@@ -72,16 +72,42 @@ def households_query():
 
 		return result
 
-class HouseholdsWithAllergies(ModelViewSet):
-	queryset = Households.objects.prefetch_related('a_hh_name')
-	serializer_class = HouseholdAllergySerializer
+class HouseholdsWithAllergies(viewsets.ViewSet):
+	def list(self, request):
+		queryset = Households.objects.prefetch_related('a_hh_name')
+		serializer = HouseholdAllergySerializer(queryset)
+		return Response(serializer.data)
+	def retrieve(self, request, pk):
+		queryset = ingredients_query("SELECT i.*, s.s_name FROM ingredients i INNER JOIN supplier s WHERE (i_id = %s) AND (i.isupplier_id = s.s_id OR i.pref_isupplier_id = s.s_id)"%(pk))
+		serializer = IngredientSerializer(queryset)
+		return Response(serializer.data)
+	def update(self, request, pk):
+		serializer = HouseholdAllergySerializer(request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(data=serializer.data, status=status.HTTP_200_OK)
+		return Response(status=status.HTTP_400_BAD_REQUEST)
+	def create(self, request):
+		form = IngredientsForm()
+
+		if request.method == 'POST':
+        		form = Ingredients(request.POST, request.FILES)
+		if form.is_valid(commit=False):
+			Ingredients.save()
+			messages.success(request, 'Ingredients has been created!')
+			return redirect('home')
+		else:
+			messages.error('An error has occured while attempting to add ingredients')
+    	    	
+		return null
+
 
 def login_page(request):
   page = 'login'
 
   if request.method == "POST":
     user = authenticate(
-      email = request.POST(['email']),
+      username = request.POST(['username']),
       password = request.POST(['password'])
     )
 
@@ -90,7 +116,7 @@ def login_page(request):
         messages.info(request, 'Successfully logged in')
         return redirect('home')
     else:
-        messages.error(request, 'Email OR Password is incorrect')
+        messages.error(request, 'Username OR Password is incorrect')
         return redirect('login')
 
     context = {'page':page}

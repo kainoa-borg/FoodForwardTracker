@@ -28,8 +28,10 @@ router.register(r'ingredients', IngredientsView, basename='ingredients')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/households', HouseholdsView.as_view({'get': 'list'})),
-    path('api/ingredients', IngredientsView.as_view({'get': 'retrieve'})),
+    path('api/update-household/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve', 'patch': 'update'})),
+    path('api/get-households', HouseholdsView.as_view({'get': 'list', 'post': 'create'})),
+    path('api/get-households/<str:pk>/', HouseholdsView.as_view({})
+    path('api/get-ingredient', IngredientsView.as_view({'get': 'retrieve'})),
     path('api/householdswithallergies', HouseholdsWithAllergies.as_view({'get': 'list'})),
     path('', include(router.urls))
 ]
