@@ -15,10 +15,9 @@ from .serializers import HouseholdSerializer, AllergySerializer, HouseholdAllerg
 from rest_framework import viewsets
 from django.db import connection
 
-def ingredients_query(queryString, many=False):
+def execute_query(queryString, keys, many=False):
 	with connection.cursor() as cursor:
 		cursor.execute(queryString)
-		keys = ('i_id', 'ingredient_name', 'pkg_type', 'storage_type', 'in_date', 'in_qty', 'unit', 'exp_date', 'unit_cost', 'flat_fee', 'i_supplier_id', 'pref_isupplier_id', 'supplier_name', 'pref_supplier_name')
 		result = []
 		if many: 
 			data = cursor.fetchall()
@@ -33,28 +32,27 @@ def ingredients_query(queryString, many=False):
 
 # Create your views here.
 class IngredientsView(viewsets.ViewSet):
+	
 	def list(self, request):
-		queryset = ingredients_query("SELECT i.*, s.s_name FROM ingredients i INNER JOIN supplier s WHERE i.isupplier_id = s.s_id OR i.pref_isupplier_id = s.s_id", many=True)
+		keys = ('i_id', 'ingredient_name', 'pkg_type', 'storage_type', 'in_date', 'in_qty', 'unit', 'exp_date', 'qty_on_hand', 'unit_cost', 'flat_fee', 'isupplier_id', 'pref_supplier_id', 'isupplier_name', 'pref_isupplier_name')
+		query = "SELECT i.*, s.s_name FROM ingredients i INNER JOIN supplier s WHERE i.isupplier_id = s.s_id OR i.pref_isupplier_id = s.s_id"
+		queryset = execute_query(query, keys, many=True)
 		serializer = IngredientSerializer(queryset, many=True)
 		return Response(serializer.data)
 	def retrieve(self, request, pk):
-		queryset = ingredients_query("SELECT i.*, s.s_name FROM ingredients i INNER JOIN supplier s WHERE (i_id = %s) AND (i.isupplier_id = s.s_id OR i.pref_isupplier_id = s.s_id)"%(pk))
+		query = "SELECT i.*, s.s_name FROM ingredients i INNER JOIN supplier s WHERE (i_id = %s) AND (i.isupplier_id = s.s_id OR i.pref_isupplier_id = s.s_id)"%(pk)
+		keys = ('i_id', 'ingredient_name', 'pkg_type', 'storage_type', 'in_date', 'in_qty', 'unit', 'exp_date', 'qty_on_hand', 'unit_cost', 'flat_fee', 'isupplier_id', 'pref_supplier_id', 'isupplier_name', 'pref_isupplier_name')
+		queryset = execute_query(query, keys)
 		serializer = IngredientSerializer(queryset)
 		return Response(serializer.data)
-	def create(self, request):
-		form = IngredientsForm()
-
-		if request.method == 'POST':
-        		form = Ingredients(request.POST, request.FILES)
-		if form.is_valid(commit=False):
-			Ingredients.save()
-			messages.success(request, 'Ingredients has been created!')
-			return redirect('home')
-		else:
-			messages.error('An error has occured while attempting to add ingredients')
-    	    	
-		return null
-
+	def update(self, request, pk):
+		data = request.data
+		serializer = IngredientSerializer(data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(status=status.HTTP_200_OK)
+		return Response(status=status.HTTP_200_BADREQUEST)
+		
 class HouseholdsView(ModelViewSet):
 	queryset = Households.objects.all()
 	serializer_class = HouseholdSerializer
@@ -72,35 +70,24 @@ def households_query():
 
 		return result
 
-class HouseholdsWithAllergies(viewsets.ViewSet):
-	def list(self, request):
-		queryset = Households.objects.prefetch_related('a_hh_name')
-		serializer = HouseholdAllergySerializer(queryset)
-		return Response(serializer.data)
-	def retrieve(self, request, pk):
-		queryset = ingredients_query("SELECT i.*, s.s_name FROM ingredients i INNER JOIN supplier s WHERE (i_id = %s) AND (i.isupplier_id = s.s_id OR i.pref_isupplier_id = s.s_id)"%(pk))
-		serializer = IngredientSerializer(queryset)
-		return Response(serializer.data)
-	def update(self, request, pk):
-		serializer = HouseholdAllergySerializer(request.data)
-		if serializer.is_valid():
-			serializer.save()
-			return Response(data=serializer.data, status=status.HTTP_200_OK)
-		return Response(status=status.HTTP_400_BAD_REQUEST)
-	def create(self, request):
-		form = IngredientsForm()
+class HouseholdsWithAllergies(ModelViewSet):
+	queryset = Households.objects.all()
+	serializer_class = HouseholdAllergySerializer
 
-		if request.method == 'POST':
-        		form = Ingredients(request.POST, request.FILES)
-		if form.is_valid(commit=False):
-			Ingredients.save()
-			messages.success(request, 'Ingredients has been created!')
-			return redirect('home')
-		else:
-			messages.error('An error has occured while attempting to add ingredients')
-    	    	
-		return null
-
+	#def list(self, request):
+		#queryset = Households.objects.all()
+		#serializer = HouseholdAllergySerializer(queryset)
+		#return Response(serializer.data)
+	#def retrieve(self, request, pk):
+		#queryset = ingredients_query("SELECT i.*, s.s_name FROM ingredients i INNER JOIN supplier s WHERE (i_id = %s) AND (i.isupplier_id = s.s_id OR i.pref_isupplier_id = s.s_id)"%(pk))
+		#serializer = IngredientSerializer(queryset)
+		#return Response(serializer.data)
+	#def update(self, request, pk):
+		#serializer = HouseholdAllergySerializer(request.data)
+		#if serializer.is_valid():
+			#serializer.save()
+			#return Response(data=serializer.data, status=status.HTTP_200_OK)
+		#return Response(status=status.HTTP_400_BAD_REQUEST)
 
 def login_page(request):
   page = 'login'

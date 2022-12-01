@@ -23,15 +23,16 @@ from .models import (Households, Ingredients, Packaging)
 #admin.site.register(Packaging)
 from rest_framework import routers
 
-router = routers.SimpleRouter()
+router = routers.DefaultRouter()
 router.register(r'ingredients', IngredientsView, basename='ingredients')
+router.register(r'households', HouseholdsView, basename='households')
+router.register(r'households-allergies', HouseholdsWithAllergies, basename='households-allergies')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/update-household/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve', 'patch': 'update'})),
     path('api/get-households', HouseholdsView.as_view({'get': 'list', 'post': 'create'})),
-    path('api/get-households/<str:pk>/', HouseholdsView.as_view({})
+    path('api/get-households/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve'})),
     path('api/get-ingredient', IngredientsView.as_view({'get': 'retrieve'})),
-    path('api/householdswithallergies', HouseholdsWithAllergies.as_view({'get': 'list'})),
-    path('', include(router.urls))
+    path('api/', include(router.urls))
 ]

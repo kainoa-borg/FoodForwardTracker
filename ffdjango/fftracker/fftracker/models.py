@@ -136,10 +136,10 @@ class DjangoSession(models.Model):
 
 
 class HhAllergies(models.Model):
-    hh_a_id = models.SmallIntegerField(primary_key=True)
+    hh_a_id = models.SmallAutoField(primary_key=True)
     a_type = models.CharField(max_length=30, blank=True, null=True)
     a_code = models.IntegerField(blank=True, null=True)
-    a_hh_name = models.ForeignKey('Households', models.DO_NOTHING, related_name='a_hh_name', db_column='a_hh_name', blank=True, null=True)
+    a_hh_name = models.ForeignKey('Households', models.DO_NOTHING, related_name='hh_allergies', db_column='a_hh_name')
 
     class Meta:
         managed = False
@@ -149,7 +149,7 @@ class HhAllergies(models.Model):
 class HhKits(models.Model):
     hk_id = models.SmallIntegerField(primary_key=True)
     hk_kit = models.ForeignKey('Kits', models.DO_NOTHING, blank=True, null=True)
-    hk_hh_name = models.ForeignKey('Households', models.DO_NOTHING,  related_name='hk_hh_name', db_column='hk_hh_name', blank=True, null=True)
+    hk_hh_name = models.ForeignKey('Households', models.DO_NOTHING, db_column='hk_hh_name', related_name='hh_kit', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -159,7 +159,7 @@ class HhKits(models.Model):
 class HhMealPlans(models.Model):
     hh_m_id = models.SmallIntegerField(primary_key=True)
     meal = models.ForeignKey('MealPlans', models.DO_NOTHING)
-    meal_hh_name = models.ForeignKey('Households', models.DO_NOTHING, related_name='meal_hh_name', db_column='meal_hh_name')
+    meal_hh_name = models.ForeignKey('Households', models.DO_NOTHING, related_name='hh_meal', db_column='meal_hh_name')
 
     class Meta:
         managed = False
@@ -168,18 +168,18 @@ class HhMealPlans(models.Model):
 
 class Households(models.Model):
     hh_name = models.CharField(primary_key=True, max_length=30)
-    num_adult = models.IntegerField(blank=True, null=True)
-    num_child = models.IntegerField(blank=True, null=True)
-    sms_flag = models.IntegerField(blank=True, null=True)
-    veg_flag = models.IntegerField(blank=True, null=True)
-    allergy_flag = models.IntegerField(blank=True, null=True)
-    gf_flag = models.IntegerField(blank=True, null=True)
-    ls_flag = models.IntegerField(blank=True, null=True)
-    paused_flag = models.IntegerField(blank=True, null=True)
+    num_adult = models.PositiveIntegerField(blank=True, null=True)
+    num_child = models.PositiveIntegerField(blank=True, null=True)
+    sms_flag = models.PositiveIntegerField(blank=True, null=True)
+    veg_flag = models.PositiveIntegerField(blank=True, null=True)
+    allergy_flag = models.PositiveIntegerField(blank=True, null=True)
+    gf_flag = models.PositiveIntegerField(blank=True, null=True)
+    ls_flag = models.PositiveIntegerField(blank=True, null=True)
+    paused_flag = models.PositiveIntegerField(blank=True, null=True)
     phone = models.CharField(max_length=10, blank=True, null=True)
     street = models.CharField(max_length=50, blank=True, null=True)
     city = models.CharField(max_length=50, blank=True, null=True)
-    pcode = models.IntegerField(blank=True, null=True)
+    pcode = models.PositiveIntegerField(blank=True, null=True)
     state = models.CharField(max_length=2, blank=True, null=True)
     delivery_notes = models.TextField(blank=True, null=True)
 
@@ -192,7 +192,7 @@ class IngredientUsages(models.Model):
     i_usage_id = models.SmallIntegerField(primary_key=True)
     used_date = models.CharField(max_length=45)
     used_qty = models.CharField(max_length=45)
-    used_ing = models.ForeignKey('Ingredients', models.DO_NOTHING)
+    used_ing = models.ForeignKey('Ingredients', models.DO_NOTHING, related_name='ingredient_usage')
 
     class Meta:
         managed = False
@@ -211,8 +211,8 @@ class Ingredients(models.Model):
     qty_on_hand = models.SmallIntegerField(blank=True, null=True)
     unit_cost = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
     flat_fee = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
-    isupplier = models.ForeignKey('Supplier', models.DO_NOTHING, related_name='related_isupplier', blank=True, null=True)
-    pref_isupplier = models.ForeignKey('Supplier', models.DO_NOTHING, related_name='related_pref_isupplier', blank=True, null=True)
+    isupplier = models.ForeignKey('Supplier', models.DO_NOTHING, related_name='isupplier', blank=True, null=True)
+    pref_isupplier = models.ForeignKey('Supplier', models.DO_NOTHING, related_name='pref_isupplier', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -255,8 +255,8 @@ class MealPacks(models.Model):
 class MealPlans(models.Model):
     m_id = models.SmallIntegerField(primary_key=True)
     m_date = models.CharField(max_length=50)
-    snack_r_num = models.ForeignKey('Recipes', models.DO_NOTHING, related_name='related_meal_r_num', db_column='snack_r_num', blank=True, null=True)
-    meal_r_num = models.ForeignKey('Recipes', models.DO_NOTHING, related_name='related_snack_r_num', db_column='meal_r_num', blank=True, null=True)
+    snack_r_num = models.ForeignKey('Recipes', models.DO_NOTHING, db_column='snack_r_num', blank=True, null=True)
+    meal_r_num = models.ForeignKey('Recipes', models.DO_NOTHING, db_column='meal_r_num', blank=True, null=True)
     num_servings = models.SmallIntegerField(blank=True, null=True)
 
     class Meta:
@@ -277,8 +277,8 @@ class Packaging(models.Model):
     exp_date = models.DateField(blank=True, null=True)
     qty_on_hand = models.SmallIntegerField(blank=True, null=True)
     flat_fee = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
-    psupplier = models.ForeignKey('Supplier', models.DO_NOTHING, related_name='related_psupplier', blank=True, null=True)
-    pref_psupplier = models.ForeignKey('Supplier', models.DO_NOTHING, related_name='related_pref_psupplier', blank=True, null=True)
+    psupplier = models.ForeignKey('Supplier', models.DO_NOTHING, related_name = 'psupplier', blank=True, null=True)
+    pref_psupplier = models.ForeignKey('Supplier', models.DO_NOTHING, related_name = 'pref_psupplier', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -289,7 +289,7 @@ class PackagingUsages(models.Model):
     p_usage_id = models.SmallIntegerField(primary_key=True)
     used_date = models.DateField()
     used_qty = models.SmallIntegerField()
-    used_pkg = models.ForeignKey(Packaging, models.DO_NOTHING)
+    used_pkg = models.ForeignKey(Packaging, models.DO_NOTHING, related_name='packaging_usage')
 
     class Meta:
         managed = False
@@ -339,6 +339,19 @@ class RecipeInstructions(models.Model):
     class Meta:
         managed = False
         db_table = 'recipe_instructions'
+
+
+class RecipePackaging(models.Model):
+    rp_id = models.IntegerField(primary_key=True)
+    amt = models.SmallIntegerField(blank=True, null=True)
+    pkg_type = models.CharField(max_length=45, blank=True, null=True)
+    rp_pkg = models.ForeignKey(Packaging, models.DO_NOTHING, blank=True, null=True)
+    rp_recipe_num = models.ForeignKey('Recipes', models.DO_NOTHING, db_column='rp_recipe_num', blank=True, null=True)
+    rp_ing_id = models.SmallIntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'recipe_packaging'
 
 
 class Recipes(models.Model):
