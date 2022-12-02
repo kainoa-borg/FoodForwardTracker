@@ -15,18 +15,18 @@ const HouseholdRow = (props) => {
             <td>{hh.hh_name}</td>
             <td>{hh.num_adult}</td>
             <td>{hh.num_child}</td>
-            <td>{String(hh.veg_flag)}</td>
-            <td>{String(hh.gf_flag)}</td>
-            <td>{String(hh.a_flag)}</td>
-            <td>{String(hh.sms_flag)}</td>
-            <td>{String(hh.paused_flag)}</td>
+            <td>{String(Boolean(hh.veg_flag))}</td>
+            <td>{String(Boolean(hh.gf_flag))}</td>
+            <td>{String(Boolean(hh.a_flag))}</td>
+            <td>{String(Boolean(hh.sms_flag))}</td>
+            <td>{String(Boolean(hh.paused_flag))}</td>
             <td>{hh.phone}</td>
             <td>{hh.street}</td>
             <td>{hh.city}</td>
             <td>{hh.pcode}</td>
             <td>{hh.state}</td>
             <td>{hh.delivery_notes}</td>
-            <td><AllergiesList allergies={hh.allergies} isEditable={false}/></td>
+            <td><AllergiesList allergies={hh.hh_allergies} isEditable={false}/></td>
             {/* When edit is clicked, handleEditClick is called with this row's key */}
             <td><button onClick={()=> handleEditClick(key)}>Edit</button></td>
             {/* When delete is clicked, deleteHousehold is called with this row's key */}

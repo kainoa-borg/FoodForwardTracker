@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react'
+import React, {Fragment, useState, useEffect} from 'react'
 import axios from 'axios'
 import HouseholdForm from './HouseholdForm.js'
 import EditableHouseholdRow from './EditableHouseholdRow.js'
@@ -11,21 +11,37 @@ import './HouseholdList.css'
 
 // Household List Component
 export default function HouseholdList() {
-    const data = [
-        {hh_name: 'Anom', num_adult: 2, num_child: 1, veg_flag: false, gf_flag: true, a_flag: false, sms_flag: true, paused_flag: false, phone: '123-456-7890', street: '1234 aStreet', city: 'aCity', pcode: '12345', state: 'MI', delivery_notes: 'N/A', allergies: []},
-        {hh_name: 'Jean', num_adult: 1, num_child: 1, veg_flag: true, gf_flag: true, a_flag: false, sms_flag: true, paused_flag: false, phone: '234-567-8912', street: '4321 bStreet', city: 'bCity', pcode: '54321', state: 'MI', delivery_notes: 'Leave on porch', allergies: [{aType: 'Peanut'}]}
-    ]
+    // const data = [
+    //     {hh_name: 'Anom', num_adult: 2, num_child: 1, veg_flag: false, gf_flag: true, a_flag: false, sms_flag: true, paused_flag: false, phone: '123-456-7890', street: '1234 aStreet', city: 'aCity', pcode: '12345', state: 'MI', delivery_notes: 'N/A', allergies: []},
+    //     {hh_name: 'Jean', num_adult: 1, num_child: 1, veg_flag: true, gf_flag: true, a_flag: false, sms_flag: true, paused_flag: false, phone: '234-567-8912', street: '4321 bStreet', city: 'bCity', pcode: '54321', state: 'MI', delivery_notes: 'Leave on porch', allergies: [{aType: 'Peanut'}]}
+    // ]
 
-    const [households, setHouseholds] = useState(data);
+    const [households, setHouseholds] = useState(undefined);
     const [editHouseholdID, setEditHouseholdID] = useState(null);
     const [editFormData, setEditFormData] = useState(null);
     const [errorComponent, setErrorComponent] = useState(null);
     const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
 
+    const handleError = (errCode) => {
+        if (errCode === 'DuplicateKey') {
+            setErrorComponent(
+                <Error text="Household Name already found!"/>
+            )
+        }
+    }
+    const clearError = () => {
+        setErrorComponent(null);
+    }
+
+    useEffect(() => {
+        setHouseholds(getDBHouseholds());
+    }, []);
+
     const getDBHouseholds = () => {
+        console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/get-households"
+            url:"http://4.236.185.213:8000/api/households-allergies"
           }).then((response)=>{
             const hhData = response.data
             setHouseholds(hhData);
@@ -39,9 +55,10 @@ export default function HouseholdList() {
     }
 
     const postDBHouseholds = () => {
+        console.log(households);
         axios({
             method: "POST",
-            url: "http://4.236.185.213:8000/api/get-households",
+            url: "http://4.236.185.213:8000/api/households-allergies",
             data: households
           }).then((response)=>{
             getDBHouseholds();
@@ -53,17 +70,6 @@ export default function HouseholdList() {
               }
           });
         setdisplayMsgComponent(<DisplayMessage msg='Submitting changes to database!'/>);
-    }
-
-    const handleError = (errCode) => {
-        if (errCode === 'DuplicateKey') {
-            setErrorComponent(
-                <Error text="Household Name already found!"/>
-            )
-        }
-    }
-    const clearError = () => {
-        setErrorComponent(null);
     }
 
     const addHousehold = (household) => {
@@ -89,19 +95,11 @@ export default function HouseholdList() {
 
     const updateHousehold = (key) => {
         let thisName = households[key];
-        if (!households.find((HH) => HH.hh_name === thisName))
-        {
-            let newHouseholds = [...households];
-            newHouseholds[key] = editFormData;
-            setEditHouseholdID(null);
-            setHouseholds(newHouseholds)
-            clearError();
-        }
-        else {
-            // If this household is already in households list, display error message
-            handleError('DuplicateKey');
-        }
-        
+        let newHouseholds = [...households];
+        newHouseholds[key] = editFormData;
+        setEditHouseholdID(null);
+        setHouseholds(newHouseholds)
+        clearError();
     }
 
     const handleEditFormChange = (event) => {
@@ -130,6 +128,10 @@ export default function HouseholdList() {
     const handleCancelClick = () => {
         setEditHouseholdID(null);
         setEditFormData(null);
+    }
+
+    if (households === undefined) {
+        return (<>loading</>);
     }
 
     // The HTML structure of this component

@@ -30,10 +30,10 @@ const AllergiesList = (props) => {
 
     const setAFlag = (allergyList) => {
         if (allergyList.length > 0) {
-            return ['aFlag', true];
+            return ['a_flag', true];
         }
         else {
-            return ['aFlag', false];
+            return ['a_flag', false];
         }
     }
 
@@ -41,7 +41,7 @@ const AllergiesList = (props) => {
         event.preventDefault();
         const newAllergies =  [...allergies, currAllergy];
         setAllergies(newAllergies);
-        setCurrAllergy({aType: ''});
+        setCurrAllergy({a_type: ''});
         const ret = setAFlag(newAllergies);
         console.log(ret)
         props.updateEditForm(['allergies', ret[0]], [newAllergies, ret[1]]);
@@ -67,7 +67,7 @@ const AllergiesList = (props) => {
                                 <Fragment>
                                     <tr key={thisKey}>
                                         <td>
-                                            {allergy.aType}
+                                            {allergy.a_type}
                                         </td>
                                         <td>
                                             <button type='button' onClick={() => {handleDeleteAllergy(thisKey)}}>
@@ -104,7 +104,7 @@ const AllergiesList = (props) => {
                                 <Fragment>
                                     <tr key={thisKey}>
                                         <td>
-                                            {allergy.aType}
+                                            {allergy.a_type}
                                         </td>
                                     </tr>
                                 </Fragment>

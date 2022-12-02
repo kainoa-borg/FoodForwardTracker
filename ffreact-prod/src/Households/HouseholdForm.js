@@ -25,7 +25,7 @@ const HouseholdForm = (props) => {
       pcode: '',
       delivery_notes: '',
       state: 'MI',
-      allergies: []
+      hh_allergies: []
     }
   }
 
@@ -131,7 +131,7 @@ const HouseholdForm = (props) => {
           <br/>
 
           <label>Allergies</label>
-          <AllergiesList allergies={household.allergies} isEditable={true} updateEditForm={updateEditForm}/>
+          <AllergiesList allergies={household.hh_allergies} isEditable={true} updateEditForm={updateEditForm}/>
 
           <button type='Submit'>Add</button>
       </form>

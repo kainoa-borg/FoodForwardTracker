@@ -26,7 +26,7 @@ const EditableHouseholdRow = (props) => {
             <td><input name='pcode' type='number' minLength='5' maxLength='5' defaultValue={hh.pcode} onChange={handleEditFormChange}/></td>
             <td><input name='state' type='text' minLength='2' maxLength='2' defaultValue={hh.state} onChange={handleEditFormChange}/></td>
             <td><textarea name='deliveryNotes' defaultValue={hh.delivery_notes} onChange={handleEditFormChange}/></td>
-            <td><AllergiesList allergies={hh.allergies} isEditable={true} updateAllergies={updateAllergies} updateEditForm={updateEditForm}/></td>
+            <td><AllergiesList allergies={hh.hh_allergies} isEditable={true} updateAllergies={updateAllergies} updateEditForm={updateEditForm}/></td>
             <td></td>
             <td><button type='Submit' onClick={()=>{updateHousehold(key)}}>Save</button></td>
             <td><button onClick={handleCancelClick}>Cancel</button></td>
