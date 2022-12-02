@@ -2,10 +2,10 @@ from rest_framework import viewsets
 from rest_framework import serializers 
 from .models import Households, HhAllergies
 
-class AllergySerializer(serializers.ModelSerializer):
-	class Meta():
-		model = HhAllergies
-		fields = ('__all__')
+class AllergySerializer(serializers.ModelSerializer):       
+    class Meta():
+        model = HhAllergies
+        fields = (['a_type'])
 
 class HouseholdSerializer(serializers.ModelSerializer):
 	class Meta():
