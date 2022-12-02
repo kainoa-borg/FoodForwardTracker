@@ -1,19 +1,24 @@
 from rest_framework.serializers import ModelSerializer, Serializer
 from rest_framework import serializers
-from .models import Households, HhAllergies, Packaging, Kits, Ingredients
+from .models import Households, HhAllergies, Packaging, Kits, Ingredients, Users
 
 class AllergySerializer(ModelSerializer):
 	class Meta():
 		model = HhAllergies
 		fields = ('__all__')
+		depth = 1
 
+class UserSerializer(ModelSerializer):
+	class Meta():
+		model = Users
+		fields = ('__all__')
 
 class HouseholdSerializer(ModelSerializer):
 	class Meta():
 		model = Households
 		fields = ('__all__')
 
-class IngredientSerializer(ModelSerializer):
+class IngredientInvSerializer(ModelSerializer):
 	isupplier_name = serializers.CharField(max_length=200)
 	pref_isupplier_name = serializers.CharField(max_length=200)
 	class Meta():

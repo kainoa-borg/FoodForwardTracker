@@ -9,49 +9,16 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Households, HhAllergies
-from .serializers import HouseholdSerializer, AllergySerializer, HouseholdAllergySerializer, IngredientSerializer
+from .models import Households, HhAllergies, Ingredients, Users
+from .serializers import HouseholdSerializer, AllergySerializer, HouseholdAllergySerializer, IngredientInvSerializer, UserSerializer
 #from .utils import updateHousehold, getHouseholdDetail, deleteHousehold, getHouseholdDetail, createHousehold 
 from rest_framework import viewsets
-from django.db import connection
+from .helperfuncs import execute_query
 
-def execute_query(queryString, keys, many=False):
-	with connection.cursor() as cursor:
-		cursor.execute(queryString)
-		result = []
-		if many: 
-			data = cursor.fetchall()
-			for row in data:
-				result.append(dict(zip(keys, row)))
-		else:
-			data = cursor.fetchone()
-			result = dict(zip(keys,data))
+class UserView(ModelViewSet):
+	queryset = Users.objects.all()
+	serializer_class = UserSerializer
 
-		return result
-
-
-# Create your views here.
-class IngredientsView(viewsets.ViewSet):
-	
-	def list(self, request):
-		keys = ('i_id', 'ingredient_name', 'pkg_type', 'storage_type', 'in_date', 'in_qty', 'unit', 'exp_date', 'qty_on_hand', 'unit_cost', 'flat_fee', 'isupplier_id', 'pref_supplier_id', 'isupplier_name', 'pref_isupplier_name')
-		query = "SELECT i.*, s.s_name FROM ingredients i INNER JOIN supplier s WHERE i.isupplier_id = s.s_id OR i.pref_isupplier_id = s.s_id"
-		queryset = execute_query(query, keys, many=True)
-		serializer = IngredientSerializer(queryset, many=True)
-		return Response(serializer.data)
-	def retrieve(self, request, pk):
-		query = "SELECT i.*, s.s_name FROM ingredients i INNER JOIN supplier s WHERE (i_id = %s) AND (i.isupplier_id = s.s_id OR i.pref_isupplier_id = s.s_id)"%(pk)
-		keys = ('i_id', 'ingredient_name', 'pkg_type', 'storage_type', 'in_date', 'in_qty', 'unit', 'exp_date', 'qty_on_hand', 'unit_cost', 'flat_fee', 'isupplier_id', 'pref_supplier_id', 'isupplier_name', 'pref_isupplier_name')
-		queryset = execute_query(query, keys)
-		serializer = IngredientSerializer(queryset)
-		return Response(serializer.data)
-	def update(self, request, pk):
-		data = request.data
-		serializer = IngredientSerializer(data)
-		if serializer.is_valid():
-			serializer.save()
-			return Response(status=status.HTTP_200_OK)
-		return Response(status=status.HTTP_200_BADREQUEST)
 		
 class HouseholdsView(ModelViewSet):
 	queryset = Households.objects.all()
@@ -69,6 +36,7 @@ def households_query():
 			result.append(dict(zip(keys, row)))
 
 		return result
+
 
 class HouseholdsWithAllergies(ModelViewSet):
 	queryset = Households.objects.all()
