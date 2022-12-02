@@ -6,7 +6,7 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    environ = 'prod'
+    environ = 'dev'
     if environ == 'prod':
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fftracker.settings')
     elif environ == 'dev':

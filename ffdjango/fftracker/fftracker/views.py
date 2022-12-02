@@ -14,6 +14,7 @@ from .serializers import HouseholdSerializer, AllergySerializer, HouseholdAllerg
 #from .utils import updateHousehold, getHouseholdDetail, deleteHousehold, getHouseholdDetail, createHousehold 
 from rest_framework import viewsets
 from .helperfuncs import execute_query
+from django.db import connection
 
 class UserView(ModelViewSet):
 	queryset = Users.objects.all()
@@ -36,7 +37,6 @@ def households_query():
 			result.append(dict(zip(keys, row)))
 
 		return result
-
 
 class HouseholdsWithAllergies(ModelViewSet):
 	queryset = Households.objects.all()

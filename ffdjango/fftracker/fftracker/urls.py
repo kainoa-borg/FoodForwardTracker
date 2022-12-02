@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import HouseholdsView, HouseholdsWithAllergies, UserView
+from .views import UserView
+from .HouseholdViews import HouseholdsView, HouseholdsWithAllergies
 from .IngredientViews import IngredientInvView
 
 from .models import (Households, Ingredients, Packaging)
