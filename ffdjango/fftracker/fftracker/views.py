@@ -1,6 +1,6 @@
 from django.dispatch.dispatcher import receiver
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, authenticate, logout, reset, get_user
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Households, HhAllergies, Ingredients, Users
+from .models import Households, HhAllergies, Ingredients, Users, Recipes, MealPlans
 from .serializers import HouseholdSerializer, AllergySerializer, HouseholdAllergySerializer, IngredientInvSerializer, UserSerializer
 #from .utils import updateHousehold, getHouseholdDetail, deleteHousehold, getHouseholdDetail, createHousehold 
 from rest_framework import viewsets
@@ -20,7 +20,6 @@ class UserView(ModelViewSet):
 	queryset = Users.objects.all()
 	serializer_class = UserSerializer
 
-		
 class HouseholdsView(ModelViewSet):
 	queryset = Households.objects.all()
 	serializer_class = HouseholdSerializer
@@ -94,12 +93,37 @@ def register_page(request):
   context = {'page':page, 'form':form}
   return render(request, 'login_register.html', context)
 
+def account_reset(request):
+  page = 'reset'
+
+  if request.method == "POST":
+    user = authenticate(
+      username = request.POST(['username']),
+      email = request.POST(['email'])
+    )
+
+    if ( (get_user('username')=='username') & (get_user('email')=='email') ):
+        reset(request, user)
+        messages.info(request, 'Reset email sent.')
+        return redirect('login')
+    else:
+        messages.error(request, 'Username OR Email is incorrect')
+        return redirect('reset')
+
+  context = {'page':page}
+  return redirect('login')
+
+def landing_page(request):
+	#Links to other pages?
+	#
+	#
+	#
+	return redirect('login')
+
 def logout_user(request):
     logout(request)
     messages.info(request, 'User was logged out!')
     return redirect('login')
-
-
 
 def index(request):
   return HttpResponse("Hello! Welcome to Food Forward Tracker")
