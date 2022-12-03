@@ -46,13 +46,16 @@ class HouseholdAllergySerializer(ModelSerializer):
 		model = Households
 		fields = ('hh_name', 'num_adult', 'num_child', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag', 'phone', 'street', 'city', 'pcode', 'state', 'delivery_notes', 'hh_allergies')
 
-class MealPlanSerializer(ModelSerializer):
+class MealPlansSerializer(ModelSerializer):
 	class Meta():
 		model = MealPlans
 		fields = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings')
 
 class MenuSerializer(ModelSerializer):
-	r_name = RecipeSerializer(many=True)
+	r_num = serializers.CharField(max_length=200)
+	r_name = serializers.CharField(max_length=200)
+	meal_name = serializers.CharField(max_length=200)
+	snack_name = serializers.CharField(max_length=200)
 	class Meta():
 		model = MealPlans
-		fields = ('m_date', 'r_name')
+		fields = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'r_num', 'r_name', 'meal_name', 'snack_name')
