@@ -8,13 +8,11 @@ from rest_framework import status
 from .models import MealPlans, Recipes
 
 class MenuSerializer(ModelSerializer):
-	r_num = serializers.CharField(max_length=200)
-	r_name = serializers.CharField(max_length=200)
 	meal_name = serializers.CharField(max_length=200)
 	snack_name = serializers.CharField(max_length=200)
 	class Meta():
 		model = MealPlans
-		fields = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'r_num', 'r_name', 'meal_name', 'snack_name')
+		fields = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'meal_name', 'snack_name')
 
 class MenuView(viewsets.ViewSet):
 	def list(self, request):
