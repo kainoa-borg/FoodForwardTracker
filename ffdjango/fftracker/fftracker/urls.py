@@ -37,7 +37,7 @@ urlpatterns = [
     path('api/update-household/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve', 'patch': 'update'})),
     path('api/get-households', HouseholdsView.as_view({'get': 'list', 'post': 'create'})),
     path('api/get-households/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve'})),
-    path('api/get-ingredient', IngredientsView.as_view({'get': 'retrieve'})),
+    path('api/get-ingredient', IngredientInvView.as_view({'get': 'retrieve'})),
     path('api/get-menu', MenuView.as_view({'get': 'retrieve'})),
     path('api/', include(router.urls))
 ]
