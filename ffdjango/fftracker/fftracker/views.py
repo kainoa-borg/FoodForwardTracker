@@ -20,6 +20,10 @@ class UserView(ModelViewSet):
 	queryset = Users.objects.all()
 	serializer_class = UserSerializer
 
+#class MainView(ModelViewSet):
+ # 	queryset = Users.objects.all() 
+  #  serializer_class = UserSerializer
+
 class HouseholdsView(ModelViewSet):
 	queryset = Households.objects.all()
 	serializer_class = HouseholdSerializer

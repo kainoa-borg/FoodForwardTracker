@@ -1,3 +1,4 @@
+from collections import UserString
 from rest_framework.serializers import ModelSerializer, Serializer
 from rest_framework import serializers
 from .models import Households, HhAllergies, Ingredients, Kits, MealPlans, Packaging, Recipes, Users
@@ -17,6 +18,11 @@ class HouseholdSerializer(ModelSerializer):
 	class Meta():
 		model = Households
 		fields = ('__all__')
+
+#class MainSerializer(ModelSerializer):
+ # 	class Meta():
+	#	model = Households
+	#	fields = ('__all__')
 
 class MealKitSerializer(ModelSerializer):
 	class Meta():
@@ -53,7 +59,7 @@ class MealPlansSerializer(ModelSerializer):
 
 class MenuSerializer(ModelSerializer):
 	r_num = serializers.CharField(max_length=200)
-	r_name = serializers.CharField(max_length=200)
+	r_name = serializers.CharField(max_length=200)                                                                                             
 	meal_name = serializers.CharField(max_length=200)
 	snack_name = serializers.CharField(max_length=200)
 	class Meta():
