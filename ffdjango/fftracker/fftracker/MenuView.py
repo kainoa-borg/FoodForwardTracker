@@ -8,8 +8,6 @@ from rest_framework import status
 from .models import MealPlans, Recipes
 
 class MenuSerializer(ModelSerializer):
-	r_num = serializers.PrimaryKeyRelatedField(queryset=Recipes.objects.all())
-	r_name = serializers.CharField(max_length=200)
 	meal_name = serializers.CharField(max_length=200)
 	snack_name = serializers.CharField(max_length=200)
 	class Meta():
