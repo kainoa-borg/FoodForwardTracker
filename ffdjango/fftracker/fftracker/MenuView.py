@@ -7,43 +7,54 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework import status
 from .models import MealPlans, Recipes
 
-class RecipeSerializer(serializers.ModelSerializer):
-	class Meta():
-		model = Recipes
-		fields = ('__all__')
-
-class MealPlansSerializer(serializers.ModelSerializer):
+class MenuSerializer(ModelSerializer):
+	r_num = serializers.IntegerField(max_length=200)
+	r_name = serializers.CharField(max_length=200)
 	class Meta():
 		model = MealPlans
-		fields = ('__all__')
+		fields = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'r_num', 'r_name')
 
-class MealPlansView(viewsets.ModelViewSet):
-	queryset = MealPlans.objects.all()
-	serializer_class = MealPlansSerializer
+class IngredientInvView(viewsets.ViewSet):
+	def list(self, request):
+		keys = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'r_num', 'r_name')
+		query = "SELECT mp.*, (SELECT r_name FROM recipes WHERE (mp.meal_r_num = r_num) OR (mp.snack_r_num = r_num) AS r_name FROM meal_plans mp"
+		queryset = execute_query(query, keys, many=True)
+		serializer = MenuSerializer(queryset, many=True)
+		return Response(serializer.data)
+	def retrieve(self, request, pk):
+		query = "SELECT mp.*, (SELECT r_name FROM recipes WHERE (mp.meal_r_num = r_num) OR (mp.snack_r_num = r_num) AS r_name FROM meal_plans mp"%(pk)
+		keys = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'r_num', 'r_name')
+		queryset = execute_query(query, keys)
+		serializer = MenuSerializer(queryset)
+		return Response(serializer.data)
+	def update(self, request, pk):
+		data = request.data
+		serializer = MenuSerializer(data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(status=status.HTTP_200_OK)
+		return Response(status=status.HTTP_200_BADREQUEST)
 
 	#class Meta():
 	#	model = MealPlans
 	#	fields = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings')
 
-class MenuRecipeSerializer(serializers.ModelSerializer):
-	r_data = RecipeSerializer(many=True)
-	class Meta():
-		model = MealPlans
-		depth = 1
-		fields = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'r_data')
-	def create(self, validated_data):
-		recipe_data = validated_data.pop('r_data')
-		mp_model = MealPlans.objects.create(**validated_data)
-		for data in recipe_data: 
-			data['meal_r_num'] = mp_model
-			data['m_id'] = Recipes.objects.latest('m_id').m_id + 1
-			data_model = Recipes.objects.create(**data)
-		return mp_model
-
+#class MenuRecipeSerializer(serializers.ModelSerializer):
+#	r_data = RecipeSerializer(many=True)
+#	class Meta():
+#		model = MealPlans
+#		depth = 1
+#		fields = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'r_data')
+#	def create(self, validated_data):
+#		recipe_data = validated_data.pop('r_data')
+#		mp_model = MealPlans.objects.create(**validated_data)
+#		for data in recipe_data: 
+#			data['meal_r_num'] = mp_model
+#			data['m_id'] = Recipes.objects.latest('m_id').m_id + 1
+#			data_model = Recipes.objects.create(**data)
+#		return mp_model
+#
 		#query = "SELECT mp.m_date, r.r_name FROM meal_plans mp INNER JOIN recipes r ON mp.meal_r_num = r.r_num OR mp.snack_r_num = r.r_num"%(pk)
 		#keys = ('mp.m_date', 'r.r_name')
 
-class MenuView(viewsets.ModelViewSet):
-	queryset = MealPlans.objects.all()
-	serializer_class = MenuRecipeSerializer
 
