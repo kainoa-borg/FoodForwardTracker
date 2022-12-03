@@ -33,7 +33,7 @@ class MenuRecipeSerializer(serializers.ModelSerializer):
 		fields = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'r_data')
 	def create(self, validated_data):
 		recipe_data = validated_data.pop('r_data')
-		mp_model = Recipes.objects.create(**validated_data)
+		mp_model = MealPlans.objects.create(**validated_data)
 		for data in recipe_data: 
 			data['meal_r_num'] = mp_model
 			data['m_id'] = Recipes.objects.latest('m_id').m_id + 1
