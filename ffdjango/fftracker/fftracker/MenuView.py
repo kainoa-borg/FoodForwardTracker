@@ -14,7 +14,7 @@ class MenuSerializer(ModelSerializer):
 		model = MealPlans
 		fields = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'r_num', 'r_name')
 
-class IngredientInvView(viewsets.ViewSet):
+class MenuView(viewsets.ViewSet):
 	def list(self, request):
 		keys = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'r_num', 'r_name')
 		query = "SELECT mp.*, (SELECT r_name FROM recipes WHERE (mp.meal_r_num = r_num) OR (mp.snack_r_num = r_num) AS r_name FROM meal_plans mp"
