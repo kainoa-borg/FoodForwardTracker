@@ -2,8 +2,8 @@ from .helperfuncs import execute_query
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.viewsets import ModelViewSet
-from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from rest_framework import status
 from .models import MealPlans, Recipes
 
@@ -27,9 +27,9 @@ class MenuView(viewsets.ViewSet):
 		query = "SELECT mp.*, (SELECT r_name FROM recipes WHERE mp.meal_r_num = r_num) AS meal_name, (SELECT r_name FROM recipes WHERE mp.snack_r_num = r_num) AS snack_name FROM meal_plans mp WHERE mp.m_id=%s"%(pk)
 		keys = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'r_num', 'r_name', 'meal_name', 'snack_name')
 		queryset = execute_query(query, keys)
-		serializer = MenuSerializer(queryset, many=True)
+		serializer = MenuSerializer(queryset)
 		return Response(serializer.data)
-	def update(self, request, pk):
+	def update(self, request):
 		data = request.data
 		serializer = MenuSerializer(data)
 		if serializer.is_valid():
