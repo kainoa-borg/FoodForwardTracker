@@ -53,6 +53,11 @@ class HouseholdAllergySerializer(ModelSerializer):
 		fields = ('hh_name', 'num_adult', 'num_child', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag', 'phone', 'street', 'city', 'pcode', 'state', 'delivery_notes', 'hh_allergies')
 
 class MealPlansSerializer(ModelSerializer):
+	m_id = serializers.PrimaryKeyRelatedField(queryset=MealPlans.objects.all())
+	m_date = serializers.CharField(max_length=200)                                                                                             
+	snack_r_num = serializers.CharField(max_length=200)
+	meal_r_num = serializers.CharField(max_length=200)
+	num_servings = serializers.CharField(max_length=200)
 	class Meta():
 		model = MealPlans
 		fields = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings')
