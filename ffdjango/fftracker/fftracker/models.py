@@ -239,7 +239,6 @@ class Kits(models.Model):
         managed = False
         db_table = 'kits'
 
-
 class MealPacks(models.Model):
     mp_id = models.IntegerField(primary_key=True)
     mp_date = models.DateField()
@@ -251,7 +250,6 @@ class MealPacks(models.Model):
         managed = False
         db_table = 'meal_packs'
 
-
 class MealPlans(models.Model):
     m_id = models.SmallIntegerField(primary_key=True)
     m_date = models.CharField(max_length=50)
@@ -262,7 +260,6 @@ class MealPlans(models.Model):
     class Meta:
         managed = False
         db_table = 'meal_plans'
-
 
 class Packaging(models.Model):
     p_id = models.SmallIntegerField(primary_key=True)
