@@ -31,7 +31,7 @@ router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient
 router.register(r'households', HouseholdsWithAllergies, basename='households')
 router.register(r'users', UserView, basename='users')
 router.register(r'menu', MenuView, basename='menu')
-#router.register(r'main', MainView, basename='main')
+router.register(r'main', MainView, basename='main')
 
 
 urlpatterns = [
@@ -40,6 +40,6 @@ urlpatterns = [
     path('api/get-households', HouseholdsView.as_view({'get': 'list', 'post': 'create'})),
     path('api/get-households/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve'})),
     path('api/get-ingredient', IngredientInvView.as_view({'get': 'retrieve'})),
-    path('api/get-menu', MenuView.as_view({'get': 'list', 'get':'retrieve', 'patch': 'update'})),
+    path('api/get-menu', MenuView.as_view({'get': 'retrieve'})),
     path('api/', include(router.urls))
 ]
