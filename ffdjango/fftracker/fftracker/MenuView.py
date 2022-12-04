@@ -16,14 +16,14 @@ class MenuSerializer(ModelSerializer):
 
 class MenuView(viewsets.ViewSet):
 	def list(self, request):
-		keys = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'r_num', 'r_name', 'meal_name', 'snack_name')
+		keys = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'meal_name', 'snack_name')
 		query = "SELECT mp.*, (SELECT r_name FROM recipes WHERE mp.meal_r_num = r_num) AS meal_name, (SELECT r_name FROM recipes WHERE mp.snack_r_num = r_num) AS snack_name FROM meal_plans mp"
 		queryset = execute_query(query, keys, many=True)
 		serializer = MenuSerializer(queryset, many=True)
 		return Response(serializer.data)
 	def retrieve(self, request, pk):
 		query = "SELECT mp.*, (SELECT r_name FROM recipes WHERE mp.meal_r_num = r_num) AS meal_name, (SELECT r_name FROM recipes WHERE mp.snack_r_num = r_num) AS snack_name FROM meal_plans mp WHERE mp.m_id=%s"%(pk)
-		keys = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'r_num', 'r_name', 'meal_name', 'snack_name')
+		keys = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'meal_name', 'snack_name')
 		queryset = execute_query(query, keys)
 		serializer = MenuSerializer(queryset)
 		return Response(serializer.data)
