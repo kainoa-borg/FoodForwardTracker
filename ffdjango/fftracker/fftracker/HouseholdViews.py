@@ -1,6 +1,9 @@
 from rest_framework import viewsets
 from rest_framework import serializers 
 from .models import Households, HhAllergies
+from rest_framework.response import Response
+import logging
+
 
 class AllergySerializer(serializers.ModelSerializer):       
     class Meta():
@@ -30,7 +33,18 @@ class HouseholdAllergySerializer(serializers.ModelSerializer):
             allergy['hh_a_id'] = HhAllergies.objects.latest('hh_a_id').hh_a_id + 1
             allergy_model = HhAllergies.objects.create(**allergy)
         return hh_model
-
+    def update(self, hh_instance, validated_data):
+        allergy_data = validated_data.pop('hh_allergies')
+        logger = logging.getLogger('fftracker')
+        logger.info(allergy_data)
+        HhAllergies.objects.all().filter(a_hh_name = hh_instance).delete()
+        for allergy in allergy_data:
+            allergy['a_hh_name'] = hh_instance
+            allergy['hh_a_id'] = HhAllergies.objects.latest('hh_a_id').hh_a_id + 1
+            allergy_model = HhAllergies.objects.create(**allergy)
+        for key, value in validated_data.items():
+            setattr(hh_instance, key, value)
+        return hh_instance
 
 class HouseholdsWithAllergies(viewsets.ModelViewSet):
 	queryset = Households.objects.all()
