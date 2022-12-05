@@ -139,7 +139,7 @@ class HhAllergies(models.Model):
     hh_a_id = models.SmallAutoField(primary_key=True)
     a_type = models.CharField(max_length=30, blank=True, null=True)
     a_code = models.IntegerField(blank=True, null=True)
-    a_hh_name = models.ForeignKey('Households', models.DO_NOTHING, related_name='hh_allergies', db_column='a_hh_name')
+    a_hh_name = models.ForeignKey('Households', models.CASCADE, related_name='hh_allergies', db_column='a_hh_name')
 
     class Meta:
         managed = False
@@ -148,8 +148,8 @@ class HhAllergies(models.Model):
 
 class HhKits(models.Model):
     hk_id = models.SmallIntegerField(primary_key=True)
-    hk_kit = models.ForeignKey('Kits', models.DO_NOTHING, blank=True, null=True)
-    hk_hh_name = models.ForeignKey('Households', models.DO_NOTHING, db_column='hk_hh_name', related_name='hh_kit', blank=True, null=True)
+    hk_kit = models.ForeignKey('Kits', models.CASCADE, blank=True, null=True)
+    hk_hh_name = models.ForeignKey('Households', models.CASCADE, db_column='hk_hh_name', related_name='hh_kit', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -158,8 +158,8 @@ class HhKits(models.Model):
 
 class HhMealPlans(models.Model):
     hh_m_id = models.SmallIntegerField(primary_key=True)
-    meal = models.ForeignKey('MealPlans', models.DO_NOTHING)
-    meal_hh_name = models.ForeignKey('Households', models.DO_NOTHING, related_name='hh_meal', db_column='meal_hh_name')
+    meal = models.ForeignKey('MealPlans', models.CASCADE)
+    meal_hh_name = models.ForeignKey('Households', models.CASCADE, related_name='hh_meal', db_column='meal_hh_name')
 
     class Meta:
         managed = False
@@ -192,7 +192,7 @@ class IngredientUsages(models.Model):
     i_usage_id = models.SmallIntegerField(primary_key=True)
     used_date = models.CharField(max_length=45)
     used_qty = models.CharField(max_length=45)
-    used_ing = models.ForeignKey('Ingredients', models.DO_NOTHING, related_name='ingredient_usage')
+    used_ing = models.ForeignKey('Ingredients', models.CASCADE, related_name='ingredient_usage')
 
     class Meta:
         managed = False
@@ -211,8 +211,8 @@ class Ingredients(models.Model):
     qty_on_hand = models.SmallIntegerField(blank=True, null=True)
     unit_cost = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
     flat_fee = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
-    isupplier = models.ForeignKey('Supplier', models.DO_NOTHING, related_name='isupplier', blank=True, null=True)
-    pref_isupplier = models.ForeignKey('Supplier', models.DO_NOTHING, related_name='pref_isupplier', blank=True, null=True)
+    isupplier = models.ForeignKey('Supplier', models.CASCADE, related_name='isupplier', blank=True, null=True)
+    pref_isupplier = models.ForeignKey('Supplier', models.CASCADE, related_name='pref_isupplier', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -223,7 +223,7 @@ class KitPackaging(models.Model):
     kp_ip = models.IntegerField(primary_key=True)
     pkg_type = models.CharField(max_length=50)
     qty = models.SmallIntegerField()
-    kp_kit = models.ForeignKey('Kits', models.DO_NOTHING)
+    kp_kit = models.ForeignKey('Kits', models.CASCADE)
 
     class Meta:
         managed = False
@@ -233,7 +233,7 @@ class KitPackaging(models.Model):
 class Kits(models.Model):
     k_id = models.SmallIntegerField(primary_key=True)
     k_date = models.DateField()
-    k_hh_name = models.ForeignKey(Households, models.DO_NOTHING, db_column='k_hh_name')
+    k_hh_name = models.ForeignKey(Households, models.CASCADE, db_column='k_hh_name')
 
     class Meta:
         managed = False
@@ -242,9 +242,9 @@ class Kits(models.Model):
 class MealPacks(models.Model):
     mp_id = models.IntegerField(primary_key=True)
     mp_date = models.DateField()
-    mp_hh_name = models.ForeignKey(Households, models.DO_NOTHING, db_column='mp_hh_name')
-    mp_stn_name = models.ForeignKey('Stations', models.DO_NOTHING, db_column='mp_stn_name')
-    mp_kit = models.ForeignKey(Kits, models.DO_NOTHING)
+    mp_hh_name = models.ForeignKey(Households, models.CASCADE, db_column='mp_hh_name')
+    mp_stn_name = models.ForeignKey('Stations', models.CASCADE, db_column='mp_stn_name')
+    mp_kit = models.ForeignKey(Kits, models.CASCADE)
 
     class Meta:
         managed = False
@@ -253,8 +253,8 @@ class MealPacks(models.Model):
 class MealPlans(models.Model):
     m_id = models.SmallIntegerField(primary_key=True)
     m_date = models.CharField(max_length=50)
-    snack_r_num = models.ForeignKey('Recipes', models.DO_NOTHING, related_name='mp_snack', db_column='snack_r_num', blank=True, null=True)
-    meal_r_num = models.ForeignKey('Recipes', models.DO_NOTHING, related_name='mp_meal', db_column='meal_r_num', blank=True, null=True)
+    snack_r_num = models.ForeignKey('Recipes', models.CASCADE, related_name='mp_snack', db_column='snack_r_num', blank=True, null=True)
+    meal_r_num = models.ForeignKey('Recipes', models.CASCADE, related_name='mp_meal', db_column='meal_r_num', blank=True, null=True)
     num_servings = models.SmallIntegerField(blank=True, null=True)
 
     class Meta:
@@ -274,8 +274,8 @@ class Packaging(models.Model):
     exp_date = models.DateField(blank=True, null=True)
     qty_on_hand = models.SmallIntegerField(blank=True, null=True)
     flat_fee = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
-    psupplier = models.ForeignKey('Supplier', models.DO_NOTHING, related_name = 'psupplier', blank=True, null=True)
-    pref_psupplier = models.ForeignKey('Supplier', models.DO_NOTHING, related_name = 'pref_psupplier', blank=True, null=True)
+    psupplier = models.ForeignKey('Supplier', models.CASCADE, related_name = 'psupplier', blank=True, null=True)
+    pref_psupplier = models.ForeignKey('Supplier', models.CASCADE, related_name = 'pref_psupplier', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -286,7 +286,7 @@ class PackagingUsages(models.Model):
     p_usage_id = models.SmallIntegerField(primary_key=True)
     used_date = models.DateField()
     used_qty = models.SmallIntegerField()
-    used_pkg = models.ForeignKey(Packaging, models.DO_NOTHING, related_name='packaging_usage')
+    used_pkg = models.ForeignKey(Packaging, models.CASCADE, related_name='packaging_usage')
 
     class Meta:
         managed = False
@@ -296,7 +296,7 @@ class PackagingUsages(models.Model):
 class RecipeAllergies(models.Model):
     ra_id = models.SmallIntegerField(primary_key=True)
     allergy = models.CharField(max_length=30)
-    ra_recipe_num = models.ForeignKey('Recipes', models.DO_NOTHING, db_column='ra_recipe_num')
+    ra_recipe_num = models.ForeignKey('Recipes', models.CASCADE, db_column='ra_recipe_num')
 
     class Meta:
         managed = False
@@ -306,7 +306,7 @@ class RecipeAllergies(models.Model):
 class RecipeDiets(models.Model):
     rd_id = models.SmallIntegerField(primary_key=True)
     diet_category = models.CharField(max_length=50)
-    rd_recipe_num = models.ForeignKey('Recipes', models.DO_NOTHING, db_column='rd_recipe_num')
+    rd_recipe_num = models.ForeignKey('Recipes', models.CASCADE, db_column='rd_recipe_num')
 
     class Meta:
         managed = False
@@ -318,8 +318,8 @@ class RecipeIngredients(models.Model):
     amt = models.SmallIntegerField()
     unit = models.CharField(max_length=10)
     prep = models.CharField(max_length=100)
-    ri_ing = models.ForeignKey(Ingredients, models.DO_NOTHING)
-    ri_recipe_num = models.ForeignKey('Recipes', models.DO_NOTHING, db_column='ri_recipe_num')
+    ri_ing = models.ForeignKey(Ingredients, models.CASCADE)
+    ri_recipe_num = models.ForeignKey('Recipes', models.CASCADE, db_column='ri_recipe_num')
 
     class Meta:
         managed = False
@@ -331,7 +331,7 @@ class RecipeInstructions(models.Model):
     step_no = models.IntegerField(blank=True, null=True)
     step_inst = models.TextField(blank=True, null=True)
     stn_name = models.CharField(max_length=50, blank=True, null=True)
-    inst_recipe_num = models.ForeignKey('Recipes', models.DO_NOTHING, db_column='inst_recipe_num', blank=True, null=True)
+    inst_recipe_num = models.ForeignKey('Recipes', models.CASCADE, db_column='inst_recipe_num', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -342,8 +342,8 @@ class RecipePackaging(models.Model):
     rp_id = models.IntegerField(primary_key=True)
     amt = models.SmallIntegerField(blank=True, null=True)
     pkg_type = models.CharField(max_length=45, blank=True, null=True)
-    rp_pkg = models.ForeignKey(Packaging, models.DO_NOTHING, blank=True, null=True)
-    rp_recipe_num = models.ForeignKey('Recipes', models.DO_NOTHING, db_column='rp_recipe_num', blank=True, null=True)
+    rp_pkg = models.ForeignKey(Packaging, models.CASCADE, blank=True, null=True)
+    rp_recipe_num = models.ForeignKey('Recipes', models.CASCADE, db_column='rp_recipe_num', blank=True, null=True)
     rp_ing_id = models.SmallIntegerField(blank=True, null=True)
 
     class Meta:
@@ -362,8 +362,8 @@ class Recipes(models.Model):
 
 class StationIngredients(models.Model):
     si_id = models.SmallIntegerField(primary_key=True)
-    si_ing = models.ForeignKey(Ingredients, models.DO_NOTHING, blank=True, null=True)
-    si_station_name = models.ForeignKey('Stations', models.DO_NOTHING, db_column='si_station_name', blank=True, null=True)
+    si_ing = models.ForeignKey(Ingredients, models.CASCADE, blank=True, null=True)
+    si_station_name = models.ForeignKey('Stations', models.CASCADE, db_column='si_station_name', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -372,8 +372,8 @@ class StationIngredients(models.Model):
 
 class StationPackaging(models.Model):
     sp_id = models.SmallIntegerField(primary_key=True)
-    sp_pkg = models.ForeignKey(Packaging, models.DO_NOTHING, blank=True, null=True)
-    sp_station_name = models.ForeignKey('Stations', models.DO_NOTHING, db_column='sp_station_name', blank=True, null=True)
+    sp_pkg = models.ForeignKey(Packaging, models.CASCADE, blank=True, null=True)
+    sp_station_name = models.ForeignKey('Stations', models.CASCADE, db_column='sp_station_name', blank=True, null=True)
 
     class Meta:
         managed = False
