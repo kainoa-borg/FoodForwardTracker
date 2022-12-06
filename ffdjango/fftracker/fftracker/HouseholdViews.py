@@ -35,3 +35,5 @@ class HouseholdAllergySerializer(serializers.ModelSerializer):
 class HouseholdsWithAllergies(viewsets.ModelViewSet):
 	queryset = Households.objects.all()
 	serializer_class = HouseholdAllergySerializer
+
+
