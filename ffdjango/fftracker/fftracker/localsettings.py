@@ -61,6 +61,7 @@ ROOT_URLCONF = 'fftracker.urls'
 
 # White listing the localhost:8000 port
 CORS_ORIGIN_WHITELIST = ['http://0.0.0.0:8000']
+CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATES = [
     {
