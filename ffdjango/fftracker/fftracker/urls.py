@@ -18,8 +18,9 @@ from django.urls import path, include
 from .UserView import UserView
 from .HouseholdViews import HouseholdsView, HouseholdsWithAllergies
 from .IngredientViews import IngredientInvView
+from .MenuView import MenuView
 
-from .models import (Households, Ingredients, Packaging)
+from .models import (Households, Ingredients, Packaging, MealPlans, Recipes)
 #admin.site.register(Households)
 #admin.site.register(Ingredients)
 #admin.site.register(Packaging)
@@ -29,11 +30,16 @@ router = routers.DefaultRouter()
 router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient-inventory')
 router.register(r'households', HouseholdsWithAllergies, basename='households')
 router.register(r'users', UserView, basename='users')
+router.register(r'menu', MenuView, basename='menu')
+#router.register(r'main', MainView, basename='main')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/update-household/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve', 'patch': 'update'})),
     path('api/get-households', HouseholdsView.as_view({'get': 'list', 'post': 'create'})),
     path('api/get-households/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve'})),
+    path('api/get-ingredient', IngredientInvView.as_view({'get': 'list', 'get': 'retrieve'})),
+    path('api/get-menu', MenuView.as_view({'get': 'retrieve'})),
     path('api/', include(router.urls))
 ]

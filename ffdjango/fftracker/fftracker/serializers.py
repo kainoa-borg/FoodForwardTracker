@@ -1,6 +1,7 @@
+from collections import UserString
 from rest_framework.serializers import ModelSerializer, Serializer
 from rest_framework import serializers
-from .models import Households, HhAllergies, Packaging, Kits, Ingredients, Users
+from .models import Households, HhAllergies, Ingredients, Kits, MealPlans, Packaging, Recipes, Users
 
 class AllergySerializer(ModelSerializer):
 	class Meta():
@@ -18,6 +19,26 @@ class HouseholdSerializer(ModelSerializer):
 		model = Households
 		fields = ('__all__')
 
+#class MainSerializer(ModelSerializer):
+ # 	class Meta():
+	#	model = Households
+	#	fields = ('__all__')
+
+class MealKitSerializer(ModelSerializer):
+	class Meta():
+		model = Kits
+		fields = ('__all__')
+
+class PackagingSerializer(ModelSerializer):
+	class Meta():
+		model = Packaging
+		fields = ('__all__')
+
+class RecipeSerializer(ModelSerializer):
+	class Meta():
+		model = Recipes
+		fields = ('__all__')
+
 class IngredientInvSerializer(ModelSerializer):
 	isupplier_name = serializers.CharField(max_length=200)
 	pref_isupplier_name = serializers.CharField(max_length=200)
@@ -31,12 +52,14 @@ class HouseholdAllergySerializer(ModelSerializer):
 		model = Households
 		fields = ('hh_name', 'num_adult', 'num_child', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag', 'phone', 'street', 'city', 'pcode', 'state', 'delivery_notes', 'hh_allergies')
 
-class PackagingSerializer(ModelSerializer):
+class MealPlansSerializer(ModelSerializer):
 	class Meta():
-		model = Packaging
+		model = MealPlans
 		fields = ('__all__')
 
-class MealKitSerializer(ModelSerializer):
+class MenuSerializer(ModelSerializer):                                                                                          
+	meal_name = serializers.CharField(max_length=200)
+	snack_name = serializers.CharField(max_length=200)
 	class Meta():
-		model = Kits
-		fields = ('__all__')
+		model = MealPlans
+		fields = ('m_id', 'm_date', 'meal_name', 'snack_name')
