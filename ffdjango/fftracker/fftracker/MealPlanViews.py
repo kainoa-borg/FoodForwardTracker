@@ -10,22 +10,22 @@ from .models import MealPlans
 class MealPlansSerializer(ModelSerializer):
     snack_r_num = serializers.CharField(max_length=200)
     meal_r_num = serializers.CharField(max_length=200)
-class Meta():
-    model = MealPlans
-    fields = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings')
+    class Meta():
+        model = MealPlans
+        fields = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings')
 
 class MealPlansView(viewsets.ViewSet):
     def list(self, request):
         keys = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings')
-        query = meal_plans_query("SELECT mp.m_date, r.r_name FROM meal_plans mp JOIN recipes r ON r.r_num = mp.meal_r_num OR r.r_num = mp.snack_r_num WHERE m_date = "22/11/7"", many=True)
+        query = 'SELECT mp.m_date, r.r_name FROM meal_plans mp JOIN recipes r ON r.r_num = mp.meal_r_num OR r.r_num = mp.snack_r_num WHERE m_date = "22/11/7", many=True'
         queryset = execute_query(query, keys, many=True)
-        serializer = MealPacksSerializer(queryset, many=True)
+        serializer = MealPlansSerializer(queryset, many=True)
         return Response(serializer.data)
     def retrieve(self, request, pk):
         keys = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings')
-        query = meal_plans_query("SELECT mp.m_date, r.r_name FROM meal_plans mp JOIN recipes r ON r.r_num = mp.meal_r_num OR r.r_num = mp.snack_r_num WHERE m_date = "22/11/7""%(pk))
+        query = 'SELECT mp.m_date, r.r_name FROM meal_plans mp JOIN recipes r ON r.r_num = mp.meal_r_num OR r.r_num = mp.snack_r_num WHERE m_date = "22/11/7"%(pk)'
         queryset = execute_query(query, keys, many=True)
-        serializer = MealPacksSerializer(queryset, many=True)
+        serializer = MealPlansSerializer(queryset, many=True)
         return Response(serializer.data)
     def update(self, request, pk):
         data = request.data
