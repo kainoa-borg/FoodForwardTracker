@@ -41,7 +41,7 @@ export default function HouseholdList() {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/households-allergies"
+            url:"http://localhost:8000/api/households"
           }).then((response)=>{
             const hhData = response.data
             setHouseholds(hhData);
@@ -58,7 +58,7 @@ export default function HouseholdList() {
         console.log(households);
         axios({
             method: "POST",
-            url: "http://4.236.185.213:8000/api/households-allergies",
+            url: "http://localhost:8000/api/households",
             data: households
           }).then((response)=>{
             getDBHouseholds();
