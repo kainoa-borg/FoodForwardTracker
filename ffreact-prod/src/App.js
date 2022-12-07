@@ -1,6 +1,8 @@
 import MealRepositoryTable from './MealPlan.js'
 import HouseholdForm from './Households/HouseholdForm.js'
 import LoginPage from './LoginPage.js'
+import PwResetPage from './PwResetPage.js'
+import LandingPage from './LandingPage.js'
 import HouseholdList from './Households/HouseholdList.js'
 import AllergiesList from './Households/AllergiesList.js'
 import Ingredients from './Ingredients/IngredientList.js'
@@ -13,11 +15,13 @@ const App = () => {
   const handlePageClick = (pageName) => {
     console.log(pageName)
     if (pageName === 'householdForm') setCurrPage(<HouseholdForm/>);
-    else if (pageName === 'loginPage') setCurrPage(<LoginPage handlePageClick={handlePageClick}/>);
+    else if (pageName === 'loginPage') setCurrPage(<LoginPage handlePageClick={handlePageClick} />);
+    else if (pageName === 'pwResetPage') setCurrPage(<PwResetPage handlePageClick={handlePageClick} />);
+    else if (pageName === 'landingPage') setCurrPage(<LandingPage handlePageClick={handlePageClick} />);
     else if (pageName === 'mealRepositoryTable') setCurrPage(<MealRepositoryTable/>);
     else if (pageName === 'households') setCurrPage(<HouseholdList/>);
     else if (pageName === 'ingredients') setCurrPage(<Ingredients/>);
-    else if (pageName === 'landing') setCurrPage(<MealRepositoryTable/>);
+    //else if (pageName === 'landing') setCurrPage(<MealRepositoryTable/>);
     else if (pageName === 'allergies') setCurrPage(<AllergiesList allergies={[{aType: 'Gluten'}, {aType: 'Peanut'}]}/>);
   }
 
@@ -30,6 +34,12 @@ const App = () => {
         </button> */}
         <button onClick={() => handlePageClick('loginPage')}>
           Login Page
+              </button>
+        <button onClick={() => handlePageClick('landingPage')}>
+          Landing Page
+        </button>
+        <button onClick={() => handlePageClick('pwResetPage')}>
+          Password Reset
         </button>
         <button onClick={() => handlePageClick('households')}>
           Households

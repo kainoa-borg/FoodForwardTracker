@@ -52,7 +52,7 @@ const LoginPage = (props) => {
         // send login to backend
         sendLoginRequest();
         // Switch to 'landing' page
-        handlePageClick('landing');
+        handlePageClick('LandingPage');
         // TO DO;
     }
     
