@@ -113,6 +113,10 @@ LOGGING = {
             "handlers": ["console"],
             "level": os.getenv('DJANGO_LOG_LEVEL', 'INFO')
         },
+        "fftracker": {
+            "handler": ["console"],
+            "level": os.getenv('DJANGO_LOG_LEVEL', 'INFO')
+        }
     }
 }
 

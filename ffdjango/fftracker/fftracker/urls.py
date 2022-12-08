@@ -18,7 +18,7 @@ from django.urls import path, include
 from .UserView import UserView
 from .HouseholdViews import HouseholdsView, HouseholdsWithAllergies
 from .IngredientViews import IngredientInvView
-from .PackagingViews import PackagingView
+from .PackagingViews import PackagingInvView
 from .MenuView import MenuView
 from .PacPurchaseList import PPLView
 
@@ -35,6 +35,7 @@ router.register(r'packaging', PackagingView, basename='packaging')
 router.register(r'pack-purchase-list', PPLView, basename='pack-purchase-list')
 router.register(r'users', UserView, basename='users')
 router.register(r'menu', MenuView, basename='menu')
+router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
 #router.register(r'main', MainView, basename='main')
 
 

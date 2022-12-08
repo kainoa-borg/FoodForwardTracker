@@ -6,55 +6,75 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from rest_framework import status
 from django.db.models import Prefetch
-from .models import Packaging, PackagingUsages
+from .models import Packaging, PackagingUsages, Supplier
+from .SupplierViews import SupplierSerializer
 import os
+import logging
+logging.basicConfig(level = logging.WARNING)
 
 class PackagingUsageSerializer(ModelSerializer):
 	class Meta():
 		model = PackagingUsages
+		depth = 1
 		fields = ('used_date', 'used_qty')
 
-class PackagingSerializer(ModelSerializer):
-	psupplier = serializers.CharField(max_length=200)
-	pref_psupplier = serializers.CharField(max_length=200)
-	#packaging_usage = PackagingUsageSerializer()
+class PackagingInvSerializer(ModelSerializer):
+	psupplier = SupplierSerializer(read_only=True)
+	pref_psupplier = SupplierSerializer(read_only=True)
+	psupplier_id = serializers.IntegerField(allow_null=True)
+	pref_psupplier_id = serializers.IntegerField(allow_null=True)
+	packaging_usage = PackagingUsageSerializer(required=False, allow_null=True, many=True)
 	class Meta():
 		model = Packaging
-		fields = ('p_id', 'package_type', 'unit_qty', 'unit_cost', 'qty_holds', 'unit', 'returnable', 'in_date', 'in_qty', 'exp_date', 'qty_on_hand', 'flat_fee', 'psupplier', 'pref_psupplier')
+		fields = ('p_id', 'package_type', 'unit_qty', 'qty_holds', 'unit', 'returnable', 'in_date', 'in_qty', 'packaging_usage', 'qty_on_hand', 'unit_cost', 'flat_fee', 'psupplier_id', 'pref_psupplier_id', 'psupplier', 'pref_psupplier')
+
+	def create(self, validated_data):
+		# raise serializers.ValidationError("IM HERE")
+		pkg_usage = validated_data.pop('packaging_usage')
+		pkg_instance = Packaging.objects.create(**validated_data)
+		used = 0
+		if pkg_usage:
+			# IngredientUsages.objects.all().filter(used_ing = instance).delete()
+			for usage in pkg_usage:
+				used += int(usage['used_qty'])
+				if (PackagingUsages.objects.count() > 0):
+					latest_id = PackagingUsages.objects.latest('p_usage_id').p_usage_id +1
+				else:
+					latest_id = 0
+				usage['p_usage_id'] = latest_id
+				usage['used_pkg_id'] = validated_data.get('p_id')
+				# raise serializers.ValidationError(usage)
+				PackagingUsages.objects.create(**usage)
+		in_qty = getattr(pkg_instance, 'in_qty')
+		setattr(pkg_instance, 'qty_on_hand', in_qty - used)
+		return pkg_instance
+		
+	def update(self, pkg_instance, validated_data):
+		# raise serializers.ValidationError("IM HERE")
+		pkg_usage = validated_data.pop('packaging_usage')
+		# ing_instance = Ingredients.objects.create(**validated_data)
+		used = 0
+		if pkg_usage:
+			delete_set = PackagingUsages.objects.all().filter(used_pkg = pkg_instance)
+			if delete_set:
+				delete_set.delete()
+			for usage in pkg_usage:
+				used += int(usage['used_qty'])
+				if (PackagingUsages.objects.count() > 0):
+					latest_id = PackagingUsages.objects.latest('p_usage_id').p_usage_id +1
+				else:
+					latest_id = 0
+				usage['p_usage_id'] = latest_id
+				usage['used_pkg_id'] = validated_data.get('p_id')
+				# raise serializers.ValidationError(usage)
+				PackagingUsages.objects.create(**usage)
+		in_qty = validated_data['in_qty']
+		validated_data['qty_on_hand'] =  in_qty - used
+		return super().update(pkg_instance, validated_data)
+
 
 # Create your views here.
-class PackagingView(viewsets.ViewSet):
-	def list(self, request):
-		keys = ('p_id', 'package_type', 'unit_qty', 'unit_cost', 'qty_holds', 'unit', 'returnable', 'in_date', 'in_qty', 'exp_date', 'qty_on_hand', 'flat_fee', 'psupplier', 'pref_psupplier')
-		query = "SELECT p.*, (SELECT s_name FROM supplier WHERE p.psupplier_id = s_id) AS psupplier, (SELECT s_name FROM supplier WHERE p.pref_psupplier_id = s_id) AS pref_psupplier FROM packaging p"
-		queryset = execute_query(query, keys, many=True)
-		#queryset = Packaging.objects.prefetch_related(Prefetch('packaging_usage', queryset=PackagingUsages.objects.all())).all().all()
-		#print(queryset[0].__dict__['_prefetched_objects_cache']['packaging_usage'].__dict__)
-		serializer = PackagingSerializer(queryset, many=True)
-		return Response(serializer.data)
-	def retrieve(self, request, pk):
-		query = "SELECT p.*, (SELECT s_name FROM supplier WHERE p.psupplier_id = s_id) AS psupplier, (SELECT s_name FROM supplier WHERE p.pref_psupplier_id = s_id) AS pref_psupplier FROM packaging p WHERE p.p_id=%s"%(pk)
-		keys = ('p_id', 'package_type', 'unit_qty', 'unit_cost', 'qty_holds', 'unit', 'returnable', 'in_date', 'in_qty', 'exp_date', 'qty_on_hand', 'flat_fee', 'psupplier', 'pref_psupplier')
-		queryset = execute_query(query, keys)
-		serializer = PackagingSerializer(queryset)
-		return Response(serializer.data)
-	def update(self, request, pk):
-		update_obj = Packaging.Objects.get(pk)
-		serializer = PackagingSerializer(update_obj, data=request.data)
-		if serializer.is_valid():
-			obj = serializer.save()
-			obj.save()
-			return Response(status=status.HTTP_200_OK)
-		return Response(status=status.HTTP_200_BADREQUEST)
-	def create(self, request):
-		data = request.data
-		serializer = PackagingSerializer(data=data)
-		if serializer.is_valid():
-			obj = serializer.save()
-			obj.save()
-			return Response(obj, status=200)
-		return Response(status=400)
-	def destroy(self, request, pk):
-		ingredient = Packaging.Objects.get(pk)
-		ingredient.delete()
-		return Response(status=204)
+class PackagingInvView(ModelViewSet):
+	# queryset = Ingredients.objects.prefetch_related('ingredient_usage').select_related('isupplier').select_related('pref_isupplier').all()
+	queryset = Packaging.objects.all()
+	serializer_class = PackagingInvSerializer
