@@ -11,20 +11,21 @@ const HouseholdForm = (props) => {
 
   const clearHousehold = () => {
     return {
-      hh_name: '',
-      num_adult: 0,
-      num_child: 0,
-      veg_flag: false,
-      gf_flag: false,
-      a_flag: false,
-      sms_flag: false,
-      paused_flag: false,
-      phone: '',
-      street: '',
-      city: '',
-      pcode: '',
-      delivery_notes: '',
-      state: 'MI',
+      hh_name: "",
+      num_adult: undefined,
+      num_child: undefined,
+      sms_flag: 0,
+      veg_flag: 0,
+      allergy_flag: 0,
+      gf_flag: 0,
+      ls_flag: 0,
+      paused_flag: 0,
+      phone: "",
+      street: "",
+      city: "",
+      pcode: undefined,
+      state: "",
+      delivery_notes: "",
       hh_allergies: []
     }
   }
@@ -48,7 +49,7 @@ const HouseholdForm = (props) => {
       const newHousehold = {...household};
       for (let i = 0; i < names.length; i++) {
         newHousehold[names[i]] = values[i];
-        console.log('(' + names[i] + ', ' + values[i] + ')', newHousehold.aFlag);
+        // console.log('(' + names[i] + ', ' + values[i] + ')', newHousehold.aFlag);
       }
       setHousehold(newHousehold);
     }
@@ -60,7 +61,7 @@ const HouseholdForm = (props) => {
     const handleFormChange = (event) => {
       // Get the name and value of the changed field
       const fieldName = event.target.getAttribute('name');
-      const fieldValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+      const fieldValue = event.target.type === 'checkbox' ? (+event.target.checked) : event.target.value;
       // Create new household object before setting state
       updateEditForm([fieldName], [fieldValue]);
       // updateEditForm('aFlag', true);
@@ -110,7 +111,7 @@ const HouseholdForm = (props) => {
           <br/>
 
           <label htmlFor='phone'>Phone Number: </label>          
-          <input name='phone' id='phone' type='tel' pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}' minLength='12' maxLength='12' value={household.phone} onChange={handleFormChange}/>
+          <input name='phone' id='phone' type='tel' /**pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}' minLength='12'*/ maxLength='10' value={household.phone} onChange={handleFormChange}/>
           
           <label htmlFor='street'>Street: </label>          
           <input name='street' id='street' maxLength='50' value={household.street} onChange={handleFormChange}/>

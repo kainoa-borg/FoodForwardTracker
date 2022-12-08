@@ -12,19 +12,20 @@ const IngredientForm = (props) => {
   const clearIngredient = () => {
     return {
       i_id: null,
-      ingredient_name: '',
-      pkg_type: '',
-      storage_type: '',
-      in_date: '',
+      ingredient_name: "",
+      pkg_type: "",
+      storage_type: "",
+      in_date: null,
       in_qty: null,
-      unit: null,
-      exp_date: null,
+      ingredient_usage: [],
       qty_on_hand: null,
+      unit: "",
+      exp_date: null,
       unit_cost: null,
       flat_fee: null,
-      isupplier_name: null,
-      pref_isupplier_name: null
-    }
+      isupplier_id: null,
+      pref_isupplier_id: null
+  }
   }
 
   // The state of this Ingredient Form with each attribute of Ingredient
@@ -102,6 +103,7 @@ const IngredientForm = (props) => {
           <label htmlFor="isupplier">Supplier: </label>
           <select name="isupplier_id" onChange={handleFormChange}>
             <option selected="true">N/A</option>
+            {/* Get supplier_name from  */}
             {supplierList.map((supplier, key) => {
               return (
                 <option name='isupplier_id' value={supplier.s_id}>{supplier.supplier_name}</option>
