@@ -4,6 +4,8 @@ import LoginPage from './LoginPage.js'
 import HouseholdList from './Households/HouseholdList.js'
 import AllergiesList from './Households/AllergiesList.js'
 import Ingredients from './Ingredients/IngredientList.js'
+import Recipe from './Recipe/RecipeList.js'
+import MealPlan from './Meals/MealList.js'
 import React from 'react'
 import {useState} from 'react'
 
@@ -18,6 +20,8 @@ const App = () => {
     else if (pageName === 'households') setCurrPage(<HouseholdList/>);
     else if (pageName === 'ingredients') setCurrPage(<Ingredients/>);
     else if (pageName === 'landing') setCurrPage(<MealRepositoryTable/>);
+    else if (pageName === 'meals') setCurrPage(<MealPlan/>);
+    else if (pageName === 'recipes') setCurrPage(<Recipe/>);
     else if (pageName === 'allergies') setCurrPage(<AllergiesList allergies={[{aType: 'Gluten'}, {aType: 'Peanut'}]}/>);
   }
 
@@ -36,6 +40,12 @@ const App = () => {
         </button>
         <button onClick={() => handlePageClick('ingredients')}>
           Ingredients
+        </button>
+        <button onClick={() => handlePageClick('meals')}>
+          Meal Plan
+        </button>
+        <button onClick={() => handlePageClick('recipes')}>
+          Recipes
         </button>
         {currPage}
       </header>
