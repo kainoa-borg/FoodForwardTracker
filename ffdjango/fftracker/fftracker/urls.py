@@ -33,6 +33,7 @@ from .models import (Households, Ingredients, Packaging, MealPlans, Recipes)
 from rest_framework import routers
 
 router = routers.DefaultRouter()
+router.register(r'create-account', AccountCreationViews, basename='create-account')
 router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient-inventory')
 router.register(r'households', HouseholdsWithAllergies, basename='households')
 router.register(r'packaging', PackagingInvView, basename='packaging')
@@ -45,6 +46,7 @@ router.register(r'mealrecipes', MealRecipeViews, basename='mealrecipes')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/create-account', AccountCreationViews.as_view({'get': 'retrieve'})),
     path('api/update-household/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve', 'patch': 'update'})),
     path('api/get-households', HouseholdsView.as_view({'get': 'list', 'post': 'create'})),
     path('api/get-households/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve'})),
