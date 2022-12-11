@@ -20,6 +20,9 @@ from .HouseholdViews import HouseholdsView, HouseholdsWithAllergies
 from .IngredientViews import IngredientInvView
 from .PackagingViews import PackagingInvView
 from .MenuView import MenuView
+from .MealPlanViews import MealPlansView
+from .MealRecipeViews import MealRecipeViews
+from .AccountCreationViews import AccountCreationViews
 
 from .models import (Households, Ingredients, Packaging, MealPlans, Recipes)
 #admin.site.register(Households)
@@ -28,20 +31,26 @@ from .models import (Households, Ingredients, Packaging, MealPlans, Recipes)
 from rest_framework import routers
 
 router = routers.DefaultRouter()
+router.register(r'create-account', AccountCreationViews, basename='create-account')
 router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient-inventory')
 router.register(r'households', HouseholdsWithAllergies, basename='households')
 router.register(r'users', UserView, basename='users')
 router.register(r'menu', MenuView, basename='menu')
 router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
+router.register(r'mealplans', MealPlansView, basename='mealplans')
+router.register(r'mealrecipes', MealRecipeViews, basename='mealrecipes')
 #router.register(r'main', MainView, basename='main')
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/create-account', AccountCreationViews.as_view({'get': 'retrieve'})),
     path('api/update-household/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve', 'patch': 'update'})),
     path('api/get-households', HouseholdsView.as_view({'get': 'list', 'post': 'create'})),
     path('api/get-households/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve'})),
     path('api/get-ingredient', IngredientInvView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-menu', MenuView.as_view({'get': 'retrieve'})),
+    path('api/get-mealplan', MealPlansView.as_view({'get': 'retrieve'})),
+    path('api/get-mealrecipes', MealRecipeViews.as_view({'get': 'retrieve'})),
     path('api/', include(router.urls))
 ]
