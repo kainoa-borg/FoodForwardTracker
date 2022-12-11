@@ -60,9 +60,9 @@ class RecipeDietsView(viewsets.ViewSet):
 class RecipesSerializer(ModelSerializer):
     r_num = serializers.CharField(max_length=200)
     r_name = serializers.CharField(max_length=200)
-class Meta():
-    model = Recipes
-    fields = ('r_num', 'r_name')
+    class Meta():
+        model = Recipes
+        fields = ('r_num', 'r_name')
 
 class RecipeView(viewsets.ViewSet):
     def list(self, request):
