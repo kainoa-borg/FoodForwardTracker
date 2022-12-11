@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from .views import UserView
 from .UserView import UserView
 from .HouseholdViews import HouseholdsView, HouseholdsWithAllergies
 from .IngredientViews import IngredientInvView
@@ -36,8 +37,6 @@ router.register(r'pack-purchase-list', PPLView, basename='pack-purchase-list')
 router.register(r'users', UserView, basename='users')
 router.register(r'menu', MenuView, basename='menu')
 router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
-#router.register(r'main', MainView, basename='main')
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
