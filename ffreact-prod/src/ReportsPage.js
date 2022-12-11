@@ -21,6 +21,9 @@ const ReportsPage = (props) => {
             <button onClick={() => handlePageClick('reportsPage')}>
                 Menu Reports
             </button>
+            <button onClick={() => handlePageClick('reportsPage')}>
+                Purchasing Reports
+            </button>
         </Fragment>
     );
 }
