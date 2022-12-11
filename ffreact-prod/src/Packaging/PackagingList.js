@@ -1,40 +1,40 @@
 import React, {Fragment, useState, useEffect, Suspense} from 'react'
 import axios from 'axios'
-import IngredientForm from './IngredientForm.js'
-import EditableIngredientRow from './EditableIngredientRow.js'
-import IngredientRow from './IngredientRow.js'
+import PackagingForm from './PackagingForm.js'
+import EditablePackagingRow from './EditablePackagingRow.js'
+import PackagingRow from './PackagingRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 
-import './IngredientList.css'
+import './PackagingList.css'
 
 
-// Ingredient List Component
-export default function IngredientList() {
+// Packaging List Component
+export default function PackagingList() {
     const data = [
         {i_id: 1, ingredient_name: 'Lasagna Noodles', pkg_type: 'DRY-BAG', storage_type: 'N/A', in_date: '11/20/22', in_qty: 10, unit: 'lbs', exp_date: '11-20-24', qty_on_hand: 10, unit_cost: 0.75, flat_fee: 0.00, isupplier_name: 'Second Harvest Food Bank', pref_isupplier_name: 'N/A', usages: []},
         {i_id: 2, ingredient_name: 'Ground Beef', pkg_type: 'FROZEN', storage_type: 'N/A', in_date: '11/11/22', in_qty: 2, unit: 'lbs', exp_date: '12-7-22', qty_on_hand: 2, unit_cost: 0.75, flat_fee: 0.00, isupplier_name: 'Second Harvest Food Bank', pref_isupplier_name: 'N/A', usages: []},
         {i_id: 3, ingredient_name: 'Ground Beef', pkg_type: 'FROZEN', storage_type: 'N/A', in_date: '11/20/22', in_qty: 5, unit: 'lbs', exp_date: '12-7-22', qty_on_hand: 5, unit_cost: 0.75, flat_fee: 0.00, isupplier_name: 'Second Harvest Food Bank', pref_isupplier_name: 'N/A', usages: [{i_usage_id: 1, used_date: '11/29/22', used_qty: 2}]}
     ]
 
-    const [ingredients, setIngredients] = useState(undefined);
+    const [packaging, setPackaging] = useState(undefined);
     const [suppliers, setSuppliers] = useState(undefined);
-    const [editIngredientID, setEditIngredientID] = useState(null);
+    const [editPackagingID, setEditPackagingID] = useState(null);
     const [editFormData, setEditFormData] = useState({
-        i_id: null,
-        ingredient_name: "",
-        pkg_type: "",
-        storage_type: "",
-        in_date: null,
-        in_qty: null,
-        ingredient_usage: [],
-        qty_on_hand: null,
+        p_id: '',
+        package_type: "",
+        unit_qty: '',
+        qty_holds: '',
         unit: "",
-        exp_date: null,
-        unit_cost: null,
-        flat_fee: null,
-        isupplier_id: null,
-        pref_isupplier_id: null
+        returnable: '',
+        in_date: '',
+        in_qty: '',
+        packaging_usage: [],
+        qty_on_hand: '',
+        unit_cost: '',
+        flat_fee: '',
+        psupplier_id: '',
+        pref_psupplier_id: ''
     });
     const [errorComponent, setErrorComponent] = useState(null);
     const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
@@ -43,7 +43,7 @@ export default function IngredientList() {
     const handleError = (errCode) => {
         if (errCode === 'DuplicateKey') {
             setErrorComponent(
-                <Error text="Ingredient ID already found!"/>
+                <Error text="Packaging ID already found!"/>
             )
         } 
         else if (errCode === 'empty') {
@@ -57,7 +57,7 @@ export default function IngredientList() {
     }
 
     useEffect(() => {
-        getDBIngredients();
+        getDBPackaging();
         getDBSuppliers();
     }, []);
 
@@ -77,15 +77,15 @@ export default function IngredientList() {
           });
     }
 
-    const getDBIngredients = () => {
+    const getDBPackaging = () => {
         console.log("MAKING REQUEST TO DJANGO")
         setLoadingComponent(<Error text="LOADING DATA..."/>);
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/ingredient-inventory"
+            url:"http://localhost:8000/api/packaging-inventory"
           }).then((response)=>{
-            const ingData = response.data
-            setIngredients(ingData);
+            const pkgData = response.data
+            setPackaging(pkgData);
             setLoadingComponent(null);
           }).catch((error) => {
             if (error.response) {
@@ -96,32 +96,15 @@ export default function IngredientList() {
           });
     }
 
-    const postDBIngredients = () => {
+    const addPackaging = (pkg) => {
+        const lastID = packaging[packaging.length - 1]['p_id'];
+        pkg['p_id'] = lastID + 1;
         axios({
             method: "POST",
-            url:"/ingredients/",
-            data: ingredients
+            url:"http://localhost:8000/api/packaging-inventory/",
+            data: pkg
           }).then((response)=>{
-            getDBIngredients();
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-        setdisplayMsgComponent(<DisplayMessage msg='Submitting changes to database!'/>);
-    }
-
-    const addIngredient = (ingredient) => {
-        const lastID = ingredients[ingredients.length - 1]['i_id'];
-        ingredient['i_id'] = lastID + 1;
-        axios({
-            method: "POST",
-            url:"http://localhost:8000/api/ingredient-inventory/",
-            data: ingredient
-          }).then((response)=>{
-            getDBIngredients();
+            getDBPackaging();
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -130,11 +113,11 @@ export default function IngredientList() {
               }
           });
         clearError();
-        // Check to see if we already have a duplicate Ingredient Name
+        // Check to see if we already have a duplicate Packaging Name
         // if (!ingredients.find((ing) => ing.i_id === ing.i_id))
         // {
-        //     let newIngredients = [...ingredients, ingredient];
-        //     setIngredients(newIngredients);
+        //     let newPackagings = [...ingredients, ingredient];
+        //     setPackagings(newPackagings);
         //     clearError();
         // }
         // else {
@@ -143,13 +126,13 @@ export default function IngredientList() {
         // }
     }
 
-    const deleteIngredient = (key) => {
-        const ingID = ingredients[key]['i_id']; 
+    const deletePackaging = (key) => {
+        const pkgID = packaging[key]['p_id']; 
         axios({
             method: "DELETE",
-            url:"http://localhost:8000/api/ingredient-inventory/"+ingID+'/',
+            url:"http://localhost:8000/api/packaging-inventory/"+pkgID+'/',
           }).then((response)=>{
-            getDBIngredients();
+            getDBPackaging();
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -159,17 +142,17 @@ export default function IngredientList() {
           });
     }
 
-    const updateIngredient = (key) => {
-        let thisID = ingredients[key]['i_id'];
-        if (ingredients.find((ing) => ing.i_id === thisID))
+    const updatePackaging = (key) => {
+        let thisID = packaging[key]['p_id'];
+        if (packaging.find((pkg) => pkg.p_id === thisID))
         {
-            setEditIngredientID(null);
+            setEditPackagingID(null);
             axios({
                 method: "PATCH",
-                url:"http://localhost:8000/api/ingredient-inventory/"+thisID+'/',
+                url:"http://localhost:8000/api/packaging-inventory/"+thisID+'/',
                 data: editFormData
               }).then((response)=>{
-                getDBIngredients();
+                getDBPackaging();
               }).catch((error) => {
                 if (error.response) {
                   console.log(error.response);
@@ -179,7 +162,7 @@ export default function IngredientList() {
               });
         }
         else {
-            // If this Ingredient is already in ingredients list, display error message
+            // If this Packaging is already in ingredients list, display error message
             handleError('DuplicateKey');
         }
         
@@ -189,7 +172,7 @@ export default function IngredientList() {
         // Get the name and value of the changed field
         const fieldName = event.target.getAttribute('name');
         const fieldValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        // Create new Ingredient object before setting state
+        // Create new Packaging object before setting state
         const newEditFormData = {...editFormData};
         newEditFormData[fieldName] = fieldValue;
         // Set state with new ingredient object
@@ -203,15 +186,15 @@ export default function IngredientList() {
       }
 
     const handleEditClick = (key) => {
-        setEditIngredientID(key);
-        setEditFormData(ingredients[key]);
+        setEditPackagingID(key);
+        setEditFormData(packaging[key]);
     }
     const handleCancelClick = () => {
-        setEditIngredientID(null);
+        setEditPackagingID(null);
         setEditFormData(null);
     }
 
-    if (ingredients === undefined || suppliers === undefined) {
+    if (packaging === undefined || suppliers === undefined) {
         return (<>loading</>)
     }
     // The HTML structure of this component
@@ -221,15 +204,15 @@ export default function IngredientList() {
             <table className='main-table'>
                 <thead>
                     <tr>
-                        <th>Ingredient Name</th>
                         <th>Package Type</th>
-                        <th>Storage Type</th>
+                        <th>Returnable</th>
+                        <th>Unit Qty</th>
+                        <th>Unit</th>
+                        <th>Qty Holds</th>
                         <th>Date In</th>
                         <th>Qty In</th>
-                        <th>Expiration Date</th>
                         <th>Usages</th>
                         <th>Qty On Hand</th>
-                        <th>Unit</th>
                         <th>Unit Cost</th>
                         <th>Flat Fee</th>
                         <th>Supplier</th>
@@ -238,15 +221,15 @@ export default function IngredientList() {
                 </thead>
                 <tbody>
                     {/* Show a row for each ingredient in ingredients.*/}
-                    {ingredients.map((ingredient, key) => {
+                    {packaging.map((pkg, key) => {
                         const thisKey = key;
                         return(
                             <Fragment>
                                 {
                                 // If this ingredient is the one to be edited, show an editable row instead
-                                editIngredientID === thisKey 
-                                ? <EditableIngredientRow thisKey={thisKey} editFormData={editFormData} suppliers={suppliers} updateIngredient={updateIngredient} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
-                                : <IngredientRow thisKey={thisKey} ingredient={ingredient} deleteIngredient={deleteIngredient} handleEditClick={handleEditClick}/>
+                                editPackagingID === thisKey 
+                                ? <EditablePackagingRow thisKey={thisKey} editFormData={editFormData} suppliers={suppliers} updatePackaging={updatePackaging} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
+                                : <PackagingRow thisKey={thisKey} packaging={pkg} deletePackaging={deletePackaging} handleEditClick={handleEditClick}/>
                                 }
                             </Fragment>
                         );
@@ -255,9 +238,8 @@ export default function IngredientList() {
                 </tbody>
             </table>
             {loadingComponent}
-            <h3>Add An Ingredient</h3>
-            <IngredientForm addIngredient={addIngredient} suppliers={suppliers}></IngredientForm>
-            <button onClick={postDBIngredients}>Submit Changes</button>
+            <h3>Add Packaging</h3>
+            <PackagingForm addPackaging={addPackaging} suppliers={suppliers}></PackagingForm>
             {errorComponent}
             {displayMsgComponent}
         </div>

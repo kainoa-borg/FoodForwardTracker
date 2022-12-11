@@ -75,6 +75,5 @@ class PackagingInvSerializer(ModelSerializer):
 
 # Create your views here.
 class PackagingInvView(ModelViewSet):
-	# queryset = Ingredients.objects.prefetch_related('ingredient_usage').select_related('isupplier').select_related('pref_isupplier').all()
 	queryset = Packaging.objects.all()
 	serializer_class = PackagingInvSerializer

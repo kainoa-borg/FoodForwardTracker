@@ -8,13 +8,13 @@ export default function ReusableTable(props) {
     // ]
 
     const [dataState, setDataState] = useState(props.data);
-    const [editRowID, setEditRowID] = useState(null);
-    const [editData, setEditData] = useState(null);
+
+    console.log(dataState);
 
     return (
         <table>
             <thead>
-                {Object.keys(dataState[0]).map((thisKey) => {
+                {Object.keys(dataState[1]).map((thisKey) => {
                     return (
                         <th>{thisKey}</th>
                     )

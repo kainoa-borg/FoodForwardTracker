@@ -9,7 +9,7 @@
     min-width: rem-calc(640);
 }
 
-.main-table.th {
+th {
     position: sticky;
     top: 0;
     background-color: white;

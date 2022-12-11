@@ -20,6 +20,7 @@ from .HouseholdViews import HouseholdsView, HouseholdsWithAllergies
 from .IngredientViews import IngredientInvView
 from .PackagingViews import PackagingInvView
 from .MenuView import MenuView
+from .SupplierViews import SupplierView
 
 from .models import (Households, Ingredients, Packaging, MealPlans, Recipes)
 #admin.site.register(Households)
@@ -30,9 +31,11 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient-inventory')
 router.register(r'households', HouseholdsWithAllergies, basename='households')
+router.register(r'households-report', HouseholdsView, basename='households-report')
 router.register(r'users', UserView, basename='users')
 router.register(r'menu', MenuView, basename='menu')
 router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
+router.register(r'suppliers', SupplierView, basename='suppliers')
 #router.register(r'main', MainView, basename='main')
 
 
