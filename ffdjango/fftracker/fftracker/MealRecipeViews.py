@@ -64,7 +64,7 @@ class Meta():
     model = Recipes
     fields = ('r_num', 'r_name')
 
-class RecipeView(viewsets.View):
+class RecipeView(viewsets.ViewSet):
     def list(self, request):
         keys = ('r_num', 'r_name')
         query = 'SELECT mp.m_date, ri.prep, ri.amt, ri.unit, i.ingredient_name, ra.allergy, rd.diet_category FROM ingredients AS i JOIN recipe_ingredients AS ri ON i.i_id = ri.ri_ing_id JOIN recipes AS r on ri.ri_recipe_num = r.r_num JOIN meal_plans AS mp ON r.r_num = mp.meal_r_num OR r.r_num = mp.snack_r_num LEFT JOIN recipe_allergies ra ON ra.ra_recipe_num = r.r_num LEFT JOIN recipe_diets rd ON rd.rd_recipe_num = r.r_num WHERE r.r_name = "pizza" OR mp.m_date = "22/11/7"'
@@ -91,7 +91,7 @@ class RecipeIngredientsSerializer(ModelSerializer):
         model = RecipeIngredients
         fields = ('__all__')
 
-class RecipeIngredientsView(viewsets.View):
+class RecipeIngredientsView(viewsets.ViewSet):
     def list(self, request):
         keys = ('ri_id', 'amt', 'unit', 'prep', 'ri_ing', 'ri_recipe_num')
         query = 'JOIN recipes AS r on ri.ri_recipe_num = r.r_num'
@@ -119,7 +119,7 @@ class RecipeInstructionsSerializer(ModelSerializer):
         model = RecipeInstructions
         fields = ('__all__')
 
-class RecipeInstructionsView(viewsets.View):
+class RecipeInstructionsView(viewsets.ViewSet):
     def list(self, request):
         keys = ('inst_id', 'step_no', 'step_inst', 'stn_name', 'inst_recipe_name')
         query = 'JOIN recipe_instructions rin ON rin.inst_recipe_num = r.r_num'

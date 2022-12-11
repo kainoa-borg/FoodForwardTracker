@@ -13,12 +13,15 @@ import './MealList.css'
 // Meal List Component
 export default function MealList() {
     const data = [
-        {m_id: 1, meal_r_num: 'Veggie Lasagna', snack_r_num: 'Apples', num_servings: '', m_date: '11/20/22', usages: []},
-        {m_id: 2, meal_r_num: 'Beef and Bean Enchiladas', snack_r_num: 'Overnight Oats', num_servings: '', m_date: '11/11/22', usages: []},
-        {m_id: 3, meal_r_num: 'Tuna Casserole', snack_r_num: 'Crackers', num_servings: 'N/A', in_date: '11/20/22', usages: []}
+        //{m_id: 1, meal_r_num: 'Veggie Lasagna', snack_r_num: 'Apples', num_servings: '', m_date: '11/20/22', usages: []},
+        //{m_id: 2, meal_r_num: 'Beef and Bean Enchiladas', snack_r_num: 'Overnight Oats', num_servings: '', m_date: '11/11/22', usages: []},
+        //{m_id: 3, meal_r_num: 'Tuna Casserole', snack_r_num: 'Crackers', num_servings: 'N/A', m_date: '11/20/22', usages: []}
+        { m_id: 1, m_date: '11/20/22', snack_r_num: 1, meal_r_num: 2, num_servings: 6, usages: [] },
+        { m_id: 2, m_date: '11/20/22', snack_r_num: 1, meal_r_num: 2, num_servings: 5, usages: [] },
+        { m_id: 3, m_date: '11/20/22', snack_r_num: 1, meal_r_num: 2, num_servings: 3, usages: [] }
     ]
 
-    const [mealID, setMealPlan] = useState(data);
+    const [meal_plans, setMealPlan] = useState(data);
     const [editMealID, setEditMealID] = useState(null);
     const [editFormData, setEditFormData] = useState(null);
     const [errorComponent, setErrorComponent] = useState(null);
@@ -27,7 +30,7 @@ export default function MealList() {
     const getDBMealPlan = () => {
         axios({
             method: "GET",
-            url:"/meals/"
+            url:"/meal_plans/"
           }).then((response)=>{
             const mealData = response.data
             setMealPlan(mealData);
@@ -43,8 +46,8 @@ export default function MealList() {
     const postDBMealPlan = () => {
         axios({
             method: "POST",
-            url:"/meals/",
-            data: mealID
+            url:"/meal_plans/",
+            data: meal_plans
           }).then((response)=>{
             getDBMealPlan();
           }).catch((error) => {
@@ -69,9 +72,9 @@ export default function MealList() {
     }
 
     const addMeal = (meal) => {
-        const lastID = meal[meal.length - 1]['m_id'];
+        const lastID = meal_plans[meal_plans.length - 1]['m_id'];
         meal['m_id'] = lastID + 1;
-        let newMeal = [...meal, meal];
+        let newMeal = [...meal_plans, meal];
         setMealPlan(newMeal);
         clearError();
         // Check to see if we already have a duplicate Ingredient Name
@@ -89,16 +92,16 @@ export default function MealList() {
 
     const deleteMeal = (key) => {
         const mealID = key; 
-        let newMeal = [...mealID];
+        let newMeal = [...meal_plans];
         newMeal.splice(mealID, 1);
         setMealPlan(newMeal);
     }
 
     const updateMeal = (key) => {
-        let thisID = mealID[key]['i_id'];
-        if (mealID.find((meals) => meals.m_id === thisID))
+        let thisID = meal_plans[key]['m_id'];
+        if (meal_plans.find((meals) => meals.m_id === thisID))
         {
-            let newMeal = [...mealID];
+            let newMeal = [...meal_plans];
             newMeal[key] = editFormData;
             setEditMealID(null);
             setMealPlan(newMeal)
@@ -132,7 +135,7 @@ export default function MealList() {
 
     const handleEditClick = (key) => {
         setEditMealID(key);
-        setEditFormData(mealID[key]);
+        setEditFormData(meal_plans[key]);
     }
     const handleCancelClick = () => {
         setEditMealID(null);
@@ -147,15 +150,15 @@ export default function MealList() {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Meal Name</th>
-                        <th>Date In</th>
+                        <th>Date</th>
                         <th>Snack Name</th>
+                        <th>Meal Name</th>
                         <th>Number of Servings</th>
                     </tr>
                 </thead>
                 <tbody>
                     {/* Show a row for each ingredient in ingredients.*/}
-                    {mealID.map((meal, key) => {
+                    {meal_plans.map((meal, key) => {
                         const thisKey = key;
                         return(
                             <Fragment>

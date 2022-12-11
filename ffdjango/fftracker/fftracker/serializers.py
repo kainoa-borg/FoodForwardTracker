@@ -43,17 +43,12 @@ class MealKitSerializer(ModelSerializer):
 		model = Kits
 		fields = ('__all__')
 
-		class MealPlansSerializer(ModelSerializer):
-	class Meta():
-		model = MealPlans
-		fields = ('__all__')
-
 class MealPacksSerializers(ModelSerializer):
 	class Meta():
 		model = MealPacks
 		fields = ('__all__')
 
-		class MealPlansSerializer(ModelSerializer):
+class MealPlansSerializer(ModelSerializer):
 	class Meta():
 		model = MealPlans
 		fields = ('__all__')

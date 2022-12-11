@@ -13,15 +13,15 @@ const MealPlanForm = (props) => {
     return {
       m_id: null,
       m_date: '',
-      snack_r_num: '',
-      meal_r_num: '',
-      num_servings: '',
+      snack_r_num: null,
+      meal_r_num: null,
+      num_servings: null
     }
   }
 
   // The state of this Meal Plan Form with each attribute of Meals
   const [meal, setMeal] = useState(clearMeal());
-  const [mealList, setMealList] = useState([{m_id: 1, meal_r_num: 'Meal Name'}, {m_id: 2, meal_r_num: 'Meal Name'}]);
+  //const [mealList, setMealList] = useState([{m_id: 1, meal_r_num: 'Meal Name'}, {m_id: 2, meal_r_num: 'Meal Name'}]);
 
     // Handle form submission (prevent refresh, pass ingredient to addMeal, and clear form state)
     // Takes submit event information (form submission)
@@ -61,43 +61,17 @@ const MealPlanForm = (props) => {
     return (
       <form onSubmit={handleSubmit}>
           {/* Basic Meal Plan info */}
-          <label htmlFor="m_id">Meal Name: </label>
-          <input name="Meal Name" type="text" maxLength='30' value={meal.m_id} onChange={handleFormChange}/>
+          <label htmlFor="m_date">Meal Name ID temp: </label>
+          <input name="m_date" type="text" maxLength='50' value={meal.m_date} onChange={handleFormChange}/>
           
-          <label htmlFor='snack_r_num'>Snack Name: </label>
-          <input name='snack_r_num' type="text" value={meal.snack_r_num} onChange={handleFormChange}/>
+          <label htmlFor='snack_r_num'>Snack Number: </label>
+          <input name='snack_r_num' type="number" value={meal.snack_r_num} onChange={handleFormChange}/>
           
-          <label htmlFor="m_date">Meal Date: </label>
-          <input name="m_date" type="date" value={meal.m_date} onChange={handleFormChange}/>
-
           <label htmlFor="meal_r_num">Meal Number: </label>
-          <input name="meal_r_num" type="number" value={meal.in_qty} onChange={handleFormChange}/>
+            <input name="meal_r_num" type="number" value={meal.meal_r_num} onChange={handleFormChange}/>
 
-          <label htmlFor="unit">Snack Number: </label>
-          <input name="unit" type="text" value={meal.unit} onChange={handleFormChange}/>
-
-          <label htmlFor="exp_date">Exp Date: </label>
-          <input name="exp_date" type="date" value={meal.exp_date} onChange={handleFormChange}/>
-
-          <label htmlFor="meal_r_num">Meal Recipe Number: </label>
-          <select name="meal_r_num" onChange={handleFormChange}>
-            <option selected="true">N/A</option>
-            {mealList.map((meal, key) => {
-              return (
-                <option name='meal_r_num' value={meal.meal_r_num}>{meal.meal_r_num}</option>
-              )
-            })}
-          </select>
-
-          <label htmlFor="snack_r_num">Snack Recipe Number: </label>
-          <select name="snack_r_num">
-            <option selected="true">N/A</option>
-            {mealList.map((meal, key) => {
-              return (
-                <option value={meal.snack_r_num}>{meal.snack_r_num}</option>
-              );
-            })}
-          </select>
+          <label htmlFor="num_servings">Number of Servings: </label>
+            <input name="num_servings" type="number" value={meal.num_servings} onChange={handleFormChange}/>
 
           <button type='Submit'>Add</button>
       </form>

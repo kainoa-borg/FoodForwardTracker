@@ -44,9 +44,6 @@ const App = () => {
         <button onClick={() => handlePageClick('loginPage')}>
           Login Page
         </button>
-               <button onClick={() => handlePageClick('pwResetPage')}>
-          Password Reset
-        </button>
         <button onClick={() => handlePageClick('landingPage')}>
           Landing Page
         </button>
