@@ -1,4 +1,3 @@
-import MealRepositoryTable from './MealPlan.js'
 import HouseholdForm from './Households/HouseholdForm.js'
 import LoginPage from './LoginPage.js'
 import PwResetPage from './PwResetPage.js'
@@ -23,7 +22,6 @@ const App = () => {
     else if (pageName === 'households') setCurrPage(<HouseholdList/>);
     else if (pageName === 'ingredients') setCurrPage(<Ingredients />);
     else if (pageName === 'packaging') setCurrPage(<Packaging />);
-    //else if (pageName === 'landing') setCurrPage(<MealRepositoryTable/>);
     else if (pageName === 'allergies') setCurrPage(<AllergiesList allergies={[{aType: 'Gluten'}, {aType: 'Peanut'}]}/>);
   }
 
