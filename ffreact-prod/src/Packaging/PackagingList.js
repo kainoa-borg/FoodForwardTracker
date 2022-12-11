@@ -13,9 +13,9 @@ import './PackagingList.css'
 // Packaging List Component
 export default function PackagingList() {
     const data = [
-        { p_id: 1, packaging_type: 'Mason Jar', unit_qty: 1, unit_cost: null, qty_holds: 8, unit: 'oz', returnable: 1, in_date: '11-20-24', in_qty: 10, exp_date: '11-20-24', qty_on_hand: 10, flat_fee: 0.00, psupplier_name: 'Second Harvest Food Bank', pref_psupplier_name: 'N/A', usages: []},
-        { p_id: 2, packaging_type: 'Mason Jar', unit_qty: 1, unit_cost: null, qty_holds: 24, unit: 'oz', returnable: 1, in_date: '12-7-22', in_qty: 2, exp_date: '11-20-24', qty_on_hand: 10, flat_fee: 0.00, psupplier_name: 'Second Harvest Food Bank', pref_psupplier_name: 'N/A', usages: []},
-        { p_id: 3, packaging_type: 'Snack Bag', unit_qty: 50, unit_cost: null, qty_holds: 1, unit: 'gal', returnable: 0, in_date: '12-7-22', in_qty: 5, exp_date: '11-20-24', qty_on_hand: 10, flat_fee: 0.00, psupplier_name: 'Second Harvest Food Bank', pref_psupplier_name: 'N/A', usages: []}
+        { p_id: 1, packaging_type: 'Mason Jar', unit_qty: 1, unit_cost: 5.50, qty_holds: 8, unit: 'oz', returnable: 1, in_date: '11-20-24', in_qty: 10, exp_date: '11-20-24', qty_on_hand: 10, flat_fee: 0.00, psupplier_name: 'Second Harvest Food Bank', pref_psupplier_name: 'N/A', usages: []},
+        { p_id: 2, packaging_type: 'Mason Jar', unit_qty: 1, unit_cost: 5.50, qty_holds: 24, unit: 'oz', returnable: 1, in_date: '12-7-22', in_qty: 2, exp_date: '11-20-24', qty_on_hand: 10, flat_fee: 0.00, psupplier_name: 'Second Harvest Food Bank', pref_psupplier_name: 'N/A', usages: []},
+        { p_id: 3, packaging_type: 'Snack Bag', unit_qty: 50, unit_cost: 2.00, qty_holds: 1, unit: 'gal', returnable: 0, in_date: '12-7-22', in_qty: 5, exp_date: '11-20-24', qty_on_hand: 10, flat_fee: 0.00, psupplier_name: 'Second Harvest Food Bank', pref_psupplier_name: 'N/A', usages: []}
     ]
 
     const [packaging, setPackaging] = useState(data);

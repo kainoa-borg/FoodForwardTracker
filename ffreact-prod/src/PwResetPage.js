@@ -40,7 +40,7 @@ const PwResetPage = (props) => {
         const fieldValue = event.target.value;
         const thisUser = {...user};
         thisUser[fieldName] = fieldValue;
-        sendEmail(thisUser);
+        sendEmail(thisUser);                                //*** Function needs to be implemented ***/
 // Send email if account and email match
     }
     
@@ -53,7 +53,7 @@ const PwResetPage = (props) => {
         // send reset request to backend
         sendResetRequest();
         // Switch to 'Login Page' page
-        handlePageClick('LoginPage');
+        handlePageClick('loginPage');
         // TO DO;
     }
     
