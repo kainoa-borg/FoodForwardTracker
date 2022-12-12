@@ -17,4 +17,4 @@ class SupplierSerializer(ModelSerializer):
 
 class SupplierView(ModelViewSet):
     queryset = Supplier.objects.all()
-    serializer_class = SupplierSerializer()
+    serializer_class = SupplierSerializer

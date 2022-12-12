@@ -18,24 +18,7 @@ export default function HouseholdList() {
 
     const [households, setHouseholds] = useState(undefined);
     const [editHouseholdID, setEditHouseholdID] = useState(null);
-    const [editFormData, setEditFormData] = useState({
-        hh_name: "",
-        num_adult: null,
-        num_child: null,
-        sms_flag: null,
-        veg_flag: null,
-        allergy_flag: null,
-        gf_flag: null,
-        ls_flag: null,
-        paused_flag: null,
-        phone: "",
-        street: "",
-        city: "",
-        pcode: null,
-        state: "",
-        delivery_notes: "",
-        hh_allergies: []
-    });
+    const [editFormData, setEditFormData] = useState(null);
     const [errorComponent, setErrorComponent] = useState(null);
     const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
 
@@ -45,28 +28,21 @@ export default function HouseholdList() {
                 <Error text="Household Name already found!"/>
             )
         }
-        if (errCode = 'empty') {
-                setErrorComponent(
-                  <Error text="There doesn't seem to be any data!"/>
-                )
-        }
     }
     const clearError = () => {
         setErrorComponent(null);
     }
 
     useEffect(() => {
-        getDBHouseholds();
+        setHouseholds(getDBHouseholds());
     }, []);
 
     const getDBHouseholds = () => {
-        setHouseholds(undefined);
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
             url:"http://localhost:8000/api/households"
           }).then((response)=>{
-            console.log(response.data[0])
             const hhData = response.data
             setHouseholds(hhData);
           }).catch((error) => {
@@ -82,7 +58,7 @@ export default function HouseholdList() {
         console.log(households);
         axios({
             method: "POST",
-            url: "http://localhost:8000/api/households/",
+            url: "http://localhost:8000/api/households",
             data: households
           }).then((response)=>{
             getDBHouseholds();
@@ -97,23 +73,11 @@ export default function HouseholdList() {
     }
 
     const addHousehold = (household) => {
-        console.log(JSON.stringify(household));
         // Check to see if we already have a duplicate Household Name
         if (!households.find((HH) => HH.hh_name === household.hh_name))
         {
-            axios({
-                method: "POST",
-                url: "http://localhost:8000/api/households/",
-                data: household
-              }).then((response)=>{
-                getDBHouseholds();
-              }).catch((error) => {
-                if (error.response) {
-                  console.log(error.response);
-                  console.log(error.response.status);
-                  console.log(error.response.headers);
-                  }
-              });
+            let newHouseholds = [...households, household];
+            setHouseholds(newHouseholds);
             clearError();
         }
         else {
@@ -124,44 +88,24 @@ export default function HouseholdList() {
 
     const deleteHousehold = (key) => {
         const householdID = key; 
-        axios({
-            method: "DELETE",
-            url: "http://localhost:8000/api/households/"+households[key].hh_name,
-          }).then((response)=>{
-            getDBHouseholds();
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-        });
+        let newHouseholds = [...households];
+        newHouseholds.splice(householdID, 1);
+        setHouseholds(newHouseholds);
     }
 
     const updateHousehold = (key) => {
-        let thisName = households[key].hh_name;
-        console.log(JSON.stringify(editFormData));
-        axios({
-            method: "PATCH",
-            url: "http://localhost:8000/api/households/"+thisName+'/',
-            data: editFormData
-          }).then((response)=>{
-            getDBHouseholds();
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
+        let thisName = households[key];
+        let newHouseholds = [...households];
+        newHouseholds[key] = editFormData;
         setEditHouseholdID(null);
+        setHouseholds(newHouseholds)
         clearError();
     }
 
     const handleEditFormChange = (event) => {
         // Get the name and value of the changed field
         const fieldName = event.target.getAttribute('name');
-        const fieldValue = event.target.type === 'checkbox' ? (+event.target.checked) : event.target.value;
+        const fieldValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
         // Create new household object before setting state
         const newEditFormData = {...editFormData};
         newEditFormData[fieldName] = fieldValue;
@@ -229,8 +173,6 @@ export default function HouseholdList() {
                             </Fragment>
                         );
                     })}
-                    {/* If the list is empty display EmptyTableMessage */}
-                    {households.length < 1 ? handleError('empty') : null}
                 </tbody>
             </table>
             <h3>Add A Household</h3>
