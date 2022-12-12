@@ -21,11 +21,12 @@ const LoginPage = (props) => {
     const sendLoginRequest = () => {
         axios({
             method: "POST",
-            url:"",
+            url:"http://localhost:8000/api/users",
             data: user
           }).then((response)=>{
             const data = response.data;
-            console.log(data);
+              console.log(data);
+              //handlePageClick('landingPage');
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
