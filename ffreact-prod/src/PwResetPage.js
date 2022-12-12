@@ -40,7 +40,7 @@ const PwResetPage = (props) => {
         const fieldValue = event.target.value;
         const thisUser = {...user};
         thisUser[fieldName] = fieldValue;
-        sendEmail(thisUser);
+        sendEmail(thisUser);                                //*** Function needs to be implemented ***/
 // Send email if account and email match
     }
     
@@ -53,7 +53,7 @@ const PwResetPage = (props) => {
         // send reset request to backend
         sendResetRequest();
         // Switch to 'Login Page' page
-        handlePageClick('LoginPage');
+        handlePageClick('loginPage');
         // TO DO;
     }
     
@@ -64,9 +64,9 @@ const PwResetPage = (props) => {
             <form onSubmit={handleResetSubmit}>
                 <label htmlFor='username'>Username: </label>
                 <input type='text' maxLength='30' name='username' value={user.username} onChange={handleResetChange}></input>
-                <label htmlFor='username'>Email: </label>
+                <br/><label htmlFor='username'>Email: </label>
                 <input type='email' maxLength='30' name='email' value={user.email} onChange={handleResetChange}></input>
-                <button type='Submit'>Submit</button>
+                <br/><br/><button type='Submit'>Submit</button>
             </form>
         </Fragment>
     );

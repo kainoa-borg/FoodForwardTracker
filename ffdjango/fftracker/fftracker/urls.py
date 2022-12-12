@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from .views import UserView
 from .UserView import UserView
 from .HouseholdViews import HouseholdsView, HouseholdsWithAllergies
 from .IngredientViews import IngredientInvView
@@ -25,6 +26,9 @@ from .MealRecipeViews import MealRecipeViews
 from .AccountCreationViews import AccountCreationViews
 from .PacPurchaseList import PPLView
 from .SupplierViews import SupplierView
+from .MealPlanViews import MealPlansView
+from .MealRecipeViews import *
+from .AccountCreationViews import AccountCreateView
 
 from .models import (Households, Ingredients, Packaging, MealPlans, Recipes)
 #admin.site.register(Households)
@@ -37,6 +41,9 @@ router.register(r'create-account', AccountCreationViews, basename='create-accoun
 router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient-inventory')
 router.register(r'households', HouseholdsWithAllergies, basename='households')
 router.register(r'households-report', HouseholdsView, basename='households-report')
+router.register(r'create-account', AccountCreateView, basename='create-account')
+router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient-inventory')
+router.register(r'households', HouseholdsWithAllergies, basename='households')
 router.register(r'packaging', PackagingInvView, basename='packaging')
 router.register(r'pack-purchase-list', PPLView, basename='pack-purchase-list')
 router.register(r'users', UserView, basename='users')
@@ -46,19 +53,20 @@ router.register(r'mealplans', MealPlansView, basename='mealplans')
 router.register(r'mealrecipes', MealRecipeViews, basename='mealrecipes')
 router.register(r'suppliers', SupplierView, basename='suppliers')
 #router.register(r'main', MainView, basename='main')
-
+router.register(r'mealrecipes', RecipeView, basename='mealrecipes')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/create-account', AccountCreationViews.as_view({'get': 'retrieve'})),
+    path('api/create-account', AccountCreateView.as_view({'get': 'retrieve'})),
     path('api/update-household/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve', 'patch': 'update'})),
     path('api/get-households', HouseholdsView.as_view({'get': 'list', 'post': 'create'})),
     path('api/get-households/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve'})),
     path('api/get-ingredient', IngredientInvView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-packaging', PackagingInvView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-pack-purchase-list', PPLView.as_view({'get': 'list', 'get': 'retrieve'})),
+    path('api/get-users', UserView.as_view({'get': 'retrieve'})),
     path('api/get-menu', MenuView.as_view({'get': 'retrieve'})),
-    path('api/get-mealplan', MealPlansView.as_view({'get': 'retrieve'})),
-    path('api/get-mealrecipes', MealRecipeViews.as_view({'get': 'retrieve'})),
+    path('api/get-mealplans', MealPlansView.as_view({'get': 'retrieve'})),
+    path('api/get-mealrecipes', RecipeView.as_view({'get': 'retrieve'})),
     path('api/', include(router.urls))
 ]
