@@ -15,10 +15,10 @@ export default function UserList() {
     const [users, setUsers] = useState(undefined);
     const [editUserID, setEditUserID] = useState(null);
     const [editFormData, setEditFormData] = useState({
-        u_id: null,
+        u_id: 0,
         username: "",
         password: "",
-        admin_flag: null,
+        admin_flag: 0,
         email: ""
     });
 
@@ -67,7 +67,7 @@ export default function UserList() {
             url: "http://localhost:8000/api/users/",
             data: users
           }).then((response)=>{
-              setUsers(getDBUsers());
+              getDBUsers();
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -81,14 +81,14 @@ export default function UserList() {
     const addUser = (user) => {
         console.log(JSON.stringify(user));
         // Check to see if we already have a duplicate User Name
-        if (!users.find((u) => u.u_id === user.u_id))
+        if (!users.find((U) => U.username === user.username))
         {
             axios({
                 method: "POST",
                 url: "http://localhost:8000/api/users/",
                 data: user
               }).then((response)=>{
-                  setUsers(getDBUsers());
+                  getDBUsers();
               }).catch((error) => {
                 if (error.response) {
                   console.log(error.response);
