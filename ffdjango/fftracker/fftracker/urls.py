@@ -23,12 +23,11 @@ from .PackagingViews import PackagingInvView
 from .StationViews import StationsView, HouseholdsWithAllergies
 from .MenuView import MenuView
 from .MealPlanViews import MealPlansView
-from .MealRecipeViews import MealRecipeViews
+from .MealRecipeViews import *
 from .AccountCreationViews import AccountCreateView
 from .PacPurchaseList import PPLView
 from .SupplierViews import SupplierView
 from .MealPlanViews import MealPlansView
-from .MealRecipeViews import *
 from .AccountCreationViews import AccountCreateView
 
 from .models import (Households, Ingredients, Packaging, MealPlans, Recipes)
@@ -52,7 +51,7 @@ router.register(r'menu', MenuView, basename='menu')
 router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
 router.register(r'stations', StationsView, basename='stations')
 router.register(r'mealplans', MealPlansView, basename='mealplans')
-router.register(r'mealrecipes', MealRecipeViews, basename='mealrecipes')
+router.register(r'mealrecipes', RecipeView, basename='mealrecipes')
 router.register(r'suppliers', SupplierView, basename='suppliers')
 #router.register(r'main', MainView, basename='main')
 router.register(r'mealrecipes', RecipeView, basename='mealrecipes')

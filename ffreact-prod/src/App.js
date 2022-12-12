@@ -12,9 +12,7 @@ import Packaging from './Packaging/PackagingList.js'
 import ReportsPage from "./ReportsPage.js"
 import UserPage from "./UserPage.js"
 import NewUserPage from "./NewUserPage.js"
-import Recipe from './Recipe/RecipeList.js'
-import MealPlan from './Meals/MealList.js'
-import Station from './Stations/StationList'
+import StationList from './Stations/StationList'
 import React from 'react'
 import { useState } from 'react'
 
@@ -32,14 +30,12 @@ const App = () => {
         else if (pageName === 'households-report') setCurrPage(<HouseholdsReport />);
         else if (pageName === 'ingredients') setCurrPage(<Ingredients />);
         else if (pageName === 'packaging') setCurrPage(<Packaging />);
-        else if (pageName === 'stations') setCurrPage(<Stations />);
+        else if (pageName === 'stations') setCurrPage(<StationList />);
         else if (pageName === 'landing') setCurrPage(<HouseholdList />);
         else if (pageName === 'meals') setCurrPage(<MealPlan />);
         else if (pageName === 'recipes') setCurrPage(<Recipe />);
         else if (pageName === 'userPage') setCurrPage(<UserPage handlePageClick={handlePageClick} />);
         else if (pageName === 'allergies') setCurrPage(<AllergiesList allergies={[{ aType: 'Gluten' }, { aType: 'Peanut' }]} />);
-        else if (pageName === 'meals') setCurrPage(<MealPlan />);
-        else if (pageName === 'recipes') setCurrPage(<Recipe />);
     }
 
     return (
