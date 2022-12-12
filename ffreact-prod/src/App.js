@@ -9,6 +9,7 @@ import Ingredients from './Ingredients/IngredientList.js'
 import StationList from './Stations/StationList.js'
 import ReportsPage from "./ReportsPage.js"
 import UserPage from "./UserPage.js"
+import UserList from "./User/UserList.js"
 import NewUserPage from "./NewUserPage.js"
 import Recipe from './Recipe/RecipeList.js'
 import MealPlan from './Meals/MealList.js'
@@ -34,7 +35,9 @@ const App = () => {
         else if (pageName === 'landing') setCurrPage(<HouseholdList />);
         else if (pageName === 'meals') setCurrPage(<MealPlan />);
         else if (pageName === 'recipes') setCurrPage(<Recipe />);
-        else if (pageName === 'userPage') setCurrPage(<UserPage handlePageClick={handlePageClick} />);
+        else if (pageName === 'reports') setCurrPage(<ReportsPage />);
+        else if (pageName === 'userPage') setCurrPage(<UserPage />);
+        else if (pageName === 'userList') setCurrPage(<UserList handlePageClick={handlePageClick} />);
         else if (pageName === 'allergies') setCurrPage(<AllergiesList allergies={[{ aType: 'Gluten' }, { aType: 'Peanut' }]} />);
     }
 
@@ -66,11 +69,14 @@ const App = () => {
                 <button onClick={() => handlePageClick('stations')}>
                     Stations
                 </button>
-                <button onClick={() => handlePageClick('reportsPage')}>
+                <button onClick={() => handlePageClick('reports')}>
                     Reports
                 </button>
                 <button onClick={() => handlePageClick('userPage')}>
-                    User Page
+                    User Account
+                </button>
+                <button onClick={() => handlePageClick('userList')}>
+                    Users List
                 </button>
                 <button onClick={() => handlePageClick('meals')}>
                     Meal Plan
