@@ -11,12 +11,6 @@ import './PackagingList.css'
 
 // Packaging List Component
 export default function PackagingList() {
-    const data = [
-        {i_id: 1, ingredient_name: 'Lasagna Noodles', pkg_type: 'DRY-BAG', storage_type: 'N/A', in_date: '11/20/22', in_qty: 10, unit: 'lbs', exp_date: '11-20-24', qty_on_hand: 10, unit_cost: 0.75, flat_fee: 0.00, isupplier_name: 'Second Harvest Food Bank', pref_isupplier_name: 'N/A', usages: []},
-        {i_id: 2, ingredient_name: 'Ground Beef', pkg_type: 'FROZEN', storage_type: 'N/A', in_date: '11/11/22', in_qty: 2, unit: 'lbs', exp_date: '12-7-22', qty_on_hand: 2, unit_cost: 0.75, flat_fee: 0.00, isupplier_name: 'Second Harvest Food Bank', pref_isupplier_name: 'N/A', usages: []},
-        {i_id: 3, ingredient_name: 'Ground Beef', pkg_type: 'FROZEN', storage_type: 'N/A', in_date: '11/20/22', in_qty: 5, unit: 'lbs', exp_date: '12-7-22', qty_on_hand: 5, unit_cost: 0.75, flat_fee: 0.00, isupplier_name: 'Second Harvest Food Bank', pref_isupplier_name: 'N/A', usages: [{i_usage_id: 1, used_date: '11/29/22', used_qty: 2}]}
-    ]
-
     const [packaging, setPackaging] = useState(undefined);
     const [suppliers, setSuppliers] = useState(undefined);
     const [editPackagingID, setEditPackagingID] = useState(null);

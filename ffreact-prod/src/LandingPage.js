@@ -15,6 +15,15 @@ const LandingPage = (props) => {
             <button onClick={() => handlePageClick('ingredients')}>
                 Ingredients
             </button>
+            <button onClick={() => handlePageClick('packaging')}>
+                Packaging
+            </button>
+            <button onClick={() => handlePageClick('reportsPage')}>
+                Reports
+            </button>
+            <button onClick={() => handlePageClick('userPage')}>
+                User
+            </button>
         </Fragment>
     );
 }
