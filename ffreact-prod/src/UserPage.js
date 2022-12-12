@@ -11,6 +11,7 @@ const UserPage = (props) => {
             email: ''
         }
     );
+
     const handleLoginChange = (event) => {
         const fieldName = event.target.name;
         const fieldValue = event.target.value;
@@ -18,6 +19,25 @@ const UserPage = (props) => {
         thisUser[fieldName] = fieldValue;
         setUser(thisUser);
     }
+   
+    // HTML structure of this component
+    return (
+        <Fragment>
+            <h3>User Account</h3>
+            <button onClick={() => handlePageClick('UserPage')}>
+                Change Username
+            </button>
+            <button onClick={() => handlePageClick('UserPage')}>
+                Change Password
+            </button>
+            <button onClick={() => handlePageClick('UserPage')}>
+                Account Permissions
+            </button>
+            <button onClick={() => handlePageClick('UserPage')}>
+                Update Email
+            </button>
+        </Fragment>
+    );
 }
 
 export default UserPage;

@@ -13,7 +13,8 @@ const StationRow = (props) => {
     return (
         <tr key={key}>
             <td>{s.stn_name}</td>
-            <td>{s.num_serving}</td>
+            <td>{s.num_servings}</td>
+            <td></td>
             
             {/* When edit is clicked, handleEditClick is called with this row's key */}
             <td><button onClick={()=> handleEditClick(key)}>Edit</button></td>
