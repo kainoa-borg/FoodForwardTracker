@@ -2,12 +2,14 @@
 
 #pycache
 .pyc
+.cpython
 
 # dependencies
 ffreact-prod/node_modules
 /node_modules
 node_modules
 /.pnp
+/pycache
 .pnp.js
 
 # testing

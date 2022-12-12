@@ -1,66 +1,48 @@
-import React, {Fragment, useState} from 'react'
+import React, {Fragment, useState, useEffect, Suspense} from 'react'
 import axios from 'axios'
 import PackagingForm from './PackagingForm.js'
 import EditablePackagingRow from './EditablePackagingRow.js'
 import PackagingRow from './PackagingRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
-import ReusableTable from '../ReusableTable.js'
 
 import './PackagingList.css'
 
 
 // Packaging List Component
 export default function PackagingList() {
-    const data = [
-        { p_id: 1, packaging_type: 'Mason Jar', unit_qty: 1, unit_cost: 5.50, qty_holds: 8, unit: 'oz', returnable: 1, in_date: '11-20-24', in_qty: 10, exp_date: '11-20-24', qty_on_hand: 10, flat_fee: 0.00, psupplier_name: 'Second Harvest Food Bank', pref_psupplier_name: 'N/A', usages: []},
-        { p_id: 2, packaging_type: 'Mason Jar', unit_qty: 1, unit_cost: 5.50, qty_holds: 24, unit: 'oz', returnable: 1, in_date: '12-7-22', in_qty: 2, exp_date: '11-20-24', qty_on_hand: 10, flat_fee: 0.00, psupplier_name: 'Second Harvest Food Bank', pref_psupplier_name: 'N/A', usages: []},
-        { p_id: 3, packaging_type: 'Snack Bag', unit_qty: 50, unit_cost: 2.00, qty_holds: 1, unit: 'gal', returnable: 0, in_date: '12-7-22', in_qty: 5, exp_date: '11-20-24', qty_on_hand: 10, flat_fee: 0.00, psupplier_name: 'Second Harvest Food Bank', pref_psupplier_name: 'N/A', usages: []}
-    ]
-
-    const [packaging, setPackaging] = useState(data);
+    const [packaging, setPackaging] = useState(undefined);
+    const [suppliers, setSuppliers] = useState(undefined);
     const [editPackagingID, setEditPackagingID] = useState(null);
-    const [editFormData, setEditFormData] = useState(null);
+    const [editFormData, setEditFormData] = useState({
+        p_id: '',
+        package_type: "",
+        unit_qty: '',
+        qty_holds: '',
+        unit: "",
+        returnable: '',
+        in_date: '',
+        in_qty: '',
+        packaging_usage: [],
+        qty_on_hand: '',
+        unit_cost: '',
+        flat_fee: '',
+        psupplier_id: '',
+        pref_psupplier_id: ''
+    });
     const [errorComponent, setErrorComponent] = useState(null);
     const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
-
-    const getDBPackaging = () => {
-        axios({
-            method: "GET",
-            url:"/packaging/"
-          }).then((response)=>{
-            const pacData = response.data
-              setPackaging(pacData);
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-    }
-
-    const postDBPackaging = () => {
-        axios({
-            method: "POST",
-            url:"/packaging/",
-            data: packaging
-          }).then((response)=>{
-              getDBPackaging();
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-        setdisplayMsgComponent(<DisplayMessage msg='Submitting changes to database!'/>);
-    }
+    const [loadingComponent, setLoadingComponent] = useState(null);
 
     const handleError = (errCode) => {
         if (errCode === 'DuplicateKey') {
             setErrorComponent(
                 <Error text="Packaging ID already found!"/>
+            )
+        } 
+        else if (errCode === 'empty') {
+            setErrorComponent(
+                <Error text="There doesn't seem to be any data!"/>
             )
         }
     }
@@ -68,17 +50,68 @@ export default function PackagingList() {
         setErrorComponent(null);
     }
 
-    const addPackaging = (package_item) => {
+    useEffect(() => {
+        getDBPackaging();
+        getDBSuppliers();
+    }, []);
+
+    const getDBSuppliers = () => {
+        console.log("MAKING REQUEST TO DJANGO")
+        axios({
+            method: "GET",
+            url:"http://localhost:8000/api/suppliers"
+          }).then((response)=>{
+            setSuppliers(response.data);
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+    }
+
+    const getDBPackaging = () => {
+        console.log("MAKING REQUEST TO DJANGO")
+        setLoadingComponent(<Error text="LOADING DATA..."/>);
+        axios({
+            method: "GET",
+            url:"http://localhost:8000/api/packaging-inventory"
+          }).then((response)=>{
+            const pkgData = response.data
+            setPackaging(pkgData);
+            setLoadingComponent(null);
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+    }
+
+    const addPackaging = (pkg) => {
         const lastID = packaging[packaging.length - 1]['p_id'];
-        package_item['p_id'] = lastID + 1;
-        let newPackaging = [...packaging, package_item];
-        setPackaging(newPackaging);
+        pkg['p_id'] = lastID + 1;
+        axios({
+            method: "POST",
+            url:"http://localhost:8000/api/packaging-inventory/",
+            data: pkg
+          }).then((response)=>{
+            getDBPackaging();
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
         clearError();
-        // Check to see if we already have a duplicate Ingredient Name
+        // Check to see if we already have a duplicate Packaging Name
         // if (!ingredients.find((ing) => ing.i_id === ing.i_id))
         // {
-        //     let newIngredients = [...ingredients, ingredient];
-        //     setIngredients(newIngredients);
+        //     let newPackagings = [...ingredients, ingredient];
+        //     setPackagings(newPackagings);
         //     clearError();
         // }
         // else {
@@ -88,24 +121,42 @@ export default function PackagingList() {
     }
 
     const deletePackaging = (key) => {
-        const pacID = key; 
-        let newPackaging = [...packaging];
-        newPackaging.splice(pacID, 1);
-        setPackaging(newPackaging);
+        const pkgID = packaging[key]['p_id']; 
+        axios({
+            method: "DELETE",
+            url:"http://localhost:8000/api/packaging-inventory/"+pkgID+'/',
+          }).then((response)=>{
+            getDBPackaging();
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
     }
 
     const updatePackaging = (key) => {
-        let thisID = packaging[key]['i_id'];
-        if (packaging.find((pac) => pac.p_id === thisID))
+        let thisID = packaging[key]['p_id'];
+        if (packaging.find((pkg) => pkg.p_id === thisID))
         {
-            let newPackaging = [...packaging];
-            newPackaging[key] = editFormData;
             setEditPackagingID(null);
-            setPackaging(newPackaging)
-            clearError();
+            axios({
+                method: "PATCH",
+                url:"http://localhost:8000/api/packaging-inventory/"+thisID+'/',
+                data: editFormData
+              }).then((response)=>{
+                getDBPackaging();
+              }).catch((error) => {
+                if (error.response) {
+                  console.log(error.response);
+                  console.log(error.response.status);
+                  console.log(error.response.headers);
+                  }
+              });
         }
         else {
-            // If this Packaging is already in Packaging list, display error message
+            // If this Packaging is already in ingredients list, display error message
             handleError('DuplicateKey');
         }
         
@@ -118,16 +169,14 @@ export default function PackagingList() {
         // Create new Packaging object before setting state
         const newEditFormData = {...editFormData};
         newEditFormData[fieldName] = fieldValue;
-        // Set state with new Packaging object
+        // Set state with new ingredient object
         setEditFormData(newEditFormData);
     }
-    const updateEditForm = (names, values) => {
+    const updateEditForm = (name, value) => {
         const newEditFormData = {...editFormData};
-        for (let i = 0; i < names.length; i++) {
-          newEditFormData[names[i]] = values[i];
-          console.log('(' + names[i] + ', ' + values[i] + ')', newEditFormData.aFlag);
-        }
+        newEditFormData[name] = value;
         setEditFormData(newEditFormData);
+        console.log(editFormData);
       }
 
     const handleEditClick = (key) => {
@@ -139,6 +188,9 @@ export default function PackagingList() {
         setEditFormData(null);
     }
 
+    if (packaging === undefined || suppliers === undefined) {
+        return (<>loading</>)
+    }
     // The HTML structure of this component
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
@@ -146,42 +198,42 @@ export default function PackagingList() {
             <table className='main-table'>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Packaging Name</th>
-                        <th>Unit Qty</th>
-                        <th>Unit Cost</th>
-                        <th>Qty Holds</th>
-                        <th>Unit</th>
+                        <th>Package Type</th>
                         <th>Returnable</th>
-                        <th>In Date</th>
-                        <th>In Qty</th>
-                        <th>Expiration Date</th>
+                        <th>Unit Qty</th>
+                        <th>Unit</th>
+                        <th>Qty Holds</th>
+                        <th>Date In</th>
+                        <th>Qty In</th>
+                        <th>Usages</th>
                         <th>Qty On Hand</th>
+                        <th>Unit Cost</th>
                         <th>Flat Fee</th>
                         <th>Supplier</th>
                         <th>Preferred Supplier</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {/* Show a row for each package type in packaging.*/}
-                    {packaging.map((package_item, key) => {
+                    {/* Show a row for each ingredient in ingredients.*/}
+                    {packaging.map((pkg, key) => {
                         const thisKey = key;
                         return(
                             <Fragment>
                                 {
-                                // If this Packaging is the one to be edited, show an editable row instead
+                                // If this ingredient is the one to be edited, show an editable row instead
                                 editPackagingID === thisKey 
-                                        ? <EditablePackagingRow thisKey={thisKey} editFormData={editFormData} updatePackaging={updatePackaging} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
-                                        : <PackagingRow thisKey={thisKey} package_item={package_item} deletePackaging={deletePackaging} handleEditClick={handleEditClick}/>
+                                ? <EditablePackagingRow thisKey={thisKey} editFormData={editFormData} suppliers={suppliers} updatePackaging={updatePackaging} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
+                                : <PackagingRow thisKey={thisKey} packaging={pkg} deletePackaging={deletePackaging} handleEditClick={handleEditClick}/>
                                 }
                             </Fragment>
                         );
                     })}
+                    {/* {ingredients.length < 1 ? handleError('empty') : null} */}
                 </tbody>
             </table>
+            {loadingComponent}
             <h3>Add Packaging</h3>
-            <PackagingForm addPackaging={addPackaging}></PackagingForm>
-            <button onClick={postDBPackaging}>Submit Changes</button>
+            <PackagingForm addPackaging={addPackaging} suppliers={suppliers}></PackagingForm>
             {errorComponent}
             {displayMsgComponent}
         </div>

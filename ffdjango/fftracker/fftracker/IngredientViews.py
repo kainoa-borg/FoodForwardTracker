@@ -67,6 +67,5 @@ class IngredientInvSerializer(ModelSerializer):
 
 # Create your views here.
 class IngredientInvView(ModelViewSet):
-	# queryset = Ingredients.objects.prefetch_related('ingredient_usage').select_related('isupplier').select_related('pref_isupplier').all()
 	queryset = Ingredients.objects.all()
 	serializer_class = IngredientInvSerializer

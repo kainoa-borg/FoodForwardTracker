@@ -46,7 +46,9 @@ export default function HouseholdList() {
             )
         }
         if (errCode = 'empty') {
-                return <Error text="There doesn't seem to be any data!"/>
+                setErrorComponent(
+                  <Error text="There doesn't seem to be any data!"/>
+                )
         }
     }
     const clearError = () => {
@@ -54,15 +56,17 @@ export default function HouseholdList() {
     }
 
     useEffect(() => {
-        setHouseholds(getDBHouseholds());
+        getDBHouseholds();
     }, []);
 
     const getDBHouseholds = () => {
+        setHouseholds(undefined);
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
             url:"http://localhost:8000/api/households"
           }).then((response)=>{
+            console.log(response.data[0])
             const hhData = response.data
             setHouseholds(hhData);
           }).catch((error) => {
@@ -81,7 +85,7 @@ export default function HouseholdList() {
             url: "http://localhost:8000/api/households/",
             data: households
           }).then((response)=>{
-            setHouseholds(getDBHouseholds());
+            getDBHouseholds();
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -102,7 +106,7 @@ export default function HouseholdList() {
                 url: "http://localhost:8000/api/households/",
                 data: household
               }).then((response)=>{
-                setHouseholds(getDBHouseholds());
+                getDBHouseholds();
               }).catch((error) => {
                 if (error.response) {
                   console.log(error.response);
@@ -124,7 +128,7 @@ export default function HouseholdList() {
             method: "DELETE",
             url: "http://localhost:8000/api/households/"+households[key].hh_name,
           }).then((response)=>{
-            setHouseholds(getDBHouseholds());
+            getDBHouseholds();
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -142,7 +146,7 @@ export default function HouseholdList() {
             url: "http://localhost:8000/api/households/"+thisName+'/',
             data: editFormData
           }).then((response)=>{
-            setHouseholds(getDBHouseholds());
+            getDBHouseholds();
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
