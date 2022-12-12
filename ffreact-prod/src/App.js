@@ -28,7 +28,7 @@ const App = () => {
         else if (pageName === 'pwResetPage') setCurrPage(<PwResetPage handlePageClick={handlePageClick} />);
         else if (pageName === 'landingPage') setCurrPage(<LandingPage handlePageClick={handlePageClick} />);
         else if (pageName === 'households') setCurrPage(<HouseholdList />);
-        else if (pageName === 'households-report') setCurrPage(<HouseholdsReport />);
+        else if (pageName === 'households-report') setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />);
         else if (pageName === 'ingredients') setCurrPage(<Ingredients />);
         else if (pageName === 'packaging') setCurrPage(<Packaging />);
         else if (pageName === 'stations') setCurrPage(<StationList />);

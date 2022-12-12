@@ -21,12 +21,12 @@ const LoginPage = (props) => {
     const sendLoginRequest = () => {
         axios({
             method: "POST",
-            url:"http://localhost:8000/api/users",
+            url:"http://localhost:8000/api/users/",
             data: user
           }).then((response)=>{
             const data = response.data;
               console.log(data);
-              //handlePageClick('landingPage');
+            handlePageClick('landingPage');
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -56,7 +56,7 @@ const LoginPage = (props) => {
         // send login to backend
         sendLoginRequest();
         // Switch to 'landing' page
-        handlePageClick('landingPage');
+        //handlePageClick('landingPage');
         // TO DO;
     }
 
