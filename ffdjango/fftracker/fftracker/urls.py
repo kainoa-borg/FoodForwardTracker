@@ -24,7 +24,7 @@ from .StationViews import StationsView, HouseholdsWithAllergies
 from .MenuView import MenuView
 from .MealPlanViews import MealPlansView
 from .MealRecipeViews import MealRecipeViews
-from .AccountCreationViews import AccountCreationViews
+from .AccountCreationViews import AccountCreateView
 from .PacPurchaseList import PPLView
 from .SupplierViews import SupplierView
 from .MealPlanViews import MealPlansView
@@ -38,7 +38,7 @@ from .models import (Households, Ingredients, Packaging, MealPlans, Recipes)
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register(r'create-account', AccountCreationViews, basename='create-account')
+router.register(r'create-account', AccountCreateView, basename='create-account')
 router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient-inventory')
 router.register(r'households', HouseholdsWithAllergies, basename='households')
 router.register(r'households-report', HouseholdsView, basename='households-report')
