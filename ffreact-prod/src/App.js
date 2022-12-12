@@ -57,14 +57,14 @@ const App = () => {
         <button onClick={() => handlePageClick('ingredients')}>
           Ingredients
         </button>
+        <button onClick={() => handlePageClick('packaging')}>
+          Packaging
+        </button>
         <button onClick={() => handlePageClick('meals')}>
           Meal Plan
         </button>
         <button onClick={() => handlePageClick('recipes')}>
           Recipes
-        </button>
-        <button onClick={() => handlePageClick('packaging')}>
-          Packaging
         </button>
         {currPage}
       </header>
