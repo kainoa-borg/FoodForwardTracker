@@ -15,11 +15,13 @@ export default function UserList() {
     const [users, setUsers] = useState(undefined);
     const [editUserID, setEditUserID] = useState(null);
     const [editFormData, setEditFormData] = useState({
-        stn_name: "",
-        num_servings: null,
-   
-       // hh_allergies: []
+        u_id: null,
+        username: "",
+        password: "",
+        admin_flag: null,
+        email: ""
     });
+
     const [errorComponent, setErrorComponent] = useState(null);
     const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
 
@@ -47,8 +49,8 @@ export default function UserList() {
             method: "GET",
             url:"http://localhost:8000/api/users"
           }).then((response)=>{
-            const stnData = response.data
-            setUsers(stnData);
+            const uData = response.data
+            setUsers(uData);
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -79,7 +81,7 @@ export default function UserList() {
     const addUser = (user) => {
         console.log(JSON.stringify(user));
         // Check to see if we already have a duplicate User Name
-        if (!users.find((s) => s.stn_name === user.stn_name))
+        if (!users.find((u) => u.u_id === user.u_id))
         {
             axios({
                 method: "POST",
@@ -106,7 +108,7 @@ export default function UserList() {
         const userID = key; 
         axios({
             method: "DELETE",
-            url: "http://localhost:8000/api/users/" + users[key].stn_name,
+            url: "http://localhost:8000/api/users/" + users[key].u_id,
           }).then((response)=>{
               setUsers(getDBUsers());
           }).catch((error) => {
@@ -119,7 +121,7 @@ export default function UserList() {
     }
 
     const updateUser = (key) => {
-        let thisName = users[key].stn_name;
+        let thisName = users[key].u_id;
         console.log(JSON.stringify(editFormData));
         axios({
             method: "PATCH",
@@ -177,10 +179,11 @@ export default function UserList() {
             <table className='main-table'>
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>User Name</th>
-                        <th>Number of Servings</th>
-                        
-                        <th>Allergies</th>
+                        <th>Password</th>
+                        <th>User Level</th>
+                        <th>Email</th>
                     </tr>
                 </thead>
                 <tbody>

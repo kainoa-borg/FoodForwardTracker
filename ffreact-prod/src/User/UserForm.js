@@ -65,8 +65,11 @@ const UserForm = (props) => {
           <label htmlFor='username'>Username: </label>
             <input name='username' id="username" type="text" value={user.username} onChange={handleFormChange} />
 
+          <label htmlFor='password'>Password: </label>
+            <input name='password' id="password" type="text" value={user.password} onChange={handleFormChange} />
+
           <label htmlFor='admin_flag'>User Level: </label>
-            <input name='admin_flag' id="admin_flag" type="text" value={user.admin_flag} onChange={handleFormChange} />
+            <input name='admin_flag' id="admin_flag" type="number" value={user.admin_flag} onChange={handleFormChange} />
 
           <label htmlFor='email'>Email: </label>
             <input name='email' id="email" type="text" value={user.email} onChange={handleFormChange} />

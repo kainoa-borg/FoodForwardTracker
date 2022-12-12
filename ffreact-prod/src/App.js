@@ -28,7 +28,7 @@ const App = () => {
         else if (pageName === 'pwResetPage') setCurrPage(<PwResetPage handlePageClick={handlePageClick} />);
         else if (pageName === 'landingPage') setCurrPage(<LandingPage handlePageClick={handlePageClick} />);
         else if (pageName === 'households') setCurrPage(<HouseholdList />);
-        else if (pageName === 'households-report') setCurrPage(<HouseholdsReport />);
+        else if (pageName === 'households-report') setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />);
         else if (pageName === 'ingredients') setCurrPage(<Ingredients />);
         else if (pageName === 'packaging') setCurrPage(<Packaging />);
         else if (pageName === 'stations') setCurrPage(<StationList />);
@@ -36,7 +36,7 @@ const App = () => {
         else if (pageName === 'meals') setCurrPage(<MealPlan />);
         else if (pageName === 'recipes') setCurrPage(<Recipe />);
         else if (pageName === 'reports') setCurrPage(<ReportsPage />);
-        else if (pageName === 'userPage') setCurrPage(<UserPage />);
+        else if (pageName === 'userPage') setCurrPage(<UserPage handlePageClick={handlePageClick} />);
         else if (pageName === 'userList') setCurrPage(<UserList handlePageClick={handlePageClick} />);
         else if (pageName === 'allergies') setCurrPage(<AllergiesList allergies={[{ aType: 'Gluten' }, { aType: 'Peanut' }]} />);
     }
@@ -76,7 +76,7 @@ const App = () => {
                     User Account
                 </button>
                 <button onClick={() => handlePageClick('userList')}>
-                    Users List
+                    User Admin.
                 </button>
                 <button onClick={() => handlePageClick('meals')}>
                     Meal Plan

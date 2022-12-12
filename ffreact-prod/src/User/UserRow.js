@@ -13,7 +13,7 @@ const UserRow = (props) => {
         <tr key={key}>
             <td>{u.u_id}</td>
             <td>{u.username}</td>
-            <td>{u.password}</td>
+            <td> ***** </td>
             <td>{u.admin_flag}</td>
             <td>{u.email}</td>
             
