@@ -10,11 +10,11 @@ const UserForm = (props) => {
 
     const clearUser = () => {
     return {
-      u_id: undefined,
+      u_id: 0,
       username: "",
       password: "",
-      admin_flag: undefined,
-      email: "",
+      admin_flag: 0,
+      email: ""
      
      // hh_allergies: []
     }
@@ -61,7 +61,9 @@ const UserForm = (props) => {
     return (
       <form onSubmit={handleSubmit}>
           {/* Basic User info */}
-       
+          <label htmlFor='u_id'>User ID: </label>
+            <input name='u_id' id="u_id" type="text" value={user.u_id} onChange={handleFormChange} />
+
           <label htmlFor='username'>Username: </label>
             <input name='username' id="username" type="text" value={user.username} onChange={handleFormChange} />
 
