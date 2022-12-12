@@ -45,9 +45,6 @@ export default function ReusableTable(props) {
                             
                             return(ret)
                         })}
-
-                        <td><button>Edit</button></td>
-
                         </tr>
                     );
                 })}
