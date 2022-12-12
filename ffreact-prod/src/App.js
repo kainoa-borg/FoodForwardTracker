@@ -6,6 +6,7 @@ import HouseholdList from './Households/HouseholdList.js'
 import AllergiesList from './Households/AllergiesList.js'
 import Ingredients from './Ingredients/IngredientList.js'
 import Packaging from './Packaging/PackagingList.js'
+import Stations from './Stations/StationList.js'
 import ReportsPage from "./ReportsPage.js"
 import UserPage from "./UserPage.js"
 import NewUserPage from "./NewUserPage.js"
@@ -27,6 +28,7 @@ const App = () => {
     else if (pageName === 'households') setCurrPage(<HouseholdList/>);
     else if (pageName === 'ingredients') setCurrPage(<Ingredients />);
     else if (pageName === 'packaging') setCurrPage(<Packaging />);
+    else if (pageName === 'stations') setCurrPage(<Stations />);
     else if (pageName === 'reportsPage') setCurrPage(<ReportsPage handlePageClick={handlePageClick} />);
     else if (pageName === 'userPage') setCurrPage(<UserPage handlePageClick={handlePageClick} />);
     else if (pageName === 'allergies') setCurrPage(<AllergiesList allergies={[{aType: 'Gluten'}, {aType: 'Peanut'}]}/>);
@@ -55,6 +57,9 @@ const App = () => {
         </button>
         <button onClick={() => handlePageClick('packaging')}>
           Packaging
+        </button>
+        <button onClick={() => handlePageClick('stations')}>
+          Stations
         </button>
         <button onClick={() => handlePageClick('reportsPage')}>
           Reports
