@@ -7,7 +7,6 @@ import HouseholdsReport from './Households/HouseholdsReport.js'
 import AllergiesList from './Households/AllergiesList.js'
 import Ingredients from './Ingredients/IngredientList.js'
 import Packaging from './Packaging/PackagingList.js'
-import Packaging from './Packaging/PackagingList.js'
 import React from 'react'
 import {useState} from 'react'
 
