@@ -6,12 +6,12 @@ import HouseholdList from './Households/HouseholdList.js'
 import HouseholdsReport from './Households/HouseholdsReport.js'
 import AllergiesList from './Households/AllergiesList.js'
 import Ingredients from './Ingredients/IngredientList.js'
-import Recipe from './Recipe/RecipeList.js'
-import MealPlan from './Meals/MealList.js'
-import Packaging from './Packaging/PackagingList.js'
 import ReportsPage from "./ReportsPage.js"
 import UserPage from "./UserPage.js"
 import NewUserPage from "./NewUserPage.js"
+import Recipe from './Recipe/RecipeList.js'
+import MealPlan from './Meals/MealList.js'
+import Packaging from './Packaging/PackagingList.js'
 import StationList from './Stations/StationList'
 import React from 'react'
 import { useState } from 'react'
