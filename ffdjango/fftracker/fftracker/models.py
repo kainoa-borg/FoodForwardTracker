@@ -192,7 +192,7 @@ class IngredientUsages(models.Model):
     i_usage_id = models.SmallIntegerField(primary_key=True)
     used_date = models.CharField(max_length=45)
     used_qty = models.CharField(max_length=45)
-    used_ing = models.ForeignKey('Ingredients', models.CASCADE, related_name='ingredient_usage')
+    used_ing = models.ForeignKey('Ingredients', models.CASCADE, related_name='used_ing_id')
 
     class Meta:
         managed = False
