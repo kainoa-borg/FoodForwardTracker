@@ -6,7 +6,6 @@ import HouseholdRow from './HouseholdRow.js'
 import ReusableTable from '../ReusableTable.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
-
 import './HouseholdList.css'
 
 

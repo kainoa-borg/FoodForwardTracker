@@ -15,7 +15,13 @@ import Recipe from './Recipe/RecipeList.js'
 import MealPlan from './Meals/MealList.js'
 import Packaging from './Packaging/PackagingList.js'
 import React from 'react'
+import { Component } from 'react'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useState } from 'react'
+import Home from "./components/Home";
+import Signup from "./components/signup/Signup";
+import Login from "./components/login/Login.js";
+import Dashboard from "./components/dashboard/Dashboard";
 
 const App = () => {
     const [currPage, setCurrPage] = useState();
@@ -23,6 +29,10 @@ const App = () => {
     const handlePageClick = (pageName) => {
         console.log(pageName)
         if (pageName === 'householdForm') setCurrPage(<HouseholdForm />);
+        else if (pageName === 'home') setCurrPage(<Home handlePageClick={handlePageClick} />);
+        else if (pageName === 'signup') setCurrPage(<Signup handlePageClick={handlePageClick} />);
+        else if (pageName === 'login') setCurrPage(<Login handlePageClick={handlePageClick} />);
+        else if (pageName === 'dashboard') setCurrPage(<Dashboard handlePageClick={handlePageClick} />);
         else if (pageName === 'loginPage') setCurrPage(<LoginPage handlePageClick={handlePageClick} />);
         else if (pageName === 'newUserPage') setCurrPage(<NewUserPage handlePageClick={handlePageClick} />);
         else if (pageName === 'pwResetPage') setCurrPage(<PwResetPage handlePageClick={handlePageClick} />);
@@ -48,6 +58,18 @@ const App = () => {
                 {/* <button onClick={() => handlePageClick('householdForm')}>
           Household Form
         </button> */}
+                <button onClick={() => handlePageClick('home')}>
+                    Home
+                </button>
+                <button onClick={() => handlePageClick('signup')}>
+                    Signup
+                </button>
+                <button onClick={() => handlePageClick('login')}>
+                    Login
+                </button>
+                <button onClick={() => handlePageClick('dashboard')}>
+                    Dashboard
+                </button>
                 <button onClick={() => handlePageClick('loginPage')}>
                     Login Page
                 </button>
@@ -89,5 +111,6 @@ const App = () => {
         </div>
     );
 }
+
 
 export default App;
