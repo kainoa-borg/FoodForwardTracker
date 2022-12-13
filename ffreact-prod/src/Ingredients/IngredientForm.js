@@ -97,9 +97,6 @@ const IngredientForm = (props) => {
           <label htmlFor="flat_fee">Flat Fee: </label>
           <input name="flat_fee" type="number" step="0.01" value={ingredient.flat_fee} onChange={handleFormChange}/>
 
-          <label htmlFor="exp_date">Exp Date: </label>
-          <input name="exp_date" type="date" value={ingredient.exp_date} onChange={handleFormChange}/>
-
           <label htmlFor="isupplier">Supplier: </label>
           <select name="isupplier_id" onChange={handleFormChange}>
             <option selected={true} value={null}>N/A</option>
@@ -111,7 +108,7 @@ const IngredientForm = (props) => {
             })}
           </select>
 
-          <label htmlFor="pref_isupplier">Supplier: </label>
+          <label htmlFor="pref_isupplier"> Preferred Supplier: </label>
           <select name="pref_isupplier_id">
             <option selected={true} value={null}>N/A</option>
             {supplierList.map((supplier, key) => {
@@ -121,7 +118,7 @@ const IngredientForm = (props) => {
             })}
           </select>
 
-          <button type='Submit'>Add</button>
+          <br /><button type='Submit'>Add</button>
       </form>
     );
 }

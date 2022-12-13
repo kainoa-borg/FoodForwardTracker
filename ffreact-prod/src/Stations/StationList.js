@@ -16,9 +16,7 @@ export default function StationList() {
     const [editStationID, setEditStationID] = useState(null);
     const [editFormData, setEditFormData] = useState({
         stn_name: "",
-        num_servings: null,
-   
-       // hh_allergies: []
+        num_servings: null
     });
     const [errorComponent, setErrorComponent] = useState(null);
     const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
@@ -179,8 +177,6 @@ export default function StationList() {
                     <tr>
                         <th>Station Name</th>
                         <th>Number of Servings</th>
-                        
-                        <th>Allergies</th>
                     </tr>
                 </thead>
                 <tbody>

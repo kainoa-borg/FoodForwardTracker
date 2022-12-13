@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import AllergiesList from './AllergiesList.js'
+import StationCalcList from './StationCalcList.js'
 import React from 'react'
 
 // Angela McNeese
@@ -14,7 +14,7 @@ const StationForm = (props) => {
       stn_name: "",
       num_servings: undefined,
      
-     // hh_allergies: []
+      hh_allergies: []
     }
   }
 
@@ -64,6 +64,8 @@ const StationForm = (props) => {
           
           <label htmlFor='num_servings'>Number of Adults: </label>
             <input name='num_servings' id="num_servings" type="number" value={station.num_servings} onChange={handleFormChange}/>
+
+          <br />
 
           <button type='Submit'>Add</button>
       </form>

@@ -1,4 +1,4 @@
-import AllergiesList from './AllergiesList.js'
+import StationCalcList from './StationCalcList.js'
 import React from 'react'
 
 // Editable Station Row
@@ -14,7 +14,7 @@ const EditableStationRow = (props) => {
         <tr key={key}>
             <td><input type="text" name="stn_name" defaultValue={s.stn_name} onChange={handleEditFormChange}/></td>
             <td><input type="number" name="num_servings" defaultValue={s.num_servings} onChange={handleEditFormChange}/></td>
-            
+
             <td><button type='Submit' onClick={()=>{updateStation(key)}}>Save</button></td>
             <td><button onClick={handleCancelClick}>Cancel</button></td>
         </tr>

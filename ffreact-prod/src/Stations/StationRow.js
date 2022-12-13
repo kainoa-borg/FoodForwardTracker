@@ -1,4 +1,4 @@
-import AllergiesList from './AllergiesList.js'
+import StationCalcList from './StationCalcList.js'
 import React from 'react'
 
 // Station Row component
@@ -14,7 +14,6 @@ const StationRow = (props) => {
         <tr key={key}>
             <td>{s.stn_name}</td>
             <td>{s.num_servings}</td>
-            <td></td>
             
             {/* When edit is clicked, handleEditClick is called with this row's key */}
             <td><button onClick={()=> handleEditClick(key)}>Edit</button></td>

@@ -91,3 +91,13 @@ class RecipesSerializers(ModelSerializer):
 		fields = ('__all__')
 
 
+class StationSerializer(ModelSerializer):
+	class Meta():
+		model = Households
+		fields = ('__all__')
+
+class StationListSerializer(ModelSerializer):
+	hh_allergies = AllergySerializer(many=True)
+	class Meta():
+		model = Households
+		fields = ('stn_name', 'num_servings', 'hh_allergies')
