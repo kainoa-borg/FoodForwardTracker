@@ -20,13 +20,23 @@ const LoginPage = (props) => {
 
     const sendLoginRequest = () => {
         axios({
-            method: "POST",
-            url:"http://localhost:8000/api/users/",
-            data: user
+            method: "GET",
+            url:"http://localhost:8000/api/users/"
           }).then((response)=>{
-            const data = response.data;
-              console.log(data);
-            handlePageClick('landingPage');
+            let userInList = false;
+            let userData = undefined;
+            for (let i = 0; i < response.data.length; ++i) {
+                if (response.data[i].username === user.username) {
+                    if (response.data[i].password === user.password) {
+                        userInList = true;
+                        userData = response.data[i];
+                    }
+                }
+            }
+            if (userInList) {
+                props.setLoginState(userData);
+                handlePageClick('landingPage');
+            }
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -78,7 +88,7 @@ const LoginPage = (props) => {
                 <input type='text' maxLength='30' name='username' value={user.username} onChange={handleLoginChange}></input>
                 <br/><label htmlFor='username'>Password: </label>
                 <input type='password' maxLength='30' name='password' value={user.password} onChange={handleLoginChange}></input>
-                <br /><br /><button type='Submit'>Submit</button>
+                <br /><br /><button type='Submit' onClick={sendLoginRequest}>Submit</button>
                 <br /><text>  Don't have an account?  </text><button onClick={() => handleCreateClick('newUserPage')}>
                     Create New User
                 </button>
