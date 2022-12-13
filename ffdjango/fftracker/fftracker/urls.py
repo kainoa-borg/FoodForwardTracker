@@ -29,6 +29,7 @@ from .PacPurchaseList import PPLView
 from .SupplierViews import SupplierView
 from .MealPlanViews import MealPlansView
 from .AccountCreationViews import AccountCreateView
+from .CalculationsView import CalculationsView
 
 from .models import (Households, Ingredients, Packaging, MealPlans, Recipes)
 #admin.site.register(Households)
@@ -53,8 +54,8 @@ router.register(r'stations', StationsView, basename='stations')
 router.register(r'mealplans', MealPlansView, basename='mealplans')
 router.register(r'mealrecipes', RecipeView, basename='mealrecipes')
 router.register(r'suppliers', SupplierView, basename='suppliers')
-#router.register(r'main', MainView, basename='main')
 router.register(r'mealrecipes', RecipeView, basename='mealrecipes')
+router.register(r'calculations', CalculationsView, basename='calculations')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

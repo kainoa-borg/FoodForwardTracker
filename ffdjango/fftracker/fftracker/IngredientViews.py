@@ -55,7 +55,10 @@ class IngredientInvSerializer(ModelSerializer):
 			IngredientUsages.objects.all().filter(used_ing = ing_instance).delete()
 			for usage in ing_usage:
 				used += int(usage['used_qty'])
-				latest_id = IngredientUsages.objects.latest('i_usage_id').i_usage_id +1
+				if (IngredientUsages.objects.count() > 0):
+					latest_id = IngredientUsages.objects.latest('i_usage_id').i_usage_id +1
+				else:
+					latest_id = 0
 				usage['i_usage_id'] = latest_id
 				usage['used_ing_id'] = validated_data.get('i_id')
 				# raise serializers.ValidationError(usage)
@@ -67,5 +70,5 @@ class IngredientInvSerializer(ModelSerializer):
 
 # Create your views here.
 class IngredientInvView(ModelViewSet):
-	queryset = Ingredients.objects.all()
+	queryset = Ingredients.objects.all().prefetch_related('ingredient_usage')
 	serializer_class = IngredientInvSerializer

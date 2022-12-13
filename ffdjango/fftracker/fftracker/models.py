@@ -192,7 +192,7 @@ class IngredientUsages(models.Model):
     i_usage_id = models.SmallIntegerField(primary_key=True)
     used_date = models.CharField(max_length=45)
     used_qty = models.CharField(max_length=45)
-    used_ing = models.ForeignKey('Ingredients', models.CASCADE, related_name='used_ing_id')
+    used_ing = models.ForeignKey('Ingredients', models.CASCADE, related_name='ingredient_usage')
 
     class Meta:
         managed = False
@@ -252,7 +252,7 @@ class MealPacks(models.Model):
 
 class MealPlans(models.Model):
     m_id = models.SmallIntegerField(primary_key=True)
-    m_date = models.CharField(max_length=50)
+    m_date = models.DateField()
     snack_r_num = models.ForeignKey('Recipes', models.CASCADE, related_name='snack_r_num', blank=True, null=True)
     meal_r_num = models.ForeignKey('Recipes', models.CASCADE, related_name='meal_r_num', blank=True, null=True)
     num_servings = models.SmallIntegerField(blank=True, null=True)
