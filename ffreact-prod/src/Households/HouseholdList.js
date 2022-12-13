@@ -60,7 +60,6 @@ export default function HouseholdList() {
     }, []);
 
     const getDBHouseholds = () => {
-        setHouseholds(undefined);
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
