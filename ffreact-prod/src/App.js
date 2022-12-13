@@ -19,11 +19,16 @@ import { useState } from 'react'
 
 const App = () => {
     const [currPage, setCurrPage] = useState();
+    const [loginState, setLoginState] = useState({
+        username: "",
+        password: "",
+        isAdmin: false
+    })
 
     const handlePageClick = (pageName) => {
         console.log(pageName)
         if (pageName === 'householdForm') setCurrPage(<HouseholdForm />);
-        else if (pageName === 'loginPage') setCurrPage(<LoginPage handlePageClick={handlePageClick} />);
+        else if (pageName === 'loginPage') setCurrPage(<LoginPage loginState={loginState} setLoginState={setLoginState} handlePageClick={handlePageClick} />);
         else if (pageName === 'newUserPage') setCurrPage(<NewUserPage handlePageClick={handlePageClick} />);
         else if (pageName === 'pwResetPage') setCurrPage(<PwResetPage handlePageClick={handlePageClick} />);
         else if (pageName === 'landingPage') setCurrPage(<LandingPage handlePageClick={handlePageClick} />);
