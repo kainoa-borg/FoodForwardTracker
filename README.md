@@ -1,16 +1,26 @@
-### Hi there 👋
+Food Forward Tracker
+--------------------
 
-<!--
-**FoodDesertDatabase/FoodDesertDatabase** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Project Overview
+Create a low-cost version of Hello Fresh to serve individuals food deserts by performing home meal
+delivery with reusable packaging.
 
-Here are some ideas to get you started:
+Contact
+foodforwarddulthmn@gmail.com
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+App Login Information
+Connect to the Food forward tracker at :
+Create a user account by following the on screen directions 
+Enter your username and password to login.
+
+Meal Recipies, Households, Ingredients and Packaging can be edited and added by Admin accounts only.
+Users may generate lists and reports.
+
+Contact: 
+foodforwarddulthmn@gmail.com
+
+Azure Login Information
+https://portal.azure.com
+1. First Whitelist your IP under 
+foodforwardserver -> Settings -> Networking -> Add Current Client IP
+2. Connect to the server via any MySQL editor such as MySQL Workbench
