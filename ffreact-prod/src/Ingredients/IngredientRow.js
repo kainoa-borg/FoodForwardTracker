@@ -13,7 +13,7 @@ const IngredientRow = (props) => {
         if (ing_usages) {
             // console.log(JSON.stringify(this_ing.usages))
             if (ing_usages.length > 0) {
-                return (
+                return(
                     <table>
                             <th>used date</th>
                             <th>used qty</th>
@@ -27,7 +27,7 @@ const IngredientRow = (props) => {
                             })
                         }
                     </table>
-                )
+                        );
             }
         }
         else {

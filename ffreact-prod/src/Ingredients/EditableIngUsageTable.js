@@ -52,13 +52,11 @@ export default function EditableIngUsageTable(props) {
                     <th>used qty</th>
                 {ingUsages.map((usage, thisKey) => {
                     return (
-                        <Fragment>
-                          <tr key={thisKey}>
-                              <td><input dataKey={thisKey} name="used_date" type="date" value={usage.used_date} onChange={handleKeyUsageChange}/></td>
-                              <td><input dataKey={thisKey} name="used_qty" value={usage.used_qty} onChange={handleKeyUsageChange}/></td>
-                              <td><button onClick={() => handleDeleteUsage(thisKey)}>Delete</button></td>
-                          </tr>
-                        </Fragment>
+                        <tr key={thisKey}>
+                            <td><input dataKey={thisKey} name="used_date" type="date" value={usage.used_date} onChange={handleKeyUsageChange}/></td>
+                            <td><input dataKey={thisKey} name="used_qty" value={usage.used_qty} onChange={handleKeyUsageChange}/></td>
+                            <td><button onClick={() => handleDeleteUsage(thisKey)}>Delete</button></td>
+                        </tr>
                         )
                     })
                 }

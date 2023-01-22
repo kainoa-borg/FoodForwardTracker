@@ -13,7 +13,8 @@ const HouseholdForm = (props) => {
     return {
       hh_name: "",
       num_adult: undefined,
-      num_child: undefined,
+      num_child_lt_6: undefined,
+      num_child_gt_6: undefined,
       sms_flag: 0,
       veg_flag: 0,
       allergy_flag: 0,
@@ -77,8 +78,11 @@ const HouseholdForm = (props) => {
           <label htmlFor='num_adult'>Number of Adults: </label>
           <input name='num_adult' id="num_adult" type="number" value={household.num_adult} onChange={handleFormChange}/>
           
-          <label htmlFor='num_child'>Number of Children: </label>
-          <input name='num_child' id="num_child" type="number" value={household.num_child} onChange={handleFormChange}/>
+          <label htmlFor='num_child_lt_6'>Number of Children 0-6: </label>
+          <input name='num_child_lt_6' id="num_child_lt_6" type="number" value={household.num_child_lt_6} onChange={handleFormChange}/>
+          
+          <label htmlFor='num_child_gt_6'>Number of Children 7-17: </label>
+          <input name='num_child_gt_6' id="num_child_gt_6" type="number" value={household.num_child_gt_6} onChange={handleFormChange}/>
           
 
           {/* Flags should be on separate lines */}

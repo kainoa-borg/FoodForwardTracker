@@ -241,7 +241,7 @@ export default function IngredientList() {
                     {ingredients.map((ingredient, key) => {
                         const thisKey = key;
                         return(
-                            <Fragment>
+                            <Fragment key={thisKey}>
                                 {
                                 // If this ingredient is the one to be edited, show an editable row instead
                                 editIngredientID === thisKey 

@@ -68,7 +68,7 @@ const AllergiesList = (props) => {
                         {/* Show a row for each allergy object in allergies */}
                         {allergies.map((allergy, thisKey) => {
                             return (
-                                <Fragment>
+                                <Fragment key={thisKey}>
                                     <tr key={thisKey}>
                                         <td>
                                             {allergy.a_type}
@@ -105,7 +105,7 @@ const AllergiesList = (props) => {
                         {/* Show a row for each allergy object in allergies */}
                         {allergies.map((allergy, thisKey) => {
                             return (
-                                <Fragment>
+                                <Fragment key={thisKey}>
                                     <tr key={thisKey}>
                                         <td>
                                             {allergy.a_type}
