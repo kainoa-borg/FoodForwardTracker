@@ -169,7 +169,8 @@ class HhMealPlans(models.Model):
 class Households(models.Model):
     hh_name = models.CharField(primary_key=True, max_length=30)
     num_adult = models.PositiveIntegerField(blank=True, null=True)
-    num_child = models.PositiveIntegerField(blank=True, null=True)
+    num_child_lt_6 = models.PositiveIntegerField(blank=True, null=True)
+    num_child_gt_6 = models.PositiveIntegerField(blank=True, null=True)
     sms_flag = models.PositiveIntegerField(blank=True, null=True)
     veg_flag = models.PositiveIntegerField(blank=True, null=True)
     allergy_flag = models.PositiveIntegerField(blank=True, null=True)

@@ -14,7 +14,8 @@ const HouseholdRow = (props) => {
         <tr key={key}>
             <td>{hh.hh_name}</td>
             <td>{hh.num_adult}</td>
-            <td>{hh.num_child}</td>
+            <td>{hh.num_child_lt_6}</td>
+            <td>{hh.num_child_gt_6}</td>
             <td>{String(Boolean(hh.veg_flag))}</td>
             <td>{String(Boolean(hh.gf_flag))}</td>
             <td>{String(Boolean(hh.a_flag))}</td>

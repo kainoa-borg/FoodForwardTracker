@@ -194,7 +194,8 @@ export default function HouseholdList() {
                     <tr>
                         <th>Name</th>
                         <th># Adults</th>
-                        <th># Children</th>
+                        <th># Children 0-6</th>
+                        <th># Children 7-17</th>
                         <th>Vegan</th>
                         <th>Gluten Free</th>
                         <th>Allergies</th>

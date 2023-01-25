@@ -23,7 +23,7 @@ class HouseholdAllergySerializer(ModelSerializer):
 	hh_allergies = AllergySerializer(many=True)
 	class Meta():
 		model = Households
-		fields = ('hh_name', 'num_adult', 'num_child', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag', 'phone', 'street', 'city', 'pcode', 'state', 'delivery_notes', 'hh_allergies')
+		fields = ('hh_name', 'num_adult', 'num_child_lt_6', 'num_child_gt_6', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag', 'phone', 'street', 'city', 'pcode', 'state', 'delivery_notes', 'hh_allergies')
 
 		
 class IngredientInvSerializer(ModelSerializer):
