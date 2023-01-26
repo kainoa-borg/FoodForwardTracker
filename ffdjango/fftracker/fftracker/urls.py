@@ -20,7 +20,7 @@ from .UserView import UserView
 from .HouseholdViews import HouseholdsView, HouseholdsWithAllergies
 from .IngredientViews import IngredientInvView
 from .PackagingViews import PackagingInvView
-from .StationViews import StationsView, HouseholdsWithAllergies
+from .StationViews import StationsView
 from .MenuView import MenuView
 from .MealPlanViews import MealPlansView
 from .MealRecipeViews import *

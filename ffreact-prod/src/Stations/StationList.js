@@ -17,7 +17,7 @@ export default function StationList() {
     const [editStationID, setEditStationID] = useState(null);
     const [editFormData, setEditFormData] = useState({
         stn_name: "",
-        num_servings: null
+        household: []
     });
     const [errorComponent, setErrorComponent] = useState(null);
     const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
@@ -29,8 +29,10 @@ export default function StationList() {
                 <Error text="Station Name already found!"/>
             )
         }
-        if (errCode = 'empty') {
-                return <Error text="There doesn't seem to be any data!"/>
+        else if (errCode = 'empty') {
+            setErrorComponent(
+                <Error text="There doesn't seem to be any data!"/>
+            )
         }
     }
     const clearError = () => {
@@ -79,13 +81,12 @@ export default function StationList() {
     }
 
     const postDBStations = () => {
-        console.log(stations);
         axios({
             method: "POST",
-            url: "http://localhost:8000/api/stations/",
+            url: "/stations/",
             data: stations
           }).then((response)=>{
-              setStations(getDBStations());
+              getDBStations();
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -97,31 +98,23 @@ export default function StationList() {
     }
 
     const addStation = (station) => {
-        console.log(JSON.stringify(station));
-        // Check to see if we already have a duplicate Station Name
-        if (!stations.find((s) => s.stn_name === station.stn_name))
-        {
-            axios({
-                method: "POST",
-                url: "http://localhost:8000/api/stations/",
-                data: station
-              }).then((response)=>{
-                  setStations(getDBStations());
-              }).catch((error) => {
-                if (error.response) {
-                  console.log(error.response);
-                  console.log(error.response.status);
-                  console.log(error.response.headers);
-                  }
-              });
-            clearError();
-        }
-        else {
-            // If this Station is already in Stations list, display error message
-            handleError('DuplicateKey');
-        }
+        const lastID = stations[stations.length - 1]['s_id'];
+        station['s_id'] = lastID + 1;
+        axios({
+            method: "POST",
+            url:"http://localhost:8000/api/stations/",
+            data: station
+          }).then((response)=>{
+            getDBStations();
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+        clearError();
     }
-
     const deleteStation = (key) => {
         const stationID = key; 
         axios({
@@ -197,17 +190,8 @@ export default function StationList() {
             <table className='main-table'>
                 <thead>
                     <tr>
-                        <th>Station Name</th>
-                        <th>Step 1</th>
-                        <th>Step 2</th>
-                        <th>Step 3</th>
-                        <th>Step 4</th>
-                        <th>Step 5</th>
-                        <th>Step 6</th>
-                        <th>Step 7</th>
-                        <th>Servings:Adult</th>
-                        <th>Servings: 6+</th>
-                        <th>Servings: Under 6</th>
+                        <th>Station</th>
+                        <th>Households</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -215,12 +199,12 @@ export default function StationList() {
                     {stations.map((station, key) => {
                         const thisKey = key;
                         return(
-                            <Fragment>
+                            <Fragment key={thisKey}>
                                 {
                                 // If this Station is the one to be edited, show an editable row instead
                                 editStationID === thisKey 
-                                        ? <EditableStationRow thisKey={thisKey} editFormData={editFormData} households={households} updateStation={updateStation} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
-                                        : <StationRow thisKey={thisKey} station={station} deleteStation={deleteStation} handleEditClick={handleEditClick}/>
+                                ? <EditableStationRow thisKey={thisKey} editFormData={editFormData} households={households} updateStation={updateStation} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
+                                : <StationRow thisKey={thisKey} station={station} deleteStation={deleteStation} handleEditClick={handleEditClick}/>
                                 }
                             </Fragment>
                         );

@@ -20,7 +20,7 @@ export default function HouseholdList() {
         num_child: null,
         sms_flag: null,
         veg_flag: null,
-        allergy_flag: null,
+        //allergy_flag: null,
         gf_flag: null,
         ls_flag: null,
         paused_flag: null,
@@ -198,7 +198,6 @@ export default function HouseholdList() {
                         <th># Children 7-17</th>
                         <th>Vegan</th>
                         <th>Gluten Free</th>
-                        <th>Allergies</th>
                         <th>Receive SMS</th>
                         <th>Paused</th>
                         <th>Phone Number</th>
