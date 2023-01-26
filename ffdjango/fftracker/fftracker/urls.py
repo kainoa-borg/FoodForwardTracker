@@ -22,8 +22,6 @@ from .IngredientViews import IngredientInvView
 from .PackagingViews import PackagingInvView
 from .StationViews import StationsView, HouseholdsWithAllergies
 from .MenuView import MenuView
-<<<<<<< Updated upstream
-=======
 from .MealPlanViews import MealPlansView
 from .MealRecipeViews import *
 from .AccountCreationViews import AccountCreateView
@@ -33,7 +31,6 @@ from .MealPlanViews import MealPlansView
 from .AccountCreationViews import AccountCreateView
 from .CalculationsView import CalculationsView
 from .RecipeListViews import RecipeListView
->>>>>>> Stashed changes
 
 from .models import (Households, Ingredients, Packaging, MealPlans, Recipes)
 #admin.site.register(Households)
@@ -53,10 +50,6 @@ router.register(r'packaging', PackagingInvView, basename='packaging')
 router.register(r'pack-purchase-list', PPLView, basename='pack-purchase-list')
 router.register(r'users', UserView, basename='users')
 router.register(r'menu', MenuView, basename='menu')
-<<<<<<< Updated upstream
-#router.register(r'main', MainView, basename='main')
-
-=======
 router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
 router.register(r'stations', StationsView, basename='stations')
 router.register(r'mealplans', MealPlansView, basename='mealplans')
@@ -65,7 +58,6 @@ router.register(r'suppliers', SupplierView, basename='suppliers')
 router.register(r'mealrecipes', RecipeView, basename='mealrecipes')
 router.register(r'recipe-list', RecipeListView, basename='recipe-list')
 router.register(r'calculations', CalculationsView, basename='calculations')
->>>>>>> Stashed changes
 
 urlpatterns = [
     path('admin/', admin.site.urls),

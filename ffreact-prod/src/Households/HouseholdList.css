@@ -4,24 +4,6 @@
     min-width: 400px;
 }
 
-<<<<<<< Updated upstream
-.main-table {
-    text-align: left;
-    position: relative;
-    table-layout: fixed;
-    min-width: rem-calc(640);
-}
-
-.main-table.th {
-    position: sticky;
-    top: 0;
-    background-color: white;
-}
-
-tr {
-    text-align: left;
-=======
 .table-div table * {
     text-align: center;
->>>>>>> Stashed changes
 }

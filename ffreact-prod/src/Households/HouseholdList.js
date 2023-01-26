@@ -18,11 +18,7 @@ export default function HouseholdList() {
 
     const [households, setHouseholds] = useState(undefined);
     const [editHouseholdID, setEditHouseholdID] = useState(null);
-<<<<<<< Updated upstream
-    const [editFormData, setEditFormData] = useState(null);
-=======
     const [editFormData, setEditFormData] = useState();
->>>>>>> Stashed changes
     const [errorComponent, setErrorComponent] = useState(null);
     const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
 
