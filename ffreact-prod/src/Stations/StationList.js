@@ -13,6 +13,7 @@ import './StationList.css'
 
 export default function StationList() {
     const [stations, setStations] = useState(undefined);
+    const [households, setHouseholds] = useState(undefined);
     const [editStationID, setEditStationID] = useState(null);
     const [editFormData, setEditFormData] = useState({
         stn_name: "",
@@ -20,6 +21,7 @@ export default function StationList() {
     });
     const [errorComponent, setErrorComponent] = useState(null);
     const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
+    const [loadingComponent, setLoadingComponent] = useState(null);
 
     const handleError = (errCode) => {
         if (errCode === 'DuplicateKey') {
@@ -36,17 +38,37 @@ export default function StationList() {
     }
 
     useEffect(() => {
-        setStations(getDBStations());
+//        setStations(getDBStations());
+        getDBStations();
+        getDBHouseholds();
     }, []);
+
+    const getDBHouseholds = () => {
+        console.log("MAKING REQUEST TO DJANGO")
+        axios({
+            method: "GET",
+            url:"http://localhost:8000/api/households"
+          }).then((response)=>{
+            setHouseholds(response.data);
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+    }
 
     const getDBStations = () => {
         console.log("MAKING REQUEST TO DJANGO")
+        setLoadingComponent(<Error text="LOADING DATA..."/>);
         axios({
             method: "GET",
             url:"http://localhost:8000/api/stations"
           }).then((response)=>{
             const stnData = response.data
             setStations(stnData);
+            setLoadingComponent(null);
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -164,7 +186,7 @@ export default function StationList() {
         setEditFormData(null);
     }
 
-    if (stations === undefined) {
+    if (stations === undefined || households === undefined) {
         return (<>loading</>);
     }
 
@@ -176,7 +198,16 @@ export default function StationList() {
                 <thead>
                     <tr>
                         <th>Station Name</th>
-                        <th>Number of Servings</th>
+                        <th>Step 1</th>
+                        <th>Step 2</th>
+                        <th>Step 3</th>
+                        <th>Step 4</th>
+                        <th>Step 5</th>
+                        <th>Step 6</th>
+                        <th>Step 7</th>
+                        <th>Servings:Adult</th>
+                        <th>Servings: 6+</th>
+                        <th>Servings: Under 6</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -188,7 +219,7 @@ export default function StationList() {
                                 {
                                 // If this Station is the one to be edited, show an editable row instead
                                 editStationID === thisKey 
-                                        ? <EditableStationRow thisKey={thisKey} editFormData={editFormData} updateStation={updateStation} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
+                                        ? <EditableStationRow thisKey={thisKey} editFormData={editFormData} households={households} updateStation={updateStation} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
                                         : <StationRow thisKey={thisKey} station={station} deleteStation={deleteStation} handleEditClick={handleEditClick}/>
                                 }
                             </Fragment>
@@ -198,8 +229,9 @@ export default function StationList() {
                     {stations.length < 1 ? handleError('empty') : null}
                 </tbody>
             </table>
+            {loadingComponent}
             <h3>Add A Station</h3>
-            <StationForm addStation={addStation}></StationForm>
+            <StationForm addStation={addStation} households={households}></StationForm>
             <button onClick={postDBStations}>Submit Changes</button>
             {errorComponent}
             {displayMsgComponent}

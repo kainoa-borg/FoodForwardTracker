@@ -8,12 +8,14 @@ import React from 'react'
 // Takes AddStation callback function
 // Returns a form that can be used to define a new Station object in a StationList
 const StationForm = (props) => {
+  
+  const HouseholdsList = props.households;
 
-    const clearStation = () => {
+  const clearStation = () => {
     return {
       stn_name: "",
       num_servings: undefined,
-     
+      household: [],
       hh_allergies: []
     }
   }
@@ -61,12 +63,7 @@ const StationForm = (props) => {
           {/* Basic station info */}
           <label htmlFor="stn_name">Name: </label>
             <input name="stn_name" id="stn_name" type="text" maxLength='50' required={true} value={station.stn_name} onChange={handleFormChange}/>
-          
-          <label htmlFor='num_servings'>Number of Adults: </label>
-            <input name='num_servings' id="num_servings" type="number" value={station.num_servings} onChange={handleFormChange}/>
-
           <br />
-
           <button type='Submit'>Add</button>
       </form>
     );
