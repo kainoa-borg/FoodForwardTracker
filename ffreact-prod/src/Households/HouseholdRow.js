@@ -1,6 +1,8 @@
 import AllergiesList from './AllergiesList.js'
 import React from 'react'
 
+import Button from 'react-bootstrap/Button'
+
 // Household Row component
 // Takes: key of current row, the state of the Household Page's hh list, deleteHousehold callback, handleEditClick callback
 // Returns a household table row component 
@@ -29,9 +31,9 @@ const HouseholdRow = (props) => {
             <td>{hh.delivery_notes}</td>
             <td><AllergiesList allergies={hh.hh_allergies} isEditable={false}/></td>
             {/* When edit is clicked, handleEditClick is called with this row's key */}
-            <td><button onClick={()=> handleEditClick(key)}>Edit</button></td>
+            <td><Button variant='secondary'onClick={()=> handleEditClick(key)}>Edit</Button></td>
             {/* When delete is clicked, deleteHousehold is called with this row's key */}
-            <td><button onClick={() => deleteHousehold(key)}>Delete</button></td>
+            <td><Button variant='danger' onClick={() => deleteHousehold(key)}>X</Button></td>
         </tr>
     )
 }

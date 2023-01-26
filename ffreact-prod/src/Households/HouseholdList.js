@@ -6,8 +6,8 @@ import HouseholdRow from './HouseholdRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 
-import './HouseholdList.css'
-
+//import './HouseholdList.css'
+import Table from 'react-bootstrap/Table'
 
 // Household List Component
 export default function HouseholdList() {
@@ -18,24 +18,11 @@ export default function HouseholdList() {
 
     const [households, setHouseholds] = useState(undefined);
     const [editHouseholdID, setEditHouseholdID] = useState(null);
-    const [editFormData, setEditFormData] = useState({
-        hh_name: "",
-        num_adult: null,
-        num_child: null,
-        sms_flag: null,
-        veg_flag: null,
-        allergy_flag: null,
-        gf_flag: null,
-        ls_flag: null,
-        paused_flag: null,
-        phone: "",
-        street: "",
-        city: "",
-        pcode: null,
-        state: "",
-        delivery_notes: "",
-        hh_allergies: []
-    });
+<<<<<<< Updated upstream
+    const [editFormData, setEditFormData] = useState(null);
+=======
+    const [editFormData, setEditFormData] = useState();
+>>>>>>> Stashed changes
     const [errorComponent, setErrorComponent] = useState(null);
     const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
 
@@ -193,7 +180,7 @@ export default function HouseholdList() {
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div className='table-div'>
-            <table className='main-table'>
+            <Table hover size='sm' bordered='false' responsive>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -232,7 +219,7 @@ export default function HouseholdList() {
                     {/* If the list is empty display EmptyTableMessage */}
                     {households.length < 1 ? handleError('empty') : null}
                 </tbody>
-            </table>
+            </Table>
             <h3>Add A Household</h3>
             <HouseholdForm addHousehold={addHousehold}></HouseholdForm>
             <button onClick={postDBHouseholds}>Submit Changes</button>

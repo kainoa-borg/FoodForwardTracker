@@ -1,7 +1,10 @@
-.main-table, th, td {
-    border: 1px solid;
+.table-div{
+    max-width: 80%;
+    max-height: 300px;
+    min-width: 400px;
 }
 
+<<<<<<< Updated upstream
 .main-table {
     text-align: left;
     position: relative;
@@ -17,4 +20,8 @@
 
 tr {
     text-align: left;
+=======
+.table-div table * {
+    text-align: center;
+>>>>>>> Stashed changes
 }

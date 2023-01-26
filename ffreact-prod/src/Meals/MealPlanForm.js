@@ -8,6 +8,8 @@ import ReusableForm from '../ReusableForm.js'
 // Takes AddMeal callback function
 // Returns a form that can be used to define a new meal object in a mealList
 const MealPlanForm = (props) => {
+
+  const recipeList = props.recipeList;
   
   const clearMeal = () => {
     return {
@@ -54,6 +56,7 @@ const MealPlanForm = (props) => {
       const fieldValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
       // Create new ingredient object before setting state
       updateEditForm([fieldName], [fieldValue]);
+      console.log(JSON.stringify(meal));
       // updateEditForm('aFlag', true);
     }
 
@@ -61,17 +64,22 @@ const MealPlanForm = (props) => {
     return (
       <form onSubmit={handleSubmit}>
           {/* Basic Meal Plan info */}
-          <label htmlFor="m_date">Meal Name ID temp: </label>
-          <input name="m_date" type="text" maxLength='50' value={meal.m_date} onChange={handleFormChange}/>
-          
-          <label htmlFor='snack_r_num'>Snack Number: </label>
-          <input name='snack_r_num' type="number" value={meal.snack_r_num} onChange={handleFormChange}/>
-          
-          <label htmlFor="meal_r_num">Meal Number: </label>
-            <input name="meal_r_num" type="number" value={meal.meal_r_num} onChange={handleFormChange}/>
+          <label htmlFor="m_date">Next Delivery Date: </label>
+          <input name="m_date" type="date" maxLength='50' value={meal.m_date} onChange={handleFormChange}/>
 
-          <label htmlFor="num_servings">Number of Servings: </label>
-            <input name="num_servings" type="number" value={meal.num_servings} onChange={handleFormChange}/>
+          <label htmlFor="meal_r_num">Meal: </label>
+          <select name='meal_r_num' meal={meal.meal_r_num} onChange={handleFormChange}>
+            {recipeList.map((recipe) => {
+              return(<option value={recipe.r_num}>{recipe.r_name}</option>)
+            })}
+          </select>
+          
+          <label htmlFor='snack_r_num'>Snack: </label>
+          <select name='snack_r_num' value={meal.snack_r_num} onChange={handleFormChange}>
+            {recipeList.map((recipe) => {
+              return(<option value={recipe.r_num}>{recipe.r_name}</option>)
+            })}
+          </select>
 
           <button type='Submit'>Add</button>
       </form>
