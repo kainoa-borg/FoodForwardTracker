@@ -17,7 +17,8 @@ const MealPlanForm = (props) => {
       m_date: '',
       snack_r_num: null,
       meal_r_num: null,
-      num_servings: null
+      meal_servings: null,
+      snack_servings: null
     }
   }
 
@@ -32,6 +33,7 @@ const MealPlanForm = (props) => {
       // Prevent refresh
       event.preventDefault();
       // Pass Meal object to MealList callback
+      console.log('HERE IN MEAL PLAN FORM SUBMIT');
       props.addMeal(meal)
       // Clear the form state
       setMeal(clearMeal());
@@ -41,7 +43,7 @@ const MealPlanForm = (props) => {
       const newMeal = {...meal};
       for (let i = 0; i < names.length; i++) {
         newMeal[names[i]] = values[i];
-        console.log('(' + names[i] + ', ' + values[i] + ')');
+        // console.log('(' + names[i] + ', ' + values[i] + ')');
       }
       setMeal(newMeal);
     }
@@ -56,7 +58,6 @@ const MealPlanForm = (props) => {
       const fieldValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
       // Create new ingredient object before setting state
       updateEditForm([fieldName], [fieldValue]);
-      console.log(JSON.stringify(meal));
       // updateEditForm('aFlag', true);
     }
 
