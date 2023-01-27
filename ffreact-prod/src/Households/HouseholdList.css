@@ -1,20 +1,9 @@
-.main-table, th, td {
-    border: 1px solid;
+.table-div{
+    max-width: 80%;
+    max-height: 300px;
+    min-width: 400px;
 }
 
-.main-table {
-    text-align: left;
-    position: relative;
-    table-layout: fixed;
-    min-width: rem-calc(640);
-}
-
-.main-table.th {
-    position: sticky;
-    top: 0;
-    background-color: white;
-}
-
-tr {
-    text-align: left;
+.table-div table * {
+    text-align: center;
 }

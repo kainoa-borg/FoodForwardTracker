@@ -30,6 +30,7 @@ from .SupplierViews import SupplierView
 from .MealPlanViews import MealPlansView
 from .AccountCreationViews import AccountCreateView
 from .CalculationsView import CalculationsView
+from .RecipeListViews import RecipeListView
 
 from .models import (Households, Ingredients, Packaging, MealPlans, Recipes)
 #admin.site.register(Households)
@@ -55,6 +56,7 @@ router.register(r'mealplans', MealPlansView, basename='mealplans')
 router.register(r'mealrecipes', RecipeView, basename='mealrecipes')
 router.register(r'suppliers', SupplierView, basename='suppliers')
 router.register(r'mealrecipes', RecipeView, basename='mealrecipes')
+router.register(r'recipe-list', RecipeListView, basename='recipe-list')
 router.register(r'calculations', CalculationsView, basename='calculations')
 
 urlpatterns = [

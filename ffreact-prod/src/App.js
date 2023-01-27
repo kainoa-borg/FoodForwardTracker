@@ -18,6 +18,8 @@ import Packaging from './Packaging/PackagingList.js'
 import React from 'react'
 import { useState } from 'react'
 
+import './bootstrap/bootstrap.min.css'
+
 const App = () => {
     const [currPage, setCurrPage] = useState();
     const [loginState, setLoginState] = useState({
