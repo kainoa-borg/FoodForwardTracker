@@ -2,9 +2,13 @@ import React, {Fragment, useState, useEffect} from 'react'
 import axios from 'axios'
 import StationForm from './StationForm.js'
 import EditableStationRow from './EditableStationRow.js'
+import EditableHouseholdRow from '../Households/EditableHouseholdRow.js'
 import StationRow from './StationRow.js'
+import HhrefRow from './HhrefRow.js'
+import HouseholdRow from '../Households/HouseholdRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
+import AllergiesList from '../Households/AllergiesList.js'
 
 import './StationList.css'
 
@@ -42,16 +46,18 @@ export default function StationList() {
     useEffect(() => {
 //        setStations(getDBStations());
         getDBStations();
-        getDBHouseholds();
+        getDBHhref();
     }, []);
 
-    const getDBHouseholds = () => {
+    const getDBHhref = () => {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
             url:"http://localhost:8000/api/households"
-          }).then((response)=>{
-            setHouseholds(response.data);
+        }).then((response)=>{
+            console.log(response.data[0])
+            const hhData = response.data
+            setHouseholds(hhData);
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -187,11 +193,38 @@ export default function StationList() {
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div className='table-div'>
+            <h3>Prep Stations</h3>
             <table className='main-table'>
                 <thead>
                     <tr>
-                        <th>Station</th>
-                        <th>Households</th>
+                        <th>Station Select Dropdown</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {/* Show a row for each station in stations.*/}
+                    {stations.map((station, key) => {
+                        const thisKey = key;
+                        return(
+                            <Fragment key={thisKey}>
+                                {
+                                // If this Station is the one to be edited, show an editable row instead
+                                editStationID === thisKey 
+                                ? <EditableStationRow thisKey={thisKey} editFormData={editFormData} households={households} updateStation={updateStation} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
+                                : <StationRow thisKey={thisKey} station={station} deleteStation={deleteStation} handleEditClick={handleEditClick}/>
+                                }
+                            </Fragment>
+                        );
+                    })}
+                    {/* If the list is empty display EmptyTableMessage */}
+                    {stations.length < 1 ? handleError('empty') : null}
+                </tbody>
+            </table>
+            <table className='main-table'>
+                <thead>
+                    <tr>
+                        <th>Station Select Dropdown</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -214,11 +247,46 @@ export default function StationList() {
                 </tbody>
             </table>
             {loadingComponent}
+
             <h3>Add A Station</h3>
-            <StationForm addStation={addStation} households={households}></StationForm>
+            <StationForm addStation={addStation}></StationForm>
             <button onClick={postDBStations}>Submit Changes</button>
             {errorComponent}
             {displayMsgComponent}
         </div>
     )
 }
+/*
+<table className='main-table'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th># Adults</th>
+                        <th># Children 0-6</th>
+                        <th># Children 7-17</th>
+                        <th>SMS</th>
+                        <th>Vegan</th>
+                        <th>Allergies</th>
+                        <th>Gluten Free</th>
+                        <th>Lactose Free</th>
+                        <th>Paused</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {/* Show a row for each station in stations.}
+                    {households.map((hhref, key) => {
+                        const thisKey = key;
+                        return(
+                            <Fragment key={thisKey}>
+                                {
+                                // If this Station is the one to be edited, show an editable row instead
+                                <HhrefRow thisKey={thisKey} hhref={hhref}/>
+                                }
+                            </Fragment>
+                        );
+                    })}
+                    {/* If the list is empty display EmptyTableMessage }
+                    {households.length < 1 ? handleError('empty') : null}
+                </tbody>
+            </table>
+        */

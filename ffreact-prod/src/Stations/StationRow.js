@@ -1,8 +1,8 @@
-//import StationCalcList from './StationCalcList.js'
 import React from 'react'
+import AllergiesList from '../Households/AllergiesList.js'
 
 // Station Row component
-// Takes: key of current row, the state of the Station Page's hh list, deleteStation callback, handleEditClick callback
+// Takes: key of current row, the state of the Station Page's list, deleteStation callback, handleEditClick callback
 // Returns a Station table row component 
 const StationRow = (props) => {
     const {thisKey, station, deleteStation, handleEditClick} = props;
@@ -21,6 +21,5 @@ const StationRow = (props) => {
         </tr>
     )
 }
-
 
 export default StationRow;

@@ -78,7 +78,6 @@ class StationsSerializer(ModelSerializer):
         return super().update(ing_instance, validated_data)
     ##
 
-# Create your views here.
 class StationsView(ModelViewSet):
 	queryset = Stations.objects.all()
 	serializer_class = StationsSerializer
