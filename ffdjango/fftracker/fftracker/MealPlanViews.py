@@ -5,7 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from rest_framework import status
-from .models import MealPlans, Recipes
+from .models import MealPlans, Recipes, Households
 # Create your views here.
 
 class MealPlansSerializer(ModelSerializer):
@@ -36,5 +36,22 @@ class MealPlansView(viewsets.ModelViewSet):
 	# 		serializer.save()
 	# 		return Response(status=status.HTTP_200_OK)
 	# 	return Response(status=status.HTTP_200_BADREQUEST)
+	def create(self, request):
+		queryset = Households.objects.filter(paused_flag=False)
+		meal_servings = 0
+		snack_servings = 0
+
+		for household in queryset:
+			meal_servings += household.num_adult + household.num_child_gt_6 + (household.num_child_lt_6 *.5)
+			snack_servings += household.num_adult + household.num_child_gt_6 + household.num_child_lt_6
+
+		request.data['meal_servings'] = meal_servings
+		request.data['snack_servings'] = snack_servings
+		serializer = MealPlansSerializer(data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(status=status.HTTP_200_OK)
+		return Response(status=status.HTTP_200_BADREQUEST)
+
 	queryset = MealPlans.objects.all()
 	serializer_class = MealPlansSerializer

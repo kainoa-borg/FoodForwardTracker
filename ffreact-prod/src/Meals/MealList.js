@@ -36,7 +36,6 @@ export default function MealList() {
           }).then((response)=>{
             const mealData = response.data
             setMealPlan(mealData);
-            console.log(mealData);
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -55,6 +54,22 @@ export default function MealList() {
             const recipeData = response.data
             setRecipeList(recipeData);
             console.log(recipeData);
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+    }
+
+    const getDBServingCalculations = () => {
+        console.log('MAKING REQUEST TO DJANGO')
+        axios({
+            method: "GET",
+            url:"http://localhost:8000/api/serving-calculations/"
+          }).then((response)=>{
+            return response.data;
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -94,8 +109,13 @@ export default function MealList() {
     }
 
     const addMeal = (meal) => {
+        // console.log(JSON.stringify(meal))
+        // console.log(meal['meal_servings'])
         const lastID = mealPlan[mealPlan.length - 1]['m_id'];
         meal['m_id'] = lastID + 1;
+        // let calc_servings = getDBServingCalculations();
+        // meal['meal_servings'] = calc_servings['meal_servings']
+        // meal['snack_servings'] = calc_servings['snack_servings']
         // let newMeal = [...mealPlan, meal];
         postDBMealPlan(meal);
         clearError();
@@ -137,8 +157,8 @@ export default function MealList() {
 
     const updateMeal = (key) => {
         let thisID = mealPlan[key]['m_id'];
-        console.log(thisID);
-        console.log(JSON.stringify(editFormData))
+        // console.log(thisID);
+        // console.log(JSON.stringify(editFormData))
         if (mealPlan.find((meals) => meals.m_id === thisID))
         {
             axios({
@@ -177,7 +197,7 @@ export default function MealList() {
         const newEditFormData = {...editFormData};
         for (let i = 0; i < names.length; i++) {
           newEditFormData[names[i]] = values[i];
-          console.log('(' + names[i] + ', ' + values[i] + ')', newEditFormData.aFlag);
+        //   console.log('(' + names[i] + ', ' + values[i] + ')', newEditFormData.aFlag);
         }
         setEditFormData(newEditFormData);
       }
