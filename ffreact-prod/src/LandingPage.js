@@ -10,19 +10,19 @@ const LandingPage = (props) => {
         <Fragment>
             <h3>Landing Page</h3>
             <button onClick={() => handlePageClick('households')}>
-                Households
+                Clients
             </button>
             <button onClick={() => handlePageClick('ingredients')}>
-                Ingredients
+                Inventory
             </button>
-            <button onClick={() => handlePageClick('packaging')}>
-                Packaging
+            <button onClick={() => handlePageClick('recipes')}>
+                Meals
             </button>
             <button onClick={() => handlePageClick('reportsPage')}>
                 Reports
             </button>
             <button onClick={() => handlePageClick('userPage')}>
-                User
+                Administration
             </button>
         </Fragment>
     );
