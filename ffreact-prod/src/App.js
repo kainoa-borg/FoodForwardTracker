@@ -6,6 +6,7 @@ import HouseholdList from './Households/HouseholdList.js'
 import HouseholdsReport from './Households/HouseholdsReport.js'
 import AllergiesList from './Households/AllergiesList.js'
 import Ingredients from './Ingredients/IngredientList.js'
+//import IngredientReport from './Ingredients/IngredientReport.js'
 import StationList from './Stations/StationList.js'
 import ReportsPage from "./ReportsPage.js"
 import UserPage from "./UserPage.js"
@@ -37,6 +38,7 @@ const App = () => {
         else if (pageName === 'households') setCurrPage(<HouseholdList />);
         else if (pageName === 'households-report') setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />);
         else if (pageName === 'ingredients') setCurrPage(<Ingredients />);
+        //else if (pageName === 'ingredients-report') setCurrPage(<IngredientReport handlePageClick={handlePageClick} />);
         else if (pageName === 'packaging') setCurrPage(<Packaging />);
         else if (pageName === 'stations') setCurrPage(<StationList />);
         else if (pageName === 'landing') setCurrPage(<HouseholdList />);
@@ -58,14 +60,17 @@ const App = () => {
                 <button onClick={() => handlePageClick('loginPage')}>
                     Login Page
                 </button>
+                <button onClick={() => handlePageClick('userPage')}>
+                    User Account
+                </button>
+                <button onClick={() => handlePageClick('userList')}>
+                    User Admin.
+                </button>
                 <button onClick={() => handlePageClick('landingPage')}>
                     Landing Page
                 </button>
                 <button onClick={() => handlePageClick('households')}>
                     Households
-                </button>
-                <button onClick={() => handlePageClick('households-report')}>
-                    Households Report
                 </button>
                 <button onClick={() => handlePageClick('ingredients')}>
                     Ingredients
@@ -78,12 +83,6 @@ const App = () => {
                 </button>
                 <button onClick={() => handlePageClick('reports')}>
                     Reports
-                </button>
-                <button onClick={() => handlePageClick('userPage')}>
-                    User Account
-                </button>
-                <button onClick={() => handlePageClick('userList')}>
-                    User Admin.
                 </button>
                 <button onClick={() => handlePageClick('meals')}>
                     Meal Plan

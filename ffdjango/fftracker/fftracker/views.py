@@ -9,9 +9,8 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Households, HhAllergies, Ingredients, Users, Recipes, MealPlans
-from .serializers import HouseholdSerializer, AllergySerializer, HouseholdAllergySerializer, IngredientInvSerializer, UserSerializer
-#from .utils import updateHousehold, getHouseholdDetail, deleteHousehold, getHouseholdDetail, createHousehold 
+from .models import Households, HhAllergies, Ingredients, Users, Recipes, MealPlans, Stations
+from .serializers import HouseholdSerializer, AllergySerializer, HouseholdAllergySerializer, IngredientInvSerializer, UserSerializer, StationSerializer, StationListSerializer
 from rest_framework import viewsets
 from .helperfuncs import execute_query
 from django.db import connection
@@ -131,4 +130,12 @@ def logout_user(request):
 
 def index(request):
   return HttpResponse("Hello! Welcome to Food Forward Tracker")
+
+class StationView(ModelViewSet):
+	queryset = Stations.objects.all()
+	serializer_class = StationSerializer
+
+class StationListView(ModelViewSet):
+	queryset = Stations.objects.all()
+	serializer_class = StationListSerializer
 

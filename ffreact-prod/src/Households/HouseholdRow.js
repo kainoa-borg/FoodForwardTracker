@@ -20,7 +20,7 @@ const HouseholdRow = (props) => {
             <td>{hh.num_child_gt_6}</td>
             <td>{String(Boolean(hh.veg_flag))}</td>
             <td>{String(Boolean(hh.gf_flag))}</td>
-            <td>{String(Boolean(hh.a_flag))}</td>
+            
             <td>{String(Boolean(hh.sms_flag))}</td>
             <td>{String(Boolean(hh.paused_flag))}</td>
             <td>{hh.phone}</td>
