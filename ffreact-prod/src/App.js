@@ -15,6 +15,8 @@ import NewUserPage from "./NewUserPage.js"
 import Recipe from './Recipe/RecipeList.js'
 import MealPlan from './Meals/MealList.js'
 import Packaging from './Packaging/PackagingList.js'
+import RecipeDropDown from './Recipe/RecipeDropDown.js'
+import Search from './Search.js'
 import React from 'react'
 import { useState } from 'react'
 
@@ -49,7 +51,6 @@ const App = () => {
         else if (pageName === 'userList') setCurrPage(<UserList handlePageClick={handlePageClick} />);
         else if (pageName === 'allergies') setCurrPage(<AllergiesList allergies={[{ aType: 'Gluten' }, { aType: 'Peanut' }]} />);
     }
-
     return (
         <div className="App">
             <header className="App-header">
@@ -89,6 +90,12 @@ const App = () => {
                 </button>
                 <button onClick={() => handlePageClick('recipes')}>
                     Recipes
+                </button>
+                <select>
+                    <button onClick={() => handlePageClick('RecipeDropDown')}></button>
+                </select>
+                <button onClick={() => handlePageClick('Search')}>
+                    Search
                 </button>
                 {currPage}
             </header>
