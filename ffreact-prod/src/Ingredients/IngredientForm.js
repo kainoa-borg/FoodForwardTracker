@@ -8,28 +8,30 @@ import ReusableForm from '../ReusableForm.js'
 // Takes AddIngredient callback function
 // Returns a form that can be used to define a new ingredient object in a IngredientList
 const IngredientForm = (props) => {
+
+  const supplierList = props.suppliers;
   
   const clearIngredient = () => {
     return {
       i_id: null,
-      ingredient_name: '',
-      pkg_type: '',
-      storage_type: '',
-      in_date: '',
+      ingredient_name: "",
+      pkg_type: "",
+      storage_type: "",
+      in_date: null,
       in_qty: null,
-      unit: null,
-      exp_date: null,
+      ingredient_usage: [],
       qty_on_hand: null,
+      unit: "",
+      exp_date: null,
       unit_cost: null,
       flat_fee: null,
-      isupplier_name: null,
-      pref_isupplier_name: null
-    }
+      isupplier_id: null,
+      pref_isupplier_id: null
+  }
   }
 
   // The state of this Ingredient Form with each attribute of Ingredient
   const [ingredient, setIngredient] = useState(clearIngredient());
-  const [supplierList, setSupplierList] = useState([{s_id: 1, supplier_name: 'Second Harvest Food Bank'}, {s_id: 2, supplier_name: 'Third Harvest Food Bank'}]);
 
     // Handle form submission (prevent refresh, pass ingredient to addIngredient, and clear form state)
     // Takes submit event information (form submission)
@@ -47,7 +49,6 @@ const IngredientForm = (props) => {
       const newIngredient = {...ingredient};
       for (let i = 0; i < names.length; i++) {
         newIngredient[names[i]] = values[i];
-        console.log('(' + names[i] + ', ' + values[i] + ')');
       }
       setIngredient(newIngredient);
     }
@@ -96,30 +97,28 @@ const IngredientForm = (props) => {
           <label htmlFor="flat_fee">Flat Fee: </label>
           <input name="flat_fee" type="number" step="0.01" value={ingredient.flat_fee} onChange={handleFormChange}/>
 
-          <label htmlFor="exp_date">Exp Date: </label>
-          <input name="exp_date" type="date" value={ingredient.exp_date} onChange={handleFormChange}/>
-
           <label htmlFor="isupplier">Supplier: </label>
           <select name="isupplier_id" onChange={handleFormChange}>
-            <option selected="true">N/A</option>
+            <option selected={true} value={null}>N/A</option>
+            {/* Get supplier_name from  */}
             {supplierList.map((supplier, key) => {
               return (
-                <option name='isupplier_id' value={supplier.s_id}>{supplier.supplier_name}</option>
+                <option value={supplier.s_id}>{supplier.s_name}</option>
               )
             })}
           </select>
 
-          <label htmlFor="pref_isupplier">Supplier: </label>
+          <label htmlFor="pref_isupplier"> Preferred Supplier: </label>
           <select name="pref_isupplier_id">
-            <option selected="true">N/A</option>
+            <option selected={true} value={null}>N/A</option>
             {supplierList.map((supplier, key) => {
               return (
-                <option value={supplier.s_id}>{supplier.supplier_name}</option>
+                <option value={supplier.s_id}>{supplier.s_name}</option>
               );
             })}
           </select>
 
-          <button type='Submit'>Add</button>
+          <br /><button type='Submit'>Add</button>
       </form>
     );
 }

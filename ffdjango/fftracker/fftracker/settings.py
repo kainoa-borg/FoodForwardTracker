@@ -31,7 +31,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['4.236.185.213']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -61,6 +60,7 @@ ROOT_URLCONF = 'fftracker.urls'
 
 # White listing the localhost:8000 port
 CORS_ORIGIN_WHITELIST = ['http://0.0.0.0:8000']
+CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATES = [
     {
@@ -110,6 +110,10 @@ LOGGING = {
             "handlers": ["console"],
             "level": os.getenv('DJANGO_LOG_LEVEL', 'INFO')
         },
+        "fftracker": {
+            "handler": ["console"],
+            "level": os.getenv('DJANGO_LOG_LEVEL', 'INFO')
+        }
     }
 }
 

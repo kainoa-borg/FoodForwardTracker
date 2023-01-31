@@ -1,11 +1,15 @@
 from rest_framework import viewsets
 from rest_framework import serializers 
 from .models import Households, HhAllergies
+from rest_framework.response import Response
+import logging
+logging.basicConfig(level = logging.WARNING)
 
-class AllergySerializer(serializers.ModelSerializer):
-	class Meta():
-		model = HhAllergies
-		fields = ('__all__')
+
+class AllergySerializer(serializers.ModelSerializer):       
+    class Meta():
+        model = HhAllergies
+        fields = (['a_type'])
 
 class HouseholdSerializer(serializers.ModelSerializer):
 	class Meta():
@@ -21,7 +25,8 @@ class HouseholdAllergySerializer(serializers.ModelSerializer):
     class Meta():
         model = Households
         depth = 1
-        fields = ('hh_name', 'num_adult', 'num_child', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag', 'phone', 'street', 'city', 'pcode', 'state', 'delivery_notes', 'hh_allergies')
+        fields = ('hh_name', 'num_adult', 'num_child_lt_6', 'num_child_gt_6', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag', 'phone', 'street', 'city', 'pcode', 'state', 'delivery_notes', 'hh_allergies')
+
     def create(self, validated_data):
         allergy_data = validated_data.pop('hh_allergies')
         hh_model = Households.objects.create(**validated_data)
@@ -30,8 +35,28 @@ class HouseholdAllergySerializer(serializers.ModelSerializer):
             allergy['hh_a_id'] = HhAllergies.objects.latest('hh_a_id').hh_a_id + 1
             allergy_model = HhAllergies.objects.create(**allergy)
         return hh_model
-
+    def update(self, hh_instance, validated_data):
+        # Create nested allergy objects
+        allergy_data = validated_data.pop('hh_allergies')
+        HhAllergies.objects.all().filter(a_hh_name = hh_instance).delete()
+        for allergy in allergy_data:
+            allergy['a_hh_name'] = hh_instance
+            allergy['hh_a_id'] = HhAllergies.objects.latest('hh_a_id').hh_a_id + 1
+            allergy_model = HhAllergies.objects.create(**allergy)
+        logging.warning(hh_instance.hh_name)
+        # If the primary key is changing, we need to delete the existing entry
+        # before saving the new one
+        # changing_pk = False
+        # new_instance = None
+        # if (hh_instance.hh_name != validated_data['hh_name']):
+        #     changing_pk = True
+        #     new_instance = Households.objects.create(**validated_data)
+        # if changing_pk:
+        #     hh_instance.delete()
+        # for key, value in validated_data.items():
+            # setattr(hh_instance, key, value)
+        return super().update(hh_instance, validated_data)
 
 class HouseholdsWithAllergies(viewsets.ModelViewSet):
-	queryset = Households.objects.all()
-	serializer_class = HouseholdAllergySerializer
+    queryset = Households.objects.all()
+    serializer_class = HouseholdAllergySerializer

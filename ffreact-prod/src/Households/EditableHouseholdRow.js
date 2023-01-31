@@ -14,7 +14,8 @@ const EditableHouseholdRow = (props) => {
         <tr key={key}>
             <td><input type="text" name="hh_name" defaultValue={hh.hh_name} onChange={handleEditFormChange}/></td>
             <td><input type="number" name="num_adult" defaultValue={hh.num_adult} onChange={handleEditFormChange}/></td>
-            <td><input type="number" name="num_child" defaultValue={hh.num_child} onChange={handleEditFormChange}/></td>
+            <td><input type="number" name="num_child_lt_6" defaultValue={hh.num_child_lt_6} onChange={handleEditFormChange}/></td>
+            <td><input type="number" name="num_child_gt_6" defaultValue={hh.num_child_gt_6} onChange={handleEditFormChange}/></td>
             <td><input name='veg_flag' type="checkbox" checked={hh.veg_flag} onChange={handleEditFormChange}/></td>
             <td><input name='gf_flag' type='checkbox' checked={hh.gf_flag} onChange={handleEditFormChange}/></td>
             <td><input name='a_flag' type='checkbox' checked={hh.a_flag} onChange={handleEditFormChange}/></td>
@@ -25,7 +26,7 @@ const EditableHouseholdRow = (props) => {
             <td><input name='city' type='text' defaultValue={hh.city} onChange={handleEditFormChange}/></td>
             <td><input name='pcode' type='number' minLength='5' maxLength='5' defaultValue={hh.pcode} onChange={handleEditFormChange}/></td>
             <td><input name='state' type='text' minLength='2' maxLength='2' defaultValue={hh.state} onChange={handleEditFormChange}/></td>
-            <td><textarea name='deliveryNotes' defaultValue={hh.delivery_notes} onChange={handleEditFormChange}/></td>
+            <td><textarea name='delivery_notes' defaultValue={hh.delivery_notes} onChange={handleEditFormChange}/></td>
             <td><AllergiesList allergies={hh.hh_allergies} isEditable={true} updateAllergies={updateAllergies} updateEditForm={updateEditForm}/></td>
             <td></td>
             <td><button type='Submit' onClick={()=>{updateHousehold(key)}}>Save</button></td>

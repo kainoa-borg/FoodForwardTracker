@@ -2,6 +2,9 @@ import React from 'react'
 import {useState} from 'react'
 import {Fragment} from 'react'
 import axios from 'axios'
+import NewUserPage from "./NewUserPage.js"
+import PwResetPage from './PwResetPage.js'
+
 
 // Login Page Component
 // Takes handlePageClick callback function to enable page switching when login is completed
@@ -17,12 +20,23 @@ const LoginPage = (props) => {
 
     const sendLoginRequest = () => {
         axios({
-            method: "POST",
-            url:"",
-            data: user
+            method: "GET",
+            url:"http://localhost:8000/api/users/"
           }).then((response)=>{
-            const data = response.data;
-            console.log(data);
+            let userInList = false;
+            let userData = undefined;
+            for (let i = 0; i < response.data.length; ++i) {
+                if (response.data[i].username === user.username) {
+                    if (response.data[i].password === user.password) {
+                        userInList = true;
+                        userData = response.data[i];
+                    }
+                }
+            }
+            if (userInList) {
+                props.setLoginState(userData);
+                handlePageClick('landingPage');
+            }
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -52,10 +66,19 @@ const LoginPage = (props) => {
         // send login to backend
         sendLoginRequest();
         // Switch to 'landing' page
-        handlePageClick('landing');
+        //handlePageClick('landingPage');
         // TO DO;
     }
-    
+
+    const handleCreateClick = (event) => {
+        handlePageClick('newUserPage');
+        //else if (pageName === 'pwResetPage') setCurrPage(<PwResetPage handlePageClick={handlePageClick} />);
+    }
+
+    const handleResetClick = (event) => {
+        handlePageClick('pwResetPage');
+    }
+
     // HTML structure of this component
     return (
         <Fragment>
@@ -63,9 +86,15 @@ const LoginPage = (props) => {
             <form onSubmit={handleLoginSubmit}>
                 <label htmlFor='username'>Username: </label>
                 <input type='text' maxLength='30' name='username' value={user.username} onChange={handleLoginChange}></input>
-                <label htmlFor='username'>Password: </label>
+                <br/><label htmlFor='username'>Password: </label>
                 <input type='password' maxLength='30' name='password' value={user.password} onChange={handleLoginChange}></input>
-                <button type='Submit'>Login</button>
+                <br /><br /><button type='Submit' onClick={sendLoginRequest}>Submit</button>
+                <br /><text>  Don't have an account?  </text><button onClick={() => handleCreateClick('newUserPage')}>
+                    Create New User
+                </button>
+                <br /><text>  Forgot Password?  </text><button onClick={() => handleResetClick('pwResetPage')}>
+                    Reset Password
+                </button>
             </form>
         </Fragment>
     );

@@ -4,27 +4,27 @@ import React from 'react'
 // Takes: key of current row, the state of the Meal Plan Page's meal list, deleteMeal callback, handleEditClick callback
 // Returns a Recipe table row component 
 const RecipeRow = (props) => {
-    const {thisKey, recipes, deleteRecipe, handleEditClick} = props;
+    const {thisKey, recipe, deleteRecipe, handleEditClick} = props;
     const key = thisKey;
-    const recipe = recipes;
+    const r = recipe;
     
     // HTML structure of this component
     return (
         <tr key={key}>
-            <td>{recipe.r_num}</td>
-            <td>{recipe.r_name}</td>
-            <td>{recipe.ri_id}</td>
-            <td>{recipe.amt}</td>
-            <td>{recipe.unit}</td>
-            <td>{recipe.prep}</td>
-            <td>{recipe.ri_ing}</td>
-            <td>{String(recipe.ri_recipe_num)}</td>
-            <td>{recipe.inst_id}</td>
-            <td>{recipe.ri_id}</td>
-            <td>{recipe.step_no}</td>
-            <td>{recipe.step_inst}</td>
-            <td>{recipe.stn_name}</td>
-            <td>{recipe.inst_recipe_num}</td>
+            <td>{r.r_num}</td>
+            <td>{r.r_name}</td>
+            <td>{r.ri_id}</td>
+            <td>{r.amt}</td>
+            <td>{r.unit}</td>
+            <td>{r.prep}</td>
+            <td>{r.ri_ing}</td>
+            <td>{String(r.ri_recipe_num)}</td>
+            <td>{r.inst_id}</td>
+            <td>{r.ri_id}</td>
+            <td>{r.step_no}</td>
+            <td>{r.step_inst}</td>
+            <td>{r.stn_name}</td>
+            <td>{r.inst_recipe_num}</td>
             <td>placeholder</td>
             {/* When edit is clicked, handleEditClick is called with this row's key */}
             <td><button onClick={()=> handleEditClick(key)}>Edit</button></td>

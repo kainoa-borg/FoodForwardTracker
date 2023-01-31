@@ -38,13 +38,17 @@ const AllergiesList = (props) => {
     }
 
     const handleAddAllergy = (event) => {
+        // Prevent refresh on form submit
         event.preventDefault();
+        // Append this allergy to allergies list
         const newAllergies =  [...allergies, currAllergy];
         setAllergies(newAllergies);
+        // Clear the allergy field
         setCurrAllergy({a_type: ''});
+        // Get key value for updating allergyFlag
         const ret = setAFlag(newAllergies);
-        console.log(ret)
-        props.updateEditForm(['allergies', ret[0]], [newAllergies, ret[1]]);
+        // Batch updating the allergies and the allergy flag together
+        props.updateEditForm(['hh_allergies', ret[0]], [newAllergies, ret[1]]);
     }
 
     const handleDeleteAllergy = (key) => {
@@ -53,7 +57,7 @@ const AllergiesList = (props) => {
         newAllergies.splice(allergyID, 1);
         setAllergies(newAllergies);
         const ret = setAFlag(newAllergies);
-        props.updateEditForm(['allergies', ret[0]], [newAllergies, ret[1]]);
+        props.updateEditForm(['hh_allergies', ret[0]], [newAllergies, ret[1]]);
     }
 
     if (isEditable) {
@@ -64,7 +68,7 @@ const AllergiesList = (props) => {
                         {/* Show a row for each allergy object in allergies */}
                         {allergies.map((allergy, thisKey) => {
                             return (
-                                <Fragment>
+                                <Fragment key={thisKey}>
                                     <tr key={thisKey}>
                                         <td>
                                             {allergy.a_type}
@@ -80,7 +84,7 @@ const AllergiesList = (props) => {
                         })}
                         <tr>
                             <td>
-                                <input name="aType" type="text" onChange={handleAllergyChange} value={currAllergy.aType}></input>
+                                <input name="a_type" type="text" onChange={handleAllergyChange} value={currAllergy.a_type}></input>
                             </td>
                             <td>
                                 <button type='button' onClick={handleAddAllergy}>
@@ -101,7 +105,7 @@ const AllergiesList = (props) => {
                         {/* Show a row for each allergy object in allergies */}
                         {allergies.map((allergy, thisKey) => {
                             return (
-                                <Fragment>
+                                <Fragment key={thisKey}>
                                     <tr key={thisKey}>
                                         <td>
                                             {allergy.a_type}

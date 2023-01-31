@@ -28,7 +28,7 @@ const RecipeForm = (props) => {
 
   // The state of this Recipe Form with each attribute of Recipes
   const [recipe, setRecipe] = useState(clearRecipe());
-  const [recipeList, setRecipeList] = useState([{r_num: 1, r_name: 'Recipe Name'}, {r_num: 2, r_name: 'Recipe Name'}]);
+  //const [recipeList, setRecipeList] = useState([{r_num: 1, r_name: 'Recipe Name'}, {r_num: 2, r_name: 'Recipe Name'}]);
 
     // Handle form submission (prevent refresh, pass Recipe to addRecipe, and clear form state)
     // Takes submit event information (form submission)
@@ -110,49 +110,8 @@ const RecipeForm = (props) => {
           <label htmlFor="inst_recipe_num">Recipe Instruction Number: </label>
           <input name="inst_recipe_num" type="text" value={recipe.inst_recipe_num} onChange={handleFormChange}/>
 
-          <label htmlFor="r_num">Recipe Number: </label>
-          <select name="r_num" onChange={handleFormChange}>
-            <option selected="true">N/A</option>
-            {recipeList.map((recipe, key) => {
-              return (
-                <option name='r_num' value={recipe.r_num}>{recipe.r_num}</option>
-              )
-            })}
-          </select>
-
-          <label htmlFor="r_name">Recipe Name: </label>
-          <select name="r_name">
-            <option selected="true">N/A</option>
-            {recipeList.map((recipe, key) => {
-              return (
-                <option value={recipe.r_name}>{recipe.r_name}</option>
-              );
-            })}
-          </select>
-
           <button type='Submit'>Add</button>
 
-          <label htmlFor="r_num">Recipe Number: </label>
-          <select name="r_num" onChange={handleFormChange}>
-            <option selected="true">N/A</option>
-            {setRecipeList.map((recipe, key) => {
-              return (
-                <option name='r_num' value={recipe.r_num}>{recipe.r_num}</option>
-              )
-            })}
-          </select>
-
-          <label htmlFor="r_name">Recipe Name: </label>
-          <select name="r_name">
-            <option selected="true">N/A</option>
-            {setRecipeList.map((recipe, key) => {
-              return (
-                <option value={recipe.r_name}>{recipe.r_name}</option>
-              );
-            })}
-
-            <button type='Submit'>Add</button>
-          </select>
       </form>
     );
 }

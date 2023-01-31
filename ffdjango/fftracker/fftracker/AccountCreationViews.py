@@ -13,7 +13,7 @@ class AuthUserSerializer(ModelSerializer):
         model = AuthUser
         fields = ('__all__')
 
-class AccountCreateView(viewsets.View):
+class AccountCreateView(viewsets.ViewSet):
     def list(self, request):
         keys = ('inst_id', 'step_no', 'step_inst', 'stn_name', 'inst_recipe_name')
         query = "INSERT INTO users (username, password, admin_flag) VALUES {<input username>, <input password>, <0 or 1>}"
@@ -35,7 +35,4 @@ class AccountCreateView(viewsets.View):
             serializer.save()
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_200_BADREQUEST)
-
-
-
 

@@ -1,36 +1,86 @@
-import React, {Fragment, useState} from 'react'
+import React, {Fragment, useState, useEffect, Suspense} from 'react'
 import axios from 'axios'
 import IngredientForm from './IngredientForm.js'
 import EditableIngredientRow from './EditableIngredientRow.js'
 import IngredientRow from './IngredientRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
-import ReusableTable from '../ReusableTable.js'
 
 import './IngredientList.css'
 
 
 // Ingredient List Component
 export default function IngredientList() {
-    const data = [
-        {i_id: 1, ingredient_name: 'Lasagna Noodles', pkg_type: 'DRY-BAG', storage_type: 'N/A', in_date: '11/20/22', in_qty: 10, unit: 'lbs', exp_date: '11-20-24', qty_on_hand: 10, unit_cost: 0.75, flat_fee: 0.00, isupplier_name: 'Second Harvest Food Bank', pref_isupplier_name: 'N/A', usages: []},
-        {i_id: 2, ingredient_name: 'Ground Beef', pkg_type: 'FROZEN', storage_type: 'N/A', in_date: '11/11/22', in_qty: 2, unit: 'lbs', exp_date: '12-7-22', qty_on_hand: 2, unit_cost: 0.75, flat_fee: 0.00, isupplier_name: 'Second Harvest Food Bank', pref_isupplier_name: 'N/A', usages: []},
-        {i_id: 3, ingredient_name: 'Ground Beef', pkg_type: 'FROZEN', storage_type: 'N/A', in_date: '11/20/22', in_qty: 5, unit: 'lbs', exp_date: '12-7-22', qty_on_hand: 5, unit_cost: 0.75, flat_fee: 0.00, isupplier_name: 'Second Harvest Food Bank', pref_isupplier_name: 'N/A', usages: [{i_usage_id: 1, used_date: '11/29/22', used_qty: 2}]}
-    ]
-
-    const [ingredients, setIngredients] = useState(data);
+    const [ingredients, setIngredients] = useState(undefined);
+    const [suppliers, setSuppliers] = useState(undefined);
     const [editIngredientID, setEditIngredientID] = useState(null);
-    const [editFormData, setEditFormData] = useState(null);
+    const [editFormData, setEditFormData] = useState({
+        i_id: null,
+        ingredient_name: "",
+        pkg_type: "",
+        storage_type: "",
+        in_date: null,
+        in_qty: null,
+        ingredient_usage: [],
+        qty_on_hand: null,
+        unit: "",
+        exp_date: null,
+        unit_cost: null,
+        flat_fee: null,
+        isupplier_id: null,
+        pref_isupplier_id: null
+    });
     const [errorComponent, setErrorComponent] = useState(null);
     const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
+    const [loadingComponent, setLoadingComponent] = useState(null);
 
-    const getDBIngredients = () => {
+    const handleError = (errCode) => {
+        if (errCode === 'DuplicateKey') {
+            setErrorComponent(
+                <Error text="Ingredient ID already found!"/>
+            )
+        } 
+        else if (errCode === 'empty') {
+            setErrorComponent(
+                <Error text="There doesn't seem to be any data!"/>
+            )
+        }
+    }
+    const clearError = () => {
+        setErrorComponent(null);
+    }
+
+    useEffect(() => {
+        getDBIngredients();
+        getDBSuppliers();
+    }, []);
+
+    const getDBSuppliers = () => {
+        console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
-            url:"/ingredients/"
+            url:"http://localhost:8000/api/suppliers"
+          }).then((response)=>{
+            setSuppliers(response.data);
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+    }
+
+    const getDBIngredients = () => {
+        console.log("MAKING REQUEST TO DJANGO")
+        setLoadingComponent(<Error text="LOADING DATA..."/>);
+        axios({
+            method: "GET",
+            url:"http://localhost:8000/api/ingredient-inventory"
           }).then((response)=>{
             const ingData = response.data
             setIngredients(ingData);
+            setLoadingComponent(null);
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -57,22 +107,22 @@ export default function IngredientList() {
         setdisplayMsgComponent(<DisplayMessage msg='Submitting changes to database!'/>);
     }
 
-    const handleError = (errCode) => {
-        if (errCode === 'DuplicateKey') {
-            setErrorComponent(
-                <Error text="Ingredient ID already found!"/>
-            )
-        }
-    }
-    const clearError = () => {
-        setErrorComponent(null);
-    }
-
     const addIngredient = (ingredient) => {
         const lastID = ingredients[ingredients.length - 1]['i_id'];
         ingredient['i_id'] = lastID + 1;
-        let newIngredients = [...ingredients, ingredient];
-        setIngredients(newIngredients);
+        axios({
+            method: "POST",
+            url:"http://localhost:8000/api/ingredient-inventory/",
+            data: ingredient
+          }).then((response)=>{
+            getDBIngredients();
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
         clearError();
         // Check to see if we already have a duplicate Ingredient Name
         // if (!ingredients.find((ing) => ing.i_id === ing.i_id))
@@ -88,21 +138,39 @@ export default function IngredientList() {
     }
 
     const deleteIngredient = (key) => {
-        const ingID = key; 
-        let newIngredients = [...ingredients];
-        newIngredients.splice(ingID, 1);
-        setIngredients(newIngredients);
+        const ingID = ingredients[key]['i_id']; 
+        axios({
+            method: "DELETE",
+            url:"http://localhost:8000/api/ingredient-inventory/"+ingID+'/',
+          }).then((response)=>{
+            getDBIngredients();
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
     }
 
     const updateIngredient = (key) => {
         let thisID = ingredients[key]['i_id'];
         if (ingredients.find((ing) => ing.i_id === thisID))
         {
-            let newIngredients = [...ingredients];
-            newIngredients[key] = editFormData;
             setEditIngredientID(null);
-            setIngredients(newIngredients)
-            clearError();
+            axios({
+                method: "PATCH",
+                url:"http://localhost:8000/api/ingredient-inventory/"+thisID+'/',
+                data: editFormData
+              }).then((response)=>{
+                getDBIngredients();
+              }).catch((error) => {
+                if (error.response) {
+                  console.log(error.response);
+                  console.log(error.response.status);
+                  console.log(error.response.headers);
+                  }
+              });
         }
         else {
             // If this Ingredient is already in ingredients list, display error message
@@ -121,13 +189,11 @@ export default function IngredientList() {
         // Set state with new ingredient object
         setEditFormData(newEditFormData);
     }
-    const updateEditForm = (names, values) => {
+    const updateEditForm = (name, value) => {
         const newEditFormData = {...editFormData};
-        for (let i = 0; i < names.length; i++) {
-          newEditFormData[names[i]] = values[i];
-          console.log('(' + names[i] + ', ' + values[i] + ')', newEditFormData.aFlag);
-        }
+        newEditFormData[name] = value;
         setEditFormData(newEditFormData);
+        console.log(editFormData);
       }
 
     const handleEditClick = (key) => {
@@ -139,6 +205,9 @@ export default function IngredientList() {
         setEditFormData(null);
     }
 
+    if (ingredients === undefined || suppliers === undefined) {
+        return (<>loading</>)
+    }
     // The HTML structure of this component
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
@@ -146,18 +215,17 @@ export default function IngredientList() {
             <table className='main-table'>
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Ingredient Name</th>
                         <th>Package Type</th>
                         <th>Storage Type</th>
                         <th>Date In</th>
                         <th>Qty In</th>
+                        <th>Expiration Date</th>
                         <th>Usages</th>
                         <th>Qty On Hand</th>
                         <th>Unit</th>
                         <th>Unit Cost</th>
                         <th>Flat Fee</th>
-                        <th>Expiration Date</th>
                         <th>Supplier</th>
                         <th>Preferred Supplier</th>
                     </tr>
@@ -167,20 +235,22 @@ export default function IngredientList() {
                     {ingredients.map((ingredient, key) => {
                         const thisKey = key;
                         return(
-                            <Fragment>
+                            <Fragment key={thisKey}>
                                 {
                                 // If this ingredient is the one to be edited, show an editable row instead
                                 editIngredientID === thisKey 
-                                ? <EditableIngredientRow thisKey={thisKey} editFormData={editFormData} updateIngredient={updateIngredient} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
+                                ? <EditableIngredientRow thisKey={thisKey} editFormData={editFormData} suppliers={suppliers} updateIngredient={updateIngredient} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
                                 : <IngredientRow thisKey={thisKey} ingredient={ingredient} deleteIngredient={deleteIngredient} handleEditClick={handleEditClick}/>
                                 }
                             </Fragment>
                         );
                     })}
+                    {/* {ingredients.length < 1 ? handleError('empty') : null} */}
                 </tbody>
             </table>
+            {loadingComponent}
             <h3>Add An Ingredient</h3>
-            <IngredientForm addIngredient={addIngredient}></IngredientForm>
+            <IngredientForm addIngredient={addIngredient} suppliers={suppliers}></IngredientForm>
             <button onClick={postDBIngredients}>Submit Changes</button>
             {errorComponent}
             {displayMsgComponent}
