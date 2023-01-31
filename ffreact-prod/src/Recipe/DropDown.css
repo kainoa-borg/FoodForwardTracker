@@ -1,0 +1,8 @@
+.dropdown-menu {
+    display: none;
+  }
+  
+  .is-open .dropdown-menu {
+    display: block;
+  }
+  
