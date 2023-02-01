@@ -8,7 +8,8 @@ import DisplayMessage from '../DisplayMessage.js'
 import ReusableTable from '../ReusableTable.js'
 
 import './MealList.css'
-import Table from 'react-bootstrap/Table'
+// import Table from 'react-bootstrap/Table'
+import Table from '@mui/material/Table'
 
 // Meal List Component
 export default function MealList() {

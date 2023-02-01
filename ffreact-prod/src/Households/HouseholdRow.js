@@ -1,7 +1,7 @@
 import AllergiesList from './AllergiesList.js'
 import React from 'react'
 
-import Button from 'react-bootstrap/Button'
+import {Button} from '@mui/material'
 
 // Household Row component
 // Takes: key of current row, the state of the Household Page's hh list, deleteHousehold callback, handleEditClick callback
