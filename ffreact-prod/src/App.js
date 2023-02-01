@@ -18,8 +18,10 @@ import Packaging from './Packaging/PackagingList.js'
 import RecipeDropDown from './Recipe/RecipeDropDown.js'
 import Search from './Search.js'
 import React from 'react'
+import ReactDOM from "react-dom"
 import { useState } from 'react'
-
+import { CssBaseline, Box } from '@mui/material'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './bootstrap/bootstrap.min.css'
 
 const App = () => {
@@ -53,11 +55,14 @@ const App = () => {
     }
     return (
         <div className="App">
+            <CssBaseline />
+            <Box sx={{
+                bgcolor: (theme) => theme.
+                palette.background.default,
+                minHeight: "100vh"
+            }}>
             <header className="App-header">
                 <h1>Food Forward Tracker</h1>
-                {/* <button onClick={() => handlePageClick('householdForm')}>
-          Household Form
-        </button> */}
                 <button onClick={() => handlePageClick('loginPage')}>
                     Login Page
                 </button>
@@ -99,8 +104,30 @@ const App = () => {
                 </button>
                 {currPage}
             </header>
+            </Box>
         </div>
     );
 }
 
 export default App;
+/*
+export default function App() {
+    return <div>
+        <CssBaseline />
+        <Router>
+            <Box sx={{
+                bgcolor: (theme) => theme.
+                palette.background.default,
+                minHeight: "100vh"
+            }}>
+                <Routes>
+                    <route path="/example"
+                    element={<Example />} />
+                </Routes>
+            </Box>
+        </Router>
+    </div>
+}
+
+ReactDOM.render(<App />, document.getElementById("root"))
+*/

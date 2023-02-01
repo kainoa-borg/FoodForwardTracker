@@ -2,13 +2,15 @@ import React, {Fragment, useState, useEffect} from 'react'
 import axios from 'axios'
 import StationForm from './StationForm.js'
 import EditableStationRow from './EditableStationRow.js'
-import EditableHouseholdRow from '../Households/EditableHouseholdRow.js'
 import StationRow from './StationRow.js'
-import HhrefRow from './HhrefRow.js'
-import HouseholdRow from '../Households/HouseholdRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
-import AllergiesList from '../Households/AllergiesList.js'
+import { Button, Box, Paper, Table, TableBody, 
+    TableCell, TableContainer, TableHead, TableRow, 
+    IconButton } from "@mui/material"
+import EditIcon from "@mui/icons-material/Edit"
+
+import { BrowserRouter as Router, Link } from "react-router-dom"
 
 import './StationList.css'
 
@@ -16,6 +18,7 @@ import './StationList.css'
 // Station List Component
 
 export default function StationList() {
+    const [recipes] = useState(undefined);
     const [stations, setStations] = useState(undefined);
     const [households, setHouseholds] = useState(undefined);
     const [editStationID, setEditStationID] = useState(null);
@@ -195,30 +198,34 @@ export default function StationList() {
         <div className='table-div'>
             <h3>Prep Stations</h3>
             <table className='main-table'>
-                <thead>
-                    <tr>
-                        <th>Station Select Dropdown</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {/* Show a row for each station in stations.*/}
-                    {stations.map((station, key) => {
-                        const thisKey = key;
-                        return(
-                            <Fragment key={thisKey}>
-                                {
-                                // If this Station is the one to be edited, show an editable row instead
-                                editStationID === thisKey 
-                                ? <EditableStationRow thisKey={thisKey} editFormData={editFormData} households={households} updateStation={updateStation} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
-                                : <StationRow thisKey={thisKey} station={station} deleteStation={deleteStation} handleEditClick={handleEditClick}/>
-                                }
-                            </Fragment>
-                        );
-                    })}
-                    {/* If the list is empty display EmptyTableMessage */}
-                    {stations.length < 1 ? handleError('empty') : null}
-                </tbody>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 360 }} size="small">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align="left">
+                                    <h4>Recipe Selection</h4>
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {stations.map((station, key) => {
+                                const thisKey = key;
+                                return(
+                                    <Fragment key={thisKey}>
+                                        {
+                                        // If this Station is the one to be edited, show an editable row instead
+                                        editStationID === thisKey 
+                                        ? <EditableStationRow thisKey={thisKey} editFormData={editFormData} households={households} updateStation={updateStation} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
+                                        : <StationRow thisKey={thisKey} station={station} deleteStation={deleteStation} handleEditClick={handleEditClick}/>
+                                        }
+                                    </Fragment>
+                                );
+                            })}
+                            {/* If the list is empty display EmptyTableMessage */}
+                            {stations.length < 1 ? handleError('empty') : null}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </table>
             <table className='main-table'>
                 <thead>
