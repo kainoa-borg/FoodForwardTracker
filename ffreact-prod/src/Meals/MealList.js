@@ -225,7 +225,7 @@ export default function MealList() {
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div class='table-div'>
-            <Table>
+            <table>
                 <thead>
                     <tr>
                         <th>Next Delivery Date</th>
@@ -251,7 +251,7 @@ export default function MealList() {
                         );
                     })}
                 </tbody>
-            </Table>
+            </table>
             <h3>Add A Meal</h3>
             <MealPlanForm addMeal={addMeal} recipeList={recipeList}></MealPlanForm>
             {errorComponent}

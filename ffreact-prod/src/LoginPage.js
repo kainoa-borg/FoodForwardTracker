@@ -1,9 +1,13 @@
-import React from 'react'
+import * as React from 'react'
 import {useState} from 'react'
 import {Fragment} from 'react'
 import axios from 'axios'
 import NewUserPage from "./NewUserPage.js"
 import PwResetPage from './PwResetPage.js'
+
+import Button from '@mui/material/Button'
+import { Grid, Container, Typography, Stack} from '@mui/material'
+import TextField from '@mui/material/TextField'
 
 
 // Login Page Component
@@ -55,6 +59,7 @@ const LoginPage = (props) => {
         const thisUser = {...user};
         thisUser[fieldName] = fieldValue;
         setUser(thisUser);
+        console.log(user.username, user.password)
     }
     
     // Handle login form submit
@@ -81,22 +86,35 @@ const LoginPage = (props) => {
 
     // HTML structure of this component
     return (
-        <Fragment>
-            <h3>Login Page</h3>
-            <form onSubmit={handleLoginSubmit}>
-                <label htmlFor='username'>Username: </label>
-                <input type='text' maxLength='30' name='username' value={user.username} onChange={handleLoginChange}></input>
-                <br/><label htmlFor='username'>Password: </label>
-                <input type='password' maxLength='30' name='password' value={user.password} onChange={handleLoginChange}></input>
-                <br /><br /><button type='Submit' onClick={sendLoginRequest}>Submit</button>
-                <br /><text>  Don't have an account?  </text><button onClick={() => handleCreateClick('newUserPage')}>
-                    Create New User
-                </button>
-                <br /><text>  Forgot Password?  </text><button onClick={() => handleResetClick('pwResetPage')}>
-                    Reset Password
-                </button>
-            </form>
-        </Fragment>
+        <Grid item container spacing='12' marginTop='4em' justifyContent='center'>
+            <Grid item xs={8} justifyContent='space-between'>
+                <img width='100%' height='100%' src="https://static.wixstatic.com/media/961f8a_8d810ec655dc4874a0c0356adf4430ce~mv2.png/v1/fill/w_142,h_107,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/961f8a_8d810ec655dc4874a0c0356adf4430ce~mv2.png"></img>
+                <Typography variant='h4'>Welcome to Food Forward</Typography>
+            </Grid>
+            <Grid item xs={4}>
+                <form onSubmit={handleLoginSubmit}>
+                    <Stack spacing='12'>
+                        <TextField type='Text' maxLength='30' label='Username' name='username' value={user.username} onChange={handleLoginChange}/>
+                        <TextField type='password' maxLength='30' label='Password' name='password' value={user.password} onChange={handleLoginChange}/>
+                        <Button variant='contained' type='Submit' onClick={sendLoginRequest}>
+                            Log In
+                        </Button>
+                        <Typography textAlign='center'>
+                            Don't have an account?
+                        </Typography>
+                        <Button variant='outlined' size='small' onClick={() => handleCreateClick('newUserPage')}>
+                            Sign Up
+                        </Button>
+                        <Typography textAlign='center'>
+                            Forgot your password?
+                        </Typography>
+                        <Button variant='outlined' size='small' onClick={() => handleResetClick('pwResetPage')}>
+                            Reset Password
+                        </Button>
+                    </Stack>
+                </form>
+            </Grid>
+        </Grid>
     );
 }
 

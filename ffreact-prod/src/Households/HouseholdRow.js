@@ -31,9 +31,9 @@ const HouseholdRow = (props) => {
             <td>{hh.delivery_notes}</td>
             <td><AllergiesList allergies={hh.hh_allergies} isEditable={false}/></td>
             {/* When edit is clicked, handleEditClick is called with this row's key */}
-            <td><Button variant='secondary'onClick={()=> handleEditClick(key)}>Edit</Button></td>
+            <td><button onClick={()=> handleEditClick(key)}>Edit</button></td>
             {/* When delete is clicked, deleteHousehold is called with this row's key */}
-            <td><Button variant='danger' onClick={() => deleteHousehold(key)}>X</Button></td>
+            <td><button onClick={() => deleteHousehold(key)}>X</button></td>
         </tr>
     )
 }
