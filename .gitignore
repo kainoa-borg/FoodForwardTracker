@@ -3,6 +3,7 @@
 #pycache
 .pyc
 .cpython
+__pycache__/
 
 # dependencies
 ffreact-prod/node_modules

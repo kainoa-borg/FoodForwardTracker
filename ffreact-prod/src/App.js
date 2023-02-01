@@ -15,9 +15,13 @@ import NewUserPage from "./NewUserPage.js"
 import Recipe from './Recipe/RecipeList.js'
 import MealPlan from './Meals/MealList.js'
 import Packaging from './Packaging/PackagingList.js'
+import RecipeDropDown from './Recipe/RecipeDropDown.js'
+import Search from './Search.js'
 import React from 'react'
+import ReactDOM from "react-dom"
 import { useState } from 'react'
-import { Container, Button, Typography } from '@mui/material'
+import { CssBaseline, Box } from '@mui/material'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'import { Container, Button, Typography } from '@mui/material'
 import { ThemeProvider } from 'styled-components'
 
 const App = () => {
@@ -49,14 +53,16 @@ const App = () => {
         else if (pageName === 'userList') setCurrPage(<UserList handlePageClick={handlePageClick} />);
         else if (pageName === 'allergies') setCurrPage(<AllergiesList allergies={[{ aType: 'Gluten' }, { aType: 'Peanut' }]} />);
     }
-
     return (
-        <Container maxWidth='xl' className="this-container">
+        <div className="App">
+            <CssBaseline />
+            <Box sx={{
+                bgcolor: (theme) => theme.
+                palette.background.default,
+                minHeight: "100vh"
+            }}>
             <header className="App-header">
                 <Typography variant='h4'>Food Forward Tracker</Typography>
-                {/* <button onClick={() => handlePageClick('householdForm')}>
-          Household Form
-        </button> */}
                 <Button variant='contained' onClick={() => handlePageClick('loginPage')}>
                     Login Page
                 </Button>
@@ -90,10 +96,38 @@ const App = () => {
                 <Button variant='contained' onClick={() => handlePageClick('recipes')}>
                     Recipes
                 </Button>
+                <select>
+                    <button onClick={() => handlePageClick('RecipeDropDown')}></button>
+                </select>
+                <button onClick={() => handlePageClick('Search')}>
+                    Search
+                </button>
                 {currPage}
             </header>
-        </Container>
+            </Box>
+        </div>
     );
 }
 
 export default App;
+/*
+export default function App() {
+    return <div>
+        <CssBaseline />
+        <Router>
+            <Box sx={{
+                bgcolor: (theme) => theme.
+                palette.background.default,
+                minHeight: "100vh"
+            }}>
+                <Routes>
+                    <route path="/example"
+                    element={<Example />} />
+                </Routes>
+            </Box>
+        </Router>
+    </div>
+}
+
+ReactDOM.render(<App />, document.getElementById("root"))
+*/

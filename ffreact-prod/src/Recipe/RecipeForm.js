@@ -87,7 +87,7 @@ const RecipeForm = (props) => {
           <input name="amt" type="text" value={recipe.amt} onChange={handleFormChange}/>
 
           <label htmlFor="prep">Preparation: </label>
-          <input name="prep" type="text" value={recipe.prep} onChange={handleFormChange}/>\
+          <input name="prep" type="text" value={recipe.prep} onChange={handleFormChange}/>
 
           <label htmlFor="ri_ing">Recipe Ingredient: </label>
           <input name="ri_ing" type="text" value={recipe.ri_ing} onChange={handleFormChange}/>

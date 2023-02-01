@@ -1,7 +1,11 @@
 import AllergiesList from './AllergiesList.js'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
-import {Button} from '@mui/material'
+//import Button from 'react-bootstrap/Button'
+import { Formik } from "formik"
+import { Grid, TextField, Typography, Paper, Button } from "@mui/material"
+import * as yup from "yup"
+//import { Link, useNavigate } from "react-router-dom"
 
 // Household Row component
 // Takes: key of current row, the state of the Household Page's hh list, deleteHousehold callback, handleEditClick callback
@@ -10,7 +14,10 @@ const HouseholdRow = (props) => {
     const {thisKey, household, deleteHousehold, handleEditClick} = props;
     const key = thisKey;
     const hh = household;
-
+    const [initialValues, setInitialValues] = useState({
+        name: "",
+        color: ""
+    });
     // HTML structure of this component
     return (
         <tr key={key}>
