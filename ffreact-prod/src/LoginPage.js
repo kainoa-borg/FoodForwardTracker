@@ -87,13 +87,13 @@ const LoginPage = (props) => {
     // HTML structure of this component
     return (
         <Grid item container spacing='12' marginTop='4em' justifyContent='center'>
-            <Grid item xs={8} justifyContent='space-between'>
-                <img width='100%' height='100%' src="https://static.wixstatic.com/media/961f8a_8d810ec655dc4874a0c0356adf4430ce~mv2.png/v1/fill/w_142,h_107,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/961f8a_8d810ec655dc4874a0c0356adf4430ce~mv2.png"></img>
-                <Typography variant='h4'>Welcome to Food Forward</Typography>
+            <Grid item xs={6} justifyContent='space-between'>
+                <img width='50%' src="https://static.wixstatic.com/media/961f8a_8d810ec655dc4874a0c0356adf4430ce~mv2.png/v1/fill/w_142,h_107,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/961f8a_8d810ec655dc4874a0c0356adf4430ce~mv2.png"></img>
+                <Typography paddingTop='1em' variant='h4'>Welcome to Food Forward</Typography>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={6}>
                 <form onSubmit={handleLoginSubmit}>
-                    <Stack spacing='12'>
+                    <Stack maxWidth='50%'>
                         <TextField type='Text' maxLength='30' label='Username' name='username' value={user.username} onChange={handleLoginChange}/>
                         <TextField type='password' maxLength='30' label='Password' name='password' value={user.password} onChange={handleLoginChange}/>
                         <Button variant='contained' type='Submit' onClick={sendLoginRequest}>

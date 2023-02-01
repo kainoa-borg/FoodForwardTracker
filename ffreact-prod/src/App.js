@@ -51,7 +51,7 @@ const App = () => {
     }
 
     return (
-        <Container className="this-container">
+        <Container maxWidth='xl' className="this-container">
             <header className="App-header">
                 <Typography variant='h4'>Food Forward Tracker</Typography>
                 {/* <button onClick={() => handlePageClick('householdForm')}>

@@ -7,6 +7,7 @@ import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 
 //import './HouseholdList.css'
+import {Table} from '@mui/material'
 
 // Household List Component
 export default function HouseholdList() {
