@@ -6,7 +6,9 @@ import RecipeRow from './RecipeRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 import ReusableTable from '../ReusableTable.js'
+import RecipeDropDown from './RecipeDropDown.js'
 
+import MealsPage from '../MealsPage'
 import './RecipeList.css'
 
 
@@ -143,8 +145,10 @@ export default function RecipeList() {
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div class='table-div'>
+            <MealsPage />
             <table className='main-table'>
                 <thead>
+                    <h3>Recipes</h3>
                     <tr>
                         <th>Recipe Number</th>
                         <th>Recipe Name</th>

@@ -7,7 +7,7 @@ import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 
 import './UserList.css'
-
+import { Container, Button, Typography } from '@mui/material'
 
 // User List Component
 
@@ -176,6 +176,7 @@ export default function UserList() {
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div className='table-div'>
+            <h3>Administration</h3>
             <table className='main-table'>
                 <thead>
                     <tr>

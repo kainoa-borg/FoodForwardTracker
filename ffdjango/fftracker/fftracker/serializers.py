@@ -1,5 +1,5 @@
 from collections import UserString
-from rest_framework.serializers import ModelSerializer, Serializer
+from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from .models import Households, HhAllergies, Ingredients, Kits, MealPlans, Packaging, Recipes, Users, MealPacks, RecipeAllergies, RecipeDiets, RecipeIngredients, RecipeInstructions
 
