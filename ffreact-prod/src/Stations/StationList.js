@@ -8,7 +8,7 @@ import DisplayMessage from '../DisplayMessage.js'
 import { Button, Box, Paper, Table, TableBody, 
     TableCell, TableContainer, TableHead, TableRow, 
     IconButton } from "@mui/material"
-import EditIcon from "@mui/icons-material/Edit"
+import EditIcon from "@mui/icons-material"
 
 import { BrowserRouter as Router, Link } from "react-router-dom"
 

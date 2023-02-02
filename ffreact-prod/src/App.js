@@ -21,7 +21,8 @@ import React from 'react'
 import ReactDOM from "react-dom"
 import { useState } from 'react'
 import { CssBaseline, Box } from '@mui/material'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'import { Container, Button, Typography } from '@mui/material'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { Container, Button, Typography } from '@mui/material'
 import { ThemeProvider } from 'styled-components'
 
 const App = () => {
@@ -59,51 +60,53 @@ const App = () => {
             <Box sx={{
                 bgcolor: (theme) => theme.
                 palette.background.default,
-                minHeight: "100vh"
+                minHeight: "100vh",
+                width: '90%',
+                margin: 'auto'
             }}>
-            <header className="App-header">
-                <Typography variant='h4'>Food Forward Tracker</Typography>
-                <Button variant='contained' onClick={() => handlePageClick('loginPage')}>
-                    Login Page
-                </Button>
-                <Button variant='contained' onClick={() => handlePageClick('userPage')}>
-                    User Account
-                </Button>
-                <Button variant='contained' onClick={() => handlePageClick('userList')}>
-                    User Admin.
-                </Button>
-                <Button variant='contained' onClick={() => handlePageClick('landingPage')}>
-                    Landing Page
-                </Button>
-                <Button variant='contained' onClick={() => handlePageClick('households')}>
-                    Households
-                </Button>
-                <Button variant='contained' onClick={() => handlePageClick('ingredients')}>
-                    Ingredients
-                </Button>
-                <Button variant='contained' onClick={() => handlePageClick('packaging')}>
-                    Packaging
-                </Button>
-                <Button variant='contained' onClick={() => handlePageClick('stations')}>
-                    Stations
-                </Button>
-                <Button variant='contained' onClick={() => handlePageClick('reports')}>
-                    Reports
-                </Button>
-                <Button variant='contained' onClick={() => handlePageClick('meals')}>
-                    Meal Plan
-                </Button>
-                <Button variant='contained' onClick={() => handlePageClick('recipes')}>
-                    Recipes
-                </Button>
-                <select>
-                    <button onClick={() => handlePageClick('RecipeDropDown')}></button>
-                </select>
-                <button onClick={() => handlePageClick('Search')}>
-                    Search
-                </button>
-                {currPage}
-            </header>
+                <header className="App-header">
+                    <Typography variant='h4'>Food Forward Tracker</Typography>
+                    <Button variant='contained' onClick={() => handlePageClick('loginPage')}>
+                        Login Page
+                    </Button>
+                    <Button variant='contained' onClick={() => handlePageClick('userPage')}>
+                        User Account
+                    </Button>
+                    <Button variant='contained' onClick={() => handlePageClick('userList')}>
+                        User Admin.
+                    </Button>
+                    <Button variant='contained' onClick={() => handlePageClick('landingPage')}>
+                        Landing Page
+                    </Button>
+                    <Button variant='contained' onClick={() => handlePageClick('households')}>
+                        Households
+                    </Button>
+                    <Button variant='contained' onClick={() => handlePageClick('ingredients')}>
+                        Ingredients
+                    </Button>
+                    <Button variant='contained' onClick={() => handlePageClick('packaging')}>
+                        Packaging
+                    </Button>
+                    <Button variant='contained' onClick={() => handlePageClick('stations')}>
+                        Stations
+                    </Button>
+                    <Button variant='contained' onClick={() => handlePageClick('reports')}>
+                        Reports
+                    </Button>
+                    <Button variant='contained' onClick={() => handlePageClick('meals')}>
+                        Meal Plan
+                    </Button>
+                    <Button variant='contained' onClick={() => handlePageClick('recipes')}>
+                        Recipes
+                    </Button>
+                    <select>
+                        <button onClick={() => handlePageClick('RecipeDropDown')}></button>
+                    </select>
+                    <button onClick={() => handlePageClick('Search')}>
+                        Search
+                    </button>
+                    {currPage}
+                </header>
             </Box>
         </div>
     );

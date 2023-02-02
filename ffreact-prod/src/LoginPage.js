@@ -6,7 +6,7 @@ import NewUserPage from "./NewUserPage.js"
 import PwResetPage from './PwResetPage.js'
 
 import Button from '@mui/material/Button'
-import { Grid, Container, Typography, Stack} from '@mui/material'
+import { Grid, Typography, Stack, Paper, Box} from '@mui/material'
 import TextField from '@mui/material/TextField'
 
 
@@ -86,32 +86,42 @@ const LoginPage = (props) => {
 
     // HTML structure of this component
     return (
-        <Grid item container spacing='12' marginTop='4em' justifyContent='center'>
-            <Grid item xs={6} justifyContent='space-between'>
-                <img width='50%' src="https://static.wixstatic.com/media/961f8a_8d810ec655dc4874a0c0356adf4430ce~mv2.png/v1/fill/w_142,h_107,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/961f8a_8d810ec655dc4874a0c0356adf4430ce~mv2.png"></img>
-                <Typography paddingTop='1em' variant='h4'>Welcome to Food Forward</Typography>
+        <Grid item container spacing='12' sx={{margin: 'auto', marginTop: '4em', maxWidth: '90%', alignContent: 'center'}}>
+            
+            {/* Logo and Welcome Message (left-side) */}
+            <Grid item md='7' sx={{justifyContent: 'center', display: {xs: 'none', md: 'block'}}}>
+                <Box component='img' sx={{width: '80%'}} src="https://static.wixstatic.com/media/961f8a_8d810ec655dc4874a0c0356adf4430ce~mv2.png/v1/fill/w_142,h_107,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/961f8a_8d810ec655dc4874a0c0356adf4430ce~mv2.png"/>
+                <Typography variant='h3' sx={{paddingBottom: '1em'}}>Welcome to Food Forward!</Typography>
             </Grid>
-            <Grid item xs={6}>
+
+            {/* Login Box */}
+            <Grid item component={Paper} md='5' sm='12' elevation='4' sx={{padding: '1em'}}>
+                <Typography variant='h5' sx={{paddingBottom: '1em'}}>Sign In</Typography>
                 <form onSubmit={handleLoginSubmit}>
-                    <Stack maxWidth='50%'>
+            
+                    <Stack spacing={1}>
                         <TextField type='Text' maxLength='30' label='Username' name='username' value={user.username} onChange={handleLoginChange}/>
                         <TextField type='password' maxLength='30' label='Password' name='password' value={user.password} onChange={handleLoginChange}/>
                         <Button variant='contained' type='Submit' onClick={sendLoginRequest}>
                             Log In
                         </Button>
-                        <Typography textAlign='center'>
+                    </Stack>
+            
+                    <Stack sx={{textAlign: 'center', alignItems: 'space-between', justifyContent: 'center'}}>
+                        <Typography>
                             Don't have an account?
                         </Typography>
                         <Button variant='outlined' size='small' onClick={() => handleCreateClick('newUserPage')}>
                             Sign Up
                         </Button>
-                        <Typography textAlign='center'>
+                        <Typography>
                             Forgot your password?
                         </Typography>
                         <Button variant='outlined' size='small' onClick={() => handleResetClick('pwResetPage')}>
                             Reset Password
                         </Button>
                     </Stack>
+            
                 </form>
             </Grid>
         </Grid>
