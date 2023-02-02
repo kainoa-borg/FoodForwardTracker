@@ -161,7 +161,7 @@ export default function HouseholdList() {
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div className='table-div'>
-          <h3>Clients</h3>
+          <h2>Clients</h2>
             <table hover size='sm' bordered='false' responsive>
                 <thead>
                     <tr>
