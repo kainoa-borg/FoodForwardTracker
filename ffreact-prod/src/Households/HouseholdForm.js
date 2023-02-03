@@ -2,6 +2,8 @@ import {useState} from 'react'
 import AllergiesList from './AllergiesList.js'
 import React from 'react'
 
+export {default as ReactFromModule} from 'react'
+
 // Kainoa Borges
 
 // Household Form component

@@ -6,21 +6,14 @@ import MealPlanRow from './MealPlanRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 import ReusableTable from '../ReusableTable.js'
+import MealsPage from '../MealsPage'
 
 import './MealList.css'
-import Table from 'react-bootstrap/Table'
+// import Table from 'react-bootstrap/Table'
+import Table from '@mui/material/Table'
 
 // Meal List Component
 export default function MealList() {
-    const data = [
-        //{m_id: 1, meal_r_num: 'Veggie Lasagna', snack_r_num: 'Apples', num_servings: '', m_date: '11/20/22', usages: []},
-        //{m_id: 2, meal_r_num: 'Beef and Bean Enchiladas', snack_r_num: 'Overnight Oats', num_servings: '', m_date: '11/11/22', usages: []},
-        //{m_id: 3, meal_r_num: 'Tuna Casserole', snack_r_num: 'Crackers', num_servings: 'N/A', m_date: '11/20/22', usages: []}
-        { m_id: 1, m_date: '11/20/22', snack_r_num: 1, meal_r_num: 2, num_servings: 6, usages: [] },
-        { m_id: 2, m_date: '11/20/22', snack_r_num: 1, meal_r_num: 2, num_servings: 5, usages: [] },
-        { m_id: 3, m_date: '11/20/22', snack_r_num: 1, meal_r_num: 2, num_servings: 3, usages: [] }
-    ]
-
     const [mealPlan, setMealPlan] = useState(undefined);
     const [recipeList, setRecipeList] = useState(undefined);
     const [editMealID, setEditMealID] = useState(null);
@@ -224,7 +217,9 @@ export default function MealList() {
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div class='table-div'>
-            <Table>
+          <MealsPage />
+          <h3>Meal Plan</h3>
+            <table>
                 <thead>
                     <tr>
                         <th>Next Delivery Date</th>
@@ -250,7 +245,7 @@ export default function MealList() {
                         );
                     })}
                 </tbody>
-            </Table>
+            </table>
             <h3>Add A Meal</h3>
             <MealPlanForm addMeal={addMeal} recipeList={recipeList}></MealPlanForm>
             {errorComponent}

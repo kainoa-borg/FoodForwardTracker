@@ -1,9 +1,14 @@
-import React from 'react'
+import * as React from 'react'
 import {useState} from 'react'
 import {Fragment} from 'react'
 import axios from 'axios'
 import NewUserPage from "./NewUserPage.js"
 import PwResetPage from './PwResetPage.js'
+
+import Button from '@mui/material/Button'
+import { Grid, Typography, Stack, Paper, Box} from '@mui/material'
+import TextField from '@mui/material/TextField'
+import { Card } from '@mui/material'
 
 
 // Login Page Component
@@ -55,6 +60,7 @@ const LoginPage = (props) => {
         const thisUser = {...user};
         thisUser[fieldName] = fieldValue;
         setUser(thisUser);
+        console.log(user.username, user.password)
     }
     
     // Handle login form submit
@@ -81,22 +87,45 @@ const LoginPage = (props) => {
 
     // HTML structure of this component
     return (
-        <Fragment>
-            <h3>Login Page</h3>
-            <form onSubmit={handleLoginSubmit}>
-                <label htmlFor='username'>Username: </label>
-                <input type='text' maxLength='30' name='username' value={user.username} onChange={handleLoginChange}></input>
-                <br/><label htmlFor='username'>Password: </label>
-                <input type='password' maxLength='30' name='password' value={user.password} onChange={handleLoginChange}></input>
-                <br /><br /><button type='Submit' onClick={sendLoginRequest}>Submit</button>
-                <br /><text>  Don't have an account?  </text><button onClick={() => handleCreateClick('newUserPage')}>
-                    Create New User
-                </button>
-                <br /><text>  Forgot Password?  </text><button onClick={() => handleResetClick('pwResetPage')}>
-                    Reset Password
-                </button>
-            </form>
-        </Fragment>
+        <Grid item container spacing='12' sx={{margin: 'auto', marginTop: '4em', maxWidth: '90%', alignItems: 'center'}}>
+            
+            {/* Logo and Welcome Message (left-side) */}
+            <Grid item md='7' sx={{display: {xs: 'none', md: 'block'}}}>
+                <Box component='img' sx={{width: '80%'}} src="https://static.wixstatic.com/media/961f8a_8d810ec655dc4874a0c0356adf4430ce~mv2.png/v1/fill/w_142,h_107,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/961f8a_8d810ec655dc4874a0c0356adf4430ce~mv2.png"/>
+                <Typography variant='h3' sx={{paddingBottom: '1em'}}>Welcome to Food Forward!</Typography>
+            </Grid>
+
+            {/* Login Box */}
+            <Grid item component={Card} md='5' sm='12' elevation='4' sx={{padding: '1em', height: 'fit-content'}}>
+                <Typography variant='h5' sx={{paddingBottom: '1em'}}>Sign In</Typography>
+                <form onSubmit={handleLoginSubmit}>
+            
+                    <Stack>
+                        <TextField type='Text' maxLength='30' label='Username' name='username' value={user.username} onChange={handleLoginChange}/>
+                        <TextField type='password' maxLength='30' label='Password' name='password' value={user.password} onChange={handleLoginChange}/>
+                        <Button variant='contained' type='Submit' onClick={sendLoginRequest}>
+                            Log In
+                        </Button>
+                    </Stack>
+            
+                    <Stack sx={{textAlign: 'center', marginTop: '2em'}}>
+                        <Typography>
+                            Don't have an account?
+                        </Typography>
+                        <Button variant='outlined' size='small' onClick={() => handleCreateClick('newUserPage')}>
+                            Sign Up
+                        </Button>
+                        <Typography>
+                            Forgot your password?
+                        </Typography>
+                        <Button variant='outlined' size='small' onClick={() => handleResetClick('pwResetPage')}>
+                            Reset Password
+                        </Button>
+                    </Stack>
+            
+                </form>
+            </Grid>
+        </Grid>
     );
 }
 

@@ -2,6 +2,8 @@ import HouseholdForm from './Households/HouseholdForm.js'
 import LoginPage from './LoginPage.js'
 import PwResetPage from './PwResetPage.js'
 import LandingPage from './LandingPage.js'
+import MealsPage from './MealsPage.js'
+import InventoryPage from './InventoryPage.js'
 import HouseholdList from './Households/HouseholdList.js'
 import HouseholdsReport from './Households/HouseholdsReport.js'
 import AllergiesList from './Households/AllergiesList.js'
@@ -18,9 +20,12 @@ import Packaging from './Packaging/PackagingList.js'
 import RecipeDropDown from './Recipe/RecipeDropDown.js'
 import Search from './Search.js'
 import React from 'react'
+import ReactDOM from "react-dom"
 import { useState } from 'react'
-
-import './bootstrap/bootstrap.min.css'
+import { CssBaseline, Box } from '@mui/material'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { Container, Button, Typography } from '@mui/material'
+import { ThemeProvider } from 'styled-components'
 
 const App = () => {
     const [currPage, setCurrPage] = useState();
@@ -37,10 +42,11 @@ const App = () => {
         else if (pageName === 'newUserPage') setCurrPage(<NewUserPage handlePageClick={handlePageClick} />);
         else if (pageName === 'pwResetPage') setCurrPage(<PwResetPage handlePageClick={handlePageClick} />);
         else if (pageName === 'landingPage') setCurrPage(<LandingPage handlePageClick={handlePageClick} />);
+        else if (pageName === 'mealsPage') setCurrPage(<MealsPage handlePageClick={handlePageClick} />);
+        else if (pageName === 'inventoryPage') setCurrPage(<InventoryPage handlePageClick={handlePageClick} />);
         else if (pageName === 'households') setCurrPage(<HouseholdList />);
         else if (pageName === 'households-report') setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />);
         else if (pageName === 'ingredients') setCurrPage(<Ingredients />);
-        //else if (pageName === 'ingredients-report') setCurrPage(<IngredientReport handlePageClick={handlePageClick} />);
         else if (pageName === 'packaging') setCurrPage(<Packaging />);
         else if (pageName === 'stations') setCurrPage(<StationList />);
         else if (pageName === 'landing') setCurrPage(<HouseholdList />);
@@ -53,54 +59,57 @@ const App = () => {
     }
     return (
         <div className="App">
-            <header className="App-header">
-                <h1>Food Forward Tracker</h1>
-                {/* <button onClick={() => handlePageClick('householdForm')}>
-          Household Form
-        </button> */}
-                <button onClick={() => handlePageClick('loginPage')}>
-                    Login Page
-                </button>
-                <button onClick={() => handlePageClick('userPage')}>
-                    User Account
-                </button>
-                <button onClick={() => handlePageClick('userList')}>
-                    User Admin.
-                </button>
-                <button onClick={() => handlePageClick('landingPage')}>
-                    Landing Page
-                </button>
-                <button onClick={() => handlePageClick('households')}>
-                    Households
-                </button>
-                <button onClick={() => handlePageClick('ingredients')}>
-                    Ingredients
-                </button>
-                <button onClick={() => handlePageClick('packaging')}>
-                    Packaging
-                </button>
-                <button onClick={() => handlePageClick('stations')}>
-                    Stations
-                </button>
-                <button onClick={() => handlePageClick('reports')}>
-                    Reports
-                </button>
-                <button onClick={() => handlePageClick('meals')}>
-                    Meal Plan
-                </button>
-                <button onClick={() => handlePageClick('recipes')}>
-                    Recipes
-                </button>
-                <select>
-                    <button onClick={() => handlePageClick('RecipeDropDown')}></button>
-                </select>
-                <button onClick={() => handlePageClick('Search')}>
-                    Search
-                </button>
-                {currPage}
-            </header>
+            <CssBaseline />
+            <Box sx={{
+                bgcolor: (theme) => theme.
+                palette.background.default,
+                minHeight: "100vh",
+                width: '90%',
+                margin: 'auto'
+            }}>
+                <header className="App-header">
+                    <Typography variant='h4'>Food Forward Tracker</Typography>
+                    <Button variant='contained' onClick={() => handlePageClick('loginPage')}>
+                        Login Page
+                    </Button>
+                    <Button variant='contained' onClick={() => handlePageClick('landingPage')}>
+                        Landing Page
+                    </Button>
+                    <Button variant='contained' onClick={() => handlePageClick('userPage')}>
+                        User Account
+                    </Button>
+                    <select>
+                        <button onClick={() => handlePageClick('RecipeDropDown')}></button>
+                    </select>
+                    <button onClick={() => handlePageClick('Search')}>
+                        Search
+                    </button>
+                    {currPage}
+                </header>
+            </Box>
         </div>
     );
 }
 
 export default App;
+/*
+export default function App() {
+    return <div>
+        <CssBaseline />
+        <Router>
+            <Box sx={{
+                bgcolor: (theme) => theme.
+                palette.background.default,
+                minHeight: "100vh"
+            }}>
+                <Routes>
+                    <route path="/example"
+                    element={<Example />} />
+                </Routes>
+            </Box>
+        </Router>
+    </div>
+}
+
+ReactDOM.render(<App />, document.getElementById("root"))
+*/

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Fragment } from 'react'
 import axios from 'axios'
 import HouseholdsReport from './Households/HouseholdsReport.js'
+import { Container, Button, Typography } from '@mui/material'
 
 
 const ReportsPage = () => {
@@ -19,25 +20,25 @@ const ReportsPage = () => {
     return (
         <div className="App">
             <header className="App-header">
-                <h1>Generate Report</h1>
-                <button onClick={() => handlePageClick('households-report')}>
+                <h2>Generate Report</h2>
+                <Button variant='contained' onClick={() => handlePageClick('households-report')}>
                     Households Report
-                </button>
-                <button onClick={() => handlePageClick()}>
+                </Button>
+                <Button variant='contained' onClick={() => handlePageClick()}>
                     Ingredients Report
-                </button>
-                <button onClick={() => handlePageClick()}>
+                </Button>
+                <Button variant='contained' onClick={() => handlePageClick()}>
                     Packaging Report
-                </button>
-                <button onClick={() => handlePageClick()}>
+                </Button>
+                <Button variant='contained' onClick={() => handlePageClick()}>
                     Cost Totals
-                </button>
-                <button onClick={() => handlePageClick()}>
+                </Button>
+                <Button variant='contained' onClick={() => handlePageClick()}>
                     Menu Reports
-                </button>
-                <button onClick={() => handlePageClick()}>
+                </Button>
+                <Button variant='contained' onClick={() => handlePageClick()}>
                     Purchasing Reports
-                </button>
+                </Button>
                 {currPage}
             </header>
         </div>

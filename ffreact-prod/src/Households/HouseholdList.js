@@ -7,7 +7,7 @@ import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 
 //import './HouseholdList.css'
-import Table from 'react-bootstrap/Table'
+import {Table} from '@mui/material'
 
 // Household List Component
 export default function HouseholdList() {
@@ -161,8 +161,8 @@ export default function HouseholdList() {
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div className='table-div'>
-          <h3>Clients</h3>
-            <Table hover size='sm' bordered='false' responsive>
+          <h2>Clients</h2>
+            <table hover size='sm' bordered='false' responsive>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -200,7 +200,7 @@ export default function HouseholdList() {
                     {/* If the list is empty display EmptyTableMessage */}
                     {households.length < 1 ? handleError('empty') : null}
                 </tbody>
-            </Table>
+            </table>
             <h3>Add A Household</h3>
             <HouseholdForm addHousehold={addHousehold}></HouseholdForm>
             <button onClick={postDBHouseholds}>Submit Changes</button>
