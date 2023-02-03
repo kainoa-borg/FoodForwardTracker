@@ -7,7 +7,7 @@ import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 
 //import './HouseholdList.css'
-import {Table} from '@mui/material'
+import {Table, TableHead, TableRow, TableCell, TableBody} from '@mui/material'
 
 // Household List Component
 export default function HouseholdList() {
@@ -160,29 +160,29 @@ export default function HouseholdList() {
     // The HTML structure of this component
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
-        <div className='table-div'>
+        <div>
           <h3>Clients</h3>
-            <table hover size='sm' bordered='false' responsive>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Adults</th>
-                        <th>Children 0-6</th>
-                        <th>Children 7-17</th>
-                        <th>Vegan</th>
-                        <th>Gluten Free</th>
-                        <th>Receive SMS</th>
-                        <th>Paused</th>
-                        <th>Phone Number</th>
-                        <th>Street</th>
-                        <th>City</th>
-                        <th>Postal Code</th>
-                        <th>State</th>
-                        <th>Delivery Notes</th>
-                        <th>Allergies</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <Table size='small' sx={{minWidth: 650}}>
+                <TableHead>
+                    <TableRow>
+                        <TableCell align='right'>Name</TableCell>
+                        <TableCell align='right'>Adults</TableCell>
+                        <TableCell align='right'>Children 0-6</TableCell>
+                        <TableCell align='right'>Children 7-17</TableCell>
+                        <TableCell align='right'>Vegan</TableCell>
+                        <TableCell align='right'>Gluten Free</TableCell>
+                        <TableCell align='right'>Receive SMS</TableCell>
+                        <TableCell align='right'>Paused</TableCell>
+                        <TableCell align='right'>Phone Number</TableCell>
+                        <TableCell align='right'>Street</TableCell>
+                        <TableCell align='right'>City</TableCell>
+                        <TableCell align='right'>Postal Code</TableCell>
+                        <TableCell align='right'>State</TableCell>
+                        <TableCell align='right'>Delivery Notes</TableCell>
+                        <TableCell align='right'>Allergies</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
                     {/* Show a row for each household in households.*/}
                     {households.map((household, key) => {
                         const thisKey = key;
@@ -199,8 +199,8 @@ export default function HouseholdList() {
                     })}
                     {/* If the list is empty display EmptyTableMessage */}
                     {households.length < 1 ? handleError('empty') : null}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
             <h3>Add A Household</h3>
             <HouseholdForm addHousehold={addHousehold}></HouseholdForm>
             <button onClick={postDBHouseholds}>Submit Changes</button>
