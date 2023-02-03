@@ -6,6 +6,7 @@ import MealPlanRow from './MealPlanRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 import ReusableTable from '../ReusableTable.js'
+import MealsPage from '../MealsPage'
 
 import './MealList.css'
 // import Table from 'react-bootstrap/Table'
@@ -216,6 +217,8 @@ export default function MealList() {
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div class='table-div'>
+          <MealsPage />
+          <h3>Meal Plan</h3>
             <table>
                 <thead>
                     <tr>
