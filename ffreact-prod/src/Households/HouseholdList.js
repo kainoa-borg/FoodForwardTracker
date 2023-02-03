@@ -162,16 +162,16 @@ export default function HouseholdList() {
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div>
           <h3>Clients</h3>
-            <Table size='small' sx={{minWidth: 650}}>
+            <Table size='small' stickyHeader sx={{minWidth: 650}}>
                 <TableHead>
                     <TableRow>
                         <TableCell align='right'>Name</TableCell>
                         <TableCell align='right'>Adults</TableCell>
                         <TableCell align='right'>Children 0-6</TableCell>
                         <TableCell align='right'>Children 7-17</TableCell>
-                        <TableCell align='right'>Vegan</TableCell>
-                        <TableCell align='right'>Gluten Free</TableCell>
-                        <TableCell align='right'>Receive SMS</TableCell>
+                        <TableCell align='right'>V</TableCell>
+                        <TableCell align='right'>GF</TableCell>
+                        <TableCell align='right'>SMS</TableCell>
                         <TableCell align='right'>Paused</TableCell>
                         <TableCell align='right'>Phone Number</TableCell>
                         <TableCell align='right'>Street</TableCell>

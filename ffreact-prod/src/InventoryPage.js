@@ -10,10 +10,10 @@ const LandingPage = (props) => {
     return (
         <Fragment>
             <h2>Landing Page</h2>
-            <Button variant='contained' onClick={() => handlePageClick('ingredients')}>
+            <Button variant='contained' onClick={() => props.handlePageClick('ingredients')}>
                 Ingredients
             </Button>
-            <Button variant='contained' onClick={() => handlePageClick('packaging')}>
+            <Button variant='contained' onClick={() => props.handlePageClick('packaging')}>
                 Packaging
             </Button>
         </Fragment>
