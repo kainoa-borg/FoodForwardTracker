@@ -17,7 +17,7 @@ const LandingPage = (props) => {
             sx={{minHeight: '60vh', margin: 'auto'}}>
             <Grid item sm={12} md={4}>
                 <Card elevation='4' sx={{height: '100%'}}>
-                    <CardActionArea onClick={() => handlePageClick('households')}>
+                    <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('households')}>
                         <CardContent>
                             <Typography component='div' variant='h5'>Clients</Typography>
                             <Typography component='div' variant='body1'>- View client information</Typography>
@@ -29,7 +29,7 @@ const LandingPage = (props) => {
 
             <Grid item sm={12} md={4}>
                 <Card elevation='4' sx={{height: '100%'}}>
-                    <CardActionArea onClick={() => handlePageClick('mealsPage')}>
+                    <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('mealsPage')}>
                         <CardContent>
                             <Typography component='div' variant='h5'>Meals</Typography>
                             <Typography component='div' variant='body1'>- View meals</Typography>
@@ -41,7 +41,7 @@ const LandingPage = (props) => {
 
             <Grid item sm={12} md={4}>
                 <Card elevation='4' sx={{height: '100%'}}>
-                    <CardActionArea onClick={() => handlePageClick('inventoryPages')}>
+                    <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('inventoryPage')}>
                         <CardContent>
                             <Typography component='div' variant='h5'>Inventory</Typography>
                             <Typography component='div' variant='body1'>- View ingredients and packaging</Typography>
@@ -53,7 +53,7 @@ const LandingPage = (props) => {
 
             <Grid item sm={12} md={4}>
                 <Card elevation='4' sx={{height: '100%'}}>
-                    <CardActionArea onClick={() => handlePageClick('reports')}>
+                    <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('reports')}>
                         <CardContent>
                             <Typography component='div' variant='h5'>Reports</Typography>
                             <Typography component='div' variant='body1'>- View reports</Typography>
@@ -65,7 +65,7 @@ const LandingPage = (props) => {
 
             <Grid item sm={12} md={4}>
                 <Card elevation='4' sx={{height: '100%'}}>
-                    <CardActionArea onClick={() => handlePageClick('reports')}>
+                    <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('reports')}>
                         <CardContent>
                             <Typography component='div' variant='h5'>Administration</Typography>
                             <Typography component='div' variant='body1'>- View users in the system</Typography>
