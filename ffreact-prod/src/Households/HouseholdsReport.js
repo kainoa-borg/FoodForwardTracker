@@ -7,8 +7,6 @@ import ReusableTable from '../ReusableTable.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 
-import './HouseholdList.css'
-
 
 // Household List Component
 export default function HouseholdList() {

@@ -37,25 +37,45 @@ const App = () => {
 
     const handlePageClick = (pageName) => {
         console.log(pageName)
-        if (pageName === 'householdForm') setCurrPage(<HouseholdForm />);
-        else if (pageName === 'loginPage') setCurrPage(<LoginPage loginState={loginState} setLoginState={setLoginState} handlePageClick={handlePageClick} />);
-        else if (pageName === 'newUserPage') setCurrPage(<NewUserPage handlePageClick={handlePageClick} />);
-        else if (pageName === 'pwResetPage') setCurrPage(<PwResetPage handlePageClick={handlePageClick} />);
-        else if (pageName === 'landingPage') setCurrPage(<LandingPage handlePageClick={handlePageClick} />);
-        else if (pageName === 'mealsPage') setCurrPage(<MealsPage handlePageClick={handlePageClick} />);
-        else if (pageName === 'inventoryPage') setCurrPage(<InventoryPage handlePageClick={handlePageClick} />);
-        else if (pageName === 'households') setCurrPage(<HouseholdList />);
-        else if (pageName === 'households-report') setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />);
-        else if (pageName === 'ingredients') setCurrPage(<Ingredients />);
-        else if (pageName === 'packaging') setCurrPage(<Packaging />);
-        else if (pageName === 'stations') setCurrPage(<StationList />);
-        else if (pageName === 'landing') setCurrPage(<HouseholdList />);
-        else if (pageName === 'meals') setCurrPage(<MealPlan />);
-        else if (pageName === 'recipes') setCurrPage(<Recipe />);
-        else if (pageName === 'reports') setCurrPage(<ReportsPage />);
-        else if (pageName === 'userPage') setCurrPage(<UserPage handlePageClick={handlePageClick} />);
-        else if (pageName === 'userList') setCurrPage(<UserList handlePageClick={handlePageClick} />);
-        else if (pageName === 'allergies') setCurrPage(<AllergiesList allergies={[{ aType: 'Gluten' }, { aType: 'Peanut' }]} />);
+        switch(pageName) {
+            case 'householdForm': setCurrPage(<HouseholdForm />); break;
+            case 'loginPage': setCurrPage(<LoginPage loginState={loginState} setLoginState={setLoginState} handlePageClick={handlePageClick} />); break;
+            case 'newUserPage': setCurrPage(<NewUserPage handlePageClick={handlePageClick} />); break;
+            case 'pwResetPage': setCurrPage(<PwResetPage handlePageClick={handlePageClick} />); break;
+            case 'landingPage': setCurrPage(<LandingPage handlePageClick={handlePageClick} />); break;
+            case 'mealsPage': setCurrPage(<MealsPage handlePageClick={handlePageClick} />); break;
+            case 'inventoryPage': setCurrPage(<InventoryPage handlePageClick={handlePageClick} />); break;
+            case 'households': setCurrPage(<HouseholdList />); break;
+            case 'households-report': setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />); break;
+            case 'ingredients': setCurrPage(<Ingredients />); break;
+            case 'packaging': setCurrPage(<Packaging />); break;
+            case 'stations': setCurrPage(<StationList />); break;
+            case 'meals': setCurrPage(<MealPlan />); break;
+            case 'recipes': setCurrPage(<Recipe />); break;
+            case 'reports': setCurrPage(<ReportsPage />); break;
+            case 'userPage': setCurrPage(<UserPage handlePageClick={handlePageClick} />); break;
+            case 'userList': setCurrPage(<UserList handlePageClick={handlePageClick} />); break;
+            // case 'allergies': setCurrPage(<AllergiesList allergies={[{ aType: 'Gluten' }, { aType: 'Peanut' }]} />); break;
+        }
+        // if (pageName === 'householdForm') setCurrPage(<HouseholdForm />);
+        // else if (pageName === 'loginPage') setCurrPage(<LoginPage loginState={loginState} setLoginState={setLoginState} handlePageClick={handlePageClick} />);
+        // else if (pageName === 'newUserPage') setCurrPage(<NewUserPage handlePageClick={handlePageClick} />);
+        // else if (pageName === 'pwResetPage') setCurrPage(<PwResetPage handlePageClick={handlePageClick} />);
+        // else if (pageName === 'landingPage') setCurrPage(<LandingPage handlePageClick={handlePageClick} />);
+        // else if (pageName === 'mealsPage') setCurrPage(<MealsPage handlePageClick={handlePageClick} />);
+        // else if (pageName === 'inventoryPage') setCurrPage(<InventoryPage handlePageClick={handlePageClick} />);
+        // else if (pageName === 'households') setCurrPage(<HouseholdList />);
+        // else if (pageName === 'households-report') setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />);
+        // else if (pageName === 'ingredients') setCurrPage(<Ingredients />);
+        // else if (pageName === 'packaging') setCurrPage(<Packaging />);
+        // else if (pageName === 'stations') setCurrPage(<StationList />);
+        // else if (pageName === 'landing') setCurrPage(<HouseholdList />);
+        // else if (pageName === 'meals') setCurrPage(<MealPlan />);
+        // else if (pageName === 'recipes') setCurrPage(<Recipe />);
+        // else if (pageName === 'reports') setCurrPage(<ReportsPage />);
+        // else if (pageName === 'userPage') setCurrPage(<UserPage handlePageClick={handlePageClick} />);
+        // else if (pageName === 'userList') setCurrPage(<UserList handlePageClick={handlePageClick} />);
+        // else if (pageName === 'allergies') setCurrPage(<AllergiesList allergies={[{ aType: 'Gluten' }, { aType: 'Peanut' }]} />);
     }
     return (
         <div className="App">

@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react'
 
 //import Button from 'react-bootstrap/Button'
 import { Formik } from "formik"
-import { Grid, TextField, Typography, Paper, Button } from "@mui/material"
+import { Grid, TextField, Typography, Paper, Button, TableRow, TableCell } from "@mui/material"
+import CheckIcon from '@mui/icons-material/Check';
 import * as yup from "yup"
+import { Check } from '@mui/icons-material';
 //import { Link, useNavigate } from "react-router-dom"
 
 // Household Row component
@@ -18,30 +20,39 @@ const HouseholdRow = (props) => {
         name: "",
         color: ""
     });
+
+    const TrueMarker = ((bool) => {
+        if (bool) {
+            return <Check></Check>
+        }
+    });
+
     // HTML structure of this component
     return (
-        <tr key={key}>
-            <td>{hh.hh_name}</td>
-            <td>{hh.num_adult}</td>
-            <td>{hh.num_child_lt_6}</td>
-            <td>{hh.num_child_gt_6}</td>
-            <td>{String(Boolean(hh.veg_flag))}</td>
-            <td>{String(Boolean(hh.gf_flag))}</td>
+        <TableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+            <TableCell align='right'>{hh.hh_name}</TableCell>
+            <TableCell align='right'>{hh.num_adult}</TableCell>
+            <TableCell align='right'>{hh.num_child_lt_6}</TableCell>
+            <TableCell align='right'>{hh.num_child_gt_6}</TableCell>
+            <TableCell align='right'>{TrueMarker(Boolean(hh.veg_flag))}</TableCell>
+            <TableCell align='right'>{TrueMarker(Boolean(hh.gf_flag))}</TableCell>
             
-            <td>{String(Boolean(hh.sms_flag))}</td>
-            <td>{String(Boolean(hh.paused_flag))}</td>
-            <td>{hh.phone}</td>
-            <td>{hh.street}</td>
-            <td>{hh.city}</td>
-            <td>{hh.pcode}</td>
-            <td>{hh.state}</td>
-            <td>{hh.delivery_notes}</td>
-            <td><AllergiesList allergies={hh.hh_allergies} isEditable={false}/></td>
+            <TableCell align='right'>{TrueMarker(Boolean(hh.sms_flag))}</TableCell>
+            <TableCell align='right'>{TrueMarker(Boolean(hh.paused_flag))}</TableCell>
+            <TableCell align='right'>{hh.phone}</TableCell>
+            <TableCell align='right'>{hh.street}</TableCell>
+            <TableCell align='right'>{hh.city}</TableCell>
+            <TableCell align='right'>{hh.pcode}</TableCell>
+            <TableCell align='right'>{hh.state}</TableCell>
+            <TableCell align='right'>{hh.delivery_notes}</TableCell>
+            <TableCell align='right'><AllergiesList allergies={hh.hh_allergies} isEditable={false}/></TableCell>
             {/* When edit is clicked, handleEditClick is called with this row's key */}
-            <td><button onClick={()=> handleEditClick(key)}>Edit</button></td>
+            <TableCell align='right'><Button size='small' variant='secondary' onClick={()=> handleEditClick(key)}>
+                <Typography component='span' variant='body1'>Edit</Typography>
+            </Button></TableCell>
             {/* When delete is clicked, deleteHousehold is called with this row's key */}
-            <td><button onClick={() => deleteHousehold(key)}>X</button></td>
-        </tr>
+            <TableCell align='right'><Button size='small' variant='secondary' onClick={() => deleteHousehold(key)}>X</Button></TableCell>
+        </TableRow>
     )
 }
 
