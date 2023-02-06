@@ -65,7 +65,7 @@ const LandingPage = (props) => {
 
             <Grid item sm={12} md={4}>
                 <Card elevation='4' sx={{height: '100%'}}>
-                    <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('reports')}>
+                    <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('userList')}>
                         <CardContent>
                             <Typography component='div' variant='h5'>Administration</Typography>
                             <Typography component='div' variant='body1'>- View users in the system</Typography>
