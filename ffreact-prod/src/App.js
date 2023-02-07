@@ -15,6 +15,7 @@ import UserPage from "./UserPage.js"
 import UserList from "./User/UserList.js"
 import NewUserPage from "./NewUserPage.js"
 import Recipe from './Recipe/RecipeList.js'
+import RecipeDropdown from './Recipe/RecipeDropDown'
 import MealPlan from './Meals/MealList.js'
 import Packaging from './Packaging/PackagingList.js'
 import RecipeDropDown from './Recipe/RecipeDropDown.js'
@@ -26,6 +27,17 @@ import { CssBaseline, Box } from '@mui/material'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { Container, Button, Typography } from '@mui/material'
 import { ThemeProvider } from 'styled-components'
+import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { DropdownMenuItem } from './dropdown';
+import Dropdown from './components/Dropdown'
+import Header from './components/Header'
+import MenuItems from './components/MenuItems'
+import NavBar from './components/NavBar'
+
+
+
 
 const App = () => {
     const [currPage, setCurrPage] = useState();
@@ -87,6 +99,7 @@ const App = () => {
                 width: '90%',
                 margin: 'auto'
             }}>
+                <Header />
                 <header className="App-header">
                     <Typography variant='h4'>Food Forward Tracker</Typography>
                     <Button variant='contained' onClick={() => handlePageClick('loginPage')}>
