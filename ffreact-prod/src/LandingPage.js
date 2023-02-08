@@ -11,10 +11,10 @@ const LandingPage = (props) => {
         <Grid 
             container 
             justifyContent='space-around' 
-            alignItems='stretch'
+            alignItems='center'
             direction='row'
             spacing={2}
-            sx={{minHeight: '60vh', margin: 'auto'}}>
+            sx={{minHeight: '40vh', margin: 'auto'}}>
             <Grid item sm={12} md={4}>
                 <Card elevation='4' sx={{height: '100%'}}>
                     <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('households')}>

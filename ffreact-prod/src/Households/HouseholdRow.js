@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react'
 
 //import Button from 'react-bootstrap/Button'
 import { Formik } from "formik"
-import { Grid, TextField, Typography, Paper, Button, TableRow, TableCell } from "@mui/material"
+import { Grid, TextField, Typography, Paper, Button, IconButton, Box, TableRow, TableCell } from "@mui/material"
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete' 
 import CheckIcon from '@mui/icons-material/Check';
 import * as yup from "yup"
 import { Check } from '@mui/icons-material';
@@ -30,28 +32,38 @@ const HouseholdRow = (props) => {
     // HTML structure of this component
     return (
         <TableRow key={key} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-            <TableCell align='right'>{hh.hh_name}</TableCell>
-            <TableCell align='right'>{hh.num_adult}</TableCell>
-            <TableCell align='right'>{hh.num_child_lt_6}</TableCell>
-            <TableCell align='right'>{hh.num_child_gt_6}</TableCell>
-            <TableCell align='right'>{TrueMarker(Boolean(hh.veg_flag))}</TableCell>
-            <TableCell align='right'>{TrueMarker(Boolean(hh.gf_flag))}</TableCell>
+            <TableCell align='left'>{hh.hh_name}</TableCell>
+            <TableCell align='left'>{hh.num_adult}</TableCell>
+            <TableCell align='left'>{hh.num_child_lt_6}</TableCell>
+            <TableCell align='left'>{hh.num_child_gt_6}</TableCell>
+            <TableCell align='left'>{TrueMarker(Boolean(hh.veg_flag))}</TableCell>
+            <TableCell align='left'>{TrueMarker(Boolean(hh.gf_flag))}</TableCell>
             
-            <TableCell align='right'>{TrueMarker(Boolean(hh.sms_flag))}</TableCell>
-            <TableCell align='right'>{TrueMarker(Boolean(hh.paused_flag))}</TableCell>
-            <TableCell align='right'>{hh.phone}</TableCell>
-            <TableCell align='right'>{hh.street}</TableCell>
-            <TableCell align='right'>{hh.city}</TableCell>
-            <TableCell align='right'>{hh.pcode}</TableCell>
-            <TableCell align='right'>{hh.state}</TableCell>
-            <TableCell align='right'>{hh.delivery_notes}</TableCell>
-            <TableCell align='right'><AllergiesList allergies={hh.hh_allergies} isEditable={false}/></TableCell>
+            <TableCell align='left'>{TrueMarker(Boolean(hh.sms_flag))}</TableCell>
+            <TableCell align='left'>{TrueMarker(Boolean(hh.paused_flag))}</TableCell>
+            <TableCell align='left'>{hh.phone}</TableCell>
+            <TableCell align='left'>{hh.street}</TableCell>
+            <TableCell align='left'>{hh.city}</TableCell>
+            <TableCell align='left'>{hh.pcode}</TableCell>
+            <TableCell align='left'>{hh.state}</TableCell>
+            <TableCell align='left'>{hh.delivery_notes}</TableCell>
+            <TableCell align='left'><AllergiesList allergies={hh.hh_allergies} isEditable={false}/></TableCell>
             {/* When edit is clicked, handleEditClick is called with this row's key */}
-            <TableCell align='right'><Button size='small' variant='secondary' onClick={()=> handleEditClick(key)}>
-                <Typography component='span' variant='body1'>Edit</Typography>
-            </Button></TableCell>
-            {/* When delete is clicked, deleteHousehold is called with this row's key */}
-            <TableCell align='right'><Button size='small' variant='secondary' onClick={() => deleteHousehold(key)}>X</Button></TableCell>
+            <TableCell align='right'>
+                <Box sx={{ display: "flex",
+                justifyContent: "flex-end"}}>
+                    {/* When edit is clicked, handleEditClick is called with this row's key */}
+                    <IconButton size="large"
+                        onClick={()=> handleEditClick(key)}>
+                        <EditIcon />
+                    </IconButton>
+                    {/* When delete is clicked, deleteUser is called with this row's key */}
+                    <IconButton size="large"
+                        onClick={() => deleteHousehold(key)}>
+                        <DeleteIcon />
+                    </IconButton>
+                </Box>
+            </TableCell>
         </TableRow>
     )
 }

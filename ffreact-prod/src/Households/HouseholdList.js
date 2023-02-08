@@ -7,7 +7,7 @@ import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 
 //import './HouseholdList.css'
-import {Table, TableHead, TableRow, TableCell, TableBody} from '@mui/material'
+import {Table, TableHead, TableRow, TableCell, TableBody, Paper} from '@mui/material'
 
 // Household List Component
 export default function HouseholdList() {
@@ -162,24 +162,25 @@ export default function HouseholdList() {
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div>
           <h3>Clients</h3>
-            <Table size='small' stickyHeader sx={{minWidth: 650}}>
+            <Table size='small' component={Paper} stickyHeader sx={{minWidth: 650}}>
                 <TableHead>
                     <TableRow>
-                        <TableCell align='right'>Name</TableCell>
-                        <TableCell align='right'>Adults</TableCell>
-                        <TableCell align='right'>Children 0-6</TableCell>
-                        <TableCell align='right'>Children 7-17</TableCell>
-                        <TableCell align='right'>V</TableCell>
-                        <TableCell align='right'>GF</TableCell>
-                        <TableCell align='right'>SMS</TableCell>
-                        <TableCell align='right'>Paused</TableCell>
-                        <TableCell align='right'>Phone Number</TableCell>
-                        <TableCell align='right'>Street</TableCell>
-                        <TableCell align='right'>City</TableCell>
-                        <TableCell align='right'>Postal Code</TableCell>
-                        <TableCell align='right'>State</TableCell>
-                        <TableCell align='right'>Delivery Notes</TableCell>
-                        <TableCell align='right'>Allergies</TableCell>
+                        <TableCell align='left'>Name</TableCell>
+                        <TableCell align='left'>Adults</TableCell>
+                        <TableCell align='left'>Children 0-6</TableCell>
+                        <TableCell align='left'>Children 7-17</TableCell>
+                        <TableCell align='left'>V</TableCell>
+                        <TableCell align='left'>GF</TableCell>
+                        <TableCell align='left'>SMS</TableCell>
+                        <TableCell align='left'>Paused</TableCell>
+                        <TableCell align='left'>Phone Number</TableCell>
+                        <TableCell align='left'>Street</TableCell>
+                        <TableCell align='left'>City</TableCell>
+                        <TableCell align='left'>Postal Code</TableCell>
+                        <TableCell align='left'>State</TableCell>
+                        <TableCell align='left'>Delivery Notes</TableCell>
+                        <TableCell align='left'>Allergies</TableCell>
+                        <TableCell align='left'>Action</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
