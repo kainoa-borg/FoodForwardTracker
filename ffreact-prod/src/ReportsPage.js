@@ -21,22 +21,22 @@ const ReportsPage = () => {
         <div className="App">
             <header className="App-header">
                 <h2>Generate Report</h2>
-                <Button variant='contained' onClick={() => handlePageClick('households-report')}>
+                <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('households-report')}>
                     Households Report
                 </Button>
-                <Button variant='contained' onClick={() => handlePageClick()}>
+                <Button color='lightGreen' variant='contained' onClick={() => handlePageClick()}>
                     Ingredients Report
                 </Button>
-                <Button variant='contained' onClick={() => handlePageClick()}>
+                <Button color='lightGreen' variant='contained' onClick={() => handlePageClick()}>
                     Packaging Report
                 </Button>
-                <Button variant='contained' onClick={() => handlePageClick()}>
+                <Button color='lightGreen' variant='contained' onClick={() => handlePageClick()}>
                     Cost Totals
                 </Button>
-                <Button variant='contained' onClick={() => handlePageClick()}>
+                <Button color='lightGreen' variant='contained' onClick={() => handlePageClick()}>
                     Menu Reports
                 </Button>
-                <Button variant='contained' onClick={() => handlePageClick()}>
+                <Button color='lightGreen' variant='contained' onClick={() => handlePageClick()}>
                     Purchasing Reports
                 </Button>
                 {currPage}

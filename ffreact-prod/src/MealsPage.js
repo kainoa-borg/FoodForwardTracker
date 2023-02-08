@@ -10,13 +10,13 @@ const MealsPage = (props) => {
     return (
         <Fragment>
             <h2>Meals Page</h2>
-            <Button variant='contained' onClick={() => handlePageClick('meals')}>
+            <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('meals')}>
                 Meal Plan
             </Button>
-            <Button variant='contained' onClick={() => handlePageClick('recipes')}>
+            <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('recipes')}>
                 Recipes
             </Button>
-            <Button variant='contained' onClick={() => handlePageClick('stations')}>
+            <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('stations')}>
                 Stations
             </Button>
         </Fragment>

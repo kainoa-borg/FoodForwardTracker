@@ -59,7 +59,7 @@ export default function PackagingList() {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/suppliers"
+            url:"http://4.236.185.213:8000/api/suppliers"
           }).then((response)=>{
             setSuppliers(response.data);
           }).catch((error) => {
@@ -76,7 +76,7 @@ export default function PackagingList() {
         setLoadingComponent(<Error text="LOADING DATA..."/>);
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/packaging-inventory"
+            url:"http://4.236.185.213:8000/api/packaging-inventory"
           }).then((response)=>{
             const pkgData = response.data
             setPackaging(pkgData);
@@ -95,7 +95,7 @@ export default function PackagingList() {
         pkg['p_id'] = lastID + 1;
         axios({
             method: "POST",
-            url:"http://localhost:8000/api/packaging-inventory/",
+            url:"http://4.236.185.213:8000/api/packaging-inventory/",
             data: pkg
           }).then((response)=>{
             getDBPackaging();
@@ -124,7 +124,7 @@ export default function PackagingList() {
         const pkgID = packaging[key]['p_id']; 
         axios({
             method: "DELETE",
-            url:"http://localhost:8000/api/packaging-inventory/"+pkgID+'/',
+            url:"http://4.236.185.213:8000/api/packaging-inventory/"+pkgID+'/',
           }).then((response)=>{
             getDBPackaging();
           }).catch((error) => {
@@ -143,7 +143,7 @@ export default function PackagingList() {
             setEditPackagingID(null);
             axios({
                 method: "PATCH",
-                url:"http://localhost:8000/api/packaging-inventory/"+thisID+'/',
+                url:"http://4.236.185.213:8000/api/packaging-inventory/"+thisID+'/',
                 data: editFormData
               }).then((response)=>{
                 getDBPackaging();

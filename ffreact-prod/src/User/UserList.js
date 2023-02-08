@@ -52,7 +52,7 @@ export default function UserList() {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/users"
+            url:"http://4.236.185.213:8000/api/users"
           }).then((response)=>{
             const uData = response.data
             setUsers(uData);
@@ -69,7 +69,7 @@ export default function UserList() {
         console.log(users);
         axios({
             method: "POST",
-            url: "http://localhost:8000/api/users/",
+            url: "http://4.236.185.213:8000/api/users/",
             data: users
           }).then((response)=>{
               getDBUsers();
@@ -90,7 +90,7 @@ export default function UserList() {
         {
             axios({
                 method: "POST",
-                url: "http://localhost:8000/api/users/",
+                url: "http://4.236.185.213:8000/api/users/",
                 data: user
               }).then((response)=>{
                   getDBUsers();
@@ -113,7 +113,7 @@ export default function UserList() {
         const userID = key; 
         axios({
             method: "DELETE",
-            url: "http://localhost:8000/api/users/" + users[key].u_id,
+            url: "http://4.236.185.213:8000/api/users/" + users[key].u_id,
           }).then((response)=>{
               setUsers(getDBUsers());
           }).catch((error) => {
@@ -130,7 +130,7 @@ export default function UserList() {
         console.log(JSON.stringify(editFormData));
         axios({
             method: "PATCH",
-            url: "http://localhost:8000/api/users/"+thisName+'/',
+            url: "http://4.236.185.213:8000/api/users/"+thisName+'/',
             data: editFormData
           }).then((response)=>{
               setUsers(getDBUsers());

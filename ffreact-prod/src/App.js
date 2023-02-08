@@ -25,7 +25,7 @@ import { useState } from 'react'
 import { CssBaseline, Box } from '@mui/material'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { Container, Button, Typography } from '@mui/material'
-import { ThemeProvider } from 'styled-components'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 const App = () => {
     const [currPage, setCurrPage] = useState();
@@ -57,27 +57,31 @@ const App = () => {
             case 'userList': setCurrPage(<UserList handlePageClick={handlePageClick} />); break;
             // case 'allergies': setCurrPage(<AllergiesList allergies={[{ aType: 'Gluten' }, { aType: 'Peanut' }]} />); break;
         }
-        // if (pageName === 'householdForm') setCurrPage(<HouseholdForm />);
-        // else if (pageName === 'loginPage') setCurrPage(<LoginPage loginState={loginState} setLoginState={setLoginState} handlePageClick={handlePageClick} />);
-        // else if (pageName === 'newUserPage') setCurrPage(<NewUserPage handlePageClick={handlePageClick} />);
-        // else if (pageName === 'pwResetPage') setCurrPage(<PwResetPage handlePageClick={handlePageClick} />);
-        // else if (pageName === 'landingPage') setCurrPage(<LandingPage handlePageClick={handlePageClick} />);
-        // else if (pageName === 'mealsPage') setCurrPage(<MealsPage handlePageClick={handlePageClick} />);
-        // else if (pageName === 'inventoryPage') setCurrPage(<InventoryPage handlePageClick={handlePageClick} />);
-        // else if (pageName === 'households') setCurrPage(<HouseholdList />);
-        // else if (pageName === 'households-report') setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />);
-        // else if (pageName === 'ingredients') setCurrPage(<Ingredients />);
-        // else if (pageName === 'packaging') setCurrPage(<Packaging />);
-        // else if (pageName === 'stations') setCurrPage(<StationList />);
-        // else if (pageName === 'landing') setCurrPage(<HouseholdList />);
-        // else if (pageName === 'meals') setCurrPage(<MealPlan />);
-        // else if (pageName === 'recipes') setCurrPage(<Recipe />);
-        // else if (pageName === 'reports') setCurrPage(<ReportsPage />);
-        // else if (pageName === 'userPage') setCurrPage(<UserPage handlePageClick={handlePageClick} />);
-        // else if (pageName === 'userList') setCurrPage(<UserList handlePageClick={handlePageClick} />);
-        // else if (pageName === 'allergies') setCurrPage(<AllergiesList allergies={[{ aType: 'Gluten' }, { aType: 'Peanut' }]} />);
     }
+
+    const theme = createTheme({
+        palette: {
+            lightGreen: {
+                main: '#9AB847', // light green logo color
+                contrastText: '#fff'
+            },
+            darkGreen: {
+                main: '#093B31',
+            },
+            lightBlue: {
+                main: '#3E8477',
+            },
+            lightOrange: {
+                main: '#A35426'
+            },
+            darkBlue: {
+                main: '#070D3A'
+            }
+        }
+    })
+
     return (
+        <ThemeProvider theme={theme}>
         <div className="App">
             <CssBaseline />
             <Box sx={{
@@ -89,13 +93,13 @@ const App = () => {
             }}>
                 <header className="App-header">
                     <Typography variant='h4'>Food Forward Tracker</Typography>
-                    <Button variant='contained' onClick={() => handlePageClick('loginPage')}>
+                    <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('loginPage')}>
                         Login Page
                     </Button>
-                    <Button variant='contained' onClick={() => handlePageClick('landingPage')}>
+                    <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('landingPage')}>
                         Landing Page
                     </Button>
-                    <Button variant='contained' onClick={() => handlePageClick('userPage')}>
+                    <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('userPage')}>
                         User Account
                     </Button>
                     <select>
@@ -108,6 +112,7 @@ const App = () => {
                 </header>
             </Box>
         </div>
+        </ThemeProvider>
     );
 }
 

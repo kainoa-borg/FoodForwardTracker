@@ -25,7 +25,7 @@ export default function MealList() {
         console.log('MAKING REQUEST TO DJANGO')
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/mealplans/"
+            url:"http://4.236.185.213:8000/api/mealplans/"
           }).then((response)=>{
             const mealData = response.data
             setMealPlan(mealData);
@@ -42,7 +42,7 @@ export default function MealList() {
         console.log('MAKING REQUEST TO DJANGO')
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/recipe-list/"
+            url:"http://4.236.185.213:8000/api/recipe-list/"
           }).then((response)=>{
             const recipeData = response.data
             setRecipeList(recipeData);
@@ -60,7 +60,7 @@ export default function MealList() {
         console.log('MAKING REQUEST TO DJANGO')
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/serving-calculations/"
+            url:"http://4.236.185.213:8000/api/serving-calculations/"
           }).then((response)=>{
             return response.data;
           }).catch((error) => {
@@ -76,7 +76,7 @@ export default function MealList() {
         console.log(JSON.stringify(meal));
         axios({
             method: "POST",
-            url:"http://localhost:8000/api/mealplans/",
+            url:"http://4.236.185.213:8000/api/mealplans/",
             data: meal
           }).then((response)=>{
             getDBMealPlan();
@@ -131,7 +131,7 @@ export default function MealList() {
         {
             axios({
                 method: "DELETE",
-                url:"http://localhost:8000/api/mealplans/"+thisID+'/',
+                url:"http://4.236.185.213:8000/api/mealplans/"+thisID+'/',
               }).then((response)=>{
                 getDBMealPlan();
               }).catch((error) => {
@@ -156,7 +156,7 @@ export default function MealList() {
         {
             axios({
                 method: "PATCH",
-                url:"http://localhost:8000/api/mealplans/"+thisID+'/',
+                url:"http://4.236.185.213:8000/api/mealplans/"+thisID+'/',
                 data: editFormData
               }).then((response)=>{
                 getDBMealPlan();

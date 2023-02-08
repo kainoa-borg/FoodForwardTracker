@@ -26,7 +26,7 @@ const LoginPage = (props) => {
     const sendLoginRequest = () => {
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/users/"
+            url:"http://4.236.185.213:8000/api/users/"
           }).then((response)=>{
             let userInList = false;
             let userData = undefined;
@@ -91,7 +91,7 @@ const LoginPage = (props) => {
             
             {/* Logo and Welcome Message (left-side) */}
             <Grid item md='7' sx={{display: {xs: 'none', md: 'block'}}}>
-                <Box component='img' sx={{width: '80%'}} src="https://static.wixstatic.com/media/961f8a_8d810ec655dc4874a0c0356adf4430ce~mv2.png/v1/fill/w_142,h_107,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/961f8a_8d810ec655dc4874a0c0356adf4430ce~mv2.png"/>
+                <Box component='img' sx={{width: '80%'}} src="/Images/ff_logo.jpg"/>
                 <Typography variant='h3' sx={{paddingBottom: '1em'}}>Welcome to Food Forward!</Typography>
             </Grid>
 
@@ -103,7 +103,7 @@ const LoginPage = (props) => {
                     <Stack>
                         <TextField type='Text' maxLength='30' label='Username' name='username' value={user.username} onChange={handleLoginChange}/>
                         <TextField type='password' maxLength='30' label='Password' name='password' value={user.password} onChange={handleLoginChange}/>
-                        <Button variant='contained' type='Submit' onClick={sendLoginRequest}>
+                        <Button color='lightGreen' variant='contained' type='Submit' onClick={sendLoginRequest}>
                             Log In
                         </Button>
                     </Stack>
@@ -112,13 +112,13 @@ const LoginPage = (props) => {
                         <Typography>
                             Don't have an account?
                         </Typography>
-                        <Button variant='outlined' size='small' onClick={() => handleCreateClick('newUserPage')}>
+                        <Button color='darkGreen'variant='outlined' size='small' onClick={() => handleCreateClick('newUserPage')}>
                             Sign Up
                         </Button>
                         <Typography>
                             Forgot your password?
                         </Typography>
-                        <Button variant='outlined' size='small' onClick={() => handleResetClick('pwResetPage')}>
+                        <Button color='darkGreen' variant='outlined' size='small' onClick={() => handleResetClick('pwResetPage')}>
                             Reset Password
                         </Button>
                     </Stack>

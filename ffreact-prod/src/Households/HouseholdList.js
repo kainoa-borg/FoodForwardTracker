@@ -39,7 +39,7 @@ export default function HouseholdList() {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/households"
+            url:"http://4.236.185.213:8000/api/households"
           }).then((response)=>{
             console.log(response.data[0])
             const hhData = response.data
@@ -56,7 +56,7 @@ export default function HouseholdList() {
         console.log(households);
         axios({
             method: "POST",
-            url: "http://localhost:8000/api/households/",
+            url: "http://4.236.185.213:8000/api/households/",
             data: households
           }).then((response)=>{
             getDBHouseholds();
@@ -76,7 +76,7 @@ export default function HouseholdList() {
         {
             axios({
                 method: "POST",
-                url: "http://localhost:8000/api/households/",
+                url: "http://4.236.185.213:8000/api/households/",
                 data: household
               }).then((response)=>{
                 getDBHouseholds();
@@ -98,7 +98,7 @@ export default function HouseholdList() {
         const householdID = key; 
         axios({
             method: "DELETE",
-            url: "http://localhost:8000/api/households/"+households[key].hh_name,
+            url: "http://4.236.185.213:8000/api/households/"+households[key].hh_name,
           }).then((response)=>{
             getDBHouseholds();
           }).catch((error) => {
@@ -114,7 +114,7 @@ export default function HouseholdList() {
         console.log(JSON.stringify(editFormData));
         axios({
             method: "PATCH",
-            url: "http://localhost:8000/api/households/"+thisName+'/',
+            url: "http://4.236.185.213:8000/api/households/"+thisName+'/',
             data: editFormData
           }).then((response)=>{
             getDBHouseholds();
