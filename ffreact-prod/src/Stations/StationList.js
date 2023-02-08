@@ -11,7 +11,7 @@ import { Button, Box, Paper, Table, TableBody,
 import EditIcon from "@mui/icons-material"
 import MealsPage from '../MealsPage'
 import { BrowserRouter as Router, Link } from "react-router-dom"
-
+import RecipeDropDown from '../Recipe/RecipeDropDown'
 import './StationList.css'
 
 // Station List Component
@@ -194,8 +194,7 @@ export default function StationList() {
 
     // The HTML structure of this component
     return (
-            <div className='table-div'>
-            <MealsPage />
+            <div className='table-div'>            
                 <h3>Prep Stations</h3>
                 <table className='main-table'>
                     <TableContainer component={Paper}>
