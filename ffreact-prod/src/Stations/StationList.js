@@ -194,9 +194,7 @@ export default function StationList() {
 
     // The HTML structure of this component
     return (
-            <div className='table-div'>
-            <MealsPage />
-            <RecipeDropDown />
+            <div className='table-div'>            
                 <h3>Prep Stations</h3>
                 <table className='main-table'>
                     <TableContainer component={Paper}>

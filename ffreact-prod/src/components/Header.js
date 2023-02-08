@@ -1,6 +1,6 @@
-import NavBar from './NavBar';
+//import NavBar from './NavBar';
 import React from 'react'
-
+/*
 const Header = () => {
   return (
     <header>
@@ -15,3 +15,4 @@ const Header = () => {
 };
 
 export default Header;
+*/

@@ -217,7 +217,6 @@ export default function MealList() {
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div class='table-div'>
-          <MealsPage />
           <h3>Meal Plan</h3>
             <table>
                 <thead>

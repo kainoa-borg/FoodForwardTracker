@@ -2,7 +2,7 @@ import { menuItems } from '../menuItems';
 import MenuItems from './MenuItems';
 import React from 'react'
 
-
+/*
 const Navbar = () => {
   return (
     <nav>
@@ -16,3 +16,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+*/
