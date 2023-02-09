@@ -87,7 +87,7 @@ const LoginPage = (props) => {
 
     // HTML structure of this component
     return (
-        <Grid item container spacing='12' sx={{margin: 'auto', marginTop: '4em', maxWidth: '90%', alignItems: 'center'}}>
+        <Grid item container spacing='12' sx={{margin: 'auto', marginTop: '1em', maxWidth: '90%', alignItems: 'center'}}>
             
             {/* Logo and Welcome Message (left-side) */}
             <Grid item md='7' sx={{display: {xs: 'none', md: 'block'}}}>
@@ -96,7 +96,7 @@ const LoginPage = (props) => {
             </Grid>
 
             {/* Login Box */}
-            <Grid item component={Card} md='5' sm='12' elevation='4' sx={{padding: '1em', height: 'fit-content'}}>
+            <Grid item component={Card} md='5' sm='12' elevation='4' sx={{padding: '2em', marginBottom: '5em', height: 'fit-content'}}>
                 <Typography variant='h5' sx={{paddingBottom: '1em'}}>Sign In</Typography>
                 <form onSubmit={handleLoginSubmit}>
             
@@ -108,7 +108,7 @@ const LoginPage = (props) => {
                         </Button>
                     </Stack>
             
-                    <Stack sx={{textAlign: 'center', marginTop: '2em'}}>
+                    <Stack sx={{textAlign: 'center', justifyContent: 'center', marginTop: '2em'}}>
                         <Typography>
                             Don't have an account?
                         </Typography>
@@ -121,8 +121,7 @@ const LoginPage = (props) => {
                         <Button color='darkGreen' variant='outlined' size='small' onClick={() => handleResetClick('pwResetPage')}>
                             Reset Password
                         </Button>
-                    </Stack>
-            
+                    </Stack>            
                 </form>
             </Grid>
         </Grid>

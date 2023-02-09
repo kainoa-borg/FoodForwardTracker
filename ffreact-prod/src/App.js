@@ -26,7 +26,7 @@ import { Container, Button, Typography } from '@mui/material'
 
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
-import { ThemeProvider } from 'styled-components'
+// import { ThemeProvider } from 'styled-components'
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -99,26 +99,30 @@ const App = () => {
             },
             darkGreen: {
                 main: '#093B31',
+                contrastText: '#fff'
             },
             lightBlue: {
                 main: '#3E8477',
+                contrastText: '#fff'
             },
             lightOrange: {
-                main: '#A35426'
+                main: '#A35426',
+                contrastText: '#fff'
             },
             darkBlue: {
-                main: '#070D3A'
+                main: '#070D3A',
+                contrastText: '#fff'
             }
         }
     })
 
-    return (
-        <ThemeProvider theme={theme}>
-        <div className="App">
+    // return (
+    //     <div className="App">
 
-     }
+    //  }
     
     return (
+        <ThemeProvider theme={theme}>
         <div className="App" style={style} onClick={handleHeaderClick}>
 
             <CssBaseline />

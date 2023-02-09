@@ -1,6 +1,10 @@
 import {useState} from 'react'
 import AllergiesList from './AllergiesList.js'
 import React from 'react'
+import { Button, Grid, Input, Typography } from '@mui/material'
+import { InputLabel } from '@mui/material'
+import { Stack } from '@mui/system'
+import { Card } from '@mui/material'
 // Kainoa Borges
 
 // Household Form component
@@ -69,76 +73,66 @@ const HouseholdForm = (props) => {
 
     // HTML structure of this component
     return (
-      <form onSubmit={handleSubmit}>
-          {/* Basic household info */}
-          <label htmlFor="hh_name">Name: </label>
-          <input name="hh_name" id="hh_name" type="text" maxLength='30' required={true} value={household.hh_name} onChange={handleFormChange}/>
-          
-          <label htmlFor='num_adult'>Number of Adults: </label>
-          <input name='num_adult' id="num_adult" type="number" value={household.num_adult} onChange={handleFormChange}/>
-          
-          <label htmlFor='num_child_lt_6'>Number of Children 0-6: </label>
-          <input name='num_child_lt_6' id="num_child_lt_6" type="number" value={household.num_child_lt_6} onChange={handleFormChange}/>
-          
-          <label htmlFor='num_child_gt_6'>Number of Children 7-17: </label>
-          <input name='num_child_gt_6' id="num_child_gt_6" type="number" value={household.num_child_gt_6} onChange={handleFormChange}/>
-          
+      <Card sx={{marginTop: '1em', padding: '1em'}}>
+        <Typography component='h5' variant='h5'>Add a household: </Typography>
+        <form onSubmit={handleSubmit}>
+            {/* Basic household info */}
+            <Grid container spacing={4}>
+              <Grid item>
+                <InputLabel htmlFor="hh_name">Name: </InputLabel>
+                <Input name="hh_name" id="hh_name" type="text" maxLength='30' required={true} value={household.hh_name} onChange={handleFormChange}/>
+                
+                <InputLabel htmlFor='num_adult'>Number of Adults: </InputLabel>
+                <Input name='num_adult' id="num_adult" type="number" value={household.num_adult} onChange={handleFormChange}/>
+                
+                <InputLabel htmlFor='num_child_lt_6'>Number of Children 0-6: </InputLabel>
+                <Input name='num_child_lt_6' id="num_child_lt_6" type="number" value={household.num_child_lt_6} onChange={handleFormChange}/>
+                
+                <InputLabel htmlFor='num_child_gt_6'>Number of Children 7-17: </InputLabel>
+                <Input name='num_child_gt_6' id="num_child_gt_6" type="number" value={household.num_child_gt_6} onChange={handleFormChange}/>
+              </Grid>
+              <Grid item>
+                <InputLabel htmlFor='veg_flag'>Vegan/Vegetarian: </InputLabel>          
+                <Input name='veg_flag' id='veg_flag' type="checkbox" checked={household.veg_flag} onChange={handleFormChange}/>
 
-          {/* Flags should be on separate lines */}
-          <br/>
+                <InputLabel htmlFor='gf_flag'>Gluten Free: </InputLabel>          
+                <Input name='gf_flag' id='gf_flag' type='checkbox' checked={household.gf_flag} onChange={handleFormChange}/>
+                
+                <InputLabel htmlFor='sms_flag'>Recieving SMS: </InputLabel>
+                <Input name='sms_flag' id='sms_flag' type='checkbox' checked={household.sms_flag} onChange={handleFormChange}/>
 
-          <label htmlFor='veg_flag'>Vegan/Vegetarian: </label>          
-          <input name='veg_flag' id='veg_flag' type="checkbox" checked={household.veg_flag} onChange={handleFormChange}/>
-          
-          <br/>
+                <InputLabel htmlFor='paused_flag'>Is Paused: </InputLabel>          
+                <Input name='paused_flag' id='paused_flag' type='checkbox' checked={household.paused_flag} onChange={handleFormChange}/>
+              </Grid>
+              <Grid item>
+                <InputLabel htmlFor='phone'>Phone Number: </InputLabel>          
+                <Input name='phone' id='phone' type='tel' /**pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}' minLength='12'*/ maxLength='10' value={household.phone} onChange={handleFormChange}/>
+                
+                <InputLabel htmlFor='street'>Street: </InputLabel>          
+                <Input name='street' id='street' maxLength='50' value={household.street} onChange={handleFormChange}/>
 
-          <label htmlFor='gf_flag'>Gluten Free: </label>          
-          <input name='gf_flag' id='gf_flag' type='checkbox' checked={household.gf_flag} onChange={handleFormChange}/>
-          
-          <br/>
+                <InputLabel htmlFor='city'>City: </InputLabel>
+                <Input name='city' id='city' maxLength='50' value={household.city} onChange={handleFormChange}/>
 
-          <label htmlFor='a_flag'>Allergy: </label>
-          <input name='a_flag' id='a_flag' type='checkbox' checked={household.a_flag} onChange={handleFormChange}/>
-          
-          <br/>
-          
-          <label htmlFor='sms_flag'>Recieving SMS: </label>
-          <input name='sms_flag' id='sms_flag' type='checkbox' checked={household.sms_flag} onChange={handleFormChange}/>
-          
-          <br/>
+                <InputLabel htmlFor='pcode'>Postal Code: </InputLabel>
+                <Input name='pcode' id='pcode' minLength='5' maxLength='5' value={household.pcode} onChange={handleFormChange}/>
 
-          <label htmlFor='paused_flag'>Is Paused: </label>          
-          <input name='paused_flag' id='paused_flag' type='checkbox' checked={household.paused_flag} onChange={handleFormChange}/>
-          
-          {/* Delivery info should be a separate line */}
-          <br/>
+                <InputLabel htmlFor='state'>State: </InputLabel>
+                <Input name='state' id='state' minLength='2' maxLength='2' value={household.state} onChange={handleFormChange}/>
 
-          <label htmlFor='phone'>Phone Number: </label>          
-          <input name='phone' id='phone' type='tel' /**pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}' minLength='12'*/ maxLength='10' value={household.phone} onChange={handleFormChange}/>
-          
-          <label htmlFor='street'>Street: </label>          
-          <input name='street' id='street' maxLength='50' value={household.street} onChange={handleFormChange}/>
+                <InputLabel htmlFor='delivery_notes'>Delivery Notes: </InputLabel>
+                <Input name='delivery_notes' id='delivery_notes' maxLength='255' value={household.delivery_notes} onChange={handleFormChange}/>
+              </Grid>
 
-          <label htmlFor='city'>City: </label>
-          <input name='city' id='city' maxLength='50' value={household.city} onChange={handleFormChange}/>
+              <Grid item>
+                <InputLabel>Allergies</InputLabel>
+                <AllergiesList allergies={household.hh_allergies} isEditable={true} updateEditForm={updateEditForm}/>
+              </Grid>
+            </Grid>
+            <Button type='Submit' color='lightBlue' variant='contained'>Add Household</Button>
+        </form>
+      </Card>
 
-          <label htmlFor='pcode'>Postal Code: </label>
-          <input name='pcode' id='pcode' minLength='5' maxLength='5' value={household.pcode} onChange={handleFormChange}/>
-
-          <label htmlFor='state'>State: </label>
-          <input name='state' id='state' minLength='2' maxLength='2' value={household.state} onChange={handleFormChange}/>
-
-          <label htmlFor='delivery_notes'>Delivery Notes: </label>
-          <textarea name='delivery_notes' id='delivery_notes' maxLength='255' value={household.delivery_notes} onChange={handleFormChange}/>
-
-          {/* Allergies input should be on a separate line */}
-          <br/>
-
-          <label>Allergies</label>
-          <AllergiesList allergies={household.hh_allergies} isEditable={true} updateEditForm={updateEditForm}/>
-
-          <button type='Submit'>Add</button>
-      </form>
     );
 }
 

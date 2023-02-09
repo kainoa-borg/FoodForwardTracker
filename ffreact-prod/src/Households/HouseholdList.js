@@ -162,51 +162,49 @@ export default function HouseholdList() {
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div>
           <h3>Clients</h3>
-            <Table size='small' component={Paper} stickyHeader sx={{minWidth: 650}}>
-                <TableHead>
-                    <TableRow>
-                        <TableCell align='left'>Name</TableCell>
-                        <TableCell align='left'>Adults</TableCell>
-                        <TableCell align='left'>Children 0-6</TableCell>
-                        <TableCell align='left'>Children 7-17</TableCell>
-                        <TableCell align='left'>V</TableCell>
-                        <TableCell align='left'>GF</TableCell>
-                        <TableCell align='left'>SMS</TableCell>
-                        <TableCell align='left'>Paused</TableCell>
-                        <TableCell align='left'>Phone Number</TableCell>
-                        <TableCell align='left'>Street</TableCell>
-                        <TableCell align='left'>City</TableCell>
-                        <TableCell align='left'>Postal Code</TableCell>
-                        <TableCell align='left'>State</TableCell>
-                        <TableCell align='left'>Delivery Notes</TableCell>
-                        <TableCell align='left'>Allergies</TableCell>
-                        <TableCell align='left'>Action</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {/* Show a row for each household in households.*/}
-                    {households.map((household, key) => {
-                        const thisKey = key;
-                        return(
-                            <Fragment>
-                                {
-                                // If this household is the one to be edited, show an editable row instead
-                                editHouseholdID === thisKey 
-                                ? <EditableHouseholdRow thisKey={thisKey} editFormData={editFormData} updateHousehold={updateHousehold} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
-                                : <HouseholdRow thisKey={thisKey} household={household} deleteHousehold={deleteHousehold} handleEditClick={handleEditClick}/>
-                                }
-                            </Fragment>
-                        );
-                    })}
-                    {/* If the list is empty display EmptyTableMessage */}
-                    {households.length < 1 ? handleError('empty') : null}
-                </TableBody>
-            </Table>
-            <h3>Add A Household</h3>
-            <HouseholdForm addHousehold={addHousehold}></HouseholdForm>
-            <button onClick={postDBHouseholds}>Submit Changes</button>
-            {errorComponent}
-            {displayMsgComponent}
+          <Table size='small' component={Paper} stickyHeader sx={{minWidth: 650}}>
+              <TableHead>
+                  <TableRow>
+                      <TableCell align='left'>Name</TableCell>
+                      <TableCell align='left'>Adults</TableCell>
+                      <TableCell align='left'>Children 0-6</TableCell>
+                      <TableCell align='left'>Children 7-17</TableCell>
+                      <TableCell align='left'>V</TableCell>
+                      <TableCell align='left'>GF</TableCell>
+                      <TableCell align='left'>SMS</TableCell>
+                      <TableCell align='left'>Paused</TableCell>
+                      <TableCell align='left'>Phone Number</TableCell>
+                      <TableCell align='left'>Street</TableCell>
+                      <TableCell align='left'>City</TableCell>
+                      <TableCell align='left'>Postal Code</TableCell>
+                      <TableCell align='left'>State</TableCell>
+                      <TableCell align='left'>Delivery Notes</TableCell>
+                      <TableCell align='left'>Allergies</TableCell>
+                      <TableCell align='left'>Action</TableCell>
+                  </TableRow>
+              </TableHead>
+              <TableBody>
+                  {/* Show a row for each household in households.*/}
+                  {households.map((household, key) => {
+                      const thisKey = key;
+                      return(
+                          <Fragment>
+                              {
+                              // If this household is the one to be edited, show an editable row instead
+                              editHouseholdID === thisKey 
+                              ? <EditableHouseholdRow thisKey={thisKey} editFormData={editFormData} updateHousehold={updateHousehold} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
+                              : <HouseholdRow thisKey={thisKey} household={household} deleteHousehold={deleteHousehold} handleEditClick={handleEditClick}/>
+                              }
+                          </Fragment>
+                      );
+                  })}
+                  {/* If the list is empty display EmptyTableMessage */}
+                  {households.length < 1 ? handleError('empty') : null}
+              </TableBody>
+          </Table>
+          <HouseholdForm addHousehold={addHousehold}></HouseholdForm>
+          {errorComponent}
+          {displayMsgComponent}
         </div>
     )
 }

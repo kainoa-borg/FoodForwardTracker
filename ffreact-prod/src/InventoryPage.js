@@ -9,11 +9,11 @@ const LandingPage = (props) => {
     // HTML structure of this component
     return (
         <Fragment>
-            <h2>Landing Page</h2>
-            <Button color='lightGreen' variant='contained' onClick={() => props.handlePageClick('ingredients')}>
+            <h2>Inventory Page</h2>
+            <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('ingredients')}>
                 <Typography color='white'>Ingredients</Typography>
             </Button>
-            <Button color='lightGreen' variant='contained' onClick={() => props.handlePageClick('packaging')}>
+            <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('packaging')}>
                 <Typography color='white'>Packaging</Typography>
             </Button>
         </Fragment>
