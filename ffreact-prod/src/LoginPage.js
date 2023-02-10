@@ -87,7 +87,7 @@ const LoginPage = (props) => {
 
     // HTML structure of this component
     return (
-        <Grid item container spacing='12' sx={{margin: 'auto', marginTop: '1em', maxWidth: '90%', alignItems: 'center'}}>
+        <Grid item container spacing='12' sx={{margin: 'auto', marginTop: '1em', maxWidth: '90%', justifyContent: 'center', alignItems: 'center'}}>
             
             {/* Logo and Welcome Message (left-side) */}
             <Grid item md='7' sx={{display: {xs: 'none', md: 'block'}}}>
