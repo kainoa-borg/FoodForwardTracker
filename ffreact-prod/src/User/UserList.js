@@ -5,9 +5,14 @@ import EditableUserRow from './EditableUserRow.js'
 import UserRow from './UserRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
+import {Formik} from "formik";
+import { Container, Grid, TextField, Typography, Paper, Button, Box, IconButton } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
+import * as yup from "yup";
+import { Link, useNavigate }from "react-router-dom";
 
 import './UserList.css'
-import { Container, Button, Typography } from '@mui/material'
+
 
 // User List Component
 
@@ -47,7 +52,7 @@ export default function UserList() {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/users"
+            url:"http://4.236.185.213:8000/api/users"
           }).then((response)=>{
             const uData = response.data
             setUsers(uData);
@@ -64,7 +69,7 @@ export default function UserList() {
         console.log(users);
         axios({
             method: "POST",
-            url: "http://localhost:8000/api/users/",
+            url: "http://4.236.185.213:8000/api/users/",
             data: users
           }).then((response)=>{
               getDBUsers();
@@ -85,7 +90,7 @@ export default function UserList() {
         {
             axios({
                 method: "POST",
-                url: "http://localhost:8000/api/users/",
+                url: "http://4.236.185.213:8000/api/users/",
                 data: user
               }).then((response)=>{
                   getDBUsers();
@@ -108,7 +113,7 @@ export default function UserList() {
         const userID = key; 
         axios({
             method: "DELETE",
-            url: "http://localhost:8000/api/users/" + users[key].u_id,
+            url: "http://4.236.185.213:8000/api/users/" + users[key].u_id,
           }).then((response)=>{
               setUsers(getDBUsers());
           }).catch((error) => {
@@ -125,7 +130,7 @@ export default function UserList() {
         console.log(JSON.stringify(editFormData));
         axios({
             method: "PATCH",
-            url: "http://localhost:8000/api/users/"+thisName+'/',
+            url: "http://4.236.185.213:8000/api/users/"+thisName+'/',
             data: editFormData
           }).then((response)=>{
               setUsers(getDBUsers());
@@ -178,39 +183,53 @@ export default function UserList() {
         <div className='table-div'>
             <h3>Administration</h3>
             <table className='main-table'>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>User Name</th>
-                        <th>Password</th>
-                        <th>User Level</th>
-                        <th>Email</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 360 }} size="small">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="left">
+                                <h4>ID</h4>
+                            </TableCell>
+                            <TableCell align="left">
+                                <h4>User Name</h4>
+                            </TableCell>
+                            <TableCell align="left">
+                                <h4>Password</h4>
+                            </TableCell>
+                            <TableCell align="left">
+                                <h4>User Level</h4>
+                            </TableCell>
+                            <TableCell align="left">
+                                <h4>Email</h4>
+                            </TableCell>
+                            <TableCell allign="right">
+                                <h4>Actions</h4>
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
                     {/* Show a row for each User in Users.*/}
                     {users.map((user, key) => {
                         const thisKey = key;
-                        return(
-                            <Fragment>
-                                {
-                                // If this User is the one to be edited, show an editable row instead
-                                editUserID === thisKey 
-                                        ? <EditableUserRow thisKey={thisKey} editFormData={editFormData} updateUser={updateUser} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
-                                        : <UserRow thisKey={thisKey} user={user} deleteUser={deleteUser} handleEditClick={handleEditClick}/>
-                                }
-                            </Fragment>
-                        );
+                        return (
+                            // If this User is the one to be edited, show an editable row instead
+                            editUserID === thisKey 
+                                    ? <EditableUserRow thisKey={thisKey} editFormData={editFormData} updateUser={updateUser} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
+                                    : <UserRow thisKey={thisKey} user={user} deleteUser={deleteUser} handleEditClick={handleEditClick}/>
+                            )
                     })}
+                    
                     {/* If the list is empty display EmptyTableMessage */}
                     {users.length < 1 ? handleError('empty') : null}
-                </tbody>
-            </table>
-            <h3>Add A User</h3>
-            <UserForm addUser={addUser}></UserForm>
-            <button onClick={postDBUsers}>Submit Changes</button>
-            {errorComponent}
-            {displayMsgComponent}
-        </div>
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </table>
+        <h3>Add A User</h3>
+        <UserForm addUser={addUser}></UserForm>
+        <button onClick={postDBUsers}>Submit Changes</button>
+        {errorComponent}
+        {displayMsgComponent}
+    </div>
     )
 }

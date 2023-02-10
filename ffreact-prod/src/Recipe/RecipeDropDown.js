@@ -1,45 +1,43 @@
-import React, { useState } from 'react';
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+//import Dropdown from '../components/Dropdown';
+//import DropdownMenuItem from '../components/Dropdown';
+/*
+const RecipeDropdown = () => {
+  const handleCreate = () => {
+    console.log('create something');
+  };
 
-function RecipeDropdown() {
-  // state to keep track of the selected recipe
-  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const handleEdit = () => {
+    console.log('edit something');
+  };
 
-  // state to keep track of whether the menu is open or closed
-  const [isOpen, setIsOpen] = useState(false);
-
-  // handle clicks on the menu button
-  function handleClick() {
-    setIsOpen(!isOpen);
-  }
-
-  // handle clicks on a recipe option
-  function handleOptionClick(recipe) {
-    setSelectedRecipe(recipe);
-    setIsOpen(false);
-  }
+  const handleDelete = () => {
+    console.log('delete something');
+  };
 
   return (
-    <div>
-      <button onClick={handleClick}>
-        {selectedRecipe ? selectedRecipe.name : 'Select a recipe'}
-      </button>
-      {isOpen && (
-        <ul>
-          {recipes.map(recipe => (
-            <li key={recipe.id} onClick={() => handleOptionClick(recipe)}>
-              {recipe.name}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <Dropdown
+      keepOpen
+      open={this.state.open}
+      trigger={<Button>Dropdown</Button>}
+      menu={[
+        <DropdownMenuItem onClick={handleCreate}>
+          Create <AddCircleOutlinedIcon />
+        </DropdownMenuItem>,
+        <DropdownMenuItem onClick={handleEdit}>
+          Edit <EditIcon />
+        </DropdownMenuItem>,
+        <DropdownMenuItem onClick={handleDelete}>
+          Delete <DeleteForeverIcon />
+        </DropdownMenuItem>,
+      ]}
+    />
   );
-}
-
-const recipes = [
-  { id: 1, name: 'Veggie Lasagna' },
-  { id: 2, name: 'Tuna Casserole' },
-  { id: 3, name: 'Beef and Bean Enchiladas' },
-];
+};
 
 export default RecipeDropdown;
+*/

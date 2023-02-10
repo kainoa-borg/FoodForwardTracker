@@ -1,9 +1,0 @@
-.table-div{
-    max-width: 80%;
-    max-height: 300px;
-    min-width: 400px;
-}
-
-.table-div table * {
-    text-align: center;
-}

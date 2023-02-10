@@ -7,7 +7,7 @@ import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 
 //import './HouseholdList.css'
-import {Table} from '@mui/material'
+import {Table, TableHead, TableRow, TableCell, TableBody, Paper} from '@mui/material'
 
 // Household List Component
 export default function HouseholdList() {
@@ -39,7 +39,7 @@ export default function HouseholdList() {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/households"
+            url:"http://4.236.185.213:8000/api/households"
           }).then((response)=>{
             console.log(response.data[0])
             const hhData = response.data
@@ -56,7 +56,7 @@ export default function HouseholdList() {
         console.log(households);
         axios({
             method: "POST",
-            url: "http://localhost:8000/api/households/",
+            url: "http://4.236.185.213:8000/api/households/",
             data: households
           }).then((response)=>{
             getDBHouseholds();
@@ -76,7 +76,7 @@ export default function HouseholdList() {
         {
             axios({
                 method: "POST",
-                url: "http://localhost:8000/api/households/",
+                url: "http://4.236.185.213:8000/api/households/",
                 data: household
               }).then((response)=>{
                 getDBHouseholds();
@@ -98,7 +98,7 @@ export default function HouseholdList() {
         const householdID = key; 
         axios({
             method: "DELETE",
-            url: "http://localhost:8000/api/households/"+households[key].hh_name,
+            url: "http://4.236.185.213:8000/api/households/"+households[key].hh_name,
           }).then((response)=>{
             getDBHouseholds();
           }).catch((error) => {
@@ -114,7 +114,7 @@ export default function HouseholdList() {
         console.log(JSON.stringify(editFormData));
         axios({
             method: "PATCH",
-            url: "http://localhost:8000/api/households/"+thisName+'/',
+            url: "http://4.236.185.213:8000/api/households/"+thisName+'/',
             data: editFormData
           }).then((response)=>{
             getDBHouseholds();
@@ -160,52 +160,51 @@ export default function HouseholdList() {
     // The HTML structure of this component
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
-        <div className='table-div'>
-          <h2>Clients</h2>
-            <table hover size='sm' bordered='false' responsive>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Adults</th>
-                        <th>Children 0-6</th>
-                        <th>Children 7-17</th>
-                        <th>Vegan</th>
-                        <th>Gluten Free</th>
-                        <th>Receive SMS</th>
-                        <th>Paused</th>
-                        <th>Phone Number</th>
-                        <th>Street</th>
-                        <th>City</th>
-                        <th>Postal Code</th>
-                        <th>State</th>
-                        <th>Delivery Notes</th>
-                        <th>Allergies</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {/* Show a row for each household in households.*/}
-                    {households.map((household, key) => {
-                        const thisKey = key;
-                        return(
-                            <Fragment>
-                                {
-                                // If this household is the one to be edited, show an editable row instead
-                                editHouseholdID === thisKey 
-                                ? <EditableHouseholdRow thisKey={thisKey} editFormData={editFormData} updateHousehold={updateHousehold} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
-                                : <HouseholdRow thisKey={thisKey} household={household} deleteHousehold={deleteHousehold} handleEditClick={handleEditClick}/>
-                                }
-                            </Fragment>
-                        );
-                    })}
-                    {/* If the list is empty display EmptyTableMessage */}
-                    {households.length < 1 ? handleError('empty') : null}
-                </tbody>
-            </table>
-            <h3>Add A Household</h3>
-            <HouseholdForm addHousehold={addHousehold}></HouseholdForm>
-            <button onClick={postDBHouseholds}>Submit Changes</button>
-            {errorComponent}
-            {displayMsgComponent}
+        <div>
+          <h3>Clients</h3>
+          <Table size='small' component={Paper} stickyHeader sx={{minWidth: 650}}>
+              <TableHead>
+                  <TableRow>
+                      <TableCell align='left'>Name</TableCell>
+                      <TableCell align='left'>Adults</TableCell>
+                      <TableCell align='left'>Children 0-6</TableCell>
+                      <TableCell align='left'>Children 7-17</TableCell>
+                      <TableCell align='left'>V</TableCell>
+                      <TableCell align='left'>GF</TableCell>
+                      <TableCell align='left'>SMS</TableCell>
+                      <TableCell align='left'>Paused</TableCell>
+                      <TableCell align='left'>Phone Number</TableCell>
+                      <TableCell align='left'>Street</TableCell>
+                      <TableCell align='left'>City</TableCell>
+                      <TableCell align='left'>Postal Code</TableCell>
+                      <TableCell align='left'>State</TableCell>
+                      <TableCell align='left'>Delivery Notes</TableCell>
+                      <TableCell align='left'>Allergies</TableCell>
+                      <TableCell align='left'>Action</TableCell>
+                  </TableRow>
+              </TableHead>
+              <TableBody>
+                  {/* Show a row for each household in households.*/}
+                  {households.map((household, key) => {
+                      const thisKey = key;
+                      return(
+                          <Fragment>
+                              {
+                              // If this household is the one to be edited, show an editable row instead
+                              editHouseholdID === thisKey 
+                              ? <EditableHouseholdRow thisKey={thisKey} editFormData={editFormData} updateHousehold={updateHousehold} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
+                              : <HouseholdRow thisKey={thisKey} household={household} deleteHousehold={deleteHousehold} handleEditClick={handleEditClick}/>
+                              }
+                          </Fragment>
+                      );
+                  })}
+                  {/* If the list is empty display EmptyTableMessage */}
+                  {households.length < 1 ? handleError('empty') : null}
+              </TableBody>
+          </Table>
+          <HouseholdForm addHousehold={addHousehold}></HouseholdForm>
+          {errorComponent}
+          {displayMsgComponent}
         </div>
     )
 }

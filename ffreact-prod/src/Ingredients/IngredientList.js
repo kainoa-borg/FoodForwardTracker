@@ -60,7 +60,7 @@ export default function IngredientList() {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/suppliers"
+            url:"http://4.236.185.213:8000/api/suppliers"
           }).then((response)=>{
             setSuppliers(response.data);
           }).catch((error) => {
@@ -77,7 +77,7 @@ export default function IngredientList() {
         setLoadingComponent(<Error text="LOADING DATA..."/>);
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/ingredient-inventory"
+            url:"http://4.236.185.213:8000/api/ingredient-inventory"
           }).then((response)=>{
             const ingData = response.data
             setIngredients(ingData);
@@ -113,7 +113,7 @@ export default function IngredientList() {
         ingredient['i_id'] = lastID + 1;
         axios({
             method: "POST",
-            url:"http://localhost:8000/api/ingredient-inventory/",
+            url:"http://4.236.185.213:8000/api/ingredient-inventory/",
             data: ingredient
           }).then((response)=>{
             getDBIngredients();
@@ -142,7 +142,7 @@ export default function IngredientList() {
         const ingID = ingredients[key]['i_id']; 
         axios({
             method: "DELETE",
-            url:"http://localhost:8000/api/ingredient-inventory/"+ingID+'/',
+            url:"http://4.236.185.213:8000/api/ingredient-inventory/"+ingID+'/',
           }).then((response)=>{
             getDBIngredients();
           }).catch((error) => {
@@ -161,7 +161,7 @@ export default function IngredientList() {
             setEditIngredientID(null);
             axios({
                 method: "PATCH",
-                url:"http://localhost:8000/api/ingredient-inventory/"+thisID+'/',
+                url:"http://4.236.185.213:8000/api/ingredient-inventory/"+thisID+'/',
                 data: editFormData
               }).then((response)=>{
                 getDBIngredients();
@@ -213,7 +213,6 @@ export default function IngredientList() {
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div class='table-div'>
-            <InventoryPage />
             <h3>Ingredients</h3>
             <table className='main-table'>
                 <thead>
