@@ -195,7 +195,6 @@ export default function PackagingList() {
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div class='table-div'>
-            <InventoryPage />
             <h3>Packaging</h3>
             <table className='main-table'>
                 <thead>
