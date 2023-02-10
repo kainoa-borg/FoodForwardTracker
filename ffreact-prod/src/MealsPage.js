@@ -6,21 +6,32 @@ import { CssBaseline, Box } from '@mui/material'
 import StationList from './Stations/StationList.js'
 import Recipe from './Recipe/RecipeList.js'
 import MealPlan from './Meals/MealList.js'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 
-/*
-class handleMenu extends React.Component {
-    handleClick() {
-        console.log('this is:', this);
+const theme = createTheme({
+    palette: {
+        lightGreen: {
+            main: '#9AB847', // light green logo color
+            contrastText: '#fff'
+        },
+        darkGreen: {
+            main: '#093B31',
+            contrastText: '#fff'
+        },
+        lightBlue: {
+            main: '#3E8477',
+            contrastText: '#fff'
+        },
+        lightOrange: {
+            main: '#A35426',
+            contrastText: '#fff'
+        },
+        darkBlue: {
+            main: '#070D3A',
+            contrastText: '#fff'
+        }
     }
-    render() {
-        return (      
-        <button onClick={() => this.handleClick()}>        
-            Click me
-        </button>
-      );
-    }
-  }
-*/
+})
 
 const style = {
     padding: '10px',
@@ -41,20 +52,22 @@ const MealsPage = (props) => {
     } 
     // HTML structure of this component
     return (
+        <ThemeProvider theme={theme}>
         <div style={style}>
         <CssBaseline />
         <Dropdown
-            trigger={<button> Meal Options</button>}
+            trigger={<Button color='lightGreen' variant='contained'> Meal Options</Button>}
             menu={[
-                <button ref={props.ref} type="button" onClick={() => handlePageClick('meals')}>
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('meals')}>
                     Meal Plans</button>,
-                <button ref={props.ref} type="button" onClick={() => handlePageClick('recipes')}>
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('recipes')}>
                     Recipes</button>,
-                <button ref={props.ref} type="button" onClick={() => handlePageClick('stations')}>
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('stations')}>
                     Stations</button>
                 ]}/>
             {currPage}
         </div>
+        </ThemeProvider>
     );   
 }
 
