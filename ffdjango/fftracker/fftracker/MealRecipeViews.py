@@ -67,23 +67,23 @@ class RecipesSerializer(ModelSerializer):
         # depth = 1
         fields = ('r_num', 'r_name', 'r_ingredients', 'r_packaging', 'r_diets', 'r_instructions', 'r_allergies')
 
-    # def create(self, validated_data):
-    #     ings = validated_data.pop('r_ingredients')
-    #     pkgs = validated_data.pop('r_packaging')
-    #     diets = validated_data.pop('r_diets')
-    #     instructions = validated_data.pop('r_instructions')
-    #     for ing in ings:
-    #         RecipeIngredients(ing).save()
-    #     for pkg in pkgs:
-    #         RecipePackaging(pkg).save()
-    #     for diet in diets:
-    #         RecipeDiets(diet).save()
-    #     for instruction in instructions:
-    #         RecipeInstructions(instruction).save()
+    def create(self, validated_data):
+        ings = validated_data.pop('r_ingredients')
+        pkgs = validated_data.pop('r_packaging')
+        diets = validated_data.pop('r_diets')
+        instructions = validated_data.pop('r_instructions')
+        for ing in ings:
+            RecipeIngredients(ing).save()
+        for pkg in pkgs:
+            RecipePackaging(pkg).save()
+        for diet in diets:
+            RecipeDiets(diet).save()
+        for instruction in instructions:
+            RecipeInstructions(instruction).save()
         
-    #     recipe_instance = Recipes.objects.create(**validated_data)
+        recipe_instance = Recipes.objects.create(**validated_data)
 
-    #     return recipe_instance
+        return recipe_instance
 
     def update(self, recipe_instance, validated_data):
 		# raise serializers.ValidationError("IM HERE")
