@@ -11,7 +11,7 @@ import { CssBaseline, Box } from '@mui/material'
 const style = {
     padding: '10px',
     border: '1px solid black',
-    display: 'flex',
+    display: 'flex-box',
     justifyContent: 'space-between',
 };
 

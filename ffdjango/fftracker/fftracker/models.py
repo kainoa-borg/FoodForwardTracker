@@ -303,7 +303,7 @@ class PackagingUsages(models.Model):
 class RecipeAllergies(models.Model):
     ra_id = models.SmallIntegerField(primary_key=True)
     allergy = models.CharField(max_length=30)
-    ra_recipe_num = models.ForeignKey('Recipes', models.CASCADE, db_column='ra_recipe_num')
+    ra_recipe_num = models.ForeignKey('Recipes', models.CASCADE, related_name='r_allergies', db_column='ra_recipe_num')
 
     class Meta:
         managed = False
@@ -313,7 +313,7 @@ class RecipeAllergies(models.Model):
 class RecipeDiets(models.Model):
     rd_id = models.SmallIntegerField(primary_key=True)
     diet_category = models.CharField(max_length=50)
-    rd_recipe_num = models.ForeignKey('Recipes', models.CASCADE, db_column='rd_recipe_num')
+    rd_recipe_num = models.ForeignKey('Recipes', models.CASCADE, related_name='r_diets', db_column='rd_recipe_num')
 
     class Meta:
         managed = False
@@ -326,7 +326,7 @@ class RecipeIngredients(models.Model):
     unit = models.CharField(max_length=10)
     prep = models.CharField(max_length=100)
     ri_ing = models.ForeignKey(Ingredients, models.CASCADE)
-    ri_recipe_num = models.ForeignKey('Recipes', models.CASCADE, db_column='ri_recipe_num')
+    ri_recipe_num = models.ForeignKey('Recipes', models.CASCADE, related_name='r_ingredients', db_column='ri_recipe_num')
 
     class Meta:
         managed = False
@@ -338,7 +338,7 @@ class RecipeInstructions(models.Model):
     step_no = models.IntegerField(blank=True, null=True)
     step_inst = models.TextField(blank=True, null=True)
     stn_name = models.CharField(max_length=50, blank=True, null=True)
-    inst_recipe_num = models.ForeignKey('Recipes', models.CASCADE, db_column='inst_recipe_num', blank=True, null=True)
+    inst_recipe_num = models.ForeignKey('Recipes', models.CASCADE, related_name='r_instructions', db_column='inst_recipe_num', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -350,7 +350,7 @@ class RecipePackaging(models.Model):
     amt = models.SmallIntegerField(blank=True, null=True)
     pkg_type = models.CharField(max_length=45, blank=True, null=True)
     rp_pkg = models.ForeignKey(Packaging, models.CASCADE, blank=True, null=True)
-    rp_recipe_num = models.ForeignKey('Recipes', models.CASCADE, db_column='rp_recipe_num', blank=True, null=True)
+    rp_recipe_num = models.ForeignKey('Recipes', models.CASCADE, related_name='r_packaging', db_column='rp_recipe_num', blank=True, null=True)
     rp_ing_id = models.SmallIntegerField(blank=True, null=True)
 
     class Meta:

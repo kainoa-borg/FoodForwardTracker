@@ -9,12 +9,12 @@ import Button from '@mui/material/Button'
 import { Grid, Typography, Stack, Paper, Box} from '@mui/material'
 import TextField from '@mui/material/TextField'
 import { Card } from '@mui/material'
-
+import Slider from 'react-slick'
 
 // Login Page Component
 // Takes handlePageClick callback function to enable page switching when login is completed
 // Returns a login page component that allows users to enter account information 
-const LoginPage = (props) => {
+const EntryPage = (props) => {
     const handlePageClick = props.handlePageClick;
     const [user, setUser] = useState(
         {
@@ -22,6 +22,7 @@ const LoginPage = (props) => {
             password: ''
         }
     );
+    const [carouselIndex, setCarouselIndex] = useState(0);
 
     const sendLoginRequest = () => {
         axios({
@@ -85,47 +86,41 @@ const LoginPage = (props) => {
         handlePageClick('pwResetPage');
     }
 
+    const handleChangeIndex = index => {
+        setCarouselIndex({
+            index
+        });
+    };
+
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1
+    }
+
     // HTML structure of this component
     return (
-        <Grid container spacing='12' sx={{margin: 'auto', marginTop: '1em', maxWidth: '90%', justifyContent: 'center', alignItems: 'center'}}>
+        <Grid container direction='row' spacing='12' sx={{marginTop: '1em', maxWidth: '90%', justifyContent: 'center', alignItems: 'center'}}>
             
             {/* Logo and Welcome Message (left-side) */}
-            <Grid item md={7} sx={{display: {xs: 'none', md: 'block'}}}>
-                <Box component='img' sx={{width: '80%'}} src="/Images/ff_logo.jpg"/>
-                <Typography variant='h3' sx={{paddingBottom: '1em'}}>Welcome to Food Forward!</Typography>
+            <Grid item md='7' sx={{display: {xs: 'none', md: 'block'}}}>
+                <Stack justifyContent={'space-around'}>
+                    <Box component='img' sx={{width: '50%'}} src="/Images/ff_logo.jpg"/>
+                    <Typography variant='h3'>Welcome to Food Forward!</Typography>
+                    <Typography variant='h5' sx={{paddingBottom: '1em'}}>Providing healthy and semi-prepared meals in Central Hillside</Typography>
+                </Stack>
             </Grid>
-
-            {/* Login Box */}
-            <Grid item component={Card} md={5} sm={12} elevation='4' sx={{padding: '2em', marginBottom: '5em', height: 'fit-content'}}>
-                <Typography variant='h5' sx={{paddingBottom: '1em'}}>Sign In</Typography>
-                <form onSubmit={handleLoginSubmit}>
-            
-                    <Stack>
-                        <TextField type='Text' maxLength='30' label='Username' name='username' value={user.username} onChange={handleLoginChange}/>
-                        <TextField type='password' maxLength='30' label='Password' name='password' value={user.password} onChange={handleLoginChange}/>
-                        <Button color='lightGreen' variant='contained' type='Submit' onClick={sendLoginRequest}>
-                            Log In
-                        </Button>
-                    </Stack>
-            
-                    <Stack sx={{textAlign: 'center', justifyContent: 'center', marginTop: '2em'}}>
-                        <Typography>
-                            Don't have an account?
-                        </Typography>
-                        <Button color='darkGreen'variant='outlined' size='small' onClick={() => handleCreateClick('newUserPage')}>
-                            Sign Up
-                        </Button>
-                        <Typography>
-                            Forgot your password?
-                        </Typography>
-                        <Button color='darkGreen' variant='outlined' size='small' onClick={() => handleResetClick('pwResetPage')}>
-                            Reset Password
-                        </Button>
-                    </Stack>            
-                </form>
+            <Grid item>
+                <Slider settings={settings}>
+                    <Box key={0} component='img' src='./Images/ff_logo.jpg'></Box>
+                    <Box key={1} component='img' src='./Images/ff_logo.jpg'></Box>
+                    <Box key={2} component='img' src='./Images/ff_logo.jpg'></Box>
+                </Slider>
             </Grid>
         </Grid>
     );
 }
 
-export default LoginPage;
+export default EntryPage;

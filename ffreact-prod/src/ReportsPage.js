@@ -36,7 +36,7 @@ const theme = createTheme({
 const style = {
     padding: '10px',
     border: '1px solid black',
-    display: 'flex',
+    display: 'flex-box',
     justifyContent: 'space-between',
 };
 
@@ -47,7 +47,6 @@ const ReportsPage = (props) => {
         console.log(pageName)
         if (pageName === 'households-report') setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />);
         else if (pageName === 'households-report') setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />);
-
     }
 
     // HTML structure of this component

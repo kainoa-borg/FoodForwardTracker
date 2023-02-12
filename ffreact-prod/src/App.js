@@ -16,6 +16,7 @@ import NewUserPage from "./NewUserPage.js"
 import Recipe from './Recipe/RecipeList.js'
 import MealPlan from './Meals/MealList.js'
 import Packaging from './Packaging/PackagingList.js'
+import EntryPage from './EntryPage.js'
 import Search from './Search.js'
 import React from 'react'
 import ReactDOM from "react-dom"
@@ -35,6 +36,9 @@ import MenuItems from './components/MenuItems'
 import NavBar from './components/NavBar'
 import Dropdown, { useOutsideClick} from './components/Dropdown'
 import './App.css';
+
+import {Grid} from '@mui/material'
+import { useEffect } from 'react'
 
 const style = {
     padding: '10px',
@@ -88,8 +92,9 @@ const App = () => {
             case 'userList': setCurrPage(<UserList handlePageClick={handlePageClick} />); break;
             // case 'allergies': setCurrPage(<AllergiesList allergies={[{ aType: 'Gluten' }, { aType: 'Peanut' }]} />); break;
         }
-
     }
+
+    // useEffect(() => {setCurrPage(<EntryPage handlePageClick={handlePageClick}/>)}, [])
 
     const theme = createTheme({
         palette: {
@@ -116,15 +121,9 @@ const App = () => {
         }
     })
 
-    // return (
-    //     <div className="App">
-
-    //  }
-    
     return (
         <ThemeProvider theme={theme}>
         <div className="App" style={style} onClick={handleHeaderClick}>
-
             <CssBaseline />
             <Box sx={{
                 bgcolor: (theme) => theme.
@@ -133,19 +132,19 @@ const App = () => {
                 width: '90%',
                 margin: 'auto'
             }}>
-                <header className="App-header">
-                    <Typography variant='h4'>Food Forward Tracker</Typography>
-                    <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('loginPage')}>
-                        Login Page
-                    </Button>
-                    <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('landingPage')}>
-                        Landing Page
-                    </Button>
-                    <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('userPage')}>
-                        User Account
-                    </Button>
-                    {currPage}
-                </header>
+            <header className="App-header">
+                <Typography variant='h4'>Food Forward Tracker</Typography>
+                <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('loginPage')}>
+                    Login Page
+                </Button>
+                <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('landingPage')}>
+                    Landing Page
+                </Button>
+                <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('userPage')}>
+                    User Account
+                </Button>
+                {currPage}
+            </header>
             </Box>
         </div>
         </ThemeProvider>
