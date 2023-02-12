@@ -9,7 +9,6 @@ import Button from '@mui/material/Button'
 import { Grid, Typography, Stack, Paper, Box} from '@mui/material'
 import TextField from '@mui/material/TextField'
 import { Card } from '@mui/material'
-import Slider from 'react-slick'
 
 // Login Page Component
 // Takes handlePageClick callback function to enable page switching when login is completed
@@ -113,11 +112,6 @@ const EntryPage = (props) => {
                 </Stack>
             </Grid>
             <Grid item>
-                <Slider settings={settings}>
-                    <Box key={0} component='img' src='./Images/ff_logo.jpg'></Box>
-                    <Box key={1} component='img' src='./Images/ff_logo.jpg'></Box>
-                    <Box key={2} component='img' src='./Images/ff_logo.jpg'></Box>
-                </Slider>
             </Grid>
         </Grid>
     );

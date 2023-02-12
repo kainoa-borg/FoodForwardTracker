@@ -14,6 +14,7 @@ import UserPage from "./UserPage.js"
 import UserList from "./User/UserList.js"
 import NewUserPage from "./NewUserPage.js"
 import Recipe from './Recipe/RecipeList.js'
+import RecipePage from './Recipe/RecipePage.js'
 import MealPlan from './Meals/MealList.js'
 import Packaging from './Packaging/PackagingList.js'
 import EntryPage from './EntryPage.js'
@@ -90,7 +91,7 @@ const App = () => {
             case 'reports': setCurrPage(<ReportsPage handlePageClick={handlePageClick} />); break;
             case 'userPage': setCurrPage(<UserPage handlePageClick={handlePageClick} />); break;
             case 'userList': setCurrPage(<UserList handlePageClick={handlePageClick} />); break;
-            // case 'allergies': setCurrPage(<AllergiesList allergies={[{ aType: 'Gluten' }, { aType: 'Peanut' }]} />); break;
+            case 'recipePage': setCurrPage(<RecipePage></RecipePage>); break;
         }
     }
 

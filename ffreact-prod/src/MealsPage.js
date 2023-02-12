@@ -5,6 +5,7 @@ import Dropdown from './components/Dropdown'
 import { CssBaseline, Box } from '@mui/material'
 import StationList from './Stations/StationList.js'
 import Recipe from './Recipe/RecipeList.js'
+import RecipePage from './Recipe/RecipePage.js'
 import MealPlan from './Meals/MealList.js'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
@@ -47,6 +48,7 @@ const MealsPage = (props) => {
         switch(pageName) {
             case 'stations': setCurrPage(<StationList handlePageClick={handlePageClick} />); break;
             case 'meals': setCurrPage(<MealPlan handlePageClick={handlePageClick} />); break;
+            case 'recipePage': setCurrPage(<RecipePage></RecipePage>); break;
             case 'recipes': setCurrPage(<Recipe handlePageClick={handlePageClick} />); break;
         }
     } 
@@ -60,7 +62,7 @@ const MealsPage = (props) => {
             menu={[
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('meals')}>
                     Meal Plans</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('recipes')}>
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('recipePage')}>
                     Recipes</button>,
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('stations')}>
                     Stations</button>

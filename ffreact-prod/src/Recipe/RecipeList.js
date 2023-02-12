@@ -14,13 +14,8 @@ import './RecipeList.css'
 
 // Recipe List Component
 export default function RecipeList() {
-    const data = [
-        { r_num: 1, r_name: 'Veggie Lasagna Recipe', ri_id: 1, unit: 5.50, amt: 8, prep: 'oz', ri_ing: 'Lasagna Noodles, Tomato Sauce, Onions', inst_id: 1, step_no: 1, step_inst: '', inst_recipe_num: 'Recipe 1', usages: []},
-        { r_num: 2, r_name: 'Tuna Casserole Recipe', ri_id: 2, unit: 5.50, amt: 24, prep: 'oz', ri_ing: 'Tuna, Noodles, Peas', inst_id: 2, step_no: 2, step_inst: 'Preheat oven. Mix tuna with cut veggies, noodles, and cheese. place in', stn_name: 'Tuna, Pasta, Vegetables', inst_recipe_num: 'Recipe 2', usages: []},
-        { r_num: 3, r_name: 'Bean and Beef Enchiladas Recipe', unit: 3, amt: 2.00, prep: 'gal', ri_ing: 'Beans, Beef, Soft Tortillas Shells', inst_id: 3, qty_on_hand: 3, inst_recipe_num: 'Recipe 3', usages: []}
-    ]
 
-    const [recipeID, setRecipe] = useState(data);
+    const [recipeID, setRecipe] = useState();
     const [editRecipeID, setEditRecipeID] = useState(null);
     const [editFormData, setEditFormData] = useState(null);
     const [errorComponent, setErrorComponent] = useState(null);
