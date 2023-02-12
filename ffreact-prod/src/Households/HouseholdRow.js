@@ -49,7 +49,7 @@ const HouseholdRow = (props) => {
             <TableCell align='left'>{hh.delivery_notes}</TableCell>
             <TableCell align='left'><AllergiesList allergies={hh.hh_allergies} isEditable={false}/></TableCell>
             {/* When edit is clicked, handleEditClick is called with this row's key */}
-            <TableCell align='right'>
+            <TableCell align='left'>
                 <Box sx={{ display: "flex",
                 justifyContent: "flex-end"}}>
                     {/* When edit is clicked, handleEditClick is called with this row's key */}
