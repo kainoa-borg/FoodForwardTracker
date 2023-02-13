@@ -4,6 +4,8 @@ import { Fragment } from 'react'
 import { Container, Button, Typography } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import Packaging from './Packaging/PackagingList.js'
+import PackagingPage from './Packaging/PackagingPage.js'
+
 import Ingredients from './Ingredients/IngredientList.js'
 import Dropdown from './components/Dropdown'
 import { CssBaseline, Box } from '@mui/material'
@@ -47,6 +49,8 @@ const LandingPage = (props) => {
         switch(pageName) {
             case 'ingredients': setCurrPage(<Ingredients handlePageClick={handlePageClick} />); break;
             case 'packaging': setCurrPage(<Packaging handlePageClick={handlePageClick} />); break;
+            case 'packagingPage': setCurrPage(<PackagingPage></PackagingPage>); break;
+
         }
     } 
     return (
@@ -58,7 +62,7 @@ const LandingPage = (props) => {
             menu={[
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('ingredients')}>
                     Ingredients</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('packaging')}>
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('packagingPage')}>
                     Packaging</button>,
                 ]}/>
             {currPage}

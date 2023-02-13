@@ -67,7 +67,11 @@ export default function RecipePage() {
 
     return(
         <Box sx={{height: '80vh'}}>
-            <DataGrid onRowClick={handleRowClick} rows={recipes} columns={columns} getRowId={(row) => row.r_num}>
+            <DataGrid 
+            onRowClick={handleRowClick} 
+            rows={recipes} 
+            columns={columns} 
+            getRowId={(row) => row.r_num}>
             </DataGrid>
         </Box>
     )
