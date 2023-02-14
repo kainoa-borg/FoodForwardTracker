@@ -78,37 +78,69 @@ export default function Recipe(props) {
         setCurrPage(<RecipePage setCurrPage={setCurrPage}></RecipePage>)
     }
 
+    const RecipeImage = (props) => {
+        if (!(props.image_source === undefined)) {
+            return (<img style={{width: '30vw'}} src={props.image_source}></img>);
+        }
+        else {
+            return (<Typography>Enter a recipe image</Typography>)
+        }
+    }
+
+    const handleImageUpload = (event) => {
+        console.log(event.target)
+    }
+
+    const handleCardUpload = () => {
+
+    }
+
     return (
         <div>
+        
+        {/* 'Close' button that goes back to recipe list */}
         <Button color='lightGreen' variant='contained' onClick={handleCloseClick}><Typography variant='h6'>Close</Typography></Button>
+        
+        {/* Recipe Page */}
         <Grid container justifyContent='space-between' direction='row'>
+            
+            {/* Recipe Image and Card Stack */}
             <Stack item spacing={3}>
                 <Typography variant='h4' sx={{textDecoration: 'underline'}}>{recipeData.r_name}</Typography>
-                <img style={{width: '30vw'}} src='https://deliexpress.com/wp-content/uploads/2021/05/0029_DE_WDG_Smk_Ham_Ch-1.jpg'></img>
-                <Button color='lightGreen' variant='contained'>Upload Image</Button>
-                <img style={{width: '30vw', marinLeft: '1em'}} src='https://www.papertraildesign.com/wp-content/uploads/2017/10/Recipe-Card-3x5.jpg'></img>
-                <Button color='lightGreen' variant='contained'>Upload PDF</Button>
+                <RecipeImage image_source={recipeData.r_image_path}/>
+                <Button color='lightGreen' variant='contained' component='label'>
+                    Upload Image
+                    <input id='recipe_image' type='file' accept='.jpg' onChange={handleImageUpload} hidden></input>
+                </Button>
+                <RecipeImage image_source={recipeData.r_card_path}/>
+                <Button color='lightGreen' variant='contained' component='label'>
+                    Upload Recipe Card
+                    <input id='recipe_card' type='file' accept='.jpg' onChange={handleCardUpload} hidden></input>
+                </Button>
             </Stack>
+
+            {/* Recipe Info Lists Stack */}
             <Stack item spacing={1}>
                 <Box>
                     <Typography variant='h6'>Ingredients</Typography>
-                    <Box sx={{height: '30vh', width: {md: '40vw', sm: '70vw'}}}>
+                    <Box sx={{height: '40vh', width: {md: '40vw', sm: '70vw'}}}>
                         <DataGrid rows={ingredientRows} columns={ingredientsColumns} getRowId={(row)=> row.ri_ing}></DataGrid>
                     </Box>
                 </Box>
                 <Box>
                     <Typography variant='h6'>Packaging</Typography>
-                    <Box sx={{height: '30vh', width: {md: '40vw', sm: '70vw'}}}>
+                    <Box sx={{height: '40vh', width: {md: '40vw', sm: '70vw'}}}>
                         <DataGrid rows={packagingRows} columns={packagingColumns} getRowId={(row)=> row.rp_pkg}></DataGrid>
                     </Box>    
                 </Box>
                 <Box>
                     <Typography variant='h6'>Instructions</Typography>
-                    <Box sx={{height: '30vh', width: {md: '40vw', sm: '70vw'}}}>
+                    <Box sx={{height: '40vh', width: {md: '40vw', sm: '70vw'}}}>
                         <DataGrid rows={instructionRows} columns={instructionColumns} getRowId={(row)=> row.step_no}></DataGrid>
                     </Box>
                 </Box>
             </Stack>
+
         </Grid>
         </div>
     )
