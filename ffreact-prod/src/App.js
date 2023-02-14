@@ -94,7 +94,6 @@ const App = () => {
             case 'reports': setCurrPage(<ReportsPage handlePageClick={handlePageClick} />); break;
             case 'userPage': setCurrPage(<UserPage handlePageClick={handlePageClick} />); break;
             case 'userList': setCurrPage(<UserList handlePageClick={handlePageClick} />); break;
-            case 'recipePage': setCurrPage(<RecipePage></RecipePage>); break;
         }
     }
 

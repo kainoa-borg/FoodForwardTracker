@@ -7,6 +7,7 @@ from rest_framework import serializers
 from rest_framework import status
 import json
 from .models import Recipes, RecipeAllergies, RecipeDiets, RecipeIngredients, RecipeInstructions, RecipePackaging
+from .IngredientViews import IngredientNameSerializer
 # Create your views here.
 
 class AllergySerializer(serializers.ModelSerializer):
@@ -36,10 +37,11 @@ class RecipeDietsSerializer(serializers.ModelSerializer):
         fields = ('diet_category',)
 
 class RecipeIngredientSerializer(ModelSerializer):
+    ingredient_name = serializers.CharField(read_only=True, source='ri_ing.ingredient_name')
     class Meta():
         model = RecipeIngredients
         # depth = 1
-        fields = ('amt', 'unit', 'prep', 'ri_ing')
+        fields = ('ingredient_name', 'amt', 'unit', 'prep', 'ri_ing')
 
 class RecipeInstructionsSerializer(ModelSerializer):
     class Meta():
@@ -48,6 +50,7 @@ class RecipeInstructionsSerializer(ModelSerializer):
         fields = ('step_no', 'step_inst', 'stn_name')
 
 class RecipePackagingSerializer(ModelSerializer):
+    pkg_type = serializers.CharField(read_only=True, source='rp_pkg.package_type')
     class Meta():
         model = RecipePackaging
         # depth = 1
@@ -181,7 +184,7 @@ class RecipeView(viewsets.ModelViewSet):
         # queryset = execute_query(query, keys)
         # serializer = RecipesSerializer(queryset)
         # return Response(serializer.data)
-        queryset = Recipes.objects.all()
+        queryset = Recipes.objects.all().prefetch_related('r_ingredients').prefetch_related('r_packaging').prefetch_related('r_diets').prefetch_related('r_instructions').prefetch_related('r_allergies')
         serializer = RecipesSerializer(queryset, many=True)
         return Response(serializer.data)
 
