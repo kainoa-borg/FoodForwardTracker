@@ -55,7 +55,7 @@ const App = () => {
     const [count, setCount] = React.useState(0);
     const [loginState, setLoginState] = useState({
         username: "",
-        password: "",
+        isAuthenticated: false,
         isAdmin: false
     })
     const handleClickOutside = () => {
