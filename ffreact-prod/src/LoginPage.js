@@ -25,22 +25,20 @@ const LoginPage = (props) => {
 
     const sendLoginRequest = () => {
         axios({
-            method: "GET",
-            url:"http://4.236.185.213:8000/api/users/"
+            method: "POST",
+            url:"http://localhost:8000/api/user-auth/",
+            data: user
           }).then((response)=>{
-            let userInList = false;
-            let userData = undefined;
-            for (let i = 0; i < response.data.length; ++i) {
-                if (response.data[i].username === user.username) {
-                    if (response.data[i].password === user.password) {
-                        userInList = true;
-                        userData = response.data[i];
-                    }
-                }
+            console.log(response.status);
+            if (response.status === 200) {
+                // Log in success
+                handlePageClick('landingPage')
             }
-            if (userInList) {
-                props.setLoginState(userData);
-                handlePageClick('landingPage');
+            else if (response.status === 500) {
+                // Password incorrect
+            }
+            else if (response.status === 400) {
+                // User not found
             }
           }).catch((error) => {
             if (error.response) {

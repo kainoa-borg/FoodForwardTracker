@@ -32,6 +32,7 @@ from .AccountCreationViews import AccountCreateView
 from .CalculationsView import CalculationsView
 from .RecipeListViews import RecipeListView
 from .ServingCalculationViews import ServingCalculationViews
+from .UserView import UserAuth
 
 from .models import (Households, Ingredients, Packaging, MealPlans, Recipes)
 #admin.site.register(Households)
@@ -50,6 +51,7 @@ router.register(r'households', HouseholdsWithAllergies, basename='households')
 router.register(r'packaging', PackagingInvView, basename='packaging')
 router.register(r'pack-purchase-list', PPLView, basename='pack-purchase-list')
 router.register(r'users', UserView, basename='users')
+router.register(r'user-auth', UserAuth, basename='user-auth')
 router.register(r'menu', MenuView, basename='menu')
 router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
 router.register(r'stations', StationsView, basename='stations')
