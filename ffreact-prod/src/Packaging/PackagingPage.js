@@ -5,6 +5,18 @@ import { Box } from '@mui/system';
 import { wait } from '@testing-library/user-event/dist/utils';
 import './PackagingList.css'
 
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+});
+  
+  const usdPrice = {
+    type: 'number',
+    width: 80,
+    valueFormatter: ({ value }) => currencyFormatter.format(value),
+    cellClassName: 'font-tabular-nums',
+};
+
 // Packaging List Component
 export default function PackagingPage() {
     const [packaging, setPackaging] = useState([]);
@@ -12,13 +24,13 @@ export default function PackagingPage() {
         { field: 'package_type', headerName: 'Packaging Type', width: 150 },
         { field: 'unit', headerName: 'Unit', width: 6 },
         { field: 'qty_holds', headerName: 'Size', width: 5 },
-        { field: 'returnable', headerName: 'Returnable', width: 90 },
-        { field: 'unit_cost', headerName: 'Unit Cost', width: 80 },
+        { field: 'returnable', headerName: 'Returnable', width: 90, type: 'boolean' },
+        { field: 'unit_cost', headerName: 'Unit Cost', width: 90, valueFormatter: ({ value }) => currencyFormatter.format(value) },
         { field: 'pref_psupplier_id', headerName: 'Supplier', width: 80 },
-        { field: 'in_date', headerName: 'Purchase Date', width: 120 },
+        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date' },
         { field: 'in_qty', headerName: 'Purchased Amount', width: 140 },
-        { field: 'tmp_1', headerName: 'Date Used', width: 100 },
-        { field: 'tmp_2', headerName: 'Units Used', width: 100 }
+        { field: 'tmp_1', headerName: 'Date Used', width: 100, type: 'date', editable: true },
+        { field: 'tmp_2', headerName: 'Units Used', width: 100, type: 'number', editable: true }
     ]
     const [suppliers, setSuppliers] = useState();
     const [editPackagingID, setEditPackagingID] = useState(null);
@@ -40,11 +52,25 @@ export default function PackagingPage() {
     });
 
     useEffect(() => {
-        fetch("http://localhost:8000/api/packaging-inventory")
-          .then((data) => data.json())
-          .then((data) => setPackaging(data))
-    
-      }, [])
+        getDBPackaging();
+        getDBSuppliers();
+    }, []);
+
+    const getDBSuppliers = () => {
+        console.log("MAKING REQUEST TO DJANGO")
+        axios({
+            method: "GET",
+            url:"http://4.236.185.213:8000/api/suppliers"
+          }).then((response)=>{
+            setSuppliers(response.data);
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+    }
 
     const getDBPackaging = () => {
         axios({
@@ -79,7 +105,12 @@ export default function PackagingPage() {
             onRowClick={handleRowClick} 
             rows={packaging} 
             columns={columns} 
-            getRowId={(row) => row.p_id}>
+            getRowId={(row) => row.p_id}
+            pageSize={5}
+            rowsPerPageOptions={[5]}
+            checkboxSelection
+            disableSelectionOnClick
+            experimentalFeatures={{ newEditingApi: true }}>
             </DataGrid>
         </Box>
     )
