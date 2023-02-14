@@ -9,13 +9,6 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
 });
-  
-  const usdPrice = {
-    type: 'number',
-    width: 80,
-    valueFormatter: ({ value }) => currencyFormatter.format(value),
-    cellClassName: 'font-tabular-nums',
-};
 
 // Ingredients List Component
 export default function IngredientPage() {
@@ -33,29 +26,10 @@ export default function IngredientPage() {
         { field: 'tmp_1', headerName: 'Date Used', width: 100, type: 'date', editable: true },
         { field: 'tmp_2', headerName: 'Units Used', width: 100, type: 'number', editable: true }
     ]
-    const [suppliers, setSuppliers] = useState();
-    const [editIngredientID, setEditIngredientID] = useState(null);
 
     useEffect(() => {
         getDBIngredients();
-        getDBSuppliers();
     }, []);
-
-    const getDBSuppliers = () => {
-        console.log("MAKING REQUEST TO DJANGO")
-        axios({
-            method: "GET",
-            url:"http://4.236.185.213:8000/api/suppliers"
-          }).then((response)=>{
-            setSuppliers(response.data);
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-    }
 
     const getDBIngredients = () => {
         axios({

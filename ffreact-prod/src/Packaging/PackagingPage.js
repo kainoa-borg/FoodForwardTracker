@@ -33,45 +33,10 @@ export default function PackagingPage() {
         { field: 'tmp_1', headerName: 'Date Used', width: 100, type: 'date', editable: true },
         { field: 'tmp_2', headerName: 'Units Used', width: 100, type: 'number', editable: true }
     ]
-    const [suppliers, setSuppliers] = useState();
-    const [editPackagingID, setEditPackagingID] = useState(null);
-    const [editFormData, setEditFormData] = useState({
-        p_id: '',
-        package_type: "",
-        unit_qty: '',
-        qty_holds: '',
-        unit: "",
-        returnable: '',
-        in_date: '',
-        in_qty: '',
-        packaging_usage: [],
-        qty_on_hand: '',
-        unit_cost: '',
-        flat_fee: '',
-        psupplier_id: '',
-        pref_psupplier_id: ''
-    });
 
     useEffect(() => {
         getDBPackaging();
-        getDBSuppliers();
     }, []);
-
-    const getDBSuppliers = () => {
-        console.log("MAKING REQUEST TO DJANGO")
-        axios({
-            method: "GET",
-            url:"http://4.236.185.213:8000/api/suppliers"
-          }).then((response)=>{
-            setSuppliers(response.data);
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-    }
 
     const getDBPackaging = () => {
         axios({
