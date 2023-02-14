@@ -27,7 +27,7 @@ export default function PackagingPage() {
         { field: 'qty_holds', headerName: 'Size', width: 5 },
         { field: 'returnable', headerName: 'Returnable', width: 90, type: 'boolean' },
         { field: 'unit_cost', headerName: 'Unit Cost', width: 90, valueFormatter: ({ value }) => currencyFormatter.format(value) },
-        { field: 'pref_psupplier', headerName: 'Supplier', width: 180, valueFormatter: ({ value }) => value.s_name },
+        { field: 'pref_psupplier', headerName: 'Supplier', width: 80, valueFormatter: ({ value }) => value.s_name },
         { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date' },
         { field: 'in_qty', headerName: 'Purchased Amount', width: 140 },
         { field: 'tmp_1', headerName: 'Date Used', width: 100, type: 'date', editable: true },

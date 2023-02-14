@@ -19,6 +19,8 @@ import MealPlan from './Meals/MealList.js'
 import Packaging from './Packaging/PackagingList.js'
 import EntryPage from './EntryPage.js'
 import Search from './Search.js'
+import Navbar from './Navbar.js'
+import Drawer from './DrawerComp'
 import React from 'react'
 import ReactDOM from "react-dom"
 import { useState } from 'react'
@@ -40,6 +42,7 @@ import './App.css';
 
 import {Grid} from '@mui/material'
 import { useEffect } from 'react'
+import DrawerComp from './DrawerComp.js'
 
 const style = {
     padding: '10px',
@@ -123,30 +126,20 @@ const App = () => {
     })
 
     return (
+        
         <ThemeProvider theme={theme}>
+            
         <div className="App" style={style} onClick={handleHeaderClick}>
-            <CssBaseline />
-            <Box sx={{
+            <Navbar />
+            
+            {/* <Box sx={{
                 bgcolor: (theme) => theme.
                 palette.background.default,
                 minHeight: "100vh",
                 width: '90%',
                 margin: 'auto'
             }}>
-            <header className="App-header">
-                <Typography variant='h4'>Food Forward Tracker</Typography>
-                <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('loginPage')}>
-                    Login Page
-                </Button>
-                <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('landingPage')}>
-                    Landing Page
-                </Button>
-                <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('userPage')}>
-                    User Account
-                </Button>
-                {currPage}
-            </header>
-            </Box>
+            </Box> */}
         </div>
         </ThemeProvider>
     );
