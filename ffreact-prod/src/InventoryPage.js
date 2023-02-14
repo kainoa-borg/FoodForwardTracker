@@ -1,12 +1,11 @@
 import React from 'react'
 import { useState } from 'react'
-import { Fragment } from 'react'
 import { Container, Button, Typography } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import Packaging from './Packaging/PackagingList.js'
 import PackagingPage from './Packaging/PackagingPage.js'
-
 import Ingredients from './Ingredients/IngredientList.js'
+import IngredientPage from './Ingredients/IngredientPage.js'
 import Dropdown from './components/Dropdown'
 import { CssBaseline, Box } from '@mui/material'
 
@@ -50,6 +49,7 @@ const LandingPage = (props) => {
             case 'ingredients': setCurrPage(<Ingredients handlePageClick={handlePageClick} />); break;
             case 'packaging': setCurrPage(<Packaging handlePageClick={handlePageClick} />); break;
             case 'packagingPage': setCurrPage(<PackagingPage></PackagingPage>); break;
+            case 'ingredientPage': setCurrPage(<IngredientPage></IngredientPage>); break;
 
         }
     } 
@@ -60,7 +60,7 @@ const LandingPage = (props) => {
         <Dropdown
             trigger={<Button color='lightGreen' variant='contained'>Inventory Page</Button>}
             menu={[
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('ingredients')}>
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('ingredientPage')}>
                     Ingredients</button>,
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('packagingPage')}>
                     Packaging</button>,

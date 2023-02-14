@@ -125,17 +125,6 @@ export default function IngredientList() {
               }
           });
         clearError();
-        // Check to see if we already have a duplicate Ingredient Name
-        // if (!ingredients.find((ing) => ing.i_id === ing.i_id))
-        // {
-        //     let newIngredients = [...ingredients, ingredient];
-        //     setIngredients(newIngredients);
-        //     clearError();
-        // }
-        // else {
-        //     // If this ingredient is already in ingredients list, display error message
-        //     handleError('DuplicateKey');
-        // }
     }
 
     const deleteIngredient = (key) => {
@@ -176,8 +165,7 @@ export default function IngredientList() {
         else {
             // If this Ingredient is already in ingredients list, display error message
             handleError('DuplicateKey');
-        }
-        
+        }   
     }
 
     const handleEditFormChange = (event) => {
@@ -215,23 +203,6 @@ export default function IngredientList() {
         <div class='table-div'>
             <h3>Ingredients</h3>
             <table className='main-table'>
-                <thead>
-                    <tr>
-                        <th>Ingredient Name</th>
-                        <th>Package Type</th>
-                        <th>Storage Type</th>
-                        <th>Date In</th>
-                        <th>Qty In</th>
-                        <th>Expiration Date</th>
-                        <th>Usages</th>
-                        <th>Qty On Hand</th>
-                        <th>Unit</th>
-                        <th>Unit Cost</th>
-                        <th>Flat Fee</th>
-                        <th>Supplier</th>
-                        <th>Preferred Supplier</th>
-                    </tr>
-                </thead>
                 <tbody>
                     {/* Show a row for each ingredient in ingredients.*/}
                     {ingredients.map((ingredient, key) => {
