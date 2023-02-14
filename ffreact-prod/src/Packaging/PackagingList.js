@@ -107,17 +107,6 @@ export default function PackagingList() {
               }
           });
         clearError();
-        // Check to see if we already have a duplicate Packaging Name
-        // if (!ingredients.find((ing) => ing.i_id === ing.i_id))
-        // {
-        //     let newPackagings = [...ingredients, ingredient];
-        //     setPackagings(newPackagings);
-        //     clearError();
-        // }
-        // else {
-        //     // If this ingredient is already in ingredients list, display error message
-        //     handleError('DuplicateKey');
-        // }
     }
 
     const deletePackaging = (key) => {
@@ -159,7 +148,6 @@ export default function PackagingList() {
             // If this Packaging is already in ingredients list, display error message
             handleError('DuplicateKey');
         }
-        
     }
 
     const handleEditFormChange = (event) => {
@@ -198,23 +186,6 @@ export default function PackagingList() {
             <InventoryPage />
             <h3>Packaging</h3>
             <table className='main-table'>
-                <thead>
-                    <tr>
-                        <th>Package Type</th>
-                        <th>Returnable</th>
-                        <th>Unit Qty</th>
-                        <th>Unit</th>
-                        <th>Qty Holds</th>
-                        <th>Date In</th>
-                        <th>Qty In</th>
-                        <th>Usages</th>
-                        <th>Qty On Hand</th>
-                        <th>Unit Cost</th>
-                        <th>Flat Fee</th>
-                        <th>Supplier</th>
-                        <th>Preferred Supplier</th>
-                    </tr>
-                </thead>
                 <tbody>
                     {/* Show a row for each ingredient in ingredients.*/}
                     {packaging.map((pkg, key) => {
