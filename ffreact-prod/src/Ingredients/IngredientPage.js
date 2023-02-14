@@ -3,7 +3,7 @@ import axios from 'axios'
 import {DataGrid, GridColDef, GridValueGetterParams} from '@mui/x-data-grid'
 import { Box } from '@mui/system';
 import { wait } from '@testing-library/user-event/dist/utils';
-import './PackagingList.css'
+import './IngredientList.css'
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -17,43 +17,27 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
     cellClassName: 'font-tabular-nums',
 };
 
-// Packaging List Component
-export default function PackagingPage() {
+// Ingredients List Component
+export default function IngredientPage() {
     
-    const [packaging, setPackaging] = useState([]);
+    const [ingredients, setIngredients] = useState([]);
     const columns = [
-        { field: 'package_type', headerName: 'Packaging Type', width: 150 },
-        { field: 'unit', headerName: 'Unit', width: 6 },
-        { field: 'qty_holds', headerName: 'Size', width: 5 },
-        { field: 'returnable', headerName: 'Returnable', width: 90, type: 'boolean' },
+        { field: 'ingredient_name', headerName: 'Ingredient', width: 120 },
+        { field: 'storage_type', headerName: 'Category', width: 150 },
+        { field: 'pkg_type', headerName: 'Package Type', width: 120 },
+        { field: 'unit', headerName: 'Measure', width: 90 },
         { field: 'unit_cost', headerName: 'Unit Cost', width: 90, valueFormatter: ({ value }) => currencyFormatter.format(value) },
-        { field: 'pref_psupplier', headerName: 'Supplier', width: 180, valueFormatter: ({ value }) => value.s_name },
+        { field: 'pref_isupplier', headerName: 'Supplier', width: 180, valueFormatter: ({ value }) => value.s_name },
         { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date' },
         { field: 'in_qty', headerName: 'Purchased Amount', width: 140 },
         { field: 'tmp_1', headerName: 'Date Used', width: 100, type: 'date', editable: true },
         { field: 'tmp_2', headerName: 'Units Used', width: 100, type: 'number', editable: true }
     ]
     const [suppliers, setSuppliers] = useState();
-    const [editPackagingID, setEditPackagingID] = useState(null);
-    const [editFormData, setEditFormData] = useState({
-        p_id: '',
-        package_type: "",
-        unit_qty: '',
-        qty_holds: '',
-        unit: "",
-        returnable: '',
-        in_date: '',
-        in_qty: '',
-        packaging_usage: [],
-        qty_on_hand: '',
-        unit_cost: '',
-        flat_fee: '',
-        psupplier_id: '',
-        pref_psupplier_id: ''
-    });
+    const [editIngredientID, setEditIngredientID] = useState(null);
 
     useEffect(() => {
-        getDBPackaging();
+        getDBIngredients();
         getDBSuppliers();
     }, []);
 
@@ -73,12 +57,12 @@ export default function PackagingPage() {
           });
     }
 
-    const getDBPackaging = () => {
+    const getDBIngredients = () => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/packaging-inventory"
+            url:"http://4.236.185.213:8000/api/ingredient-inventory"
         }).then((response)=>{
-        setPackaging(response.data);
+        setIngredients(response.data);
         }).catch((error) => {
         if (error.response) {
             console.log(error.response);
@@ -89,12 +73,12 @@ export default function PackagingPage() {
     }
 
     const handleRowClick = (params) => {
-        getDBPackaging(params.row.p_id);
+        getDBIngredients(params.row.i_id);
         wait(300);
-        console.log(packaging);
+        console.log(ingredients);
     }
 
-    if (packaging === undefined) {
+    if (ingredients === undefined) {
         return (
             <>loading...</>
         )
@@ -103,13 +87,13 @@ export default function PackagingPage() {
     
     return(
         <div class='table-div'>
-        <h3>Packaging</h3>
+        <h3>Ingredients</h3>
         <Box sx={{height: '80vh'}}>
             <DataGrid 
             onRowClick={handleRowClick} 
-            rows={packaging} 
+            rows={ingredients} 
             columns={columns} 
-            getRowId={(row) => row.p_id}
+            getRowId={(row) => row.i_id}
             pageSize={5}
             rowsPerPageOptions={[5]}
             checkboxSelection
