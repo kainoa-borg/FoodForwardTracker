@@ -60,7 +60,7 @@ const LandingPage = (props) => {
 
             <Grid item sm={12} md={4}>
                 <Card elevation='4' sx={{height: '100%'}}>
-                    <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('InventoryPage')}>
+                    <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('inventoryPage')}>
                         <CardContent>
                             <Stack spacing={4} justifyContent='space-between' direction='row'>
                                 <div>

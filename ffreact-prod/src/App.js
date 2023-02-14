@@ -20,7 +20,7 @@ import Packaging from './Packaging/PackagingList.js'
 import EntryPage from './EntryPage.js'
 import Search from './Search.js'
 import Navbar from './Navbar.js'
-import Drawer from './DrawerComp'
+// import Drawer from './DrawerComp'
 import React from 'react'
 import ReactDOM from "react-dom"
 import { useState } from 'react'
@@ -42,7 +42,7 @@ import './App.css';
 
 import {Grid} from '@mui/material'
 import { useEffect } from 'react'
-import DrawerComp from './DrawerComp.js'
+// import DrawerComp from './DrawerComp.js'
 
 const style = {
     padding: '10px',
@@ -127,18 +127,18 @@ const App = () => {
     return (
         
         <ThemeProvider theme={theme}>
-            
         <div className="App" style={style} onClick={handleHeaderClick}>
-            <Navbar />
-            
-            {/* <Box sx={{
+            <Navbar handlePageClick={handlePageClick} />
+            <Box sx={{
                 bgcolor: (theme) => theme.
                 palette.background.default,
                 minHeight: "100vh",
                 width: '90%',
-                margin: 'auto'
+                margin: 'auto',
+                marginTop: '5%',
             }}>
-            </Box> */}
+                {currPage}
+            </Box>
         </div>
         </ThemeProvider>
     );
