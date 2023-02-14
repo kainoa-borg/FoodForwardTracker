@@ -26,25 +26,27 @@ const LoginPage = (props) => {
     const sendLoginRequest = () => {
         axios({
             method: "POST",
-            url:"http://localhost:8000/api/user-auth/",
+            url:"http://4.236.185.213:8000/api/user-auth/",
             data: user
           }).then((response)=>{
-            console.log(response.status);
-            if (response.status === 200) {
+            console.log(response.data);
+            if (response.data === 200) {
                 // Log in success
                 handlePageClick('landingPage')
             }
-            else if (response.status === 500) {
+            else if (response.data === 500) {
                 // Password incorrect
+                console.log('user not found');
             }
-            else if (response.status === 400) {
+            else if (response.data === 400) {
                 // User not found
+                console.log('password incorrect');
             }
           }).catch((error) => {
             if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
+            //   console.log(error.response);
+            //   console.log(error.response.status);
+            //   console.log(error.response.headers);
               }
           });
     }

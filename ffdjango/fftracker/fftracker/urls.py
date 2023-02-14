@@ -69,6 +69,7 @@ router.register(r'serving-calculations', ServingCalculationViews, basename='serv
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),
     path('api/create-account', AccountCreateView.as_view({'get': 'retrieve'})),
     path('api/update-household/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve', 'patch': 'update'})),
     path('api/get-households', HouseholdsView.as_view({'get': 'list', 'post': 'create'})),
@@ -81,5 +82,4 @@ urlpatterns = [
     path('api/get-menu', MenuView.as_view({'get': 'retrieve'})),
     path('api/get-mealplans', MealPlansView.as_view({'get': 'retrieve'})),
     path('api/get-mealrecipes', RecipeView.as_view({'get': 'retrieve'})),
-    path('api/', include(router.urls))
 ]
