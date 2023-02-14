@@ -169,17 +169,17 @@ export default function HouseholdList() {
                       <TableCell align='left'>Adults</TableCell>
                       <TableCell align='left'>Children 0-6</TableCell>
                       <TableCell align='left'>Children 7-17</TableCell>
-                      <TableCell align='left'>V</TableCell>
-                      <TableCell align='left'>GF</TableCell>
-                      <TableCell align='left'>SMS</TableCell>
-                      <TableCell align='left'>Paused</TableCell>
                       <TableCell align='left'>Phone Number</TableCell>
                       <TableCell align='left'>Street</TableCell>
                       <TableCell align='left'>City</TableCell>
-                      <TableCell align='left'>Postal Code</TableCell>
                       <TableCell align='left'>State</TableCell>
+                      <TableCell align='left'>Postal Code</TableCell>
                       <TableCell align='left'>Delivery Notes</TableCell>
+                      <TableCell align='left'>SMS</TableCell>
+                      <TableCell align='left'>V</TableCell>
+                      <TableCell align='left'>GF</TableCell>
                       <TableCell align='left'>Allergies</TableCell>
+                      <TableCell align='left'>Paused</TableCell>
                       <TableCell align='left'>Action</TableCell>
                   </TableRow>
               </TableHead>

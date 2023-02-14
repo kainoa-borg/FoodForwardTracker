@@ -36,18 +36,18 @@ const HouseholdRow = (props) => {
             <TableCell align='left'>{hh.num_adult}</TableCell>
             <TableCell align='left'>{hh.num_child_lt_6}</TableCell>
             <TableCell align='left'>{hh.num_child_gt_6}</TableCell>
-            <TableCell align='left'>{TrueMarker(Boolean(hh.veg_flag))}</TableCell>
-            <TableCell align='left'>{TrueMarker(Boolean(hh.gf_flag))}</TableCell>
-            
-            <TableCell align='left'>{TrueMarker(Boolean(hh.sms_flag))}</TableCell>
-            <TableCell align='left'>{TrueMarker(Boolean(hh.paused_flag))}</TableCell>
             <TableCell align='left'>{hh.phone}</TableCell>
             <TableCell align='left'>{hh.street}</TableCell>
             <TableCell align='left'>{hh.city}</TableCell>
-            <TableCell align='left'>{hh.pcode}</TableCell>
             <TableCell align='left'>{hh.state}</TableCell>
+            <TableCell align='left'>{hh.pcode}</TableCell>
             <TableCell align='left'>{hh.delivery_notes}</TableCell>
+            <TableCell align='left'>{TrueMarker(Boolean(hh.sms_flag))}</TableCell>
+            <TableCell align='left'>{TrueMarker(Boolean(hh.veg_flag))}</TableCell>
+            <TableCell align='left'>{TrueMarker(Boolean(hh.gf_flag))}</TableCell>
+
             <TableCell align='left'><AllergiesList allergies={hh.hh_allergies} isEditable={false}/></TableCell>
+            <TableCell align='left'>{TrueMarker(Boolean(hh.paused_flag))}</TableCell>
             {/* When edit is clicked, handleEditClick is called with this row's key */}
             <TableCell align='left'>
                 <Box sx={{ display: "flex",
