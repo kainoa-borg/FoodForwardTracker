@@ -16,6 +16,11 @@ import { Card } from '@mui/material'
 // Returns a login page component that allows users to enter account information 
 const LoginPage = (props) => {
     const handlePageClick = props.handlePageClick;
+    const setLoginState = props.setLoginState;
+    
+    
+    const [errorState, setErrorState] = useState('');
+
     const [user, setUser] = useState(
         {
             username: '',
@@ -32,15 +37,32 @@ const LoginPage = (props) => {
             console.log(response.data);
             if (response.data === 200) {
                 // Log in success
-                handlePageClick('landingPage')
+                setLoginState({
+                    username: user.username,
+                    isAuthenticated: true,
+                    isAdmin: true
+                });
+                handlePageClick('landingPage');
             }
             else if (response.data === 500) {
                 // Password incorrect
                 console.log('user not found');
+                setErrorState('usernameError');
+                setLoginState({
+                    username: undefined,
+                    isAuthenticated: false,
+                    isAdmin: false
+                })
             }
             else if (response.data === 400) {
                 // User not found
                 console.log('password incorrect');
+                setErrorState('pwError');
+                setLoginState({
+                    username: user.username,
+                    isAuthenticated: false,
+                    isAdmin: false
+                })
             }
           }).catch((error) => {
             if (error.response) {
@@ -101,8 +123,26 @@ const LoginPage = (props) => {
                 <form onSubmit={handleLoginSubmit}>
             
                     <Stack>
-                        <TextField type='Text' maxLength='30' label='Username' name='username' value={user.username} onChange={handleLoginChange}/>
-                        <TextField type='password' maxLength='30' label='Password' name='password' value={user.password} onChange={handleLoginChange}/>
+                        <TextField 
+                            error={errorState === 'usernameError'}
+                            id='outlined-error-helper-text'
+                            helperText={errorState === 'usernameError' ? 'User not found!': ''}
+                            type='Text' 
+                            maxLength='30' 
+                            label='Username' 
+                            name='username' 
+                            value={user.username}
+                            onChange={handleLoginChange}/>
+                        <TextField 
+                            error={errorState === 'pwError'}
+                            id='outlined-error-helper-text'
+                            helperText={errorState === 'pwError' ? 'Incorrect password' : ''}
+                            type='password'
+                            maxLength='30' 
+                            label='Password' 
+                            name='password' 
+                            value={user.password} 
+                            onChange={handleLoginChange}/>
                         <Button color='lightGreen' variant='contained' type='Submit' onClick={sendLoginRequest}>
                             Log In
                         </Button>
