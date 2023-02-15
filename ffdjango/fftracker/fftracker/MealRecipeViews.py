@@ -5,7 +5,9 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from rest_framework import status
+from PIL import Image
 import json
+
 from .models import Recipes, RecipeAllergies, RecipeDiets, RecipeIngredients, RecipeInstructions, RecipePackaging
 from .IngredientViews import IngredientNameSerializer
 # Create your views here.
@@ -56,6 +58,57 @@ class RecipePackagingSerializer(ModelSerializer):
         # depth = 1
         fields = ('amt', 'pkg_type', 'rp_pkg')
 
+class RecipeImageSerializer(serializers.ModelSerializer):
+    class Meta():
+        model = Recipes
+        fields = ('r_img_path')
+
+class RecipeImageView(viewsets.ViewSet):
+    def list(self, request):
+        return Response('list')
+    def retrieve(self, request, pk):
+        return Response(pk)
+    def patch(self, request, pk):
+        queryset = Recipes.objects.filter(r_num = pk)
+        if len(queryset) > 0:
+            img = Image.open(request.data['file'])
+            try:
+                img.verify()
+            except:
+                print('image corrupt')
+                return Response(request)
+            img = Image.open(request.data['file'])
+            file_path = '../../Images/r_%s_image.jpg'%(pk)
+            img.save(file_path)
+            queryset[0].r_img_path = file_path
+            queryset[0].save()
+            
+        return Response(200)
+
+
+class RecipeCardView(viewsets.ViewSet):
+    def list(self, request):
+        return Response('list')
+    def retrieve(self, request, pk):
+        return Response(pk)
+    def patch(self, request, pk):
+        queryset = Recipes.objects.filter(r_num = pk)
+        if len(queryset) > 0:
+            img = Image.open(request.data['file'])
+            try:
+                img.verify()
+            except:
+                print('image corrupt')
+                return Response(request)
+            img = Image.open(request.data['file'])
+            file_path = '../../Images/r_%s_image.jpg'%(pk)
+            img.save(file_path)
+            queryset[0].r_card_path = file_path
+            queryset[0].save()
+            
+        return Response(200)
+
+
 class RecipesSerializer(ModelSerializer):
     r_num = serializers.CharField(max_length=200)
     r_name = serializers.CharField(max_length=200)
@@ -68,7 +121,7 @@ class RecipesSerializer(ModelSerializer):
     class Meta():
         model = Recipes
         # depth = 1
-        fields = ('r_num', 'r_name', 'r_ingredients', 'r_packaging', 'r_diets', 'r_instructions', 'r_allergies')
+        fields = ('r_num', 'r_name', 'r_img_path', 'r_card_path', 'r_ingredients', 'r_packaging', 'r_diets', 'r_instructions', 'r_allergies')
 
     def create(self, validated_data):
         ings = validated_data.pop('r_ingredients')
@@ -197,7 +250,7 @@ class RecipeView(viewsets.ModelViewSet):
         # serializer = RecipesSerializer(queryset)
         # return Response(serializer.data)
     
-    queryset = Recipes.objects.all()
+    queryset = Recipes.objects.all().prefetch_related('r_ingredients').prefetch_related('r_packaging').prefetch_related('r_diets').prefetch_related('r_instructions').prefetch_related('r_allergies')
     serializer_class = RecipesSerializer
 
 class RecipeIngredientsView(viewsets.ViewSet):

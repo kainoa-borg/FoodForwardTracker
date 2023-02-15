@@ -2,7 +2,8 @@ import { Button, Typography, Box, Grid } from "@mui/material";
 import React, {useState, useEffect} from 'react';
 import { DataGrid } from "@mui/x-data-grid";
 import { Stack } from "@mui/material";
-
+import axios from 'axios'
+// import FormData from 'axios'
 import RecipePage from './RecipePage.js'
 
 export default function Recipe(props) {
@@ -88,12 +89,50 @@ export default function Recipe(props) {
     }
 
     const handleImageUpload = (event) => {
-        console.log(event.target)
+        const file = event.target.files[0];
+        const formData = new FormData();
+        formData.append('file', file)
+        axios({
+            method: "PATCH",
+            url:"http://4.236.185.213:8000/api/mealrecipe-image/" + recipeData.r_num + '/',
+            data: formData,
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then((response)=>{
+            console.log('success!')
+        }).catch((error) => {
+        if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
     }
 
-    const handleCardUpload = () => {
-
+    const handleCardUpload = (event) => {
+        const file = event.target.files[0];
+        const formData = new FormData();
+        formData.append('file', file)
+        axios({
+            method: "PATCH",
+            url:"http://4.236.185.213:8000/api/mealrecipe-card/" + recipeData.r_num + '/',
+            data: formData,
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then((response)=>{
+            console.log('success!')
+        }).catch((error) => {
+        if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
     }
+
+    console.log(recipeData);
 
     return (
         <div>
@@ -107,7 +146,7 @@ export default function Recipe(props) {
             {/* Recipe Image and Card Stack */}
             <Stack item spacing={3}>
                 <Typography variant='h4' sx={{textDecoration: 'underline'}}>{recipeData.r_name}</Typography>
-                <RecipeImage image_source={recipeData.r_image_path}/>
+                <RecipeImage image_source={recipeData.r_img_path}/>
                 <Button color='lightGreen' variant='contained' component='label'>
                     Upload Image
                     <input id='recipe_image' type='file' accept='.jpg' onChange={handleImageUpload} hidden></input>
