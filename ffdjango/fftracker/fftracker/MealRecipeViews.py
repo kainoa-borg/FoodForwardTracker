@@ -81,7 +81,7 @@ class RecipeImageView(viewsets.ViewSet):
             abs_file_path = 'var/www/html/Images/r_%s_image.jpg'%(pk)
             rel_file_path = 'Images/r_%s_image.jpg'%(pk)
             img.save(abs_file_path)
-            queryset[0].r_card_path = rel_file_path
+            queryset[0].r_img_path = rel_file_path
             queryset[0].save()
             
         return Response(200)
