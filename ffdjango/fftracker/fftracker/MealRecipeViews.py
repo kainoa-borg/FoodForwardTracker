@@ -78,9 +78,10 @@ class RecipeImageView(viewsets.ViewSet):
                 print('image corrupt')
                 return Response(request)
             img = Image.open(request.data['file'])
-            file_path = '../../Images/r_%s_image.jpg'%(pk)
-            img.save(file_path)
-            queryset[0].r_img_path = file_path
+            abs_file_path = 'var/www/html/Images/r_%s_image.jpg'%(pk)
+            rel_file_path = 'Images/r_%s_image.jpg'%(pk)
+            img.save(abs_file_path)
+            queryset[0].r_card_path = rel_file_path
             queryset[0].save()
             
         return Response(200)
@@ -101,9 +102,10 @@ class RecipeCardView(viewsets.ViewSet):
                 print('image corrupt')
                 return Response(request)
             img = Image.open(request.data['file'])
-            file_path = '../../Images/r_%s_image.jpg'%(pk)
-            img.save(file_path)
-            queryset[0].r_card_path = file_path
+            abs_file_path = 'var/www/html/Images/r_%s_card.jpg'%(pk)
+            rel_file_path = 'Images/r_%s_card.jpg'%(pk)
+            img.save(abs_file_path)
+            queryset[0].r_card_path = rel_file_path
             queryset[0].save()
             
         return Response(200)
