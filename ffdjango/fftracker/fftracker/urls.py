@@ -24,6 +24,7 @@ from .StationViews import StationsView
 from .MenuView import MenuView
 from .MealPlanViews import MealPlansView
 from .MealRecipeViews import RecipeView, RecipeIngredientsView, RecipePackagingView, RecipeAllergyView, RecipeDietsView, RecipeInstructionsView
+from .MealView import MealView
 from .AccountCreationViews import AccountCreateView
 from .PacPurchaseList import PPLView
 from .SupplierViews import SupplierView
@@ -51,6 +52,7 @@ router.register(r'packaging', PackagingInvView, basename='packaging')
 router.register(r'pack-purchase-list', PPLView, basename='pack-purchase-list')
 router.register(r'users', UserView, basename='users')
 router.register(r'menu', MenuView, basename='menu')
+router.register(r'meal', MealView, basename='meals-list')
 router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
 router.register(r'stations', StationsView, basename='stations')
 router.register(r'mealplans', MealPlansView, basename='mealplans')
@@ -60,7 +62,6 @@ router.register(r'mealrecipe-packaging', RecipePackagingView, basename='mealreci
 router.register(r'mealrecipe-diets', RecipeDietsView, basename='mealrecipe-diets')
 router.register(r'mealrecipe-instructions', RecipeInstructionsView, basename='mealrecipe-instructions')
 router.register(r'suppliers', SupplierView, basename='suppliers')
-# router.register(r'mealrecipes', RecipeView, basename='mealrecipes')
 router.register(r'recipe-list', RecipeListView, basename='recipe-list')
 router.register(r'calculations', CalculationsView, basename='calculations')
 router.register(r'serving-calculations', ServingCalculationViews, basename='serving-calculations')
@@ -77,6 +78,7 @@ urlpatterns = [
     path('api/get-pack-purchase-list', PPLView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-users', UserView.as_view({'get': 'retrieve'})),
     path('api/get-menu', MenuView.as_view({'get': 'retrieve'})),
+    path('api/get-meals', MealView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-mealplans', MealPlansView.as_view({'get': 'retrieve'})),
     path('api/get-mealrecipes', RecipeView.as_view({'get': 'retrieve'})),
     path('api/', include(router.urls))

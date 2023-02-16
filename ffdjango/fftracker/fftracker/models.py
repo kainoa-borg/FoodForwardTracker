@@ -361,6 +361,9 @@ class RecipePackaging(models.Model):
 class Recipes(models.Model):
     r_num = models.SmallIntegerField(primary_key=True)
     r_name = models.CharField(max_length=50, blank=True, null=True)
+    r_img_path = models.CharField(max_length=200, blank=True, null=True)
+    r_card_path = models.CharField(max_length=200, blank=True, null=True)
+    m_s = models.SmallIntegerField()
 
     class Meta:
         managed = False

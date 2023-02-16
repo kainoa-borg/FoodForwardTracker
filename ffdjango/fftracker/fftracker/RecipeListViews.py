@@ -5,7 +5,7 @@ from .models import Recipes
 class RecipeListSerializer(ModelSerializer):
 	class Meta():
 		model = Recipes
-		fields = ('r_num', 'r_name')
+		fields = ('__all__')
 
 class RecipeListView(ModelViewSet):
 	queryset = Recipes.objects.all()

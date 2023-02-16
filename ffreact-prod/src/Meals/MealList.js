@@ -6,7 +6,6 @@ import MealPlanRow from './MealPlanRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 import ReusableTable from '../ReusableTable.js'
-import MealsPage from '../MealsPage'
 
 import './MealList.css'
 // import Table from 'react-bootstrap/Table'
@@ -112,17 +111,6 @@ export default function MealList() {
         // let newMeal = [...mealPlan, meal];
         postDBMealPlan(meal);
         clearError();
-        // Check to see if we already have a duplicate Ingredient Name
-        // if (!ingredients.find((ing) => ing.i_id === ing.i_id))
-        // {
-        //     let newIngredients = [...ingredients, ingredient];
-        //     setIngredients(newIngredients);
-        //     clearError();
-        // }
-        // else {
-        //     // If this ingredient is already in ingredients list, display error message
-        //     handleError('DuplicateKey');
-        // }
     }
 
     const deleteMeal = (key) => {
@@ -173,7 +161,6 @@ export default function MealList() {
             // If this Ingredient is already in ingredients list, display error message
             handleError('DuplicateKey');
         }
-        
     }
 
     const handleEditFormChange = (event) => {
