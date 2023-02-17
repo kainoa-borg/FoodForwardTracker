@@ -1,6 +1,6 @@
 import React, {Fragment, useState, useEffect, Suspense} from 'react'
 import axios from 'axios'
-import {DataGrid, GridColDef, GridValueGetterParams} from '@mui/x-data-grid'
+import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams} from '@mui/x-data-grid'
 import { Box } from '@mui/system';
 import { wait } from '@testing-library/user-event/dist/utils';
 import './IngredientList.css'
@@ -64,12 +64,13 @@ export default function IngredientPage() {
         <h3>Ingredients</h3>
         <Box sx={{height: '80vh'}}>
             <DataGrid 
+            components={{ Toolbar: GridToolbar }}
             onRowClick={handleRowClick} 
             rows={ingredients} 
             columns={columns} 
             getRowId={(row) => row.i_id}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
+            pageSize={10}
+            //rowsPerPageOptions={[5]}
             checkboxSelection
             disableSelectionOnClick
             experimentalFeatures={{ newEditingApi: true }}>

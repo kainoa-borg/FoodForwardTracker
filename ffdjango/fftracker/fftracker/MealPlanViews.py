@@ -13,8 +13,8 @@ class MealPlansSerializer(ModelSerializer):
 	# snack_name = serializers.CharField(max_length=50)
 	class Meta():
 		model = MealPlans
-		fields = ('m_id', 'm_date', 'meal_r_num', 'snack_r_num', 'meal_servings', 'snack_servings')
-		# fields = ('__all__')
+		#fields = ('m_id', 'm_date', 'meal_r_num', 'snack_r_num', 'meal_servings', 'snack_servings')
+		fields = ('__all__')
 
 class MealPlansView(viewsets.ModelViewSet):
 	# def list(self, request):

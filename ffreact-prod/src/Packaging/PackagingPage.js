@@ -1,6 +1,6 @@
 import React, {Fragment, useState, useEffect, Suspense} from 'react'
 import axios from 'axios'
-import {DataGrid, GridColDef, GridValueGetterParams} from '@mui/x-data-grid'
+import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams} from '@mui/x-data-grid'
 import { Box } from '@mui/system';
 import { wait } from '@testing-library/user-event/dist/utils';
 import './PackagingList.css'
@@ -9,13 +9,6 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
 });
-  
-  const usdPrice = {
-    type: 'number',
-    width: 80,
-    valueFormatter: ({ value }) => currencyFormatter.format(value),
-    cellClassName: 'font-tabular-nums',
-};
 
 // Packaging List Component
 export default function PackagingPage() {
@@ -23,11 +16,11 @@ export default function PackagingPage() {
     const [packaging, setPackaging] = useState([]);
     const columns = [
         { field: 'package_type', headerName: 'Packaging Type', width: 150 },
-        { field: 'unit', headerName: 'Unit', width: 6 },
-        { field: 'qty_holds', headerName: 'Size', width: 5 },
+        { field: 'unit', headerName: 'Unit', width: 90 },
+        { field: 'qty_holds', headerName: 'Size', width: 50 },
         { field: 'returnable', headerName: 'Returnable', width: 90, type: 'boolean' },
         { field: 'unit_cost', headerName: 'Unit Cost', width: 90, valueFormatter: ({ value }) => currencyFormatter.format(value) },
-        { field: 'pref_psupplier', headerName: 'Supplier', width: 80, valueFormatter: ({ value }) => value.s_name },
+        { field: 'pref_psupplier', headerName: 'Supplier', width: 180, valueFormatter: ({ value }) => value.s_name },
         { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date' },
         { field: 'in_qty', headerName: 'Purchased Amount', width: 140 },
         { field: 'tmp_1', headerName: 'Date Used', width: 100, type: 'date', editable: true },
@@ -71,12 +64,13 @@ export default function PackagingPage() {
         <h3>Packaging</h3>
         <Box sx={{height: '80vh'}}>
             <DataGrid 
+            components={{ Toolbar: GridToolbar }}
             onRowClick={handleRowClick} 
             rows={packaging} 
             columns={columns} 
             getRowId={(row) => row.p_id}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
+            pageSize={10}
+            //rowsPerPageOptions={[7]}
             checkboxSelection
             disableSelectionOnClick
             experimentalFeatures={{ newEditingApi: true }}>

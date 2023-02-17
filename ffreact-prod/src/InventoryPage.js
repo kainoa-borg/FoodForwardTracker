@@ -1,13 +1,13 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Container, Button, Typography } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { CssBaseline, Box } from '@mui/material'
 import Packaging from './Packaging/PackagingList.js'
 import PackagingPage from './Packaging/PackagingPage.js'
 import Ingredients from './Ingredients/IngredientList.js'
 import IngredientPage from './Ingredients/IngredientPage.js'
 import Dropdown from './components/Dropdown'
-import { CssBaseline, Box } from '@mui/material'
+
 
 const style = {
     padding: '10px',
@@ -41,7 +41,7 @@ const theme = createTheme({
     }
 })
 
-const LandingPage = (props) => {
+const InventoryPage = (props) => {
     const [currPage, setCurrPage] = useState();
     const handlePageClick = (pageName) => {
         console.log(pageName)
@@ -71,4 +71,4 @@ const LandingPage = (props) => {
     );   
 }
 
-export default LandingPage;
+export default InventoryPage;
