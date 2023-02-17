@@ -12,14 +12,16 @@ const NewUserPage = (props) => {
         {
             username: '',
             password: '',
-            email: ''
+            email: '',
+            admin_flag: 0,
         }
     );
 
     const sendCreateRequest = () => {
+        console.log(JSON.stringify(user))
         axios({
             method: "POST",
-            url: "",
+            url: "http://4.236.185.213:8000/api/users/",
             data: user
         }).then((response) => {
             const data = response.data;

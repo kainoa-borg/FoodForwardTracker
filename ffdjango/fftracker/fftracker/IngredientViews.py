@@ -12,6 +12,11 @@ import os
 import logging
 logging.basicConfig(level = logging.WARNING)
 
+class IngredientNameSerializer(ModelSerializer):
+    class Meta():
+        model = Ingredients
+        fields = ('ingredient_name',)
+
 class IngredientUsageSerializer(ModelSerializer):
 	class Meta():
 		model = IngredientUsages

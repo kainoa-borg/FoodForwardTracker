@@ -4,16 +4,19 @@ import {DataGrid, GridColDef, GridValueGetterParams} from '@mui/x-data-grid'
 import { Box } from '@mui/system';
 import { waitFor } from '@testing-library/react';
 import { wait } from '@testing-library/user-event/dist/utils';
+import Recipe from './Recipe.js'
 
-export default function RecipePage() {
+export default function RecipePage(props) {
 
     const [recipes, setRecipes] = useState();
     const [recipeData, setRecipeData] = useState();
 
+    const setCurrPage = props.setCurrPage;
+
     const getDBRecipes = () => {
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/recipe-list"
+            url:"http://4.236.185.213:8000/api/recipe-list"
         }).then((response)=>{
         setRecipes(response.data);
         }).catch((error) => {
@@ -28,7 +31,7 @@ export default function RecipePage() {
     const getDBRecipeData = (pk) => {
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/mealrecipes/" + pk
+            url:"http://4.236.185.213:8000/api/mealrecipes/" + pk + '/'
         }).then((response)=>{
         setRecipeData(response.data);
         }).catch((error) => {
@@ -49,7 +52,6 @@ export default function RecipePage() {
             field: 'r_name',
             headerName: 'Select a Recipe',
             width: 400,
-            editable: true,
         }
     ]
 
@@ -58,11 +60,17 @@ export default function RecipePage() {
             <>loading...</>
         )
     }
+    else {
+        if (!(recipeData === undefined))
+            setCurrPage(<Recipe recipeData={recipeData} setCurrPage={setCurrPage}></Recipe>);
+    }
 
     const handleRowClick = (params) => {
         getDBRecipeData(params.row.r_num);
-        wait(300);
-        console.log(recipeData);
+        return (
+            <>loading...</>
+        );
+        // setCurrPage(<Recipe recipeData={recipeData}></Recipe>)
     }
 
     return(

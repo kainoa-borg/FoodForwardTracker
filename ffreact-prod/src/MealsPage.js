@@ -4,8 +4,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { CssBaseline, Box } from '@mui/material'
 import Dropdown from './components/Dropdown'
 import StationList from './Stations/StationList.js'
-import Recipe from './Recipe/RecipeList.js'
 import RecipePage from './Recipe/RecipePage.js'
+import Recipe from './Recipe/Recipe.js'
 import MealPlan from './Meals/MealList.js'
 import MealPlanPage from './Meals/MealPlanPage.js'
 
@@ -50,8 +50,8 @@ const MealsPage = (props) => {
             case 'stations': setCurrPage(<StationList handlePageClick={handlePageClick} />); break;
             case 'meals': setCurrPage(<MealPlan handlePageClick={handlePageClick} />); break;
             case 'mealsPage': setCurrPage(<MealPlanPage handlePageClick={handlePageClick} />); break;
-            case 'recipePage': setCurrPage(<RecipePage></RecipePage>); break;
-            case 'recipes': setCurrPage(<Recipe handlePageClick={handlePageClick} />); break;
+            case 'recipePage': setCurrPage(<RecipePage setCurrPage={setCurrPage}></RecipePage>); break;
+            case 'recipe': setCurrPage(<Recipe/>); break;
         }
     } 
     // HTML structure of this component
