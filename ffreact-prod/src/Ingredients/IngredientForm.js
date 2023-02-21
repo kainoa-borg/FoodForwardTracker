@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import React from 'react'
 import ReusableForm from '../ReusableForm.js'
+import { Grid, Typography, Card, Input, InputLabel, Select, MenuItem, Button} from '@mui/material';
 
 // Kainoa Borges
 
@@ -70,55 +71,51 @@ const IngredientForm = (props) => {
     return (
       <form onSubmit={handleSubmit}>
           {/* Basic ingredient info */}
-          <label htmlFor="ingredient_name">Ingredient Name: </label>
-          <input name="ingredient_name" type="text" maxLength='30' value={ingredient.ingredient_name} onChange={handleFormChange}/>
-          
-          <label htmlFor='pkg_type'>Package Type: </label>
-          <input name='pkg_type' type="text" value={ingredient.pkg_type} onChange={handleFormChange}/>
-          
-          <label htmlFor='storage_type'>Storage Type: </label>
-          <input name='storage_type' type="text" value={ingredient.storage_type} onChange={handleFormChange}/>
-          
-          <label htmlFor="in_date">In Date: </label>
-          <input name="in_date" type="date" value={ingredient.in_date} onChange={handleFormChange}/>
+          <Card sx={{marginTop: '1em', padding: '1em'}}>
+            <Typography variant='h5'>Add Ingredient</Typography>
+            <Grid container direction='row' spacing={4}>
+              <Grid item>
+                <InputLabel htmlFor="ingredient_name">Ingredient Name: </InputLabel>
+                <Input name="ingredient_name" type="text" maxLength='30' value={ingredient.ingredient_name} onChange={handleFormChange}/>
+                
+                <InputLabel htmlFor='storage_type'>Category: </InputLabel>
+                <Input name='storage_type' type="text" value={ingredient.storage_type} onChange={handleFormChange}/>
 
-          <label htmlFor="in_qty">In Quantity: </label>
-          <input name="in_qty" type="number" value={ingredient.in_qty} onChange={handleFormChange}/>
+                <InputLabel htmlFor='pkg_type'>Package Type: </InputLabel>
+                <Input name='pkg_type' type="text" value={ingredient.pkg_type} onChange={handleFormChange}/>
+                
+                <InputLabel htmlFor="unit">Measure: </InputLabel>
+                <Input name="unit" type="text" value={ingredient.unit} onChange={handleFormChange}/>
+              </Grid>
+              <Grid item>
+                <InputLabel htmlFor="unit_cost">Unit Cost: </InputLabel>
+                <Input name="unit_cost" type="number" step="0.01" value={ingredient.unit_cost} onChange={handleFormChange}/>
 
-          <label htmlFor="unit">Unit: </label>
-          <input name="unit" type="text" value={ingredient.unit} onChange={handleFormChange}/>
+                <InputLabel htmlFor="pref_isupplier">Supplier: </InputLabel>
+                <Select type='select' name="pref_isupplier_id" value={undefined} label={'Supplier'}>
+                  <MenuItem value={'Select A Supplier'}></MenuItem>
+                  {supplierList.map((supplier, key) => {
+                    return (
+                      <MenuItem key={supplier.s_id} value={supplier.s_id}>{supplier.s_name}</MenuItem>
+                    );
+                  })}
+                </Select>
+              </Grid>
+              <Grid item>
+                <InputLabel htmlFor="in_date">Purchase Date: </InputLabel>
+                <Input name="in_date" type="date" value={ingredient.in_date} onChange={handleFormChange}/>
 
-          <label htmlFor="exp_date">Exp Date: </label>
-          <input name="exp_date" type="date" value={ingredient.exp_date} onChange={handleFormChange}/>
+                <InputLabel htmlFor="in_qty">Purchase Amount: </InputLabel>
+                <Input name="in_qty" type="number" value={ingredient.in_qty} onChange={handleFormChange}/>
 
-          <label htmlFor="unit_cost">Unit Cost: </label>
-          <input name="unit_cost" type="number" step="0.01" value={ingredient.unit_cost} onChange={handleFormChange}/>
-
-          <label htmlFor="flat_fee">Flat Fee: </label>
-          <input name="flat_fee" type="number" step="0.01" value={ingredient.flat_fee} onChange={handleFormChange}/>
-
-          <label htmlFor="isupplier">Supplier: </label>
-          <select name="isupplier_id" onChange={handleFormChange}>
-            <option selected={true} value={null}>N/A</option>
-            {/* Get supplier_name from  */}
-            {supplierList.map((supplier, key) => {
-              return (
-                <option value={supplier.s_id}>{supplier.s_name}</option>
-              )
-            })}
-          </select>
-
-          <label htmlFor="pref_isupplier"> Preferred Supplier: </label>
-          <select name="pref_isupplier_id">
-            <option selected={true} value={null}>N/A</option>
-            {supplierList.map((supplier, key) => {
-              return (
-                <option value={supplier.s_id}>{supplier.s_name}</option>
-              );
-            })}
-          </select>
-
-          <br /><button type='Submit'>Add</button>
+                <InputLabel htmlFor="exp_date">Exp Date: </InputLabel>
+                <Input name="exp_date" type="date" value={ingredient.exp_date} onChange={handleFormChange}/>
+              </Grid>
+              <Grid item>
+                <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>
+              </Grid>
+            </Grid>
+          </Card>
       </form>
     );
 }
