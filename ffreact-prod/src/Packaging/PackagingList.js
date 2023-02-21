@@ -90,6 +90,23 @@ export default function PackagingList() {
           });
     }
 
+    const postDBPackaging = () => {
+        axios({
+            method: "POST",
+            url:"/packaging/",
+            data: packaging
+          }).then((response)=>{
+            getDBPackaging();
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+        setdisplayMsgComponent(<DisplayMessage msg='Submitting changes to database!'/>);
+    }
+
     const addPackaging = (pkg) => {
         const lastID = packaging[packaging.length - 1]['p_id'];
         pkg['p_id'] = lastID + 1;
@@ -183,7 +200,6 @@ export default function PackagingList() {
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div class='table-div'>
-            <InventoryPage />
             <h3>Packaging</h3>
             <table className='main-table'>
                 <tbody>
@@ -191,7 +207,7 @@ export default function PackagingList() {
                     {packaging.map((pkg, key) => {
                         const thisKey = key;
                         return(
-                            <Fragment>
+                            <Fragment key={thisKey}>
                                 {
                                 // If this ingredient is the one to be edited, show an editable row instead
                                 editPackagingID === thisKey 
@@ -207,6 +223,7 @@ export default function PackagingList() {
             {loadingComponent}
             <h3>Add Packaging</h3>
             <PackagingForm addPackaging={addPackaging} suppliers={suppliers}></PackagingForm>
+            <button onClick={postDBPackaging}>Submit Changes</button>
             {errorComponent}
             {displayMsgComponent}
         </div>
