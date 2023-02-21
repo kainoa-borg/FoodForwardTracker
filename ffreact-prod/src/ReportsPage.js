@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Fragment } from 'react'
 import axios from 'axios'
 import HouseholdsReport from './Households/HouseholdsReport.js'
+import IngredientsReport from './Ingredients/IngredientsReport'
 import { Container, Button, Typography } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import Dropdown from './components/Dropdown'
@@ -46,7 +47,7 @@ const ReportsPage = (props) => {
     const handlePageClick = (pageName) => {
         console.log(pageName)
         if (pageName === 'households-report') setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />);
-        else if (pageName === 'households-report') setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />);
+        else if (pageName === 'ingredients-report') setCurrPage(<IngredientsReport handlePageClick={handlePageClick} />);
     }
 
     // HTML structure of this component
@@ -59,16 +60,16 @@ const ReportsPage = (props) => {
             menu={[
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Households Report</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
-                    Ingredients Report</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
-                    Packaging Report</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
-                    Cost Totals</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
-                    Menu Reports</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
-                    Purchasing Reports</button>
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('ingredients-report')}>
+                    Ingredients Report</button>
+                // <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
+                //     Packaging Report</button>,
+                // <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
+                //     Cost Totals</button>,
+                // <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
+                //     Menu Reports</button>,
+                // <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
+                //     Purchasing Reports</button>
                 ]}/>
             {currPage}
         </div>
