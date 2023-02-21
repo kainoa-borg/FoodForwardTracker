@@ -1,107 +1,119 @@
 import React, {Fragment, useState, useEffect, Suspense} from 'react'
 import axios from 'axios'
-import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams} from '@mui/x-data-grid'
-//import { Box } from '@mui/system';
+import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCell, GridRowModes, GridActionsCellItem} from '@mui/x-data-grid'
+import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
+import { Box } from '@mui/system';
 import { wait } from '@testing-library/user-event/dist/utils';
 import './PackagingList.css'
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
-import {GridRowModes, DataGridPro, GridToolbarContainer, GridActionsCellItem} from '@mui/x-data-grid-pro';
-//import {randomCreatedDate, randomTraderName, randomUpdatedDate, randomId} from '@mui/x-data-grid-generator';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
 });
 
-function EditToolbar(props) {
-    const { setRows, setRowModesModel } = props;
-  
-    const handleClick = () => {
-      setRows((oldRows) => [...oldRows, { p_id, name: '', unit: '', qty_holds: '', returnable: '', 
-      unit_cost: '', pref_psupplier: '', in_date: '', in_qty: '', isNew: true }]);
-      setRowModesModel((oldModel) => ({
-        ...oldModel,
-        [p_id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-      }));
-    };
-  
-    return (
-      <GridToolbarContainer>
-        <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-          Add record
-        </Button>
-      </GridToolbarContainer>
-    );
-  }
-  
-  EditToolbar.propTypes = {
-    setRowModesModel: PropTypes.func.isRequired,
-    setRows: PropTypes.func.isRequired,
-  };
-
 // Packaging List Component
 export default function PackagingPage() {
     
     const [packaging, setPackaging] = useState([]);
-    const [rows, setRows] = React.useState(packaging);
-    const [rowModesModel, setRowModesModel] = React.useState({});
-  
-    const handleRowEditStart = (params, event) => {
-      event.defaultMuiPrevented = true;
-    };
-  
-    const handleRowEditStop = (params, event) => {
-      event.defaultMuiPrevented = true;
-    };
-  
-    const handleEditClick = (id) => () => {
-      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-    };
-  
-    const handleSaveClick = (id) => () => {
-      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-    };
-  
-    const handleDeleteClick = (id) => () => {
-      setRows(rows.filter((row) => row.id !== id));
-    };
-  
-    const handleCancelClick = (id) => () => {
-      setRowModesModel({
-        ...rowModesModel,
-        [id]: { mode: GridRowModes.View, ignoreModifications: true },
-      });
-  
-      const editedRow = rows.find((row) => row.id === id);
-      if (editedRow.isNew) {
-        setRows(rows.filter((row) => row.id !== id));
-      }
-    };
-  
+    const [rowModesModel, setRowModesModel] = useState({});
+
+    // Add Packaging from form
+    const addPackaging = (pkg) => {
+        const lastID = packaging[packaging.length - 1]['p_id'];
+        pkg['p_id'] = lastID + 1;
+        axios({
+            method: "POST",
+            url:"http://4.236.185.213:8000/api/packaging/",
+            data: pkg
+          }).then((response)=>{
+            getDBPackaging();
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+    }
+
+    const deletePackaging = (key) => {
+        const pkgID = packaging[key]['p_id']; 
+        axios({
+            method: "DELETE",
+            url:"http://4.236.185.213:8000/api/packaging/"+pkgID+'/',
+          }).then((response)=>{
+            getDBPackaging();
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+    }
+
+    // Update Packaging Row
     const processRowUpdate = (newRow) => {
-      const updatedRow = { ...newRow, isNew: false };
-      setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-      return updatedRow;
-    };
+        const updatedRow = {...newRow, isNew: false};
+
+        console.log(updatedRow);
+        
+        axios({
+            method: "PATCH",
+            url:"http://4.236.185.213:8000/api/packaging/"+ newRow.i_id +'/',
+            data: newRow
+            }).then((response)=>{
+            getDBPackaging();
+            }).catch((error) => {
+            if (error.response) {
+                console.log(error.response);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                }
+        });
+
+        return updatedRow;
+    }
+
+    const handleEditClick = (params) => {
+        setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.Edit}});
+    }
+    const handleSaveClick = (params) => {
+        setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.View}})
+    }
+    const handleCancelClick = (params) => {
+        setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.View, ignoreModifications: true}});
+    }
 
     const columns = [
-        { field: 'package_type', headerName: 'Packaging Type', width: 150 },
-        { field: 'unit', headerName: 'Unit', width: 90 },
-        { field: 'qty_holds', headerName: 'Size', width: 50 },
-        { field: 'returnable', headerName: 'Returnable', width: 90, type: 'boolean' },
-        { field: 'unit_cost', headerName: 'Unit Cost', width: 90, valueFormatter: ({ value }) => currencyFormatter.format(value) },
-        { field: 'pref_psupplier', headerName: 'Supplier', width: 180, valueFormatter: ({ value }) => value.s_name },
-        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date' },
-        { field: 'in_qty', headerName: 'Purchased Amount', width: 140 },
+        { field: 'package_type', headerName: 'Packaging Type', width: 150, editable: true },
+        { field: 'unit', headerName: 'Unit', width: 6, editable: true },
+        { field: 'qty_holds', headerName: 'Size', width: 5, editable: true },
+        { field: 'returnable', headerName: 'Returnable', width: 90, type: 'boolean', editable: true },
+        { field: 'unit_cost', headerName: 'Unit Cost', width: 90, valueFormatter: ({ value }) => currencyFormatter.format(value), editable: true },
+        { field: 'pref_psupplier', headerName: 'Supplier', width: 80, valueFormatter: ({ value }) => value.s_name },
+        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
+        { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
         { field: 'tmp_1', headerName: 'Date Used', width: 100, type: 'date', editable: true },
-        { field: 'tmp_2', headerName: 'Units Used', width: 100, type: 'number', editable: true }
+        { field: 'tmp_2', headerName: 'Units Used', width: 100, type: 'number', editable: true },
+        { field: 'actions', type: 'actions', width: 100,
+            getActions: (params) => {
+                let isInEditMode = false;
+                if (rowModesModel[params.id]) isInEditMode = rowModesModel[params.id].mode === GridRowModes.Edit;
+                if (isInEditMode) {
+                    return [
+                        <GridActionsCellItem icon={<Save/>} onClick={() => {handleSaveClick(params)}}/>,
+                        <GridActionsCellItem icon={<Cancel/>} onClick={() => {handleCancelClick(params)}}/>
+                    ];
+                }
+                else {
+                    return [
+                        <GridActionsCellItem icon={<Edit/>} onClick={() => handleEditClick(params)} color="inherit"/>,
+                        <GridActionsCellItem icon={<Delete/>} onClick={() => deletePackaging(params)}/>
+                    ]
+                }
+            }
+        }
     ]
 
     useEffect(() => {
@@ -139,34 +151,23 @@ export default function PackagingPage() {
     return(
         <div class='table-div'>
         <h3>Packaging</h3>
-        <Box sx={{height: '80vh',
-        width: '100%',
-        '& .actions': {
-          color: 'text.secondary',
-        },
-        '& .textPrimary': {
-          color: 'text.primary',
-        },
-        }}>
+        <Box sx={{height: '80vh'}}>
             <DataGrid 
-            components={{ Toolbar: /*GridToolbar,*/ EditToolbar }}
+            components={{ Toolbar: GridToolbar }}
             onRowClick={handleRowClick} 
             rows={packaging} 
             columns={columns} 
+            editMode='row'
+            rowModesModel={rowModesModel}
+            onRowModesModelChange={(newModel) => {setRowModesModel(newModel)}}
             getRowId={(row) => row.p_id}
             pageSize={10}
-            //rowsPerPageOptions={[7]}
-            checkboxSelection
-            disableSelectionOnClick
-            experimentalFeatures={{ newEditingApi: true }}
-            editMode="row"
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={(newModel) => setRowModesModel(newModel)}
-            onRowEditStart={handleRowEditStart}
-            onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
-            componentsProps={{toolbar: { setRows, setRowModesModel },}}
-            />
+            //rowsPerPageOptions={[5]}
+            //checkboxSelection
+            disableSelectionOnClick
+            experimentalFeatures={{ newEditingApi: true }}>
+            </DataGrid>
         </Box>
         </div>
     )

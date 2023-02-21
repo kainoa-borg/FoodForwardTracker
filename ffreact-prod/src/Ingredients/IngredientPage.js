@@ -23,7 +23,7 @@ export default function IngredientPage() {
         ingredient['i_id'] = lastID + 1;
         axios({
             method: "POST",
-            url:"http://4.236.185.213:8000/api/ingredient-inventory/",
+            url:"http://4.236.185.213:8000/api/ingredient/",
             data: ingredient
           }).then((response)=>{
             getDBIngredients();
@@ -41,7 +41,7 @@ export default function IngredientPage() {
         console.log(params.id);
         axios({
             method: "DELETE",
-            url:"http://4.236.185.213:8000/api/ingredient-inventory/"+params.id+'/',
+            url:"http://4.236.185.213:8000/api/ingredient/"+params.id+'/',
           }).then((response)=>{
             getDBIngredients();
           }).catch((error) => {
@@ -61,7 +61,7 @@ export default function IngredientPage() {
         
         axios({
             method: "PATCH",
-            url:"http://4.236.185.213:8000/api/ingredient-inventory/"+ newRow.i_id +'/',
+            url:"http://4.236.185.213:8000/api/ingredient/"+ newRow.i_id +'/',
             data: newRow
             }).then((response)=>{
             getDBIngredients();
@@ -149,8 +149,6 @@ export default function IngredientPage() {
     }
     // The HTML structure of this component
 
-
-    
     return(
         <div class='table-div'>
         <h3>Ingredients</h3>
