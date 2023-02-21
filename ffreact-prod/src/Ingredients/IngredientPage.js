@@ -5,6 +5,9 @@ import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import { Snackbar } from '@mui/material';
 import { wait } from '@testing-library/user-event/dist/utils';
+import IngredientForm from './IngredientForm.js'
+import EditableIngredientRow from './EditableIngredientRow.js'
+import IngredientRow from './IngredientRow.js'
 import './IngredientList.css'
 import IngredientForm from './IngredientForm';
 
@@ -17,10 +20,10 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 export default function IngredientPage() {
     
     const [ingredients, setIngredients] = useState([]);
+    const [suppliers, setSuppliers] = useState(undefined);
     const [rowModesModel, setRowModesModel] = useState({});
     const [updateSBOpen, setUpdateSBOpen] = useState(false);
     const [updateDoneSBOpen, setUpdateDoneSBOpen] = useState(false);
-    const [suppliers, setSuppliers] = useState([]);
     const [supplierOptions, setSupplierOptions] = useState();
 
     // Add ingredient from form
@@ -29,7 +32,7 @@ export default function IngredientPage() {
         ingredient['i_id'] = lastID + 1;
         axios({
             method: "POST",
-            url:"http://localhost:8000/api/ingredient-inventory/",
+            url:"http://4.236.185.213:8000/api/ingredient-inventory/",
             data: ingredient
           }).then((response)=>{
             getDBIngredients();
@@ -42,12 +45,29 @@ export default function IngredientPage() {
           });
     }
 
+    const postDBIngredients = () => {
+        axios({
+            method: "POST",
+            url:"/ingredients/",
+            data: ingredients
+          }).then((response)=>{
+            getDBIngredients();
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+        setdisplayMsgComponent(<DisplayMessage msg='Submitting changes to database!'/>);
+    }
+
     // Delete Ingredient Row
     const deleteIngredient = (params) => {
         console.log(params.id);
         axios({
             method: "DELETE",
-            url:"http://localhost:8000/api/ingredient-inventory/"+params.id+'/',
+            url:"http://4.236.185.213:8000/api/ingredient-inventory/"+params.id+'/',
           }).then((response)=>{
             getDBIngredients();
           }).catch((error) => {
@@ -67,7 +87,7 @@ export default function IngredientPage() {
         
         axios({
             method: "PATCH",
-            url:"http://localhost:8000/api/ingredient-inventory/"+ newRow.i_id +'/',
+            url:"http://4.236.185.213:8000/api/ingredient-inventory/"+ newRow.i_id +'/',
             data: newRow
             }).then((response)=>{
             getDBIngredients();
@@ -137,26 +157,16 @@ export default function IngredientPage() {
         }
     ]
 
-    const getDBIngredients = () => {
-        axios({
-            method: "GET",
-            url:"http://localhost:8000/api/ingredient-inventory"
-        }).then((response)=>{
-        setIngredients(response.data);
-        }).catch((error) => {
-        if (error.response) {
-            console.log(error.response);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-            }
-        });
-    }
+    useEffect(() => {
+        getDBIngredients();
+        getDBSuppliers();
+    }, []);
 
     const getDBSuppliers = () => {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/suppliers"
+            url:"http://4.236.185.213:8000/api/suppliers"
           }).then((response)=>{
             setSuppliers(response.data);
           }).catch((error) => {
@@ -166,6 +176,21 @@ export default function IngredientPage() {
               console.log(error.response.headers);
               }
           });
+    }
+
+    const getDBIngredients = () => {
+        axios({
+            method: "GET",
+            url:"http://4.236.185.213:8000/api/ingredient-inventory"
+        }).then((response)=>{
+        setIngredients(response.data);
+        }).catch((error) => {
+        if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
     }
 
     const handleRowClick = (params) => {
