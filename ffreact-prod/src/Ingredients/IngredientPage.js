@@ -5,7 +5,11 @@ import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import { Snackbar } from '@mui/material';
 import { wait } from '@testing-library/user-event/dist/utils';
+import IngredientForm from './IngredientForm.js'
+import EditableIngredientRow from './EditableIngredientRow.js'
+import IngredientRow from './IngredientRow.js'
 import './IngredientList.css'
+import DisplayMessage from '../DisplayMessage.js'
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -16,9 +20,11 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 export default function IngredientPage() {
     
     const [ingredients, setIngredients] = useState([]);
+    const [suppliers, setSuppliers] = useState(undefined);
     const [rowModesModel, setRowModesModel] = useState({});
     const [updateSBOpen, setUpdateSBOpen] = useState(false);
     const [updateDoneSBOpen, setUpdateDoneSBOpen] = useState(false);
+    const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
 
     // Add ingredient from form
     const addIngredient = (ingredient) => {
@@ -37,6 +43,23 @@ export default function IngredientPage() {
               console.log(error.response.headers);
               }
           });
+    }
+
+    const postDBIngredients = () => {
+        axios({
+            method: "POST",
+            url:"/ingredients/",
+            data: ingredients
+          }).then((response)=>{
+            getDBIngredients();
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+        setdisplayMsgComponent(<DisplayMessage msg='Submitting changes to database!'/>);
     }
 
     // Delete Ingredient Row
@@ -124,7 +147,24 @@ export default function IngredientPage() {
 
     useEffect(() => {
         getDBIngredients();
+        getDBSuppliers();
     }, []);
+
+    const getDBSuppliers = () => {
+        console.log("MAKING REQUEST TO DJANGO")
+        axios({
+            method: "GET",
+            url:"http://4.236.185.213:8000/api/suppliers"
+          }).then((response)=>{
+            setSuppliers(response.data);
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+    }
 
     const getDBIngredients = () => {
         axios({
@@ -181,6 +221,9 @@ export default function IngredientPage() {
             experimentalFeatures={{ newEditingApi: true }}>
             </DataGrid>
         </Box>
+        <h3>Add An Ingredient</h3>
+            <IngredientForm addIngredient={addIngredient} suppliers={suppliers}></IngredientForm>
+            <button onClick={postDBIngredients}>Submit Changes</button>
         {/* Save Click Notice */}
         <Snackbar
             open={updateSBOpen}
