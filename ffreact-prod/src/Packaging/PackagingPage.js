@@ -229,7 +229,6 @@ export default function PackagingPage() {
             </DataGrid>
         </Box>
             <PackagingForm addPackaging={addPackaging} suppliers={suppliers}></PackagingForm>
-            <button onClick={postDBPackaging}>Submit Changes</button>
         </div>
     )
 }
