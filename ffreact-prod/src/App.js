@@ -7,7 +7,7 @@ import InventoryPage from './InventoryPage.js'
 import HouseholdList from './Households/HouseholdList.js'
 import HouseholdsReport from './Households/HouseholdsReport.js'
 import Ingredients from './Ingredients/IngredientList.js'
-//import IngredientReport from './Ingredients/IngredientReport.js'
+import IngredientsReport from './Ingredients/IngredientsReport.js'
 import StationList from './Stations/StationList.js'
 import ReportsPage from "./ReportsPage.js"
 import UserPage from "./UserPage.js"
@@ -87,6 +87,7 @@ const App = () => {
             case 'households': setCurrPage(<HouseholdList handlePageClick={handlePageClick} />); break;
             case 'households-report': setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />); break;
             case 'ingredients': setCurrPage(<Ingredients handlePageClick={handlePageClick} />); break;
+            case 'ingredients-report': setCurrPage(<IngredientsReport handlePageClick={handlePageClick} />); break;
             case 'packaging': setCurrPage(<Packaging handlePageClick={handlePageClick} />); break;
             case 'stations': setCurrPage(<StationList handlePageClick={handlePageClick} />); break;
             case 'meals': setCurrPage(<MealPlan handlePageClick={handlePageClick} />); break;
