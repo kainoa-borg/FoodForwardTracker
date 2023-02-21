@@ -44,23 +44,6 @@ export default function IngredientPage() {
           });
     }
 
-    const postDBIngredients = () => {
-        axios({
-            method: "POST",
-            url:"/ingredients/",
-            data: ingredients
-          }).then((response)=>{
-            getDBIngredients();
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-        setdisplayMsgComponent(<DisplayMessage msg='Submitting changes to database!'/>);
-    }
-
     // Delete Ingredient Row
     const deleteIngredient = (params) => {
         console.log(params.id);
