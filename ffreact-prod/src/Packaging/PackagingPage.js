@@ -4,6 +4,11 @@ import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCel
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import { wait } from '@testing-library/user-event/dist/utils';
+import PackagingForm from './PackagingForm.js'
+import EditablePackagingRow from './EditablePackagingRow.js'
+import PackagingRow from './PackagingRow.js'
+import Error from '../Error.js'
+import DisplayMessage from '../DisplayMessage.js'
 import './PackagingList.css'
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -13,9 +18,82 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 
 // Packaging List Component
 export default function PackagingPage() {
-    
-    const [packaging, setPackaging] = useState([]);
+    const [packaging, setPackaging] = useState(undefined);
+    const [suppliers, setSuppliers] = useState(undefined);
     const [rowModesModel, setRowModesModel] = useState({});
+    const [errorComponent, setErrorComponent] = useState(null);
+    const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
+    const [loadingComponent, setLoadingComponent] = useState(null);
+    const [editPackagingID, setEditPackagingID] = useState(null);
+    const [editFormData, setEditFormData] = useState({
+        p_id: '',
+        package_type: "",
+        unit_qty: '',
+        qty_holds: '',
+        unit: "",
+        returnable: '',
+        in_date: '',
+        in_qty: '',
+        packaging_usage: [],
+        qty_on_hand: '',
+        unit_cost: '',
+        flat_fee: '',
+        psupplier_id: '',
+        pref_psupplier_id: ''
+    });
+
+    useEffect(() => {
+        getDBPackaging();
+        getDBSuppliers();
+    }, []);
+
+    const getDBSuppliers = () => {
+        console.log("MAKING REQUEST TO DJANGO")
+        axios({
+            method: "GET",
+            url:"http://4.236.185.213:8000/api/suppliers"
+          }).then((response)=>{
+            setSuppliers(response.data);
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+    }
+
+    const getDBPackaging = () => {
+        axios({
+            method: "GET",
+            url:"http://4.236.185.213:8000/api/packaging-inventory"
+        }).then((response)=>{
+        setPackaging(response.data);
+        }).catch((error) => {
+        if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
+    }
+
+    const postDBPackaging = () => {
+        axios({
+            method: "POST",
+            url:"/packaging/",
+            data: packaging
+          }).then((response)=>{
+            getDBPackaging();
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+        setdisplayMsgComponent(<DisplayMessage msg='Submitting changes to database!'/>);
+    }
 
     // Add Packaging from form
     const addPackaging = (pkg) => {
@@ -23,7 +101,7 @@ export default function PackagingPage() {
         pkg['p_id'] = lastID + 1;
         axios({
             method: "POST",
-            url:"http://4.236.185.213:8000/api/packaging/",
+            url:"http://4.236.185.213:8000/api/packaging-inventory/",
             data: pkg
           }).then((response)=>{
             getDBPackaging();
@@ -40,7 +118,7 @@ export default function PackagingPage() {
         const pkgID = packaging[key]['p_id']; 
         axios({
             method: "DELETE",
-            url:"http://4.236.185.213:8000/api/packaging/"+pkgID+'/',
+            url:"http://4.236.185.213:8000/api/packaging-inventory/"+pkgID+'/',
           }).then((response)=>{
             getDBPackaging();
           }).catch((error) => {
@@ -60,7 +138,7 @@ export default function PackagingPage() {
         
         axios({
             method: "PATCH",
-            url:"http://4.236.185.213:8000/api/packaging/"+ newRow.i_id +'/',
+            url:"http://4.236.185.213:8000/api/packaging-inventory/"+ newRow.i_id +'/',
             data: newRow
             }).then((response)=>{
             getDBPackaging();
@@ -116,25 +194,6 @@ export default function PackagingPage() {
         }
     ]
 
-    useEffect(() => {
-        getDBPackaging();
-    }, []);
-
-    const getDBPackaging = () => {
-        axios({
-            method: "GET",
-            url:"http://4.236.185.213:8000/api/packaging-inventory"
-        }).then((response)=>{
-        setPackaging(response.data);
-        }).catch((error) => {
-        if (error.response) {
-            console.log(error.response);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-            }
-        });
-    }
-
     const handleRowClick = (params) => {
         getDBPackaging(params.row.p_id);
         wait(300);
@@ -169,6 +228,9 @@ export default function PackagingPage() {
             experimentalFeatures={{ newEditingApi: true }}>
             </DataGrid>
         </Box>
+        <h3>Add Packaging</h3>
+            <PackagingForm addPackaging={addPackaging} suppliers={suppliers}></PackagingForm>
+            <button onClick={postDBPackaging}>Submit Changes</button>
         </div>
     )
 }
