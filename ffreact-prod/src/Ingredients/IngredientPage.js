@@ -3,6 +3,7 @@ import axios from 'axios'
 import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCell, GridRowModes, GridActionsCellItem} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
+import { Snackbar } from '@mui/material';
 import { wait } from '@testing-library/user-event/dist/utils';
 import './IngredientList.css'
 
@@ -16,6 +17,8 @@ export default function IngredientPage() {
     
     const [ingredients, setIngredients] = useState([]);
     const [rowModesModel, setRowModesModel] = useState({});
+    const [updateSBOpen, setUpdateSBOpen] = useState(false);
+    const [updateDoneSBOpen, setUpdateDoneSBOpen] = useState(false);
 
     // Add ingredient from form
     const addIngredient = (ingredient) => {
@@ -65,6 +68,7 @@ export default function IngredientPage() {
             data: newRow
             }).then((response)=>{
             getDBIngredients();
+            setUpdateDoneSBOpen(true);
             }).catch((error) => {
             if (error.response) {
                 console.log(error.response);
@@ -81,6 +85,7 @@ export default function IngredientPage() {
     }
     const handleSaveClick = (params) => {
         setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.View}})
+        setUpdateSBOpen(true);
     }
     const handleCancelClick = (params) => {
         setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.View, ignoreModifications: true}});
@@ -149,7 +154,12 @@ export default function IngredientPage() {
     }
     // The HTML structure of this component
 
-
+    const handleSBClose = (event, reason, setOpen) => {
+        if (reason === 'clickaway') {
+            setOpen(false);
+        }
+        setOpen(false);
+    }
     
     return(
         <div class='table-div'>
@@ -171,6 +181,20 @@ export default function IngredientPage() {
             experimentalFeatures={{ newEditingApi: true }}>
             </DataGrid>
         </Box>
+        {/* Save Click Notice */}
+        <Snackbar
+            open={updateSBOpen}
+            autoHideDuration={3000}
+            onClose={(event, reason) => handleSBClose(event, reason, setUpdateSBOpen)}
+            message="Saving..."
+        />
+        {/* Save Complete Notice */}
+        <Snackbar
+            open={updateDoneSBOpen}
+            autoHideDuration={3000}
+            onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
+            message="Changes saved!"
+        />
         </div>
     )
 }
