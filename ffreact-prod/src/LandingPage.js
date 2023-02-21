@@ -9,11 +9,21 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
+const cardStyle = {
+    height: '100%',
+    borderWidth: '.1rem',
+}
+
 const LandingPage = (props) => {
     const handlePageClick = props.handlePageClick;
     // HTML structure of this component
     return (
-        <Grid 
+        <Fragment>
+            <Typography variant='h3' sx={{textAlign: 'center', marginTop: '.5em', marginBottom: '1em'}}>
+                Welcome to Food Forward!
+            </Typography>
+
+            <Grid 
             container 
             justifyContent='center' 
             alignItems='stretch'
@@ -21,7 +31,7 @@ const LandingPage = (props) => {
             spacing={2}
             sx={{maxHeight: '40vh', maxWidth: '80vw', margin: 'auto'}}>
             <Grid item sm={12} md={4}>
-                <Card elevation='4' sx={{height: '100%'}}>
+                <Card variant='outlined' sx={cardStyle}>
                     <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('households')}>
                         <CardContent>
                             <Stack spacing={4} justifyContent='space-between' direction='row'>
@@ -40,7 +50,7 @@ const LandingPage = (props) => {
             </Grid>
 
             <Grid item sm={12} md={4}>
-                <Card elevation='4' sx={{height: '100%'}}>
+                <Card variant='outlined' sx={cardStyle}>
                     <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('mealsPage')}>
                         <CardContent>
                             <Stack spacing={4} justifyContent='space-between' direction='row'>
@@ -59,7 +69,7 @@ const LandingPage = (props) => {
             </Grid>
 
             <Grid item sm={12} md={4}>
-                <Card elevation='4' sx={{height: '100%'}}>
+                <Card variant='outlined' sx={cardStyle}>
                     <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('inventoryPage')}>
                         <CardContent>
                             <Stack spacing={4} justifyContent='space-between' direction='row'>
@@ -78,7 +88,7 @@ const LandingPage = (props) => {
             </Grid>
 
             <Grid item sm={12} md={4}>
-                <Card elevation='4' sx={{height: '100%'}}>
+                <Card variant='outlined' sx={cardStyle}>
                     <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('reports')}>
                         <CardContent>
                             <Stack spacing={4} justifyContent='space-between' direction='row'>
@@ -97,7 +107,7 @@ const LandingPage = (props) => {
             </Grid>
 
             <Grid item sm={12} md={4}>
-                <Card elevation='4' sx={{height: '100%'}}>
+                <Card variant='outlined' sx={cardStyle}>
                     <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('userList')}>
                         <CardContent>
                             <Stack spacing={4} justifyContent='space-between' direction='row'>
@@ -115,6 +125,7 @@ const LandingPage = (props) => {
                 </Card>    
             </Grid>
         </Grid>
+        </Fragment>
     );
 }
 

@@ -76,10 +76,12 @@ export default function Recipe(props) {
     console.log(ingredientRows)
 
     const handleCloseClick = () => {
+        // Return to recipe list when close is clicked
         setCurrPage(<RecipePage setCurrPage={setCurrPage}></RecipePage>)
     }
 
     const RecipeImage = (props) => {
+        // Replace image with a prompt if undefined
         if (!(props.image_source === undefined)) {
             return (<img style={{width: '30vw'}} src={props.image_source}></img>);
         }
@@ -89,9 +91,10 @@ export default function Recipe(props) {
     }
 
     const handleImageUpload = (event) => {
+        // Send file in request to api
         const file = event.target.files[0];
         const formData = new FormData();
-        formData.append('file', file)
+        formData.append('file', file);
         axios({
             method: "PATCH",
             url:"http://4.236.185.213:8000/api/mealrecipe-image/" + recipeData.r_num + '/',
@@ -163,7 +166,11 @@ export default function Recipe(props) {
                 <Box>
                     <Typography variant='h6'>Ingredients</Typography>
                     <Box sx={{height: '40vh', width: {md: '40vw', sm: '70vw'}}}>
-                        <DataGrid rows={ingredientRows} columns={ingredientsColumns} getRowId={(row)=> row.ri_ing}></DataGrid>
+                        <DataGrid 
+                        rows={ingredientRows} 
+                        columns={ingredientsColumns} 
+                        getRowId={(row)=> row.ri_ing}
+                        ></DataGrid>
                     </Box>
                 </Box>
                 <Box>
