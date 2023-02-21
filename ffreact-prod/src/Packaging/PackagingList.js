@@ -5,7 +5,7 @@ import EditablePackagingRow from './EditablePackagingRow.js'
 import PackagingRow from './PackagingRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
-
+import {Table, TableHead, TableRow, TableCell, TableBody, Paper} from '@mui/material'
 import './PackagingList.css'
 import InventoryPage from '../InventoryPage'
 
@@ -201,8 +201,8 @@ export default function PackagingList() {
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div class='table-div'>
             <h3>Packaging</h3>
-            <table className='main-table'>
-                <tbody>
+            <Table className='main-table'>
+                <TableBody>
                     {/* Show a row for each ingredient in ingredients.*/}
                     {packaging.map((pkg, key) => {
                         const thisKey = key;
@@ -218,12 +218,9 @@ export default function PackagingList() {
                         );
                     })}
                     {/* {ingredients.length < 1 ? handleError('empty') : null} */}
-                </tbody>
-            </table>
-            {loadingComponent}
-            <h3>Add Packaging</h3>
+                </TableBody>
+            </Table>
             <PackagingForm addPackaging={addPackaging} suppliers={suppliers}></PackagingForm>
-            <button onClick={postDBPackaging}>Submit Changes</button>
             {errorComponent}
             {displayMsgComponent}
         </div>

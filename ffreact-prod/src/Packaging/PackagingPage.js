@@ -138,7 +138,7 @@ export default function PackagingPage() {
         
         axios({
             method: "PATCH",
-            url:"http://4.236.185.213:8000/api/packaging-inventory/"+ newRow.i_id +'/',
+            url:"http://4.236.185.213:8000/api/packaging-inventory/"+ newRow.p_id +'/',
             data: newRow
             }).then((response)=>{
             getDBPackaging();
@@ -228,9 +228,7 @@ export default function PackagingPage() {
             experimentalFeatures={{ newEditingApi: true }}>
             </DataGrid>
         </Box>
-        <h3>Add Packaging</h3>
             <PackagingForm addPackaging={addPackaging} suppliers={suppliers}></PackagingForm>
-            <button onClick={postDBPackaging}>Submit Changes</button>
         </div>
     )
 }
