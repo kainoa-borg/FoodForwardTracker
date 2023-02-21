@@ -9,7 +9,6 @@ import IngredientForm from './IngredientForm.js'
 import EditableIngredientRow from './EditableIngredientRow.js'
 import IngredientRow from './IngredientRow.js'
 import './IngredientList.css'
-import DisplayMessage from '../DisplayMessage.js'
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -24,7 +23,7 @@ export default function IngredientPage() {
     const [rowModesModel, setRowModesModel] = useState({});
     const [updateSBOpen, setUpdateSBOpen] = useState(false);
     const [updateDoneSBOpen, setUpdateDoneSBOpen] = useState(false);
-    const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
+    const [supplierOptions, setSupplierOptions] = useState();
 
     // Add ingredient from form
     const addIngredient = (ingredient) => {
@@ -32,7 +31,7 @@ export default function IngredientPage() {
         ingredient['i_id'] = lastID + 1;
         axios({
             method: "POST",
-            url:"http://4.236.185.213:8000/api/ingredient/",
+            url:"http://4.236.185.213:8000/api/ingredient-inventory/",
             data: ingredient
           }).then((response)=>{
             getDBIngredients();
@@ -45,29 +44,12 @@ export default function IngredientPage() {
           });
     }
 
-    const postDBIngredients = () => {
-        axios({
-            method: "POST",
-            url:"/ingredients/",
-            data: ingredients
-          }).then((response)=>{
-            getDBIngredients();
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-        setdisplayMsgComponent(<DisplayMessage msg='Submitting changes to database!'/>);
-    }
-
     // Delete Ingredient Row
     const deleteIngredient = (params) => {
         console.log(params.id);
         axios({
             method: "DELETE",
-            url:"http://4.236.185.213:8000/api/ingredient/"+params.id+'/',
+            url:"http://4.236.185.213:8000/api/ingredient-inventory/"+params.id+'/',
           }).then((response)=>{
             getDBIngredients();
           }).catch((error) => {
@@ -87,7 +69,7 @@ export default function IngredientPage() {
         
         axios({
             method: "PATCH",
-            url:"http://4.236.185.213:8000/api/ingredient/"+ newRow.i_id +'/',
+            url:"http://4.236.185.213:8000/api/ingredient-inventory/"+ newRow.i_id +'/',
             data: newRow
             }).then((response)=>{
             getDBIngredients();
@@ -114,31 +96,43 @@ export default function IngredientPage() {
         setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.View, ignoreModifications: true}});
     }
 
+    const supplierNameFormatter = (value) => {
+        console.log('FORMATTING: ' + value);
+        if (value) {
+            let idx = suppliers.findIndex((suppliers.s_id === value));
+            console.log(idx);
+            if (idx) return suppliers[idx].s_name;
+        }
+    }
+
     const columns = [
         { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
         { field: 'storage_type', headerName: 'Category', width: 150, editable: true },
         { field: 'pkg_type', headerName: 'Package Type', width: 120, editable: true },
         { field: 'unit', headerName: 'Measure', width: 90, editable: true },
         { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
-        { field: 'pref_isupplier', headerName: 'Supplier', width: 180, editable: true, valueFormatter: ({ value }) => value.s_name },
+        { field: 'pref_isupplier_id', headerName: 'Supplier', type: 'singleSelect', valueOptions: supplierOptions, width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
         { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
         { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
-        { field: 'tmp_1', headerName: 'Date Used', width: 100, type: 'date', editable: true },
-        { field: 'tmp_2', headerName: 'Units Used', width: 100, type: 'number', editable: true},
+        { field: 'exp_date', headerName: 'Expiration Date', width: 140, editable: true},
+        { field: 'ingredient_usage', headerName: 'Date Used', width: 100, type: 'date', editable: true, valueFormatter: (params) => {if (params.value) {
+            if (params.value.length > 0) return params.value[params.value.length - 1].used_date}}},
+        { field: 'ingredient_usage2', headerName: 'Units Used', width: 100, type: 'number', editable: true, valueFormatter: (params) => {if (params.value) {
+            if (params.value.length > 0) return params.value[params.value.length - 1].used_qty}}},
         { field: 'actions', type: 'actions', width: 100,
             getActions: (params) => {
                 let isInEditMode = false;
                 if (rowModesModel[params.id]) isInEditMode = rowModesModel[params.id].mode === GridRowModes.Edit;
                 if (isInEditMode) {
                     return [
-                        <GridActionsCellItem icon={<Save/>} onClick={() => {handleSaveClick(params)}}/>,
-                        <GridActionsCellItem icon={<Cancel/>} onClick={() => {handleCancelClick(params)}}/>
+                        <GridActionsCellItem icon={<Save/>} onClick={() => {handleSaveClick(params)}} color="darkBlue"/>,
+                        <GridActionsCellItem icon={<Cancel/>} onClick={() => {handleCancelClick(params)}} color="darkBlue"/>
                     ];
                 }
                 else {
                     return [
-                        <GridActionsCellItem icon={<Edit/>} onClick={() => handleEditClick(params)} color="inherit"/>,
-                        <GridActionsCellItem icon={<Delete/>} onClick={() => deleteIngredient(params)}/>
+                        <GridActionsCellItem icon={<Edit/>} onClick={() => handleEditClick(params)} color="darkBlue"/>,
+                        <GridActionsCellItem icon={<Delete/>} onClick={() => deleteIngredient(params)} color="darkBlue"/>
                     ]
                 }
             }
@@ -187,7 +181,22 @@ export default function IngredientPage() {
         console.log(ingredients);
     }
 
-    if (ingredients === undefined) {
+    // On page load
+    useEffect(() => {
+        getDBIngredients();
+        getDBSuppliers();
+    }, []);
+
+    // On suppliers set
+    useEffect(() => {
+        setSupplierOptions(suppliers.map((supplier) => {return {value: supplier.s_id, label: supplier.s_name}}))
+    }, [suppliers])
+
+    useEffect(() => {
+        // console.log('SUPPLIER OPTIONS ===> ' + supplierOptions);
+    }, [supplierOptions])
+
+    if (ingredients === undefined || suppliers === undefined) {
         return (
             <>loading...</>
         )
@@ -221,9 +230,7 @@ export default function IngredientPage() {
             experimentalFeatures={{ newEditingApi: true }}>
             </DataGrid>
         </Box>
-        <h3>Add An Ingredient</h3>
-            <IngredientForm addIngredient={addIngredient} suppliers={suppliers}></IngredientForm>
-            <button onClick={postDBIngredients}>Submit Changes</button>
+        <IngredientForm addIngredient={addIngredient} suppliers={suppliers}></IngredientForm>
         {/* Save Click Notice */}
         <Snackbar
             open={updateSBOpen}

@@ -44,6 +44,8 @@ import {Grid} from '@mui/material'
 import { useEffect } from 'react'
 // import DrawerComp from './DrawerComp.js'
 
+// SERVER IP 4.236.185.213
+
 const style = {
     padding: '10px',
     border: '1px solid black',
