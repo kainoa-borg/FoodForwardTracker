@@ -74,7 +74,7 @@ const HouseholdForm = (props) => {
     // HTML structure of this component
     return (
       <Card sx={{marginTop: '1em', padding: '1em'}}>
-        <Typography component='h5' variant='h5'>Add a household: </Typography>
+        <Typography component='h5' variant='h5'>Add a Client: </Typography>
         <form onSubmit={handleSubmit}>
             {/* Basic household info */}
             <Grid container spacing={4}>
