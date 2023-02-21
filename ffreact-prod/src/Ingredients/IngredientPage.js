@@ -9,7 +9,6 @@ import IngredientForm from './IngredientForm.js'
 import EditableIngredientRow from './EditableIngredientRow.js'
 import IngredientRow from './IngredientRow.js'
 import './IngredientList.css'
-import IngredientForm from './IngredientForm';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
