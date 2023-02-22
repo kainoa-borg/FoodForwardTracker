@@ -139,10 +139,6 @@ export default function IngredientPage() {
         }
     ]
 
-    useEffect(() => {
-        getDBIngredients();
-        getDBSuppliers();
-    }, []);
 
     const getDBSuppliers = () => {
         console.log("MAKING REQUEST TO DJANGO")
@@ -189,7 +185,8 @@ export default function IngredientPage() {
 
     // On suppliers set
     useEffect(() => {
-        setSupplierOptions(suppliers.map((supplier) => {return {value: supplier.s_id, label: supplier.s_name}}))
+        if (suppliers)
+            setSupplierOptions(suppliers.map((supplier) => {return {value: supplier.s_id, label: supplier.s_name}}));
     }, [suppliers])
 
     useEffect(() => {
