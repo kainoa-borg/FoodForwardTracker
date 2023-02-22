@@ -3,7 +3,7 @@ import axios from 'axios'
 import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCell, GridRowModes, GridActionsCellItem} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
-import { Snackbar } from '@mui/material';
+import { Button, Popover, Snackbar, Typography } from '@mui/material';
 import { wait } from '@testing-library/user-event/dist/utils';
 import IngredientForm from './IngredientForm.js'
 import EditableIngredientRow from './EditableIngredientRow.js'
@@ -22,19 +22,28 @@ export default function IngredientPage() {
     const [suppliers, setSuppliers] = useState(undefined);
     const [rowModesModel, setRowModesModel] = useState({});
     const [updateSBOpen, setUpdateSBOpen] = useState(false);
+    // Struct with all Snackbar open states
     const [updateDoneSBOpen, setUpdateDoneSBOpen] = useState(false);
+    // Struct of option definitions for Supplier dropdown
     const [supplierOptions, setSupplierOptions] = useState();
+    // Struct with all popover anchors
+    const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteAnchor: null, confirmCancelAnchor: null});
+    const [deleteParams, setDeleteParams] = useState(null);
 
     // Add ingredient from form
     const addIngredient = (ingredient) => {
         const lastID = ingredients[ingredients.length - 1]['i_id'];
         ingredient['i_id'] = lastID + 1;
+        // Open save notification
+        setUpdateSBOpen(true);
         axios({
             method: "POST",
             url:"http://4.236.185.213:8000/api/ingredient-inventory/",
             data: ingredient
           }).then((response)=>{
             getDBIngredients();
+            // Open save success notification
+            setUpdateDoneSBOpen(true);
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -46,12 +55,18 @@ export default function IngredientPage() {
 
     // Delete Ingredient Row
     const deleteIngredient = (params) => {
+        setPopoverAnchors({...popoverAnchors, confirmDeleteAnchor: null})
+        // Open saving changes notification
+        setUpdateSBOpen(true);
+
         console.log(params.id);
         axios({
             method: "DELETE",
             url:"http://4.236.185.213:8000/api/ingredient-inventory/"+params.id+'/',
           }).then((response)=>{
             getDBIngredients();
+            // Open saving changes success notification
+            setUpdateDoneSBOpen(true);
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -92,8 +107,8 @@ export default function IngredientPage() {
         setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.View}})
         setUpdateSBOpen(true);
     }
-    const handleCancelClick = (params) => {
-        setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.View, ignoreModifications: true}});
+    const handleCancelClick = (event, params) => {
+        setPopoverAnchors({...popoverAnchors, confirmCancelAnchor: event.currentTarget})
     }
 
     const supplierNameFormatter = (value) => {
@@ -103,6 +118,15 @@ export default function IngredientPage() {
             console.log(idx);
             if (idx) return suppliers[idx].s_name;
         }
+    }
+
+    const handleDeleteClick = (event, params) => {
+        console.log(event);
+        console.log(params);
+        // Set the confirmDeleteAnchor in popoverAnchors to the delete button
+        setPopoverAnchors({...popoverAnchors, confirmDeleteAnchor: event.currentTarget});
+        // Save the params as state variable
+        setDeleteParams(params);
     }
 
     const columns = [
@@ -123,23 +147,62 @@ export default function IngredientPage() {
             getActions: (params) => {
                 let isInEditMode = false;
                 if (rowModesModel[params.id]) isInEditMode = rowModesModel[params.id].mode === GridRowModes.Edit;
+            
+                // confirmDeleteOpen flag/id
+                const confirmDeleteOpen = Boolean(popoverAnchors.confirmDeleteAnchor);
+                const confirmDeleteID = confirmDeleteOpen ? 'simple-popover' : undefined;
+                
+                // confirmCancelOpen flag/id
+                const confirmCancelOpen = Boolean(popoverAnchors.confirmCancelAnchor);
+                const confirmCancelID = confirmCancelOpen ? 'simple-popover' : undefined;
+
+                // Show Edit Actions
                 if (isInEditMode) {
                     return [
                         <GridActionsCellItem icon={<Save/>} onClick={() => {handleSaveClick(params)}} color="darkBlue"/>,
-                        <GridActionsCellItem icon={<Cancel/>} onClick={() => {handleCancelClick(params)}} color="darkBlue"/>
+                        <GridActionsCellItem icon={<Cancel/>} onClick={(event) => {handleCancelClick(event, params)}} color="darkBlue"/>,
+                        <Popover
+                            id={confirmCancelID}
+                            open={confirmCancelOpen}
+                            anchorEl={popoverAnchors.confirmCancelAnchor}
+                            onClose={() => setPopoverAnchors({...popoverAnchors, confirmCancelAnchor: null})}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                        >
+                            <Typography>Canceling will revert all changes</Typography>
+                            <Button variant='contained' onClick={() => {setPopoverAnchors({...popoverAnchors, confirmCancelAnchor: null}); setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.View, ignoreModifications: true}});}}>Confirm</Button>
+                        </Popover>
                     ];
                 }
+                // Show View Actions
                 else {
                     return [
                         <GridActionsCellItem icon={<Edit/>} onClick={() => handleEditClick(params)} color="darkBlue"/>,
-                        <GridActionsCellItem icon={<Delete/>} onClick={() => deleteIngredient(params)} color="darkBlue"/>
+                        <GridActionsCellItem aria-describedby={confirmDeleteID} icon={<Delete/>} onClick={(event) => handleDeleteClick(event, params)} color="darkBlue"/>,
+                        <Popover
+                            id={confirmDeleteID}
+                            open={confirmDeleteOpen}
+                            anchorEl={popoverAnchors.confirmDeleteAnchor}
+                            onClose={() => setPopoverAnchors({...popoverAnchors, confirmDeleteAnchor: null})}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                        >
+                            <Typography>Delete this entry?</Typography>
+                            {/* Confirm button fires deleteIngredient using row params state */}
+                            <Button variant='contained' onClick={() => deleteIngredient(deleteParams)}>Confirm</Button>
+                        </Popover>
                     ]
                 }
             }
         }
     ]
 
-
+    // Get suppliers from database
+    // Set supplier variable with supplier data
     const getDBSuppliers = () => {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
@@ -156,6 +219,8 @@ export default function IngredientPage() {
           });
     }
 
+    // Get ingredients from database
+    // Set ingredients variable with ingredient data
     const getDBIngredients = () => {
         axios({
             method: "GET",
@@ -242,6 +307,7 @@ export default function IngredientPage() {
             onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
             message="Changes saved!"
         />
+        {/* Add entry notice */}
         </div>
     )
 }
