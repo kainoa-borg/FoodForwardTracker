@@ -14,10 +14,11 @@ import { Button, Popover, Snackbar, Typography } from '@mui/material';
     // Datagrid component with table data
 export default function ModularDatagrid(props) {
     
+    const apiIP = props.apiIP;
     const apiEndpoint = props.apiEndpoint;
     const keyFieldName = props.keyFieldName;
     const columns = [...props.columns, 
-        { field: 'actions', type: 'actions', width: 100,
+        { field: 'actions', type: 'actions', headerName: 'Actions', width: 100,
             getActions: (params) => modularActions(params, rowModesModel, setRowModesModel, setUpdateSBOpen)
         }                     
     ];
@@ -184,7 +185,7 @@ export default function ModularDatagrid(props) {
         else {
             return [
                 <GridActionsCellItem icon={<Edit/>} onClick={() => handleEditClick(params)} color="darkBlue"/>,
-                <GridActionsCellItem aria-describedby={confirmDeleteID} icon={<Delete/>} onClick={(event) => {handleDeleteClick(event, params); setPopoverAnchors({...popoverAnchors, confirmDeleteAnchor: null})}} color="darkBlue"/>,
+                <GridActionsCellItem aria-describedby={confirmDeleteID} icon={<Delete/>} onClick={(event) => {handleDeleteClick(event, params)}} color="darkBlue"/>,
                 <Popover
                     id={confirmDeleteID}
                     open={confirmDeleteOpen}

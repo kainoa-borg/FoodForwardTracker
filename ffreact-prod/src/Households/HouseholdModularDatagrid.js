@@ -30,7 +30,6 @@ export default function HouseholdModularDatagrid() {
         { field: 'gf_flag', headerName: 'Gluten Free', width: 100, type: 'date', type: 'boolean'},
         { field: 'hh_allergies', headerName: 'Allergies', width: 100, type: 'date', valueFormatter: ({ value }) => value.a_type },
         { field: 'paused_flag', headerName: 'Paused', width: 100, type: 'date', editable: true },
-        { field: 'delete', headerName: 'Action', width: 100, type: 'date', editable: true },
     ]
     
     return(
