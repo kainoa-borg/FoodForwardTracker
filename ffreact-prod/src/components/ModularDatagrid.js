@@ -46,10 +46,9 @@ export default function ModularDatagrid(props) {
         // Open saving changes notification
         setUpdateSBOpen(true);
 
-        console.log(params.id);
         axios({
             method: "DELETE",
-            url:"http://4.236.185.213:8000/api/ingredient-inventory/"+params.id+'/',
+            url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/"+params.id+'/',
           }).then((response)=>{
             getDBData();
             // Open saving changes success notification
