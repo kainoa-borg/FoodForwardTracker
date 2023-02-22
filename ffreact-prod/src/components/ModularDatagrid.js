@@ -4,29 +4,35 @@ import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCel
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import { Button, Popover, Snackbar, Typography } from '@mui/material';
-import { wait } from '@testing-library/user-event/dist/utils';
-import IngredientForm from './IngredientForm.js'
-import EditableIngredientRow from './EditableIngredientRow.js'
-import IngredientRow from './IngredientRow.js'
-import './IngredientList.css'
 
-const currencyFormatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-});
-
-// Ingredients List Component
-export default function IngredientPage() {
+// Modularized Datagrid with prompts/notifications
+// Takes:
+    // apiEndpoint -- string -- Name of the API endpoint to send requests to (Only supports 1 api endpoint per table)
+    // keyFieldName -- string -- Name of the primary key to use in API requests
+    // columns -- array -- Array of column definitions for the datagrid
+// Returns:
+    // Datagrid component with table data
+export default function ModularDatagrid(props) {
     
-    const [ingredients, setIngredients] = useState([]);
-    const [suppliers, setSuppliers] = useState(undefined);
+    const apiEndpoint = props.apiEndpoint;
+    const keyFieldName = props.keyFieldName;
+    const columns = [...props.columns, 
+        { field: 'actions', type: 'actions', width: 100,
+            getActions: (params) => modularActions(params, rowModesModel, setRowModesModel, setUpdateSBOpen)
+        }                     
+    ];
+
+    const [tableData, setTableData] = useState([]);
+
+    // Boolean 'request made' message state
     const [updateSBOpen, setUpdateSBOpen] = useState(false);
-    // Struct with all Snackbar open states
+    // Boolean 'request success' message state
     const [updateDoneSBOpen, setUpdateDoneSBOpen] = useState(false);
-    // Struct of option definitions for Supplier dropdown
-    const [supplierOptions, setSupplierOptions] = useState();
+    
+    // Struct of row modes (view/edit)
     const [rowModesModel, setRowModesModel] = useState({});
 
+    // Helper function closes Snackbar notification
     const handleSBClose = (event, reason, setOpen) => {
         if (reason === 'clickaway') {
             setOpen(false);
@@ -34,31 +40,8 @@ export default function IngredientPage() {
         setOpen(false);
     }
 
-    // Add ingredient from form
-    const addIngredient = (ingredient) => {
-        const lastID = ingredients[ingredients.length - 1]['i_id'];
-        ingredient['i_id'] = lastID + 1;
-        // Open save notification
-        setUpdateSBOpen(true);
-        axios({
-            method: "POST",
-            url:"http://4.236.185.213:8000/api/ingredient-inventory/",
-            data: ingredient
-          }).then((response)=>{
-            getDBIngredients();
-            // Open save success notification
-            setUpdateDoneSBOpen(true);
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-    }
-
-    // Delete Ingredient Row
-    const deleteIngredient = (params) => {
+    // Generalized Delete Row
+    const deleteEntry = (params) => {
         // Open saving changes notification
         setUpdateSBOpen(true);
 
@@ -67,7 +50,7 @@ export default function IngredientPage() {
             method: "DELETE",
             url:"http://4.236.185.213:8000/api/ingredient-inventory/"+params.id+'/',
           }).then((response)=>{
-            getDBIngredients();
+            getDBData();
             // Open saving changes success notification
             setUpdateDoneSBOpen(true);
           }).catch((error) => {
@@ -79,7 +62,7 @@ export default function IngredientPage() {
           });
     }
 
-    // Update Ingredient Row
+    // Generalized Update Row
     const processRowUpdate = (newRow) => {
         const updatedRow = {...newRow, isNew: false};
 
@@ -87,10 +70,10 @@ export default function IngredientPage() {
         
         axios({
             method: "PATCH",
-            url:"http://4.236.185.213:8000/api/ingredient-inventory/"+ newRow.i_id +'/',
+            url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/" + newRow[keyFieldName] +'/',
             data: newRow
             }).then((response)=>{
-            getDBIngredients();
+            getDBData();
             setUpdateDoneSBOpen(true);
             }).catch((error) => {
             if (error.response) {
@@ -103,32 +86,14 @@ export default function IngredientPage() {
         return updatedRow;
     }
 
-    // Get suppliers from database
-    // Set supplier variable with supplier data
-    const getDBSuppliers = () => {
-        console.log("MAKING REQUEST TO DJANGO")
+    // Get table data from database
+    // Set tableData state variable with ingredient data
+    const getDBData = () => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/suppliers"
-          }).then((response)=>{
-            setSuppliers(response.data);
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-    }
-
-    // Get ingredients from database
-    // Set ingredients variable with ingredient data
-    const getDBIngredients = () => {
-        axios({
-            method: "GET",
-            url:"http://4.236.185.213:8000/api/ingredient-inventory"
+            url:"http://4.236.185.213:8000/api/" + apiEndpoint
         }).then((response)=>{
-        setIngredients(response.data);
+        setTableData(response.data);
         }).catch((error) => {
         if (error.response) {
             console.log(error.response);
@@ -139,36 +104,20 @@ export default function IngredientPage() {
     }
 
     // On page load
+    // Get table data
     useEffect(() => {
-        getDBIngredients();
-        getDBSuppliers();
+        getDBData();
     }, []);
 
-    // On suppliers set
-    useEffect(() => {
-        if (suppliers)
-            setSupplierOptions(suppliers.map((supplier) => {return {value: supplier.s_id, label: supplier.s_name}}));
-    }, [suppliers])
-
-    useEffect(() => {
-        // console.log('SUPPLIER OPTIONS ===> ' + supplierOptions);
-    }, [supplierOptions])
-
-    if (ingredients === undefined || suppliers === undefined) {
+    // Wait until table data is loaded to render datagrid
+    if (tableData === undefined) {
         return (
             <>loading...</>
         )
     }
-    // The HTML structure of this component
 
-    const supplierNameFormatter = (value) => {
-        if (value) {
-            let idx = suppliers.findIndex((suppliers.s_id === value));
-            console.log(idx);
-            if (idx) return suppliers[idx].s_name;
-        }
-    }
-
+    // Takes rowModesModel getter and setter, setUpdateSBOpen ('request sent' message) setter 
+    // Returns actions column definition with Popover confirmation prompts
     const modularActions = (params, rowModesModel, setRowModesModel, setUpdateSBOpen) => {
         // Struct with all popover anchors
         const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteAnchor: null, confirmCancelAnchor: null});
@@ -176,29 +125,38 @@ export default function IngredientPage() {
         let isInEditMode = false;
         if (rowModesModel[params.id]) isInEditMode = rowModesModel[params.id].mode === GridRowModes.Edit;
 
+        // Set this row to edit mode
         const handleEditClick = (params) => {
             setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.Edit}});
         }
+
+        // Set this row to view mode
+        // Open 'request sent' snackbar
         const handleSaveClick = (params) => {
             setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.View}})
             setUpdateSBOpen(true);
         }
+
+        // Open 'confirm cancel' popover on the Cancel button
         const handleCancelClick = (event, params) => {
             setPopoverAnchors({...popoverAnchors, confirmCancelAnchor: event.currentTarget})
         }
+
+        // Open 'confirm delete' popover on the Delete button
+        // Save the params as state variable for the actual delete function
         const handleDeleteClick = (event, params) => {
-            // Set the confirmDeleteAnchor in popoverAnchors to the delete button
             setPopoverAnchors({...popoverAnchors, confirmDeleteAnchor: event.currentTarget});
-            // Save the params as state variable
             setDeleteParams(params);
         }
     
     
         // confirmDeleteOpen flag/id
+        // "Open the Delete prompt if the anchor is set"
         const confirmDeleteOpen = Boolean(popoverAnchors.confirmDeleteAnchor);
         const confirmDeleteID = confirmDeleteOpen ? 'simple-popover' : undefined;
         
         // confirmCancelOpen flag/id
+        // "Open the Cancel prompt if the anchor is set"
         const confirmCancelOpen = Boolean(popoverAnchors.confirmCancelAnchor);
         const confirmCancelID = confirmCancelOpen ? 'simple-popover' : undefined;
 
@@ -239,43 +197,24 @@ export default function IngredientPage() {
                 >
                     <Typography>Delete this entry?</Typography>
                     {/* Confirm button fires deleteIngredient using row params state */}
-                    <Button variant='contained' onClick={() => deleteIngredient(deleteParams)}>Confirm</Button>
+                    <Button variant='contained' onClick={() => deleteEntry(deleteParams)}>Confirm</Button>
                 </Popover>
             ]
         }
     }
-    
-    const columns = [
-        { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
-        { field: 'storage_type', headerName: 'Category', width: 150, editable: true },
-        { field: 'pkg_type', headerName: 'Package Type', width: 120, editable: true },
-        { field: 'unit', headerName: 'Measure', width: 90, editable: true },
-        { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
-        { field: 'pref_isupplier_id', headerName: 'Supplier', type: 'singleSelect', valueOptions: supplierOptions, width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
-        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
-        { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
-        { field: 'exp_date', headerName: 'Expiration Date', width: 140, editable: true},
-        { field: 'ingredient_usage', headerName: 'Date Used', width: 100, type: 'date', editable: true, valueFormatter: (params) => {if (params.value) {
-            if (params.value.length > 0) return params.value[params.value.length - 1].used_date}}},
-        { field: 'ingredient_usage2', headerName: 'Units Used', width: 100, type: 'number', editable: true, valueFormatter: (params) => {if (params.value) {
-            if (params.value.length > 0) return params.value[params.value.length - 1].used_qty}}},
-        { field: 'actions', type: 'actions', width: 100,
-            getActions: (params) => modularActions(params, rowModesModel, setRowModesModel, setUpdateSBOpen)
-        }
-    ]
 
+    // The HTML structure of this component
     return(
         <div class='table-div'>
-        <h3>Ingredients</h3>
         <Box sx={{height: '80vh'}}>
             <DataGrid 
             components={{ Toolbar: GridToolbar }}
-            rows={ingredients}
+            rows={tableData}
             columns={columns}
             editMode='row'
             rowModesModel={rowModesModel}
             onRowModesModelChange={(newModel) => {setRowModesModel(newModel)}}
-            getRowId={(row) => row.i_id}
+            getRowId={(row) => row[keyFieldName]}
             pageSize={10}
             processRowUpdate={processRowUpdate}
             //rowsPerPageOptions={[5]}
@@ -283,15 +222,14 @@ export default function IngredientPage() {
             experimentalFeatures={{ newEditingApi: true }}>
             </DataGrid>
         </Box>
-        <IngredientForm addIngredient={addIngredient} suppliers={suppliers}></IngredientForm>
-        {/* Save Click Notice */}
+        {/* Save Click 'request sent' Notice */}
         <Snackbar
             open={updateSBOpen}
             autoHideDuration={3000}
             onClose={(event, reason) => handleSBClose(event, reason, setUpdateSBOpen)}
             message="Saving..."
         />
-        {/* Save Complete Notice */}
+        {/* Save Complete 'request success' Notice */}
         <Snackbar
             open={updateDoneSBOpen}
             autoHideDuration={3000}

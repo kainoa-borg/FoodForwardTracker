@@ -5,6 +5,7 @@ import EditableHouseholdRow from './EditableHouseholdRow.js'
 import HouseholdRow from './HouseholdRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
+import HouseholdModularDatagrid from './HouseholdModularDatagrid.js'
 
 //import './HouseholdList.css'
 import {Table, TableHead, TableRow, TableCell, TableBody, Paper} from '@mui/material'
@@ -158,6 +159,11 @@ export default function HouseholdList() {
         return (<>loading</>);
     }
     // The HTML structure of this component
+
+    return (
+      <HouseholdModularDatagrid/>
+    )
+
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div>
