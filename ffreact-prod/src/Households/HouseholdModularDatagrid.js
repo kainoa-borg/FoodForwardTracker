@@ -30,22 +30,22 @@ export default function HouseholdModularDatagrid() {
     }
 
     const columns = [
-        { field: 'hh_name', headerName: 'Name', type: 'text', width: 150 },
-        { field: 'num_adult', headerName: 'Adults', type: 'number', width: 90 },
-        { field: 'num_child_lt_6', headerName: 'Children 0-6', type: 'number', width: 50 },
-        { field: 'num_child_gt_6', headerName: 'Children 7-17', type: 'number', width: 90, type: 'number' },
-        { field: 'phone', headerName: 'Phone Number', width: 90, type: 'phoneNumber' },
-        { field: 'street', headerName: 'Street', width: 180, type: 'text' },
-        { field: 'city', headerName: 'City', width: 120, type: 'text' },
-        { field: 'state', headerName: 'State', width: 140, type: 'state' },
-        { field: 'pcode', headerName: 'Postal Code', width: 100, type: 'date', editable: true },
+        { field: 'hh_name', headerName: 'Name', type: 'string', width: 150, editable: true },
+        { field: 'num_adult', headerName: 'Adults', type: 'number', width: 90, editable: true },
+        { field: 'num_child_lt_6', headerName: '# Child 0-6', type: 'number', width: 100, editable: true },
+        { field: 'num_child_gt_6', headerName: '# Child 7-17', type: 'number', width: 100, editable: true },
+        { field: 'phone', headerName: 'Phone Number', width: 90, type: 'number', editable: true, valueFormatter: (value) => {return value} },
+        { field: 'street', headerName: 'Street', width: 180, type: 'string', editable: true },
+        { field: 'city', headerName: 'City', width: 120, type: 'string', editable: true },
+        { field: 'state', headerName: 'State', width: 140, type: 'string', editable: true },
+        { field: 'pcode', headerName: 'Postal Code', width: 100, type: 'number', editable: true, valueFormatter: (value) => {return value} },
         { field: 'delivery_notes', headerName: 'Delivery Notes', width: 100, editable: true },
         { field: 'sms_flag', headerName: 'SMS', width: 100, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'veg_flag', headerName: 'Veg', width: 100, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'gf_flag', headerName: 'Gluten Free', width: 100, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0},
         { field: 'hh_allergies', headerName: 'Allergies', width: 200, type: 'string', editable: true, 
             renderCell: AllergyListCell,
-            renderEditCell: (params) => <AllergyListEditCell {...params}/>
+            renderEditCell: (params) => <AllergyListEditCell {...params} sx={{height: 'auto', minHeight: 200, maxHeight: 1000}}/>
         },
         { field: 'paused_flag', headerName: 'Paused', width: 100, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
     ]

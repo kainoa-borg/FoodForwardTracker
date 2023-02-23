@@ -1,6 +1,6 @@
-import React, {Fragment, useState, useEffect, Suspense} from 'react'
+import React, {Fragment, useState, useEffect, Suspense, useRef, createRef, useMemo} from 'react'
 import axios from 'axios'
-import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCell, GridRowModes, GridActionsCellItem} from '@mui/x-data-grid'
+import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCell, GridRowModes, GridActionsCellItem, useGridApiRef, gridSortedRowEntriesSelector, useGridApiContext} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import { Button, Popover, Snackbar, Typography } from '@mui/material';
@@ -12,18 +12,18 @@ import { Button, Popover, Snackbar, Typography } from '@mui/material';
     // columns -- array -- Array of column definitions for the datagrid
 // Returns:
     // Datagrid component with table data
-export default function ModularDatagrid(props) {
-    
+export default function ModularRecipeDatagrid(props) {    
     const apiIP = props.apiIP;
-    const apiEndpoint = props.apiEndpoint;
+    // const apiEndpoint = props.apiEndpoint;
     const keyFieldName = props.keyFieldName;
+    const setRows = props.setRows;
     const columns = [...props.columns, 
         { field: 'actions', type: 'actions', headerName: 'Actions', width: 100,
             getActions: (params) => modularActions(params, rowModesModel, setRowModesModel, setUpdateSBOpen)
         }                     
     ];
 
-    const [tableData, setTableData] = useState([]);
+    const [tableData, setTableData] = useState(props.rows);
 
     // Boolean 'request made' message state
     const [updateSBOpen, setUpdateSBOpen] = useState(false);
@@ -32,6 +32,23 @@ export default function ModularDatagrid(props) {
     
     // Struct of row modes (view/edit)
     const [rowModesModel, setRowModesModel] = useState({});
+
+    // (PROBLEM AREA) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // Somehow call this when new rows are added/deleted/updated (when state changes)
+    // => Save rows using the setRows prop function
+    const handleStateChange = () => {
+        return null; // Stop this broken function from being called for now
+        
+        // export state of this data grid using the api reference
+        const rowStates = dataGridApiRef.current.exportState()
+        
+        // (assuming state contains a list of objects with a row data (model) field)
+        // create an array of just the row data (model) of each row
+        const allRowData = rowStates.map((state) => state.model);
+
+        // use setter from parent component to update the state of its data with new row data
+        setRows(allRowData);
+    }
 
     // Helper function closes Snackbar notification
     const handleSBClose = (event, reason, setOpen) => {
@@ -44,44 +61,46 @@ export default function ModularDatagrid(props) {
     // Generalized Delete Row
     const deleteEntry = (params) => {
         // Open saving changes notification
-        setUpdateSBOpen(true);
+        // setUpdateSBOpen(true);
+        setTableData(tableData.filter((row) => row[keyFieldName] !== params.id));
+        // setRows(tableData.filter((row) => row[keyFieldName] !== params.id));
+        // updatedRows = updatedRows.map((dataGridRow) => updatedRows[dataGridRow.id, ])
 
-        axios({
-            method: "DELETE",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/"+params.id+'/',
-          }).then((response)=>{
-            getDBData();
-            // Open saving changes success notification
-            setUpdateDoneSBOpen(true);
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
+        // axios({
+        //     method: "DELETE",
+        //     url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/"+params.id+'/',
+        //   }).then((response)=>{
+        //     getDBData();
+        //     // Open saving changes success notification
+        //     setUpdateDoneSBOpen(true);
+        //   }).catch((error) => {
+        //     if (error.response) {
+        //       console.log(error.response);
+        //       console.log(error.response.status);
+        //       console.log(error.response.headers);
+        //       }
+        //   });
     }
 
     // Generalized Update Row
     const processRowUpdate = (newRow) => {
         const updatedRow = {...newRow, isNew: false};
-
-        console.log(updatedRow);
+        // console.log(updatedRow);
         
-        axios({
-            method: "PATCH",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/" + newRow[keyFieldName] +'/',
-            data: newRow
-            }).then((response)=>{
-            getDBData();
-            setUpdateDoneSBOpen(true);
-            }).catch((error) => {
-            if (error.response) {
-                console.log(error.response);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                }
-        });
+        // axios({
+        //     method: "PATCH",
+        //     url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/" + newRow[keyFieldName] +'/',
+        //     data: newRow
+        //     }).then((response)=>{
+        //     getDBData();
+        //     setUpdateDoneSBOpen(true);
+        //     }).catch((error) => {
+        //     if (error.response) {
+        //         console.log(error.response);
+        //         console.log(error.response.status);
+        //         console.log(error.response.headers);
+        //         }
+        // });
 
         return updatedRow;
     }
@@ -89,18 +108,18 @@ export default function ModularDatagrid(props) {
     // Get table data from database
     // Set tableData state variable with ingredient data
     const getDBData = () => {
-        axios({
-            method: "GET",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint
-        }).then((response)=>{
-        setTableData(response.data);
-        }).catch((error) => {
-        if (error.response) {
-            console.log(error.response);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-            }
-        });
+        // axios({
+        //     method: "GET",
+        //     url:"http://4.236.185.213:8000/api/" + apiEndpoint
+        // }).then((response)=>{
+        // setTableData(response.data);
+        // }).catch((error) => {
+        // if (error.response) {
+        //     console.log(error.response);
+        //     console.log(error.response.status);
+        //     console.log(error.response.headers);
+        //     }
+        // });
     }
 
     // On page load
@@ -116,11 +135,17 @@ export default function ModularDatagrid(props) {
         )
     }
 
+    const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteAnchor: null, confirmCancelAnchor: null});
+
+    const handleRowEditStop = (params, event) => {
+        console.log(params.reason);
+        if (params.reason === 'escapeKeyDown') {event.defaultMuiPrevented = true; setPopoverAnchors({...popoverAnchors, confirmCancelAnchor: event.target})};
+    }
+
     // Takes rowModesModel getter and setter, setUpdateSBOpen ('request sent' message) setter 
     // Returns actions column definition with Popover confirmation prompts
     const modularActions = (params, rowModesModel, setRowModesModel, setUpdateSBOpen) => {
         // Struct with all popover anchors
-        const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteAnchor: null, confirmCancelAnchor: null});
         const [deleteParams, setDeleteParams] = useState(null);
         let isInEditMode = false;
         if (rowModesModel[params.id]) isInEditMode = rowModesModel[params.id].mode === GridRowModes.Edit;
@@ -147,8 +172,7 @@ export default function ModularDatagrid(props) {
         const handleDeleteClick = (event, params) => {
             setPopoverAnchors({...popoverAnchors, confirmDeleteAnchor: event.currentTarget});
             setDeleteParams(params);
-        }
-    
+        }    
     
         // confirmDeleteOpen flag/id
         // "Open the Delete prompt if the anchor is set"
@@ -206,14 +230,17 @@ export default function ModularDatagrid(props) {
     // The HTML structure of this component
     return(
         <div class='table-div'>
-        <Box sx={{height: '80vh'}}>
-            <DataGrid 
+        <Box sx={{height: 'auto', overflow: 'auto'}}>
+            <DataGrid
             components={{ Toolbar: GridToolbar }}
             rows={tableData}
             columns={columns}
+            autoHeight={true}
             editMode='row'
             rowModesModel={rowModesModel}
             onRowModesModelChange={(newModel) => {setRowModesModel(newModel)}}
+            onRowEditStop={handleRowEditStop}
+            onStateChange={handleStateChange}
             getRowId={(row) => row[keyFieldName]}
             pageSize={10}
             processRowUpdate={processRowUpdate}
@@ -237,7 +264,6 @@ export default function ModularDatagrid(props) {
             onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
             message="Changes saved!"
         />
-        {/* Add entry notice */}
         </div>
     )
 }
