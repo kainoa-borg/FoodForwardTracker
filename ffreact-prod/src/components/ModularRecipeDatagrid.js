@@ -33,12 +33,17 @@ export default function ModularRecipeDatagrid(props) {
     // Struct of row modes (view/edit)
     const [rowModesModel, setRowModesModel] = useState({});
 
+
     // (PROBLEM AREA) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // Somehow call this when new rows are added/deleted/updated (when state changes)
     // => Save rows using the setRows prop function
     const handleStateChange = () => {
         return null; // Stop this broken function from being called for now
-        
+
+        // Doesn't work.
+        // => Use some function to get a reference to this datagrid's api
+        const dataGridApiRef = useGridApiRef();
+
         // export state of this data grid using the api reference
         const rowStates = dataGridApiRef.current.exportState()
         
