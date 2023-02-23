@@ -1,8 +1,8 @@
 import React from 'react'
 
-// Ingredient Row component
-// Takes: key of current row, the state of the Ingredient Page's ingredient list, deletePackaging callback, handleEditClick callback
-// Returns a Ingredient table row component 
+// Packaging Row component
+// Takes: key of current row, the state of the Packaging Page's Packaging list, deletePackaging callback, handleEditClick callback
+// Returns a Packaging table row component 
 const PackagingRow = (props) => {
     const {thisKey, packaging, deletePackaging, handleEditClick} = props;
     const key = thisKey;

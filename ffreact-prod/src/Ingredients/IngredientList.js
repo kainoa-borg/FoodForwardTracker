@@ -1,14 +1,11 @@
-import React, {Fragment, useState, useEffect, Suspense} from 'react'
+import React, {Fragment, useState, useEffect} from 'react'
 import axios from 'axios'
 import IngredientForm from './IngredientForm.js'
 import EditableIngredientRow from './EditableIngredientRow.js'
 import IngredientRow from './IngredientRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
-
 import './IngredientList.css'
-import InventoryPage from '../InventoryPage'
-
 
 // Ingredient List Component
 export default function IngredientList() {
