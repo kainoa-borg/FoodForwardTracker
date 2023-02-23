@@ -161,12 +161,20 @@ export default function HouseholdList() {
     // The HTML structure of this component
 
     return (
+      <div>
       <HouseholdModularDatagrid/>
+        <h3>Add a Client</h3>
+        <HouseholdForm addHousehold={addHousehold} allergies={households.hh_allergies}></HouseholdForm>
+        {errorComponent}
+        {displayMsgComponent}
+      </div>
     )
+  }
 
+  /*
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
-        <div>
+  /*      <div>
           <h3>Clients</h3>
           <Table size='small' component={Paper} stickyHeader sx={{minWidth: 650}}>
               <TableHead>
@@ -190,8 +198,8 @@ export default function HouseholdList() {
                   </TableRow>
               </TableHead>
               <TableBody>
-                  {/* Show a row for each household in households.*/}
-                  {households.map((household, key) => {
+                  {/* Show a row for each household in households.*///}
+  /*                {households.map((household, key) => {
                       const thisKey = key;
                       return(
                           <Fragment>
@@ -204,8 +212,8 @@ export default function HouseholdList() {
                           </Fragment>
                       );
                   })}
-                  {/* If the list is empty display EmptyTableMessage */}
-                  {households.length < 1 ? handleError('empty') : null}
+                  {/* If the list is empty display EmptyTableMessage *///}
+  /*                {households.length < 1 ? handleError('empty') : null}
               </TableBody>
           </Table>
           <HouseholdForm addHousehold={addHousehold}></HouseholdForm>
@@ -214,3 +222,4 @@ export default function HouseholdList() {
         </div>
     )
 }
+*/

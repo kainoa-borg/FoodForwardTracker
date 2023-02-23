@@ -1,13 +1,8 @@
 import AllergiesList from './AllergiesList.js'
-import React, { useEffect, useState } from 'react'
-
-//import Button from 'react-bootstrap/Button'
-import { Formik } from "formik"
+import React, { useState } from 'react'
 import { Grid, TextField, Typography, Paper, Button, IconButton, Box, TableRow, TableCell } from "@mui/material"
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete' 
-import CheckIcon from '@mui/icons-material/Check';
-import * as yup from "yup"
 import { Check } from '@mui/icons-material';
 //import { Link, useNavigate } from "react-router-dom"
 

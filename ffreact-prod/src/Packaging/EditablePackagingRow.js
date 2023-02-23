@@ -1,9 +1,9 @@
-import React, {useState, useEffect, Fragment} from 'react'
+import React from 'react'
 import EditablePkgUsageTable from '../Packaging/EditablePkgUsageTable.js'
 
-// Editable Household Row
-// Takes: key of current row, the state of the Household Page's editFormData, updateHousehold callback, handleEditFormChange callback, and handleCancelClick callback
-// Returns an editable household table row component
+// Editable Packaging Row
+// Takes: key of current row, the state of the Packaging Page's editFormData, updatePackaging callback, handleEditFormChange callback, and handleCancelClick callback
+// Returns an editable packaging table row component
 const EditablePackagingRow = (props) => {
     const {thisKey, editFormData, suppliers, updatePackaging, handleEditFormChange, handleCancelClick, updateEditForm} = props
     const pkg = editFormData;
