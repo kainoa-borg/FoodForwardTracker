@@ -55,7 +55,6 @@ const style = {
 
 
 const App = () => {
-    const [currPage, setCurrPage] = useState();
     const [open, setOpen] = React.useState(false);
     const [count, setCount] = React.useState(0);
     const [loginState, setLoginState] = useState({
@@ -76,6 +75,30 @@ const App = () => {
         // do something
         event.stopPropagation();
       };
+
+    const readLoginCookie = () => {
+        const parseCookie = str =>
+            str
+            .split(';')
+            .map(v => v.split('='))
+            .reduce((acc, v) => {
+            acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+            return acc;
+        }, {});
+        return parseCookie(document.cookie);
+    }
+
+    const handleLogout = () => {
+        document.cookie = 'username=;'
+        document.cookie = 'isAuthenticated=false;'
+        document.cookie = 'isAdmin=false;'
+        setLoginState({
+            username: '',
+            isAuthenticated: false,
+            isAdmin: false
+        })
+    }
+
     const handlePageClick = (pageName) => {
         console.log(pageName)
         switch(pageName) {
@@ -97,8 +120,11 @@ const App = () => {
             case 'reports': setCurrPage(<ReportsPage handlePageClick={handlePageClick} />); break;
             case 'userPage': setCurrPage(<UserPage handlePageClick={handlePageClick} />); break;
             case 'userList': setCurrPage(<UserList handlePageClick={handlePageClick} />); break;
+            case 'entryPage': setCurrPage(<EntryPage handlePageClick={handlePageClick}/>); break;
         }
     }
+
+    const [currPage, setCurrPage] = useState(<EntryPage handlePageClick={handlePageClick} setLoginState={setLoginState} />);
 
     // useEffect(() => {setCurrPage(<EntryPage handlePageClick={handlePageClick}/>)}, [])
 
@@ -131,11 +157,11 @@ const App = () => {
         
         <ThemeProvider theme={theme}>
         <div className="App" style={style} onClick={handleHeaderClick}>
-            <Navbar handlePageClick={handlePageClick} />
+            <Navbar handlePageClick={handlePageClick} handleLogout={handleLogout} loginState={loginState} />
             <Box sx={{
                 bgcolor: (theme) => theme.
                 palette.background.default,
-                minHeight: "100vh",
+                minHeight: "100%",
                 width: '90%',
                 margin: 'auto',
                 marginTop: '5%',

@@ -10,6 +10,8 @@ import { Grid, Typography, Stack, Paper, Box} from '@mui/material'
 import TextField from '@mui/material/TextField'
 import { Card } from '@mui/material'
 
+import ffLogo from './Images/ff_logo.jpg'
+
 
 // Login Page Component
 // Takes handlePageClick callback function to enable page switching when login is completed
@@ -28,6 +30,17 @@ const LoginPage = (props) => {
         }
     );
 
+    const setLoginCookie = (username, isAuthenticated, isAdmin) => {
+        var now = new Date();
+        var now = new Date();
+        var time = now.getTime();
+        var expireTime = time + 1000*36000;
+        now.setTime(expireTime);
+        document.cookie = 'username='+username+';'+'expires='+expireTime+';'
+        document.cookie = 'isAuthenticated='+isAuthenticated+';'+'expires='+expireTime+';'
+        document.cookie = 'isAdmin='+isAdmin+';'+'expires='+expireTime+';'
+    }
+
     const sendLoginRequest = () => {
         axios({
             method: "POST",
@@ -42,6 +55,8 @@ const LoginPage = (props) => {
                     isAuthenticated: true,
                     isAdmin: true
                 });
+                // Set the cookie login data
+                setLoginCookie(user.username, 'true', 'true');
                 handlePageClick('landingPage');
             }
             else if (response.data === 500) {
@@ -113,7 +128,7 @@ const LoginPage = (props) => {
             
             {/* Logo and Welcome Message (left-side) */}
             <Grid item md={7} sx={{display: {xs: 'none', md: 'block'}}}>
-                <Box component='img' sx={{width: '80%'}} src="/Images/ff_logo.jpg"/>
+                <Box component='img' sx={{width: '80%'}} src={ffLogo}/>
                 <Typography variant='h3' sx={{paddingBottom: '1em'}}>Welcome to Food Forward!</Typography>
             </Grid>
 

@@ -22,13 +22,36 @@ import ff_logo from './Images/ff_logo.jpg'
 import { AppBar, Typography, Toolbar, Tabs, Button, useMediaQuery, useTheme, Grid} from "@mui/material"
 
 const PAGES = ["Landing Page", "Clients", "Households", "Inventory", "Meals", "Reports", "Administration"]
-  console.log(PAGES)
+// console.log(PAGES)
 const Navbar = (props) => {
   const [value, setValue] = useState();
-    const theme = useTheme();
-    console.log(theme);
-    const isMatch = useMediaQuery(theme.breakpoints.down(""))
-    console.log(isMatch)
+  const theme = useTheme();
+  // console.log(theme);
+  const isMatch = useMediaQuery(theme.breakpoints.down(""))
+  // console.log(isMatch)
+  const loginState = props.loginState;
+  const handleLogout = props.handleLogout;
+
+  const displayLoginSignup = () => {
+    if (loginState.isAuthenticated) {
+      return (
+        <Grid item>
+          <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('userPage')}>My Account</Button>
+          <Button color='lightGreen' variant='contained' onClick={handleLogout}>Sign Out</Button>
+        </Grid>
+      )
+    }
+    else {
+      return (
+        <Grid item>
+            <Button color='lightGreen' variant="contained" onClick={() => handlePageClick('loginPage')
+            }>Login{""}</Button>
+            <Button color='lightGreen' variant="contained" onClick={() => handlePageClick('newUserPage')}>Sign Up{""}</Button>
+        </Grid>
+      )
+    }
+  }
+
 
   const handlePageClick = props.handlePageClick;
   return (
@@ -36,10 +59,10 @@ const Navbar = (props) => {
       <AppBar sx={{ background: '#9AB847'}}>
         <Toolbar>
         <Tabs
-        value={value}
-        onChange={(e, value) => setValue(value)}
+          value={value}
+          onChange={(e, value) => setValue(value)}
         >
-          </Tabs>
+        </Tabs>
         
           
         <Grid container justifyContent='space-between' alignItems='center' direction='row'>
@@ -48,7 +71,7 @@ const Navbar = (props) => {
             <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('landingPage')}>
               Landing Page
             </Button>
-            <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('households','householdForm')}>
+            <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('households')}>
                 Clients
             </Button>
             <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('inventoryPage')}>
@@ -64,11 +87,7 @@ const Navbar = (props) => {
                 Administration
             </Button>
           </Grid>
-          <Grid item>
-            <Button color='lightGreen' variant="contained" onClick={() => handlePageClick('loginPage')
-            }>Login{""}</Button>
-            <Button color='lightGreen' variant="contained" onClick={() => handlePageClick('newUserPage')}>Sign Up{""}</Button>
-          </Grid>
+          {displayLoginSignup()}
         </Grid>
         </Toolbar>
       </AppBar>

@@ -16,6 +16,7 @@ const cardStyle = {
 
 const LandingPage = (props) => {
     const handlePageClick = props.handlePageClick;
+
     // HTML structure of this component
     return (
         <Fragment>
