@@ -1,9 +1,12 @@
 import React, {Fragment, useState, useEffect, Suspense, useRef, createRef, useMemo} from 'react'
 import axios from 'axios'
-import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCell, GridRowModes, GridActionsCellItem, useGridApiRef, gridSortedRowEntriesSelector, useGridApiContext} from '@mui/x-data-grid'
+import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCell, GridRowModes, GridActionsCellItem, useGridApiRef, gridSortedRowEntriesSelector, useGridApiContext, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import { Button, Popover, Snackbar, Typography } from '@mui/material';
+
+import FormDialog from './FormDialog';
+import HouseholdForm from '../Households/HouseholdForm.js'
 
 // Modularized Datagrid with prompts/notifications
 // Takes:
@@ -29,31 +32,14 @@ export default function ModularRecipeDatagrid(props) {
     const [updateSBOpen, setUpdateSBOpen] = useState(false);
     // Boolean 'request success' message state
     const [updateDoneSBOpen, setUpdateDoneSBOpen] = useState(false);
+
+    // Boolean 'add form open' state
+    const [addFormOpen, setAddFormOpen] = useState(false);
     
     // Struct of row modes (view/edit)
     const [rowModesModel, setRowModesModel] = useState({});
 
-
-    // (PROBLEM AREA) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // Somehow call this when new rows are added/deleted/updated (when state changes)
-    // => Save rows using the setRows prop function
-    const handleStateChange = () => {
-        return null; // Stop this broken function from being called for now
-
-        // Doesn't work.
-        // => Use some function to get a reference to this datagrid's api
-        const dataGridApiRef = useGridApiRef();
-
-        // export state of this data grid using the api reference
-        const rowStates = dataGridApiRef.current.exportState()
-        
-        // (assuming state contains a list of objects with a row data (model) field)
-        // create an array of just the row data (model) of each row
-        const allRowData = rowStates.map((state) => state.model);
-
-        // use setter from parent component to update the state of its data with new row data
-        setRows(allRowData);
-    }
+    const dataGridApiRef = useGridApiRef();
 
     // Helper function closes Snackbar notification
     const handleSBClose = (event, reason, setOpen) => {
@@ -67,45 +53,22 @@ export default function ModularRecipeDatagrid(props) {
     const deleteEntry = (params) => {
         // Open saving changes notification
         // setUpdateSBOpen(true);
-        setTableData(tableData.filter((row) => row[keyFieldName] !== params.id));
-        // setRows(tableData.filter((row) => row[keyFieldName] !== params.id));
-        // updatedRows = updatedRows.map((dataGridRow) => updatedRows[dataGridRow.id, ])
-
-        // axios({
-        //     method: "DELETE",
-        //     url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/"+params.id+'/',
-        //   }).then((response)=>{
-        //     getDBData();
-        //     // Open saving changes success notification
-        //     setUpdateDoneSBOpen(true);
-        //   }).catch((error) => {
-        //     if (error.response) {
-        //       console.log(error.response);
-        //       console.log(error.response.status);
-        //       console.log(error.response.headers);
-        //       }
-        //   });
+        const newTableData = tableData.filter((row) => row[keyFieldName] !== params.id);
+        setTableData(newTableData);
+        setRows(newTableData);
     }
 
     // Generalized Update Row
     const processRowUpdate = (newRow) => {
         const updatedRow = {...newRow, isNew: false};
-        // console.log(updatedRow);
         
-        // axios({
-        //     method: "PATCH",
-        //     url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/" + newRow[keyFieldName] +'/',
-        //     data: newRow
-        //     }).then((response)=>{
-        //     getDBData();
-        //     setUpdateDoneSBOpen(true);
-        //     }).catch((error) => {
-        //     if (error.response) {
-        //         console.log(error.response);
-        //         console.log(error.response.status);
-        //         console.log(error.response.headers);
-        //         }
-        // });
+        // Find row to update
+        const rowIndex = tableData.findIndex((row) => row[keyFieldName] === newRow[keyFieldName])
+        // Update that row of tableData with newRow
+        const newTableData = [...tableData];
+        newTableData[rowIndex] = newRow;
+        // Set the parent rows state with the updated tableData
+        setRows(newTableData);
 
         return updatedRow;
     }
@@ -232,12 +195,26 @@ export default function ModularRecipeDatagrid(props) {
         }
     }
 
+    function CustomToolbar() {
+        return (
+          <GridToolbarContainer>
+            <GridToolbarColumnsButton />
+            <GridToolbarFilterButton />
+            <GridToolbarDensitySelector />
+            <GridToolbarExport />
+            <Button color='lightBlue' variant='contained' onClick={() => {setAddFormOpen(true)}}>Add Entry</Button>
+          </GridToolbarContainer>
+        );
+    }
+      
+
     // The HTML structure of this component
     return(
         <div class='table-div'>
         <Box sx={{height: 'auto', overflow: 'auto'}}>
             <DataGrid
-            components={{ Toolbar: GridToolbar }}
+            apiRef={dataGridApiRef}
+            components={{ Toolbar: CustomToolbar }}
             rows={tableData}
             columns={columns}
             autoHeight={true}
@@ -245,7 +222,6 @@ export default function ModularRecipeDatagrid(props) {
             rowModesModel={rowModesModel}
             onRowModesModelChange={(newModel) => {setRowModesModel(newModel)}}
             onRowEditStop={handleRowEditStop}
-            onStateChange={handleStateChange}
             getRowId={(row) => row[keyFieldName]}
             pageSize={10}
             processRowUpdate={processRowUpdate}
@@ -255,6 +231,8 @@ export default function ModularRecipeDatagrid(props) {
             experimentalFeatures={{ newEditingApi: true }}>
             </DataGrid>
         </Box>
+        {/* Add Form Dialog */}
+        <FormDialog open={addFormOpen} setOpen={setAddFormOpen} addForm={<HouseholdForm />}/>
         {/* Save Click 'request sent' Notice */}
         <Snackbar
             open={updateSBOpen}

@@ -29,7 +29,12 @@ const EntryPage = (props) => {
             acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
             return acc;
         }, {});
-        return parseCookie(document.cookie);
+
+        console.log(document.cookie);
+
+        if (document.cookie !== '') {
+            return parseCookie(document.cookie);
+        }
     }
 
     useEffect(() => {

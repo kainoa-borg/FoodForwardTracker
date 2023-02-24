@@ -12,7 +12,6 @@ import { Card } from '@mui/material'
 
 import ffLogo from './Images/ff_logo.jpg'
 
-
 // Login Page Component
 // Takes handlePageClick callback function to enable page switching when login is completed
 // Returns a login page component that allows users to enter account information 
