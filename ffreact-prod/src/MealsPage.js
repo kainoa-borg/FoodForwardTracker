@@ -60,14 +60,12 @@ const MealsPage = (props) => {
         <div style={style}>
         <CssBaseline />
         <Dropdown
-            trigger={<Button color='lightGreen' variant='contained'> Meal Options</Button>}
+            trigger={<Button color='lightGreen' variant='contained'> Meals</Button>}
             menu={[
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('meals')}>
                     Meal Plans</button>,
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('recipePage')}>
-                    Recipes</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('stations')}>
-                    Stations</button>
+                    Recipes</button>
                 ]}/>
             {currPage}
         </div>
