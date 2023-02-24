@@ -129,7 +129,7 @@ const HouseholdForm = (props) => {
                 <AllergiesList allergies={household.hh_allergies} isEditable={true} updateEditForm={updateEditForm}/>
               </Grid>
             </Grid>
-            <Button type='Submit' color='lightBlue' variant='contained'>Add Household</Button>
+            <Button type='Submit' color='lightBlue' variant='contained'>Add Client</Button>
         </form>
       </Card>
 

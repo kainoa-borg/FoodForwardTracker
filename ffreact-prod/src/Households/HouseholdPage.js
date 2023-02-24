@@ -146,7 +146,6 @@ export default function HouseholdPage() {
             </DataGrid>
         </Box>
         {loadingComponent}
-        <h3>Add An Ingredient</h3>
         <HouseholdForm addHousehold={addHousehold} allergies={household.hh_allergies}></HouseholdForm>
         <button onClick={postDBHousehold}>Submit Changes</button>
         {errorComponent}

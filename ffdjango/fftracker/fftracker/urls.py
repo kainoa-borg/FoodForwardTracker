@@ -19,6 +19,7 @@ from django.urls import path, include
 from .models import (Households, Ingredients, Packaging, MealPlans, Recipes)
 from rest_framework import routers
 
+from .MealRecipeViews import *
 from .AccountCreationViews import AccountCreateView
 from .CalculationsView import CalculationsView
 from .HouseholdViews import HouseholdsView, HouseholdsWithAllergies
@@ -26,7 +27,6 @@ from .IngredientViews import IngredientInvView
 from .MenuView import MenuView
 from .MealPlanViews import MealPlansView
 from .MealView import MealView
-from .MealRecipeViews import *
 from .PackagingViews import PackagingInvView
 from .PacPurchaseList import PPLView
 from .RecipeListViews import RecipeListView
