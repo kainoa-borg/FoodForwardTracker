@@ -1,13 +1,16 @@
-import React from 'react'
-import { useState } from 'react'
-import { Fragment } from 'react'
-import axios from 'axios'
-import HouseholdsReport from './Households/HouseholdsReport.js'
-import IngredientsReport from './Ingredients/IngredientsReport'
-import { Container, Button, Typography } from '@mui/material'
+import React, { useState } from 'react'
+import { Button, CssBaseline } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import Dropdown from './components/Dropdown'
-import { CssBaseline, Box } from '@mui/material'
+
+import HouseholdsReport from './Households/HouseholdsReport.js'
+import IngredientsReport from './Ingredients/IngredientsReport.js'
+import PackagingReport from './Packaging/PackagingReport.js'
+import PurchasingReport from './Reports/PurchasingReport.js'
+import PackagingReturns from './Reports/PackagingReturns.js'
+import MealPlanReport from './Reports/MealPlanReport.js'
+import MealHistory from './Reports/MealHistory.js'
+import CostTotals from './Reports/CostTotals.js'
 
 const theme = createTheme({
     palette: {
@@ -47,7 +50,13 @@ const ReportsPage = (props) => {
     const handlePageClick = (pageName) => {
         console.log(pageName)
         if (pageName === 'households-report') setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />);
-        else if (pageName === 'ingredients-report') setCurrPage(<IngredientsReport handlePageClick={handlePageClick} />);
+        if (pageName === 'ingredients-report') setCurrPage(<IngredientsReport handlePageClick={handlePageClick} />);
+        if (pageName === 'packaging-report') setCurrPage(<PackagingReport handlePageClick={handlePageClick} />);
+        if (pageName === 'purchasing-report') setCurrPage(<PurchasingReport handlePageClick={handlePageClick} />);
+        if (pageName === 'packaging-returns') setCurrPage(<PackagingReturns handlePageClick={handlePageClick} />);
+        if (pageName === 'meal-plan-report') setCurrPage(<MealPlanReport handlePageClick={handlePageClick} />);
+        if (pageName === 'meal-history') setCurrPage(<MealHistory handlePageClick={handlePageClick} />);
+        else if (pageName === 'cost-totals') setCurrPage(<CostTotals handlePageClick={handlePageClick} />);
     }
 
     // HTML structure of this component
@@ -61,15 +70,19 @@ const ReportsPage = (props) => {
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Households Report</button>,
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('ingredients-report')}>
-                    Ingredients Report</button>
-                // <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
-                //     Packaging Report</button>,
-                // <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
-                //     Cost Totals</button>,
-                // <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
-                //     Menu Reports</button>,
-                // <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
-                //     Purchasing Reports</button>
+                    Ingredients Report</button>,
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('packaging-report')}>
+                    Packaging Report</button>,
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('purchasing-report')}>
+                    Purchasing Report</button>,
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('packaging-returns')}>
+                    Packaging Returns</button>,
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('meal-plan-report')}>
+                    Meal Plan Report</button>,
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('meal-history')}>
+                    Meal History</button>,
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('cost-totals')}>
+                    Cost Totals</button>,
                 ]}/>
             {currPage}
         </div>

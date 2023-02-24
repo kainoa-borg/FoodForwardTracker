@@ -31,7 +31,6 @@ export default function HouseholdPage() {
         { field: 'hh_allergies', headerName: 'Allergies', width: 100, type: 'date', valueFormatter: ({ value }) => value.s_name },
         { field: 'paused_flag', headerName: 'Paused', width: 100, type: 'date', editable: true },
         { field: 'delete', headerName: 'Action', width: 100, type: 'date', editable: true },
-
     ]
 
     const handleError = (errCode) => {
