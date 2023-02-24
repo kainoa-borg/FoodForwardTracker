@@ -17,32 +17,17 @@ import Recipe from './Recipe/RecipeList.js'
 import RecipePage from './Recipe/RecipePage.js'
 import MealPlan from './Meals/MealList.js'
 import Packaging from './Packaging/PackagingList.js'
+import PackagingReport from './Packaging/PackagingReport.js'
 import EntryPage from './EntryPage.js'
 import Search from './Search.js'
 import Navbar from './Navbar.js'
-// import Drawer from './DrawerComp'
 import React from 'react'
-import ReactDOM from "react-dom"
 import { useState } from 'react'
-import { CssBaseline, Box } from '@mui/material'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import { Container, Button, Typography } from '@mui/material'
-
+import { Box } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-
-// import { ThemeProvider } from 'styled-components'
-import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-//import Header from './components/Header'
-import MenuItems from './components/MenuItems'
 import NavBar from './components/NavBar'
 import Dropdown, { useOutsideClick} from './components/Dropdown'
 import './App.css';
-
-import {Grid} from '@mui/material'
-import { useEffect } from 'react'
-// import DrawerComp from './DrawerComp.js'
 
 // SERVER IP 4.236.185.213
 
@@ -53,7 +38,6 @@ const style = {
     justifyContent: 'space-between',
 };
 
-
 const App = () => {
     const [open, setOpen] = React.useState(false);
     const [count, setCount] = React.useState(0);
@@ -62,17 +46,12 @@ const App = () => {
         isAuthenticated: false,
         isAdmin: false
     })
+
     const handleClickOutside = () => {
-        setCount(0);
       };
     const ref = useOutsideClick(handleClickOutside);
     
-    const handleClick = () => {
-        setCount((state) => state + 1);
-      };  
-    
     const handleHeaderClick = (event) => {
-        // do something
         event.stopPropagation();
       };
 
@@ -102,18 +81,19 @@ const App = () => {
     const handlePageClick = (pageName) => {
         console.log(pageName)
         switch(pageName) {
-            case 'householdForm': setCurrPage(<HouseholdForm />); break;
             case 'loginPage': setCurrPage(<LoginPage loginState={loginState} setLoginState={setLoginState} handlePageClick={handlePageClick} />); break;
             case 'newUserPage': setCurrPage(<NewUserPage handlePageClick={handlePageClick} />); break;
             case 'pwResetPage': setCurrPage(<PwResetPage handlePageClick={handlePageClick} />); break;
             case 'landingPage': setCurrPage(<LandingPage handlePageClick={handlePageClick} />); break;
             case 'mealsPage': setCurrPage(<MealsPage handlePageClick={handlePageClick} />); break;
-            case 'inventoryPage': setCurrPage(<InventoryPage handlePageClick={handlePageClick} />); break;
             case 'households': setCurrPage(<HouseholdList handlePageClick={handlePageClick} />); break;
+            case 'householdForm': setCurrPage(<HouseholdForm />); break;
             case 'households-report': setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />); break;
             case 'ingredients': setCurrPage(<Ingredients handlePageClick={handlePageClick} />); break;
             case 'ingredients-report': setCurrPage(<IngredientsReport handlePageClick={handlePageClick} />); break;
+            case 'inventoryPage': setCurrPage(<InventoryPage handlePageClick={handlePageClick} />); break;
             case 'packaging': setCurrPage(<Packaging handlePageClick={handlePageClick} />); break;
+            case 'packaging-report': setCurrPage(<PackagingReport handlePageClick={handlePageClick} />); break;
             case 'stations': setCurrPage(<StationList handlePageClick={handlePageClick} />); break;
             case 'meals': setCurrPage(<MealPlan handlePageClick={handlePageClick} />); break;
             case 'recipes': setCurrPage(<Recipe handlePageClick={handlePageClick} />); break;
@@ -154,7 +134,6 @@ const App = () => {
     })
 
     return (
-        
         <ThemeProvider theme={theme}>
         <div className="App" style={style} onClick={handleHeaderClick}>
             <Navbar handlePageClick={handlePageClick} handleLogout={handleLogout} loginState={loginState} />
@@ -174,11 +153,3 @@ const App = () => {
 };
 
 export default App;
-
-/*   Dropdown example
-         <Dropdown
-                trigger={<button>Dropdown</button>}
-                menu={[
-                    <button ref={ref} type="button" onClick={handleClick}>Count: {count}</button>
-                ]}/>
-*/

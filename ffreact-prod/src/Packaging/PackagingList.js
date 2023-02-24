@@ -1,13 +1,11 @@
-import React, {Fragment, useState, useEffect, Suspense} from 'react'
+import React, {Fragment, useState, useEffect} from 'react'
 import axios from 'axios'
 import PackagingForm from './PackagingForm.js'
 import EditablePackagingRow from './EditablePackagingRow.js'
 import PackagingRow from './PackagingRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
-import {Table, TableHead, TableRow, TableCell, TableBody, Paper} from '@mui/material'
 import './PackagingList.css'
-import InventoryPage from '../InventoryPage'
 
 // Packaging List Component
 export default function PackagingList() {
@@ -162,7 +160,7 @@ export default function PackagingList() {
               });
         }
         else {
-            // If this Packaging is already in ingredients list, display error message
+            // If this Packaging is already in packaging list, display error message
             handleError('DuplicateKey');
         }
     }
@@ -201,15 +199,15 @@ export default function PackagingList() {
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div class='table-div'>
             <h3>Packaging</h3>
-            <Table className='main-table'>
-                <TableBody>
-                    {/* Show a row for each ingredient in ingredients.*/}
+            <table className='main-table'>
+                <tbody>
+                    {/* Show a row for each packaging in ingredients.*/}
                     {packaging.map((pkg, key) => {
                         const thisKey = key;
                         return(
                             <Fragment key={thisKey}>
                                 {
-                                // If this ingredient is the one to be edited, show an editable row instead
+                                // If this packaging is the one to be edited, show an editable row instead
                                 editPackagingID === thisKey 
                                 ? <EditablePackagingRow thisKey={thisKey} editFormData={editFormData} suppliers={suppliers} updatePackaging={updatePackaging} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
                                 : <PackagingRow thisKey={thisKey} packaging={pkg} deletePackaging={deletePackaging} handleEditClick={handleEditClick}/>
@@ -217,9 +215,10 @@ export default function PackagingList() {
                             </Fragment>
                         );
                     })}
-                    {/* {ingredients.length < 1 ? handleError('empty') : null} */}
-                </TableBody>
-            </Table>
+                    {/* {packaging.length < 1 ? handleError('empty') : null} */}
+                </tbody>
+            </table>
+            {loadingComponent}
             <PackagingForm addPackaging={addPackaging} suppliers={suppliers}></PackagingForm>
             {errorComponent}
             {displayMsgComponent}

@@ -1,19 +1,19 @@
-import React, {Fragment, useState, useEffect, Suspense} from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams} from '@mui/x-data-grid'
+import {DataGrid, GridToolbar } from '@mui/x-data-grid'
 import { Box } from '@mui/system';
 import { wait } from '@testing-library/user-event/dist/utils';
 import './HouseholdList.css'
 import { Container, Button, Typography } from '@mui/material'
-import { ThemeProvider, createTheme } from '@mui/material/styles'
-import { CssBaseline, Box } from '@mui/material'
-import HouseholdList from './HouseholdList.js'
-import Dropdown from './components/Dropdown'
+import { Box } from '@mui/material'
 
-// Packaging List Component
+// Households/Clients List Component
 export default function HouseholdPage() {
     
     const [households, setHousehold] = useState([]);
+    const [errorComponent, setErrorComponent] = useState(null);
+    const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
+    const [loadingComponent, setLoadingComponent] = useState(null);
     const columns = [
         { field: 'hh_name', headerName: 'Name', width: 150, type: 'string', editable: true },
         { field: 'num_adult', headerName: 'Adults', width: 90, type: 'string', editable: true },
@@ -32,16 +32,79 @@ export default function HouseholdPage() {
         { field: 'paused_flag', headerName: 'Paused', width: 100, type: 'boolean', editable: true },
     ]
 
+    const handleError = (errCode) => {
+        if (errCode === 'DuplicateKey') {
+            setErrorComponent(
+                <Error text="Household Name already found!"/>
+            )
+        }
+        if (errCode = 'empty') {
+                setErrorComponent(
+                  <Error text="There doesn't seem to be any data!"/>
+                )
+        }
+    }
+    const clearError = () => {
+        setErrorComponent(null);
+    }
+
     useEffect(() => {
         getDBHousehold();
     }, []);
 
+    const addHousehold = (household) => {
+        console.log(JSON.stringify(household));
+        // Check to see if we already have a duplicate Household Name
+        if (!households.find((HH) => HH.hh_name === household.hh_name))
+        {
+            axios({
+                method: "POST",
+                url: "http://4.236.185.213:8000/api/households/",
+                data: household
+              }).then((response)=>{
+                getDBHouseholds();
+              }).catch((error) => {
+                if (error.response) {
+                  console.log(error.response);
+                  console.log(error.response.status);
+                  console.log(error.response.headers);
+                  }
+              });
+            clearError();
+        }
+        else {
+            // If this household is already in households list, display error message
+            handleError('DuplicateKey');
+        }
+    }
+
+    const postDBHouseholds = () => {
+        console.log(households);
+        axios({
+            method: "POST",
+            url: "http://4.236.185.213:8000/api/households/",
+            data: households
+          }).then((response)=>{
+            getDBHouseholds();
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+        setdisplayMsgComponent(<DisplayMessage msg='Submitting changes to database!'/>);
+    }
+
     const getDBHousehold = () => {
+        console.log("MAKING REQUEST TO DJANGO")
+        setLoadingComponent(<Error text="LOADING DATA..."/>);
         axios({
             method: "GET",
             url:"http://4.236.185.213:8000/api/households"
         }).then((response)=>{
         setHousehold(response.data);
+        setLoadingComponent(null);
         }).catch((error) => {
         if (error.response) {
             console.log(error.response);
@@ -81,6 +144,11 @@ export default function HouseholdPage() {
             experimentalFeatures={{ newEditingApi: true }}>
             </DataGrid>
         </Box>
+        {loadingComponent}
+        <HouseholdForm addHousehold={addHousehold} allergies={household.hh_allergies}></HouseholdForm>
+        <button onClick={postDBHousehold}>Submit Changes</button>
+        {errorComponent}
+        {displayMsgComponent}
         </div>
     )
 }

@@ -2,21 +2,21 @@ import React, { useState, useEffect} from 'react'
 import axios from 'axios'
 import ReusableTable from '../ReusableTable.js'
 
-// Household List Component
-export default function HouseholdReport() {
-    const [households, setHouseholds] = useState(undefined);
+// Packaging List Component
+export default function PackagingList() {
+    const [packaging, setPackaging] = useState(undefined);
 
     useEffect(() => {
-        getDBHouseholds();
+        getDBPackaging();
     }, []);
 
-    const getDBHouseholds = () => {
+    const getDBPackaging = () => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/households-report"
+            url:"http://4.236.185.213:8000/api/packaging-report"
           }).then((response)=>{
-            const hhData = response.data
-            setHouseholds(hhData);
+            const pkgData = response.data
+            setPackaging(pkgData);
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -26,7 +26,7 @@ export default function HouseholdReport() {
           });
     }
 
-    if (households === undefined) {
+    if (packaging === undefined) {
         return (<>loading</>);
     }
 
@@ -34,8 +34,8 @@ export default function HouseholdReport() {
     return (
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div className='table-div'>
-            {/* Show a row for each household in households.*/}
-            <ReusableTable data={households}/>
+            {/* Show a row for each packaging item in packaging.*/}
+            <ReusableTable data={packaging}/>
         </div>
     )
 }

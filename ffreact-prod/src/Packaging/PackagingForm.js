@@ -1,10 +1,7 @@
 import {useState} from 'react'
 import React from 'react'
-import ReusableForm from '../ReusableForm.js'
-import { Button, Grid, Input, Typography } from '@mui/material'
-import { InputLabel } from '@mui/material'
-import { Stack } from '@mui/system'
-import { Card } from '@mui/material'
+import { Grid, Typography, Card, Input, InputLabel, Select, MenuItem, Button} from '@mui/material';
+
 // Kainoa Borges
 // Angela McNeese
 
@@ -12,7 +9,9 @@ import { Card } from '@mui/material'
 // Takes AddPackaging callback function
 // Returns a form that can be used to define a new packaging object in a PackagingList
 const PackagingForm = (props) => {
+
   const supplierList = props.suppliers;
+
   const clearPackaging = () => {
     return {
       p_id: null,
@@ -70,13 +69,13 @@ const PackagingForm = (props) => {
 
     // HTML structure of this component
     return (
-      <Card sx={{marginTop: '1em', padding: '1em'}}>
-        <Typography component='h5' variant='h5'>Add Packaging: </Typography>
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
           {/* Packaging info fields */}
-          <Grid container spacing={4}>
-            <Grid item>
-            <InputLabel htmlFor="package_type">Package Type: </InputLabel>
+          <Card sx={{marginTop: '1em', padding: '1em'}}>
+            <Typography component='h5' variant='h5'>Add Packaging: </Typography>
+            <Grid container direction='row' spacing={4}>
+              <Grid item>
+                <InputLabel htmlFor="package_type">Package Type: </InputLabel>
                 <Input name="package_type" id="package_type" type="text" maxLength='30' required={true} value={packaging.package_type} onChange={handleFormChange}/>
                 
                 <InputLabel htmlFor='unit_qty'>Purchased Amount: </InputLabel>
@@ -94,7 +93,14 @@ const PackagingForm = (props) => {
               <Input name='unit' id="unit" type="text" value={packaging.unit} onChange={handleFormChange}/>
 
               <InputLabel htmlFor='psupplier'>Supplier: </InputLabel>
-              <Input name='psupplier' id="psupplier" type="number" value={packaging.psupplier} onChange={handleFormChange}/>
+              <Select type='select' name="psupplier_id" value={undefined} label={'Supplier'} style={{width: `170px`}} >
+                  <MenuItem value={'Select A Supplier'}></MenuItem>
+                  {supplierList.map((supplier, key) => {
+                    return (
+                      <MenuItem key={supplier.s_id} value={supplier.s_id}>{supplier.s_name}</MenuItem>
+                    );
+                  })}
+              </Select>
             </Grid>
             <Grid item>
               <InputLabel htmlFor='returnable'>Returnable: </InputLabel>          
@@ -105,36 +111,8 @@ const PackagingForm = (props) => {
             </Grid>
           </Grid>
           <Button type='Submit' color='lightBlue' variant='contained'>Add Packaging</Button>
-        </form>
-      </Card>
-
-      //<form onSubmit={handleSubmit}>       
-/*          <label htmlFor="flat_fee">Flat Fee: </label>
-          <input name="flat_fee" type="number" step="0.01" value={packaging.flat_fee} onChange={handleFormChange}/>
-
-          <label htmlFor="psupplier">Supplier: </label>
-          <select name="psupplier_id" onChange={handleFormChange}>
-            <option defaultValue={true} value={null}>N/A</option>
-            {/* Get supplier_name from  *///}
- /*           {supplierList.map((supplier, key) => {
-              return (
-                <option value={supplier.s_id}>{supplier.s_name}</option>
-              )
-            })}
-          </select>
-
-          <label htmlFor="pref_psupplier">Supplier: </label>
-          <select name="pref_psupplier_id">
-            <option defaultValue={true} value={null}>N/A</option>
-            {supplierList.map((supplier, key) => {
-              return (
-                <option value={supplier.s_id}>{supplier.s_name}</option>
-              );
-            })}
-          </select>
-
-          <button type='Submit'>Add</button>
-      </form>*/
+        </Card>
+      </form>
     );
 }
 

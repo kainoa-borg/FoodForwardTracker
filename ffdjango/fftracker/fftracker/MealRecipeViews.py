@@ -114,8 +114,8 @@ class RecipeCardView(viewsets.ViewSet):
 class RecipesSerializer(ModelSerializer):
     r_num = serializers.CharField(max_length=200)
     r_name = serializers.CharField(max_length=200)
-    r_img_path = serializers.CharField(readOnly=True)
-    r_card_path = serializers.CharField(readOnly=True)
+    r_img_path = serializers.CharField()
+    r_card_path = serializers.CharField()
     r_ingredients = RecipeIngredientSerializer(many=True)
     r_packaging = RecipePackagingSerializer(many=True)
     r_diets = RecipeDietsSerializer(many=True)

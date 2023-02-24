@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useEffect} from 'react'
+import React, { useState, useEffect} from 'react'
 import axios from 'axios'
 import IngredientForm from './IngredientForm.js'
 import IngredientRow from './IngredientRow.js'
@@ -9,8 +9,7 @@ import DisplayMessage from '../DisplayMessage.js'
 
 
 // Ingredient List Component
-export default function IngredientList() {
-
+export default function IngredientReport() {
     const [ingredients, setIngredients] = useState(undefined);
 
     useEffect(() => {
@@ -39,7 +38,6 @@ export default function IngredientList() {
 
     // The HTML structure of this component
     return (
-        /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div className='table-div'>
             {/* Show a row for each ingredient in ingredientts.*/}
             <ReusableTable data={ingredients}/>

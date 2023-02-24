@@ -1,9 +1,10 @@
 import {useState} from 'react'
 import React from 'react'
-import ReusableForm from '../ReusableForm.js'
 import { Grid, Typography, Card, Input, InputLabel, Select, MenuItem, Button} from '@mui/material';
 
 // Kainoa Borges
+// Angela McNeese
+
 
 // Ingredient Form component
 // Takes AddIngredient callback function

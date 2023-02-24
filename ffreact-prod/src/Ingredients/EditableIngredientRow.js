@@ -1,9 +1,9 @@
-import React, {useState, useEffect, Fragment} from 'react'
+import React from 'react'
 import EditableIngUsageTable from '../Ingredients/EditableIngUsageTable.js'
 
-// Editable Household Row
-// Takes: key of current row, the state of the Household Page's editFormData, updateHousehold callback, handleEditFormChange callback, and handleCancelClick callback
-// Returns an editable household table row component
+// Editable Ingredients Row
+// Takes: key of current row, the state of the Ingredients Page's editFormData, updateIngredients callback, handleEditFormChange callback, and handleCancelClick callback
+// Returns an editable ingredients table row component
 const EditableIngredientRow = (props) => {
     const {thisKey, editFormData, suppliers, updateIngredient, handleEditFormChange, handleCancelClick, updateAllergies, updateEditForm} = props
     const ingredient = editFormData;
