@@ -226,7 +226,7 @@ export default function IngredientPage() {
         else {
             return [
                 <GridActionsCellItem icon={<Edit/>} onClick={() => handleEditClick(params)} color="darkBlue"/>,
-                <GridActionsCellItem aria-describedby={confirmDeleteID} icon={<Delete/>} onClick={(event) => {handleDeleteClick(event, params); setPopoverAnchors({...popoverAnchors, confirmDeleteAnchor: null})}} color="darkBlue"/>,
+                <GridActionsCellItem aria-describedby={confirmDeleteID} icon={<Delete/>} onClick={(event) => {handleDeleteClick(event, params)}} color="darkBlue"/>,
                 <Popover
                     id={confirmDeleteID}
                     open={confirmDeleteOpen}
