@@ -30,20 +30,24 @@ const EntryPage = (props) => {
             return acc;
         }, {});
 
-        console.log(document.cookie);
-
         if (document.cookie !== '') {
             return parseCookie(document.cookie);
+        }
+        else {
+            return undefined;
         }
     }
 
     useEffect(() => {
         let cookieData = readLoginCookie();
-        setLoginState({
-            username: cookieData.username,
-            isAuthenticated: cookieData.isAuthenticated === 'true' ? true : false,
-            isAdmin: cookieData.isAdmin === 'true' ? true : false            
-        });
+
+        if (cookieData !== undefined) {
+            setLoginState({
+                username: cookieData.username,
+                isAuthenticated: cookieData.isAuthenticated === 'true' ? true : false,
+                isAdmin: cookieData.isAdmin === 'true' ? true : false            
+            });
+        }
     }, [])
 
     // HTML structure of this component
