@@ -4,7 +4,7 @@ import PwResetPage from './PwResetPage.js'
 import LandingPage from './LandingPage.js'
 import MealsPage from './MealsPage.js'
 import InventoryPage from './InventoryPage.js'
-import HouseholdList from './Households/HouseholdList.js'
+import HouseholdPage from './Households/HouseholdPage.js'
 import HouseholdsReport from './Households/HouseholdsReport.js'
 import Ingredients from './Ingredients/IngredientList.js'
 import IngredientsReport from './Ingredients/IngredientsReport.js'
@@ -86,7 +86,7 @@ const App = () => {
             case 'pwResetPage': setCurrPage(<PwResetPage handlePageClick={handlePageClick} />); break;
             case 'landingPage': setCurrPage(<LandingPage handlePageClick={handlePageClick} />); break;
             case 'mealsPage': setCurrPage(<MealsPage handlePageClick={handlePageClick} />); break;
-            case 'households': setCurrPage(<HouseholdList handlePageClick={handlePageClick} />); break;
+            case 'households': setCurrPage(<HouseholdPage handlePageClick={handlePageClick} />); break;
             case 'householdForm': setCurrPage(<HouseholdForm />); break;
             case 'households-report': setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />); break;
             case 'ingredients': setCurrPage(<Ingredients handlePageClick={handlePageClick} />); break;

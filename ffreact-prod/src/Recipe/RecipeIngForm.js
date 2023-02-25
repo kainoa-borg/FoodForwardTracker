@@ -11,7 +11,6 @@ import { Grid, Typography, Card, Input, InputLabel, Select, MenuItem, Button} fr
 // Returns a form that can be used to define a new ingredient object in a IngredientList
 const RecipeIngForm = (props) => {
     const addEntry = props.addEntry;
-    const latestKey = props.latestKey;
     
     // The state of this Ingredient Form with each attribute of Ingredient
     const [ingredient, setIngredient] = useState({
@@ -19,7 +18,6 @@ const RecipeIngForm = (props) => {
         amt: '',
         unit: '',
         prep: '',
-        ri_ing: latestKey + 1
     });
 
     // Handle form submission (prevent refresh, pass ingredient to addIngredient, and clear form state)
@@ -29,7 +27,7 @@ const RecipeIngForm = (props) => {
         // Prevent refresh
         event.preventDefault();
         // Pass ingredient object to IngredientList callback
-        addEntry(ingredient)
+        addEntry(ingredient);
     }
 
     const updateEditForm = (names, values) => {

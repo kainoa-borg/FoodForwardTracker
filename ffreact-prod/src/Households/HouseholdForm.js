@@ -13,6 +13,7 @@ import { Card } from '@mui/material'
 const HouseholdForm = (props) => {
 
   const addEntry = props.addEntry;
+  const handleClose = props.handleClose;
 
   const clearHousehold = () => {
     return {
@@ -132,7 +133,7 @@ const HouseholdForm = (props) => {
                 <AllergiesList allergies={household.hh_allergies} isEditable={true} updateEditForm={updateEditForm}/>
               </Grid>
             </Grid>
-            <Button type='Submit' color='lightBlue' variant='contained'>Add Client</Button>
+            <Button type='Submit' color='lightBlue' variant='contained' onClick={handleClose}>Add Client</Button>
         </form>
       </Card>
 

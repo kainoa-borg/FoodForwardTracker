@@ -49,8 +49,17 @@ export default function ModularRecipeDatagrid(props) {
         setOpen(false);
     }
 
+    // Helper function gets the latest key value of the table
+    const getLatestKey = () => {
+        return Math.max(...tableData.map(row => row[keyFieldName])) // Get the max id of all rows
+    }
+
     // Generalized Add Row
     const addEntry = (formData) => {
+        // If a form doesn't take the latest key, it should be added for the datagrid
+        if (!formData[keyFieldName])
+            formData[keyFieldName] = getLatestKey() + 1;
+        console.log(formData);
         const newTableData = [...tableData, formData];
         setTableData(newTableData);
         setRows(newTableData);
@@ -215,9 +224,7 @@ export default function ModularRecipeDatagrid(props) {
             </DataGrid>
         </Box>
         {/* Add Form Dialog */}
-        <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={addFormComponent} addEntry={addEntry}  latestKey={() => {
-            return Math.max(...tableData.map(o => o.keyFieldName))
-        }}/>
+        <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={addFormComponent} addEntry={addEntry}  latestKey={getLatestKey()}/>
         {/* Save Click 'request sent' Notice */}
         <Snackbar
             open={updateSBOpen}

@@ -17,16 +17,20 @@ import FormDialog from '../components/FormDialog.js'
 export default function NewModularDatagrid(props) {
     
     const apiIP = props.apiIP;
-    const gridRef = React.useRef();
+    // Name of the api endpoint to send requests to
     const apiEndpoint = props.apiEndpoint;
+    // Field name of the row key/id
     const keyFieldName = props.keyFieldName;
+    // Add entry form to be passed to FormDialog
     const AddFormComponent = props.AddFormComponent;
+    // Append passed columns with default actions
     const columns = [...props.columns, 
         { field: 'actions', type: 'actions', headerName: 'Actions', width: 100,
             getActions: (params) => modularActions(params, rowModesModel, setRowModesModel, setUpdateSBOpen)
         }                     
     ];
 
+    // Row data of the table
     const [tableData, setTableData] = useState([]);
 
     // Boolean 'request made' message state
@@ -37,6 +41,7 @@ export default function NewModularDatagrid(props) {
     // Struct of row modes (view/edit)
     const [rowModesModel, setRowModesModel] = useState({});
 
+    // Open state of the Add form popup
     const [addFormOpen, setAddFormOpen] = useState(false);
 
     // Helper function closes Snackbar notification
@@ -47,8 +52,17 @@ export default function NewModularDatagrid(props) {
         setOpen(false);
     }
 
+    // Helper function gets the latest key value of the table
+    const getLatestKey = () => {
+        return Math.max(...tableData.map(row => row[keyFieldName])) // Get the max id of all rows
+    }
+
     // Generalized Add Row
     const addEntry = (formData) => {
+        // If a form doesn't take the latest key, it should be added for the datagrid
+        if (!formData[keyFieldName])
+            formData[keyFieldName] = getLatestKey() + 1;
+        console.log(formData);
         axios({
             method: 'POST',
             url:"http://4.236.185.213:8000/api/" + apiEndpoint + '/',
@@ -89,10 +103,7 @@ export default function NewModularDatagrid(props) {
 
     // Generalized Update Row
     const processRowUpdate = (newRow) => {
-        const updatedRow = {...newRow, isNew: false};
-
-        console.log(updatedRow);
-        
+        const updatedRow = {...newRow, isNew: false};        
         axios({
             method: "PATCH",
             url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/" + newRow[keyFieldName] +'/',
@@ -141,20 +152,21 @@ export default function NewModularDatagrid(props) {
         )
     }
 
-    const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteAnchor: null, confirmCancelAnchor: null});
+    // const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteAnchor: null, confirmCancelAnchor: null});
 
-    const handleRowEditStop = (params, event) => {
-        console.log(params.reason);
-        console.log(event);
-        if (params.reason === 'escapeKeyDown') {event.defaultMuiPrevented = true; setPopoverAnchors({confirmDeleteAnchor: null, confirmCancelAnchor: event.target})};
-    }
+    // const handleRowEditStop = (params, event) => {
+    //     console.log(params.reason);
+    //     console.log(event);
+    //     if (params.reason === 'escapeKeyDown') {event.defaultMuiPrevented = true; setPopoverAnchors({confirmDeleteAnchor: null, confirmCancelAnchor: event.target})};
+    // }
 
     // Takes rowModesModel getter and setter, setUpdateSBOpen ('request sent' message) setter 
     // Returns actions column definition with Popover confirmation prompts
     const modularActions = (params, rowModesModel, setRowModesModel, setUpdateSBOpen) => {
         // Struct with all popover anchors
-        // const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteAnchor: null, confirmCancelAnchor: null});
-        const [deleteParams, setDeleteParams] = useState();
+        const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteAnchor: null, confirmCancelAnchor: null});
+        // Control state of row data to be deleted
+        const [deleteParams, setDeleteParams] = useState(null);
         let isInEditMode = false;
         if (rowModesModel[params.id]) isInEditMode = rowModesModel[params.id].mode === GridRowModes.Edit;
 
@@ -179,7 +191,7 @@ export default function NewModularDatagrid(props) {
         // Save the params as state variable for the actual delete function
         const handleDeleteClick = (event, params) => {
             setPopoverAnchors({...popoverAnchors, confirmDeleteAnchor: event.currentTarget});
-            setDeleteParams({id: params.id});
+            setDeleteParams(params);
         }
     
     
@@ -228,9 +240,9 @@ export default function NewModularDatagrid(props) {
                         horizontal: 'left',
                     }}
                 >
-                    <Typography>Delete this entry?</Typography>
+                    <Typography onClick={() => console.log(deleteParams)}>Delete this entry?</Typography>
                     {/* Confirm button fires deleteIngredient using row params state */}
-                    <Button variant='contained' onClick={() => {deleteEntry(deleteParams)}}>Confirm</Button>
+                    <Button variant='contained' onClick={() => deleteEntry(deleteParams)}>Confirm</Button>
                 </Popover>
             ]
         }
@@ -253,7 +265,6 @@ export default function NewModularDatagrid(props) {
         <div class='table-div'>
         <Box sx={{height: 'auto', overflow: 'auto'}}>
             <DataGrid
-            ref={gridRef}
             components={{ Toolbar: CustomToolbar }}
             rows={tableData}
             columns={columns}
@@ -261,20 +272,18 @@ export default function NewModularDatagrid(props) {
             editMode='row'
             rowModesModel={rowModesModel}
             onRowModesModelChange={(newModel) => {setRowModesModel(newModel)}}
-            onRowEditStop={handleRowEditStop}
+            // onRowEditStop={handleRowEditStop}
             getRowId={(row) => row[keyFieldName]}
             pageSize={10}
             processRowUpdate={processRowUpdate}
             //rowsPerPageOptions={[5]}
             disableSelectionOnClick
-            disableVirtualization
+            // disableVirtualization
             experimentalFeatures={{ newEditingApi: true }}>
             </DataGrid>
         </Box>
         {/* Add Form Dialog */}
-        <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={AddFormComponent} addEntry={addEntry} latestKey={() => {
-            Math.max(...tableData.map(row => row.keyFieldName)) // Get the max id of all rows
-        }}/>
+        <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={AddFormComponent} addEntry={addEntry} latestKey={getLatestKey()}/>
         {/* Save Click 'request sent' Notice */}
         <Snackbar
             open={updateSBOpen}

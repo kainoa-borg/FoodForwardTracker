@@ -195,7 +195,7 @@ export default function ModularDatagrid(props) {
                         horizontal: 'left',
                     }}
                 >
-                    <Typography>Delete this entry?</Typography>
+                    <Typography onClick={() => console.log(deleteParams)}>Delete this entry?</Typography>
                     {/* Confirm button fires deleteIngredient using row params state */}
                     <Button variant='contained' onClick={() => deleteEntry(deleteParams)}>Confirm</Button>
                 </Popover>
