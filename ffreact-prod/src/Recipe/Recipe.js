@@ -174,7 +174,7 @@ export default function Recipe(props) {
             <Stack item spacing={10}>
                 <Box>
                     <Typography variant='h6'>Ingredients</Typography>
-                    <Box sx={{height: '40vh', width: {md: '40vw', sm: '70vw'}}}>
+                    <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
                         <ModularRecipeDatagrid 
                             ref={gridRef}
                             rows={ingredientRows} 
@@ -186,7 +186,7 @@ export default function Recipe(props) {
                 </Box>
                 <Box>
                     <Typography variant='h6'>Packaging</Typography>
-                    <Box sx={{height: '40vh', width: {md: '40vw', sm: '70vw'}}}>
+                    <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
                         <ModularRecipeDatagrid 
                             rows={packagingRows}
                             columns={packagingColumns}
@@ -197,7 +197,7 @@ export default function Recipe(props) {
                 </Box>
                 <Box>
                     <Typography variant='h6'>Instructions</Typography>
-                    <Box sx={{height: '40vh', width: {md: '40vw', sm: '70vw'}}}>
+                    <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
                         <ModularRecipeDatagrid 
                             rows={instructionRows}
                             columns={instructionColumns} 

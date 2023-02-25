@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {Fragment} from 'react'
 import axios from 'axios'
 import NewUserPage from "./NewUserPage.js"
@@ -10,108 +10,73 @@ import { Grid, Typography, Stack, Paper, Box} from '@mui/material'
 import TextField from '@mui/material/TextField'
 import { Card } from '@mui/material'
 
+import ffLogo from './Images/ff_logo.jpg'
+import entryImage from './Images/food_placeholder.jpg'
+
 // Login Page Component
 // Takes handlePageClick callback function to enable page switching when login is completed
 // Returns a login page component that allows users to enter account information 
 const EntryPage = (props) => {
     const handlePageClick = props.handlePageClick;
-    const [user, setUser] = useState(
-        {
-            username: '',
-            password: ''
+    const setLoginState = props.setLoginState;
+
+    const readLoginCookie = () => {
+        const parseCookie = str =>
+            str
+            .split(';')
+            .map(v => v.split('='))
+            .reduce((acc, v) => {
+            acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+            return acc;
+        }, {});
+
+        if (document.cookie !== '') {
+            return parseCookie(document.cookie);
         }
-    );
-    const [carouselIndex, setCarouselIndex] = useState(0);
-
-    const sendLoginRequest = () => {
-        axios({
-            method: "GET",
-            url:"http://4.236.185.213:8000/api/users/"
-          }).then((response)=>{
-            let userInList = false;
-            let userData = undefined;
-            for (let i = 0; i < response.data.length; ++i) {
-                if (response.data[i].username === user.username) {
-                    if (response.data[i].password === user.password) {
-                        userInList = true;
-                        userData = response.data[i];
-                    }
-                }
-            }
-            if (userInList) {
-                props.setLoginState(userData);
-                handlePageClick('landingPage');
-            }
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
+        else {
+            return undefined;
+        }
     }
 
-    // Handle input change for user login
-    // Takes input change event information (name, value)
-    // Returns none
-    const handleLoginChange = (event) => {
-        const fieldName = event.target.name;
-        const fieldValue = event.target.value;
-        const thisUser = {...user};
-        thisUser[fieldName] = fieldValue;
-        setUser(thisUser);
-        console.log(user.username, user.password)
-    }
-    
-    // Handle login form submit
-    // Takes login form event information (form submission)
-    // Returns none
-    const handleLoginSubmit = (event) => {
-        // Prevent refresh
-        event.preventDefault();
-        // send login to backend
-        sendLoginRequest();
-        // Switch to 'landing' page
-        //handlePageClick('landingPage');
-        // TO DO;
-    }
+    useEffect(() => {
+        let cookieData = readLoginCookie();
 
-    const handleCreateClick = (event) => {
-        handlePageClick('newUserPage');
-        //else if (pageName === 'pwResetPage') setCurrPage(<PwResetPage handlePageClick={handlePageClick} />);
-    }
-
-    const handleResetClick = (event) => {
-        handlePageClick('pwResetPage');
-    }
-
-    const handleChangeIndex = index => {
-        setCarouselIndex({
-            index
-        });
-    };
-
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1
-    }
+        if (cookieData !== undefined) {
+            setLoginState({
+                username: cookieData.username,
+                isAuthenticated: cookieData.isAuthenticated === 'true' ? true : false,
+                isAdmin: cookieData.isAdmin === 'true' ? true : false            
+            });
+        }
+    }, [])
 
     // HTML structure of this component
     return (
-        <Grid container direction='row' spacing='12' sx={{marginTop: '1em', maxWidth: '90%', justifyContent: 'center', alignItems: 'center'}}>
-            
-            {/* Logo and Welcome Message (left-side) */}
-            <Grid item md='7' sx={{display: {xs: 'none', md: 'block'}}}>
-                <Stack justifyContent={'space-around'}>
-                    <Box component='img' sx={{width: '50%'}} src="/Images/ff_logo.jpg"/>
+        <Grid container direction='row' spacing={6} sx={{bgColor: 'lightBlue'}}>
+            <Grid item container direction='column' md={6}>
+                <Grid item sx={{overflow: 'hidden'}} md={6}>
+                    <Box component='img' sx={{margin: 'auto', width: '70%', height: 'auto'}} src={ffLogo}/>
+                </Grid>
+                <Grid item md={5}>
                     <Typography variant='h3'>Welcome to Food Forward!</Typography>
-                    <Typography variant='h5' sx={{paddingBottom: '1em'}}>Providing healthy and semi-prepared meals in Central Hillside</Typography>
-                </Stack>
+                    <Typography variant='h5'>Providing healthy and semi-prepared meals in Central Hillside</Typography>
+                    <Button color='darkGreen' variant='contained' sx={{width: '40%', marginTop: '1em', alignSelf: 'center'}} onClick={() => handlePageClick('landingPage')}>Enter</Button>
+                </Grid>
             </Grid>
-            <Grid item>
+            <Grid item container direction='column' md={6}>
+                <Grid item md={5} sx={{overflow: 'hidden', marginRight: '-20%'}}>
+                    <Box component='img' sx={{width: '100%', height: 'auto'}} src={entryImage}/>
+                </Grid>
+                <Grid item md={7} sx={{paddingTop: '3%', width: '70%', alignSelf: 'flex-end'}}>
+                    <Typography variant='h4'>Food Forward Functions</Typography>
+                    <ul>
+                        <li><Typography variant='h6'>Manage Clients</Typography></li>
+                        <li><Typography variant='h6'>Manage Ingredient and Packaging Inventory</Typography></li>
+                        <li><Typography variant='h6'>Create Recipes</Typography></li>
+                        <li><Typography variant='h6'>Plan Meals for delivery</Typography></li>
+                        <li><Typography variant='h6'>Receive Reports on Food Forward</Typography></li>
+                    </ul>
+                </Grid>
             </Grid>
         </Grid>
     );

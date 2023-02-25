@@ -28,7 +28,6 @@ class IngredientInvSerializer(ModelSerializer):
 	pref_isupplier = SupplierSerializer(read_only=True)
 	isupplier_id = serializers.IntegerField(allow_null=True)
 	pref_isupplier_id = serializers.IntegerField(allow_null=True)
-	used_date = serializers.DateField(required=False, allow_null=True, source='')
 	class Meta():
 		model = Ingredients
 		fields = ('i_id', 'ingredient_name', 'pkg_type', 'storage_type', 'in_date', 'in_qty', 'ingredient_usage', 'qty_on_hand', 'unit', 'exp_date', 'unit_cost', 'flat_fee', 'isupplier_id', 'pref_isupplier_id', 'isupplier', 'pref_isupplier')

@@ -13,22 +13,21 @@ export default function HouseholdPage() {
     const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
     const [loadingComponent, setLoadingComponent] = useState(null);
     const columns = [
-        { field: 'hh_name', headerName: 'Name', width: 150 },
-        { field: 'num_adult', headerName: 'Adults', width: 90 },
-        { field: 'num_child_lt_6', headerName: 'Children 0-6', width: 50 },
-        { field: 'num_child_gt_6', headerName: 'Children 7-17', width: 90, type: 'number' },
-        { field: 'phone', headerName: 'Phone Number', width: 90, valueFormatter: ({ value }) => currencyFormatter.format(value) },
-        { field: 'street', headerName: 'Street', width: 180 },
-        { field: 'city', headerName: 'City', width: 120 },
-        { field: 'state', headerName: 'State', width: 140 },
+        { field: 'hh_name', headerName: 'Name', width: 150, type: 'string', editable: true },
+        { field: 'num_adult', headerName: 'Adults', width: 90, type: 'string', editable: true },
+        { field: 'num_child_lt_6', headerName: 'Children 0-6', width: 50, type: 'number', editable: true },
+        { field: 'num_child_gt_6', headerName: 'Children 7-17', width: 90, type: 'number', editable: true },
+        { field: 'phone', headerName: 'Phone Number', width: 90, type: 'number', editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
+        { field: 'street', headerName: 'Street', width: 180, type: 'string', editable: true },
+        { field: 'city', headerName: 'City', width: 120, type: 'string', editable: true },
+        { field: 'state', headerName: 'State', width: 140, type: 'string', editable: true },
         { field: 'pcode', headerName: 'Postal Code', width: 100, type: 'date', editable: true },
-        { field: 'delivery_notes', headerName: 'Delivery Notes', width: 100, type: 'number', editable: true },
-        { field: 'sms_flag', headerName: 'SMS', width: 100, type: 'date', type: 'boolean' },
-        { field: 'veg_flag', headerName: 'Veg', width: 100, type: 'date', type: 'boolean' },
-        { field: 'gf_flag', headerName: 'Gluten Free', width: 100, type: 'date', type: 'boolean'},
-        { field: 'hh_allergies', headerName: 'Allergies', width: 100, type: 'date', valueFormatter: ({ value }) => value.s_name },
-        { field: 'paused_flag', headerName: 'Paused', width: 100, type: 'date', editable: true },
-        { field: 'delete', headerName: 'Action', width: 100, type: 'date', editable: true },
+        { field: 'delivery_notes', headerName: 'Delivery Notes', width: 100, type: 'string', editable: true },
+        { field: 'veg_flag', headerName: 'Veg', width: 100, type: 'boolean', editable: true },
+        { field: 'sms_flag', headerName: 'SMS', width: 100, type: 'boolean', editable: true },
+        { field: 'gf_flag', headerName: 'Gluten Free', width: 100, type: 'boolean', editable: true},
+        { field: 'hh_allergies', headerName: 'Allergies', width: 100, type: 'date', editable: true, valueFormatter: ({ value }) => value.s_name }
+        { field: 'paused_flag', headerName: 'Paused', width: 100, type: 'boolean', editable: true },
     ]
 
     const handleError = (errCode) => {
