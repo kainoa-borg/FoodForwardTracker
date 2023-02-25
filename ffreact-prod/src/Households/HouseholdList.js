@@ -164,7 +164,8 @@ export default function HouseholdList() {
     return (
       <div>
       <HouseholdModularDatagrid/>
-        <HouseholdForm addHousehold={addHousehold} allergies={households.hh_allergies}></HouseholdForm>
+        {/* <h3>Add Client</h3> */}
+        {/* <HouseholdForm addHousehold={addHousehold} allergies={households.hh_allergies}></HouseholdForm> */}
         {errorComponent}
         {displayMsgComponent}
       </div>
