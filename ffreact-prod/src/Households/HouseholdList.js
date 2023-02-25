@@ -70,6 +70,7 @@ export default function HouseholdList() {
           });
         setdisplayMsgComponent(<DisplayMessage msg='Submitting changes to database!'/>);
     }
+    
     const addHousehold = (household) => {
         console.log(JSON.stringify(household));
         // Check to see if we already have a duplicate Household Name
@@ -163,7 +164,6 @@ export default function HouseholdList() {
     return (
       <div>
       <HouseholdModularDatagrid/>
-        <h3>Add a Client</h3>
         <HouseholdForm addHousehold={addHousehold} allergies={households.hh_allergies}></HouseholdForm>
         {errorComponent}
         {displayMsgComponent}

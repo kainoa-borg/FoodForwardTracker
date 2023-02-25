@@ -93,7 +93,7 @@ const IngredientForm = (props) => {
                 <Input name="unit_cost" type="number" step="0.01" value={ingredient.unit_cost} onChange={handleFormChange}/>
 
                 <InputLabel htmlFor="pref_isupplier">Supplier: </InputLabel>
-                <Select type='select' name="pref_isupplier_id" value={undefined} label={'Supplier'}>
+                <Select type='select' name="pref_isupplier_id" value={undefined} label={'Supplier'} style={{width: `170px`}}>
                   <MenuItem value={'Select A Supplier'}></MenuItem>
                   {supplierList.map((supplier, key) => {
                     return (

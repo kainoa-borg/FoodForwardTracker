@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import {DataGrid, GridToolbar } from '@mui/x-data-grid'
-import { Box } from '@mui/system';
 import { wait } from '@testing-library/user-event/dist/utils';
 import './HouseholdList.css'
-import { Container, Button, Typography } from '@mui/material'
 import { Box } from '@mui/material'
 
 // Households/Clients List Component
@@ -121,12 +119,10 @@ export default function HouseholdPage() {
     }
 
     if (households === undefined) {
-        return (
-            <>loading...</>
-        )
+        return (<>loading...</>);
     }
-    // The HTML structure of this component
     
+    // The HTML structure of this component
     return(
         <div class='table-div'>
         <h3>Clients</h3>
@@ -139,7 +135,7 @@ export default function HouseholdPage() {
             getRowId={(row) => row.p_id}
             pageSize={10}
             //rowsPerPageOptions={[7]}
-            checkboxSelection
+            //checkboxSelection
             disableSelectionOnClick
             experimentalFeatures={{ newEditingApi: true }}>
             </DataGrid>
