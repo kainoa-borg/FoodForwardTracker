@@ -12,8 +12,9 @@ export default function FormDialog(props) {
 //   const [open, setOpen] = React.useState(false);
   const open = props.open;
   const setOpen = props.setOpen;
-  const addForm = props.addForm;
-  console.log(addForm);
+  const AddForm = props.AddFormComponent;
+  const addEntry = props.addEntry;
+  console.log(AddForm);
   console.log(open);
 
   const handleClickOpen = () => {
@@ -29,6 +30,7 @@ export default function FormDialog(props) {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Add Entry</DialogTitle>
         <DialogContent>
+            <AddForm addEntry={addEntry}/>
             <Typography variant='h6'>Placeholder</Typography>
         </DialogContent>
         <DialogActions>

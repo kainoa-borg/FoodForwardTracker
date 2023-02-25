@@ -6,7 +6,6 @@ import { Box } from '@mui/system';
 import { Button, Popover, Snackbar, Typography } from '@mui/material';
 
 import FormDialog from './FormDialog';
-import HouseholdForm from '../Households/HouseholdForm.js'
 
 // Modularized Datagrid with prompts/notifications
 // Takes:
@@ -25,6 +24,7 @@ export default function ModularRecipeDatagrid(props) {
             getActions: (params) => modularActions(params, rowModesModel, setRowModesModel, setUpdateSBOpen)
         }                     
     ];
+    const addFormComponent = props.addFormComponent;
 
     const [tableData, setTableData] = useState(props.rows);
 
@@ -47,6 +47,13 @@ export default function ModularRecipeDatagrid(props) {
             setOpen(false);
         }
         setOpen(false);
+    }
+
+    // Generalized Add Row
+    const addEntry = (formData) => {
+        const newTableData = [...tableData, formData];
+        setTableData(newTableData);
+        setRows(newTableData);
     }
 
     // Generalized Delete Row
@@ -72,29 +79,6 @@ export default function ModularRecipeDatagrid(props) {
 
         return updatedRow;
     }
-
-    // Get table data from database
-    // Set tableData state variable with ingredient data
-    const getDBData = () => {
-        // axios({
-        //     method: "GET",
-        //     url:"http://4.236.185.213:8000/api/" + apiEndpoint
-        // }).then((response)=>{
-        // setTableData(response.data);
-        // }).catch((error) => {
-        // if (error.response) {
-        //     console.log(error.response);
-        //     console.log(error.response.status);
-        //     console.log(error.response.headers);
-        //     }
-        // });
-    }
-
-    // On page load
-    // Get table data
-    useEffect(() => {
-        getDBData();
-    }, []);
 
     // Wait until table data is loaded to render datagrid
     if (tableData === undefined) {
@@ -213,7 +197,6 @@ export default function ModularRecipeDatagrid(props) {
         <div class='table-div'>
         <Box sx={{height: 'auto', overflow: 'auto'}}>
             <DataGrid
-            apiRef={dataGridApiRef}
             components={{ Toolbar: CustomToolbar }}
             rows={tableData}
             columns={columns}
@@ -232,7 +215,9 @@ export default function ModularRecipeDatagrid(props) {
             </DataGrid>
         </Box>
         {/* Add Form Dialog */}
-        <FormDialog open={addFormOpen} setOpen={setAddFormOpen} addForm={<HouseholdForm />}/>
+        <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={addFormComponent} addEntry={addEntry}  latestKey={() => {
+            return Math.max(...tableData.map(o => o.keyFieldName))
+        }}/>
         {/* Save Click 'request sent' Notice */}
         <Snackbar
             open={updateSBOpen}
