@@ -1,11 +1,12 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
-import IngredientForm from './IngredientForm.js'
-import IngredientRow from './IngredientRow.js'
-import EditableIngredientRow from './EditableIngredientRow'
+// import IngredientForm from './IngredientForm.js'
+// import IngredientRow from './IngredientRow.js'
+// import EditableIngredientRow from './EditableIngredientRow'
 import ReusableTable from '../ReusableTable.js'
-import Error from '../Error.js'
-import DisplayMessage from '../DisplayMessage.js'
+import ReportsPage from 'src/ReportsPage.js';
+// import Error from '../Error.js'
+// import DisplayMessage from '../DisplayMessage.js'
 
 
 // Ingredient List Component
