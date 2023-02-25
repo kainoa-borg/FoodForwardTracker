@@ -3,7 +3,6 @@ import AllergiesList from './AllergiesList.js'
 import React from 'react'
 import { Button, Grid, Input, Typography } from '@mui/material'
 import { InputLabel } from '@mui/material'
-import { Stack } from '@mui/system'
 import { Card } from '@mui/material'
 // Kainoa Borges
 

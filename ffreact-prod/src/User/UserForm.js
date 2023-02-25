@@ -1,6 +1,8 @@
 import {useState} from 'react'
 import React from 'react'
-
+import { Button, Grid, Input, Typography } from '@mui/material'
+import { InputLabel } from '@mui/material'
+import { Card } from '@mui/material'
 // Angela McNeese
 
 // User Form component
@@ -39,7 +41,6 @@ const UserForm = (props) => {
         const newUser = { ...user };
       for (let i = 0; i < names.length; i++) {
           newUser[names[i]] = values[i];
-        // console.log('(' + names[i] + ', ' + values[i] + ')', newUser.aFlag);
       }
         setUser(newUser);
     }
@@ -59,25 +60,29 @@ const UserForm = (props) => {
 
     // HTML structure of this component
     return (
-      <form onSubmit={handleSubmit}>
+      <Card sx={{marginTop: '1em', padding: '1em'}}>
+        <Typography component='h5' variant='h5'>Add a User: </Typography>
+        <form onSubmit={handleSubmit}>
           {/* Basic User info */}
-          <label htmlFor='u_id'>User ID: </label>
-            <input name='u_id' id="u_id" type="text" value={user.u_id} onChange={handleFormChange} />
+          <Grid container spacing={4}>
+              <Grid item>
+                <InputLabel htmlFor='username'>Username: </InputLabel>
+                <Input name='username' id='username' type='text' value={user.username} onChange={handleFormChange}/>
 
-          <label htmlFor='username'>Username: </label>
-            <input name='username' id="username" type="text" value={user.username} onChange={handleFormChange} />
+                <InputLabel htmlFor='password'>Password: </InputLabel>
+                <Input name='password' id='password' type='password' value={user.password} onChange={handleFormChange}/>
+              </Grid>
+              <Grid item>
+                <InputLabel htmlFor='admin_flag'>User Level: </InputLabel>
+                <Input name='admin_flag' id='admin_flag' type='checkbox' value={user.admin_flag} onChange={handleFormChange}/>
 
-          <label htmlFor='password'>Password: </label>
-            <input name='password' id="password" type="text" value={user.password} onChange={handleFormChange} />
-
-          <label htmlFor='admin_flag'>User Level: </label>
-            <input name='admin_flag' id="admin_flag" type="number" value={user.admin_flag} onChange={handleFormChange} />
-
-          <label htmlFor='email'>Email: </label>
-            <input name='email' id="email" type="text" value={user.email} onChange={handleFormChange} />
-
-          <button type='Submit'>Add</button>
-      </form>
+                <InputLabel htmlFor='email'>Email: </InputLabel>
+                <Input name='email' id='email' type='email' value={user.email} onChange={handleFormChange}/>
+              </Grid>
+            </Grid>
+            <Button type='Submit' color='lightBlue' variant='contained'>Add User</Button>
+          </form>
+      </Card>
     );
 }
 

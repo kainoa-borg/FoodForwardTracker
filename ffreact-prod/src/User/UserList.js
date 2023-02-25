@@ -1,12 +1,13 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
+import {DataGrid, GridToolbar } from '@mui/x-data-grid'
+import { Box } from '@mui/material'
+import { wait } from '@testing-library/user-event/dist/utils'
 import UserForm from './UserForm.js'
 import EditableUserRow from './EditableUserRow.js'
 import UserRow from './UserRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
-import { Container, Grid, TextField, Typography, Paper, Button, Box, IconButton } from "@mui/material";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
 import './UserList.css'
 
 
@@ -14,16 +15,17 @@ import './UserList.css'
 export default function UserList() {
     const [users, setUsers] = useState(undefined);
     const [editUserID, setEditUserID] = useState(null);
-    const [editFormData, setEditFormData] = useState({
-        u_id: 0,
-        username: "",
-        password: "",
-        admin_flag: 0,
-        email: ""
-    });
-
     const [errorComponent, setErrorComponent] = useState(null);
     const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
+    const [loadingComponent, setLoadingComponent] = useState(null);
+    const [editFormData, setEditFormData] = useState({ u_id: 0, username: "", password: "", admin_flag: 0, email: "" });
+    const columns = [
+        { field: 'username', headerName: 'User Name', width: 200, editable: true },
+        { field: 'password', headerName: 'Password', width: 200, editable: true },
+        { field: 'admin_flag', headerName: 'User Level', type: 'boolean', width: 100, editable: true },
+        { field: 'email', headerName: 'Email', width: 200, editable: true },
+        { field: 'actions', headerName: 'Actions', width: 150, editable: true },
+    ]
 
     const handleError = (errCode) => {
         if (errCode === 'DuplicateKey') {
@@ -32,7 +34,9 @@ export default function UserList() {
             )
         }
         if (errCode = 'empty') {
-                return <Error text="There doesn't seem to be any data!"/>
+            setErrorComponent(
+                <Error text="There doesn't seem to be any data!"/>
+            )
         }
     }
     const clearError = () => {
@@ -42,41 +46,6 @@ export default function UserList() {
     useEffect(() => {
         setUsers(getDBUsers());
     }, []);
-
-    const getDBUsers = () => {
-        console.log("MAKING REQUEST TO DJANGO")
-        axios({
-            method: "GET",
-            url:"http://4.236.185.213:8000/api/users"
-          }).then((response)=>{
-            const uData = response.data
-            setUsers(uData);
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-    }
-
-    const postDBUsers = () => {
-        console.log(users);
-        axios({
-            method: "POST",
-            url: "http://4.236.185.213:8000/api/users/",
-            data: users
-          }).then((response)=>{
-              getDBUsers();
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-        setdisplayMsgComponent(<DisplayMessage msg='Submitting changes to database!'/>);
-    }
 
     const addUser = (user) => {
         console.log(JSON.stringify(user));
@@ -102,6 +71,41 @@ export default function UserList() {
             // If this User is already in Users list, display error message
             handleError('DuplicateKey');
         }
+    }
+
+    const getDBUsers = () => {
+        console.log("MAKING REQUEST TO DJANGO")
+        axios({
+            method: "GET",
+            url:"http://4.236.185.213:8000/api/users"
+          }).then((response)=>{
+            const uData = response.data
+            setUsers(uData);
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+    }
+
+    const postDBUser = () => {
+        console.log(users);
+        axios({
+            method: "POST",
+            url: "http://4.236.185.213:8000/api/users/",
+            data: users
+          }).then((response)=>{
+              getDBUsers();
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
+        setdisplayMsgComponent(<DisplayMessage msg='Submitting changes to database!'/>);
     }
 
     const deleteUser = (key) => {
@@ -167,6 +171,11 @@ export default function UserList() {
         setEditUserID(null);
         setEditFormData(null);
     }
+    const handleRowClick = (params) => {
+        getDBUsers(params.row.u_id);
+        wait(300);
+        console.log(users);
+    }
 
     if (users === undefined) {
         return (<>loading</>);
@@ -174,57 +183,26 @@ export default function UserList() {
 
     // The HTML structure of this component
     return (
-        /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <div className='table-div'>
-            <h3>Administration</h3>
-            <table className='main-table'>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 360 }} size="small">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align="left">
-                                <h4>ID</h4>
-                            </TableCell>
-                            <TableCell align="left">
-                                <h4>User Name</h4>
-                            </TableCell>
-                            <TableCell align="left">
-                                <h4>Password</h4>
-                            </TableCell>
-                            <TableCell align="left">
-                                <h4>User Level</h4>
-                            </TableCell>
-                            <TableCell align="left">
-                                <h4>Email</h4>
-                            </TableCell>
-                            <TableCell allign="right">
-                                <h4>Actions</h4>
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {/* Show a row for each User in Users.*/}
-                    {users.map((user, key) => {
-                        const thisKey = key;
-                        return (
-                            // If this User is the one to be edited, show an editable row instead
-                            editUserID === thisKey 
-                                    ? <EditableUserRow thisKey={thisKey} editFormData={editFormData} updateUser={updateUser} handleEditFormChange={handleEditFormChange} updateEditForm={updateEditForm} handleCancelClick={handleCancelClick}/>
-                                    : <UserRow thisKey={thisKey} user={user} deleteUser={deleteUser} handleEditClick={handleEditClick}/>
-                            )
-                    })}
-                    
-                    {/* If the list is empty display EmptyTableMessage */}
-                    {users.length < 1 ? handleError('empty') : null}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </table>
-        <h3>Add A User</h3>
-        <UserForm addUser={addUser}></UserForm>
-        <button onClick={postDBUsers}>Submit Changes</button>
+        <h3>Administration</h3>
+        <Box sx={{height: '80vh'}}>
+        <DataGrid 
+            components={{ Toolbar: GridToolbar }}
+            onRowClick={handleRowClick} 
+            rows={users} 
+            columns={columns} 
+            getRowId={(row) => row.u_id}
+            pageSize={10}
+            //rowsPerPageOptions={[7]}
+            //checkboxSelection
+            disableSelectionOnClick
+            experimentalFeatures={{ newEditingApi: true }}>
+            </DataGrid>
+        </Box>
+        {loadingComponent}
+        <UserForm addUser={addUser}/>
         {errorComponent}
         {displayMsgComponent}
-    </div>
+        </div>
     )
 }
