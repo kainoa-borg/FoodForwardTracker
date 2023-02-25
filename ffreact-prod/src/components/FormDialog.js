@@ -25,6 +25,24 @@ export default function FormDialog(props) {
     setOpen(false);
   };
 
+  if (!AddForm) {
+    return (
+        <div>
+        <Dialog open={open} onClose={handleClose}>
+            <DialogTitle>Add Entry</DialogTitle>
+            <DialogContent>
+                {/* <AddForm addEntry={addEntry} handleClose={handleClose} latestKey={latestKey}/> */}
+                <Typography variant='h6'>Placeholder</Typography>
+            </DialogContent>
+            <DialogActions>
+            {/* <Button onClick={handleClose}>Cancel</Button> */}
+            {/* <Button onClick={handleClose}>Add</Button> */}
+            </DialogActions>
+        </Dialog>
+        </div>
+    )
+  }
+
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
