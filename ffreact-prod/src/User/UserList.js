@@ -9,7 +9,7 @@ import UserRow from './UserRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 import './UserList.css'
-
+import UserModularDatagrid from './UserModularDatagrid.js'
 
 // User List Component
 export default function UserList() {
@@ -21,7 +21,7 @@ export default function UserList() {
     const [editFormData, setEditFormData] = useState({ u_id: 0, username: "", password: "", admin_flag: 0, email: "" });
     const columns = [
         { field: 'username', headerName: 'User Name', width: 200, editable: true },
-        { field: 'password', headerName: 'Password', width: 200, editable: true },
+        { field: 'password', headerName: 'Password', width: 100, editable: true },
         { field: 'admin_flag', headerName: 'User Level', type: 'boolean', width: 100, editable: true },
         { field: 'email', headerName: 'Email', width: 200, editable: true },
         { field: 'actions', headerName: 'Actions', width: 150, editable: true },
@@ -185,21 +185,7 @@ export default function UserList() {
     return (
         <div className='table-div'>
         <h3>Administration</h3>
-        <Box sx={{height: '80vh'}}>
-        <DataGrid 
-            components={{ Toolbar: GridToolbar }}
-            onRowClick={handleRowClick} 
-            rows={users} 
-            columns={columns} 
-            getRowId={(row) => row.u_id}
-            pageSize={10}
-            //rowsPerPageOptions={[7]}
-            //checkboxSelection
-            disableSelectionOnClick
-            experimentalFeatures={{ newEditingApi: true }}>
-            </DataGrid>
-        </Box>
-        {loadingComponent}
+        <UserModularDatagrid/>
         <UserForm addUser={addUser}/>
         {errorComponent}
         {displayMsgComponent}

@@ -69,19 +69,19 @@ const ReportsPage = (props) => {
             menu={[
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Households Report</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('ingredients-report')}>
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Ingredients Report</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('packaging-report')}>
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Packaging Report</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('purchasing-report')}>
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Purchasing Report</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('packaging-returns')}>
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Packaging Returns</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('meal-plan-report')}>
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Meal Plan Report</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('meal-history')}>
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Meal History</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('cost-totals')}>
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Cost Totals</button>,
                 ]}/>
             {currPage}

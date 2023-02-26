@@ -68,16 +68,18 @@ const UserForm = (props) => {
               <Grid item>
                 <InputLabel htmlFor='username'>Username: </InputLabel>
                 <Input name='username' id='username' type='text' value={user.username} onChange={handleFormChange}/>
-
+              </Grid>
+              <Grid item>
                 <InputLabel htmlFor='password'>Password: </InputLabel>
                 <Input name='password' id='password' type='password' value={user.password} onChange={handleFormChange}/>
               </Grid>
               <Grid item>
-                <InputLabel htmlFor='admin_flag'>User Level: </InputLabel>
-                <Input name='admin_flag' id='admin_flag' type='checkbox' value={user.admin_flag} onChange={handleFormChange}/>
-
                 <InputLabel htmlFor='email'>Email: </InputLabel>
                 <Input name='email' id='email' type='email' value={user.email} onChange={handleFormChange}/>
+              </Grid>
+              <Grid item>
+                <InputLabel htmlFor='admin_flag'>Is Admin.: </InputLabel>
+                <Input name='admin_flag' id='admin_flag' type='checkbox' value={user.admin_flag} onChange={handleFormChange}/>
               </Grid>
             </Grid>
             <Button type='Submit' color='lightBlue' variant='contained'>Add User</Button>

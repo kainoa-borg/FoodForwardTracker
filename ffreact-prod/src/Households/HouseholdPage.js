@@ -11,6 +11,7 @@ export default function HouseholdPage() {
     
     const AllergyListCell = (params) => {
         return <AllergiesList allergies={params.value} isEditable={false}/>
+
     }
     const AllergyListEditCell = (params) => {
         const api = useGridApiContext();
