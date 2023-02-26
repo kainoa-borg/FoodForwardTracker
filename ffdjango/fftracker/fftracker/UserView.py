@@ -7,7 +7,8 @@ from django.contrib.auth.hashers import make_password, check_password
 class UserSerializer(serializers.ModelSerializer):
 	class Meta():
 		model = Users
-		fields = ('username', 'password', 'email', 'admin_flag')
+		fields = ('u_id', 'username', 'password', 'email', 'admin_flag')
+		read_only_fields = ['u_id']
 
 	def create(self, validated_data):
 		latest_id = Users.objects.all().latest('u_id').u_id
