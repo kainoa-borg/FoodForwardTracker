@@ -1,9 +1,11 @@
-import React, {Fragment, useState, useEffect, Suspense} from 'react'
+import React, {Fragment, useState, useEffect, Suspense, useRef, createRef, useMemo} from 'react'
 import axios from 'axios'
-import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCell, GridRowModes, GridActionsCellItem} from '@mui/x-data-grid'
+import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCell, GridRowModes, GridActionsCellItem, useGridApiRef, gridSortedRowEntriesSelector, useGridApiContext, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import { Button, Popover, Snackbar, Typography } from '@mui/material';
+
+import FormDialog from '../components/FormDialog.js'
 
 // Modularized Datagrid with prompts/notifications
 // Takes:
@@ -12,17 +14,23 @@ import { Button, Popover, Snackbar, Typography } from '@mui/material';
     // columns -- array -- Array of column definitions for the datagrid
 // Returns:
     // Datagrid component with table data
-export default function ModularDatagrid(props) {
+export default function NewModularDatagrid(props) {
     
     const apiIP = props.apiIP;
+    // Name of the api endpoint to send requests to
     const apiEndpoint = props.apiEndpoint;
+    // Field name of the row key/id
     const keyFieldName = props.keyFieldName;
+    // Add entry form to be passed to FormDialog
+    const AddFormComponent = props.AddFormComponent;
+    // Append passed columns with default actions
     const columns = [...props.columns, 
         { field: 'actions', type: 'actions', headerName: 'Actions', width: 100,
             getActions: (params) => modularActions(params, rowModesModel, setRowModesModel, setUpdateSBOpen)
         }                     
     ];
 
+    // Row data of the table
     const [tableData, setTableData] = useState([]);
 
     // Boolean 'request made' message state
@@ -33,12 +41,43 @@ export default function ModularDatagrid(props) {
     // Struct of row modes (view/edit)
     const [rowModesModel, setRowModesModel] = useState({});
 
+    // Open state of the Add form popup
+    const [addFormOpen, setAddFormOpen] = useState(false);
+
     // Helper function closes Snackbar notification
     const handleSBClose = (event, reason, setOpen) => {
         if (reason === 'clickaway') {
             setOpen(false);
         }
         setOpen(false);
+    }
+
+    // Helper function gets the latest key value of the table
+    const getLatestKey = () => {
+        return Math.max(...tableData.map(row => row[keyFieldName])) // Get the max id of all rows
+    }
+
+    // Generalized Add Row
+    const addEntry = (formData) => {
+        // If a form doesn't take the latest key, it should be added for the datagrid
+        if (!formData[keyFieldName])
+            formData[keyFieldName] = getLatestKey() + 1;
+        console.log(formData);
+        axios({
+            method: 'POST',
+            url:"http://4.236.185.213:8000/api/" + apiEndpoint + '/',
+            data: formData
+        }).then((response)=>{
+            getDBData();
+            // Open saving changes success notification
+            setUpdateDoneSBOpen(true);
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error.response);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+              }
+          });
     }
 
     // Generalized Delete Row
@@ -64,10 +103,7 @@ export default function ModularDatagrid(props) {
 
     // Generalized Update Row
     const processRowUpdate = (newRow) => {
-        const updatedRow = {...newRow, isNew: false};
-
-        console.log(updatedRow);
-        
+        const updatedRow = {...newRow, isNew: false};        
         axios({
             method: "PATCH",
             url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/" + newRow[keyFieldName] +'/',
@@ -116,11 +152,20 @@ export default function ModularDatagrid(props) {
         )
     }
 
+    // const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteAnchor: null, confirmCancelAnchor: null});
+
+    // const handleRowEditStop = (params, event) => {
+    //     console.log(params.reason);
+    //     console.log(event);
+    //     if (params.reason === 'escapeKeyDown') {event.defaultMuiPrevented = true; setPopoverAnchors({confirmDeleteAnchor: null, confirmCancelAnchor: event.target})};
+    // }
+
     // Takes rowModesModel getter and setter, setUpdateSBOpen ('request sent' message) setter 
     // Returns actions column definition with Popover confirmation prompts
     const modularActions = (params, rowModesModel, setRowModesModel, setUpdateSBOpen) => {
         // Struct with all popover anchors
         const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteAnchor: null, confirmCancelAnchor: null});
+        // Control state of row data to be deleted
         const [deleteParams, setDeleteParams] = useState(null);
         let isInEditMode = false;
         if (rowModesModel[params.id]) isInEditMode = rowModesModel[params.id].mode === GridRowModes.Edit;
@@ -202,26 +247,43 @@ export default function ModularDatagrid(props) {
             ]
         }
     }
+    function CustomToolbar() {
+        return (
+          <GridToolbarContainer>
+            <GridToolbarColumnsButton />
+            <GridToolbarFilterButton />
+            <GridToolbarDensitySelector />
+            <GridToolbarExport />
+            <Button color='lightBlue' variant='contained' onClick={() => {setAddFormOpen(true)}}>Add Entry</Button>
+          </GridToolbarContainer>
+        );
+    }
+      
 
     // The HTML structure of this component
     return(
         <div class='table-div'>
-        <Box sx={{height: '80vh'}}>
-            <DataGrid 
-            components={{ Toolbar: GridToolbar }}
+        <Box sx={{height: 'auto', overflow: 'auto'}}>
+            <DataGrid
+            components={{ Toolbar: CustomToolbar }}
             rows={tableData}
             columns={columns}
+            autoHeight={true}
             editMode='row'
             rowModesModel={rowModesModel}
             onRowModesModelChange={(newModel) => {setRowModesModel(newModel)}}
+            // onRowEditStop={handleRowEditStop}
             getRowId={(row) => row[keyFieldName]}
             pageSize={10}
             processRowUpdate={processRowUpdate}
             //rowsPerPageOptions={[5]}
             disableSelectionOnClick
+            // disableVirtualization
             experimentalFeatures={{ newEditingApi: true }}>
             </DataGrid>
         </Box>
+        {/* Add Form Dialog */}
+        <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={AddFormComponent} addEntry={addEntry} latestKey={getLatestKey()}/>
         {/* Save Click 'request sent' Notice */}
         <Snackbar
             open={updateSBOpen}
@@ -236,7 +298,6 @@ export default function ModularDatagrid(props) {
             onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
             message="Changes saved!"
         />
-        {/* Add entry notice */}
         </div>
     )
 }

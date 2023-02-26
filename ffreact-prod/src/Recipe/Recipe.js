@@ -6,11 +6,11 @@ import axios from 'axios'
 // import FormData from 'axios'
 import RecipePage from './RecipePage.js'
 import ModularRecipeDatagrid from "../components/ModularRecipeDatagrid.js";
+import RecipeIngForm from "./RecipeIngForm.js"
 
 export default function Recipe(props) {
     const [recipeData, setRecipeData] = useState(props.recipeData);
     const setCurrPage = props.setCurrPage;
-    const gridRef = createRef();
 
     const ingredientsColumns = [
         {
@@ -176,10 +176,10 @@ export default function Recipe(props) {
                     <Typography variant='h6'>Ingredients</Typography>
                     <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
                         <ModularRecipeDatagrid 
-                            ref={gridRef}
                             rows={ingredientRows} 
                             setRows={setIngredientRows}
-                            columns={ingredientsColumns} 
+                            columns={ingredientsColumns}
+                            addFormComponent={RecipeIngForm}
                             keyFieldName={'ri_ing'}
                         ></ModularRecipeDatagrid>
                     </Box>

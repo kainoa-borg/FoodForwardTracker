@@ -3,7 +3,8 @@ import { useGridApiContext, gridClasses} from '@mui/x-data-grid'
 import './HouseholdList.css'
 import { Box } from '@mui/material'
 import AllergiesList from './AllergiesList';
-import ModularDatagrid from '../components/ModularDatagrid';
+import NewModularDatagrid from '../components/NewModularDatagrid';
+import HouseholdForm from './HouseholdForm.js'
 
 // Packaging List Component
 export default function HouseholdModularDatagrid() {
@@ -22,10 +23,10 @@ export default function HouseholdModularDatagrid() {
     }
 
     const columns = [
-        { field: 'hh_name', headerName: 'Name', type: 'string', width: 120, editable: true },
-        { field: 'num_adult', headerName: 'Adults', type: 'number', width: 50, editable: true },
-        { field: 'num_child_lt_6', headerName: '0-6', type: 'number', width: 50, editable: true },
-        { field: 'num_child_gt_6', headerName: '7-17', type: 'number', width: 50, editable: true },
+        { field: 'hh_name', headerName: 'Name', type: 'string', width: 80, editable: true },
+        { field: 'num_adult', headerName: 'Adults', type: 'number', width: 80, editable: true },
+        { field: 'num_child_lt_6', headerName: '0-6', type: 'number', width: 80, editable: true },
+        { field: 'num_child_gt_6', headerName: '7-17', type: 'number', width: 80, editable: true },
         { field: 'phone', headerName: 'Phone Number', width: 110, type: 'number', editable: true },
         { field: 'street', headerName: 'Street', width: 160, type: 'string', editable: true },
         { field: 'city', headerName: 'City', width: 100, type: 'string', editable: true },
@@ -45,12 +46,16 @@ export default function HouseholdModularDatagrid() {
     return(
         <div class='table-div'>
         <h3>Clients</h3>
-        <Box sx={{height: '80vh'}}>
-            <ModularDatagrid columns={columns} getRowHeight={() => 'auto'} sx={{
-          [`& .${gridClasses.cell}`]: {
-            py: 1,
-          },
-        }} getEstimatedRowHeight={() => 300} keyFieldName={'hh_name'} apiEndpoint={'households'}></ModularDatagrid>
+        <Box sx={{height: '80%'}}>
+            <NewModularDatagrid 
+                columns={columns} 
+                getRowHeight={() => 'auto'}
+                getEstimatedRowHeight={() => 300} 
+                keyFieldName={'hh_name'} 
+                apiEndpoint={'households'}
+                AddFormComponent={HouseholdForm}
+            >
+            </NewModularDatagrid>
         </Box>
         </div>
     )
