@@ -26,7 +26,7 @@ export default function HouseholdPage() {
         { field: 'veg_flag', headerName: 'Veg', width: 100, type: 'boolean', editable: true },
         { field: 'sms_flag', headerName: 'SMS', width: 100, type: 'boolean', editable: true },
         { field: 'gf_flag', headerName: 'Gluten Free', width: 100, type: 'boolean', editable: true},
-        { field: 'hh_allergies', headerName: 'Allergies', width: 100, type: 'date', editable: true, valueFormatter: ({ value }) => value.s_name }
+        { field: 'hh_allergies', headerName: 'Allergies', width: 100, type: 'date', editable: true, valueFormatter: ({ value }) => value.s_name },
         { field: 'paused_flag', headerName: 'Paused', width: 100, type: 'boolean', editable: true },
     ]
 
