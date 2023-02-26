@@ -8,7 +8,12 @@ import ModularDatagrid from '../components/ModularDatagrid';
 export default function UserModularDatagrid() {
     const columns = [
         { field: 'username', headerName: 'User Name', type: 'string', width: 200, editable: true },
-        { field: 'password', headerName: 'Password', type: 'password', width: 200, editable: true },
+        { field: 'password', headerName: 'Password', type: 'password', width: 100, editable: true, 
+          renderCell: (cellValues) => {
+          return (
+            <text>*****</text>
+          );
+        } },
         { field: 'admin_flag', headerName: 'Administrator', type: 'boolean', width: 100, editable: true },
         { field: 'email', headerName: 'Email', type: 'email', width: 200, editable: true },
     ]

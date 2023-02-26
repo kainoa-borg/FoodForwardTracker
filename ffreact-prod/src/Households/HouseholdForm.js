@@ -11,6 +11,9 @@ import { Card } from '@mui/material'
 // Returns a form that can be used to define a new household object in a HouseholdList
 const HouseholdForm = (props) => {
 
+  const addEntry = props.addEntry;
+  const handleClose = props.handleClose;
+
   const clearHousehold = () => {
     return {
       hh_name: "",
@@ -43,7 +46,8 @@ const HouseholdForm = (props) => {
       // Prevent refresh
       event.preventDefault();
       // Pass household object to HouseholdList callback
-      props.addHousehold(household)
+      // props.addHousehold(household)
+      addEntry(household);
       // Clear the form state
       setHousehold(clearHousehold());
     }
@@ -128,7 +132,7 @@ const HouseholdForm = (props) => {
                 <AllergiesList allergies={household.hh_allergies} isEditable={true} updateEditForm={updateEditForm}/>
               </Grid>
             </Grid>
-            <Button type='Submit' color='lightBlue' variant='contained'>Add Client</Button>
+            <Button type='Submit' color='lightBlue' variant='contained' onClick={handleClose}>Add Client</Button>
         </form>
       </Card>
 
