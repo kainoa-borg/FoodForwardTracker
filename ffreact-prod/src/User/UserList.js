@@ -9,7 +9,7 @@ import UserRow from './UserRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 import './UserList.css'
-
+import UserModularDatagrid from './UserModularDatagrid.js'
 
 // User List Component
 export default function UserList() {
@@ -185,21 +185,7 @@ export default function UserList() {
     return (
         <div className='table-div'>
         <h3>Administration</h3>
-        <Box sx={{height: '80vh'}}>
-        <DataGrid 
-            components={{ Toolbar: GridToolbar }}
-            onRowClick={handleRowClick} 
-            rows={users} 
-            columns={columns} 
-            getRowId={(row) => row.u_id}
-            pageSize={10}
-            //rowsPerPageOptions={[7]}
-            //checkboxSelection
-            disableSelectionOnClick
-            experimentalFeatures={{ newEditingApi: true }}>
-            </DataGrid>
-        </Box>
-        {loadingComponent}
+        <UserModularDatagrid/>
         <UserForm addUser={addUser}/>
         {errorComponent}
         {displayMsgComponent}

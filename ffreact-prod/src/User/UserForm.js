@@ -73,7 +73,7 @@ const UserForm = (props) => {
                 <Input name='password' id='password' type='password' value={user.password} onChange={handleFormChange}/>
               </Grid>
               <Grid item>
-                <InputLabel htmlFor='admin_flag'>User Level: </InputLabel>
+                <InputLabel htmlFor='admin_flag'>Is Admin.: </InputLabel>
                 <Input name='admin_flag' id='admin_flag' type='checkbox' value={user.admin_flag} onChange={handleFormChange}/>
 
                 <InputLabel htmlFor='email'>Email: </InputLabel>
