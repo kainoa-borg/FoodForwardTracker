@@ -39,15 +39,15 @@ export default function ModularRecipeDatagrid(props) {
     const handleStateChange = () => {
         return null; // Stop this broken function from being called for now
         
-        // export state of this data grid using the api reference
-        const rowStates = dataGridApiRef.current.exportState()
+        // // export state of this data grid using the api reference
+        // const rowStates = dataGridApiRef.current.exportState()
         
-        // (assuming state contains a list of objects with a row data (model) field)
-        // create an array of just the row data (model) of each row
-        const allRowData = rowStates.map((state) => state.model);
+        // // (assuming state contains a list of objects with a row data (model) field)
+        // // create an array of just the row data (model) of each row
+        // const allRowData = rowStates.map((state) => state.model);
 
-        // use setter from parent component to update the state of its data with new row data
-        setRows(allRowData);
+        // // use setter from parent component to update the state of its data with new row data
+        // setRows(allRowData);
     }
 
     // Helper function closes Snackbar notification
