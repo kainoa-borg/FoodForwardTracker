@@ -415,7 +415,7 @@ class Supplier(models.Model):
 class Users(models.Model):
     u_id = models.PositiveSmallIntegerField(primary_key=True)
     username = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
+    password = models.CharField(max_length=260)
     admin_flag = models.PositiveIntegerField()
     email = models.CharField(max_length=45)
 
