@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { Fragment } from 'react'
 import axios from 'axios'
-
+import { Typography, Stack, Button, Box, Card, Grid, TextField} from "@mui/material"
 // Login Page Component
 // Takes handlePageClick callback function to enable page switching when login is completed
 // Returns a login page component that allows users to enter account information 
@@ -61,18 +61,56 @@ const NewUserPage = (props) => {
 
     // HTML structure of this component
     return (
-        <Fragment>
-            <h3>Create New User</h3>
-            <form onSubmit={handleCreateUser}>
-                <label htmlFor='username'>Username: </label>
-                <input type='text' maxLength='30' name='username' value={user.username} onChange={createNewUser}></input>
-                <br/><label htmlFor='username'>Password: </label>
-                <input type='password' maxLength='30' name='password' value={user.password} onChange={createNewUser}></input>
-                <br/><label htmlFor='username'>Email: </label>
-                <input type='email' maxLength='30' name='email' value={user.email} onChange={createNewUser}></input>
-                <br/><br/><button type='Submit'>Submit</button>
-            </form>
-        </Fragment>
+
+
+        <Grid container spacing='12' sx={{margin: 'auto', marginTop: '1em', maxWidth: '90%', justifyContent: 'center', alignItems: 'center'}}>
+            
+            {/* Logo and Welcome Message (left-side) */}
+            <Grid item md={7} sx={{display: {xs: 'none', md: 'block'}}}>
+                <Box component='img' sx={{width: '80%'}} src="/Images/ff_logo.jpg"/>
+                <Typography variant='h3' sx={{paddingBottom: '1em'}}>Welcome to Food Forward!</Typography>
+            </Grid>
+
+            {/* Sign up Box */}
+            <Grid item component={Card} md={5} sm={12} elevation='4' sx={{padding: '2em', marginBottom: '5em', height: 'fit-content'}}>
+                <Typography variant='h5' sx={{paddingBottom: '1em'}}>Create New User</Typography>
+                <form onSubmit={handleCreateUser}>
+            
+                    <Stack sx={{textAlign: 'center', justifyContent: 'center', marginTop: '2em'}}>
+                        <TextField
+                        type = 'text'
+                        maxLength = '30' 
+                        label = 'Username'
+                        name = 'username' 
+                        value = {user.username} 
+                        onChange = {createNewUser}
+                        />
+                        
+                        <TextField
+                        type = 'text'
+                        maxLength = '30' 
+                        label = 'Password'
+                        name = 'password' 
+                        value = {user.password} 
+                        onChange = {createNewUser}
+                        />
+
+                        <TextField
+                        type = 'text'
+                        maxLength = '30' 
+                        label = 'Email'
+                        name = 'email'
+                        value = {user.email} 
+                        onChange = {createNewUser}
+                        />
+                        <Button color='lightGreen' variant='contained' type='Submit' onClick={sendCreateRequest}>
+                            Submit
+                        </Button>
+                    </Stack>            
+                </form>
+            </Grid>
+        </Grid>
+
     );
 }
 

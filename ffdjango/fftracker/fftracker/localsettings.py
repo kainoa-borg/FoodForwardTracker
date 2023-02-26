@@ -86,7 +86,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-ca_path = os.path.join(os.path.dirname(__file__) + '/../DigiCertGlobalRootCA.crt.pem').replace('\\', '/')
+ca_path = os.path.join(os.path.dirname(__file__) + '/../DigiCertGlobalRootCA.crt.pem')
 
 DATABASES = {
     'default': {
