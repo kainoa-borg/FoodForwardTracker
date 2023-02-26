@@ -35,7 +35,6 @@ from .StationViews import StationsView
 from .SupplierViews import SupplierView
 from .UserView import UserAuth
 from .UserView import UserView
-from .views import UserView
 
 #admin.site.register(Households)
 #admin.site.register(Ingredients)

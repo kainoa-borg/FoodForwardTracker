@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { Fragment } from 'react'
 import axios from 'axios'
@@ -18,7 +18,7 @@ const NewUserPage = (props) => {
     );
 
     const sendCreateRequest = () => {
-        console.log(JSON.stringify(user))
+        console.log(JSON.stringify(user));
         axios({
             method: "POST",
             url: "http://4.236.185.213:8000/api/users/",
