@@ -39,12 +39,12 @@ class RecipeDietsSerializer(serializers.ModelSerializer):
         fields = ('diet_category',)
 
 class RecipeIngredientSerializer(ModelSerializer):
-    ingredient_name = serializers.CharField(read_only=True, source='ri_ing.ingredient_name')
+    ri_id = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta():
         model = RecipeIngredients
         # depth = 1
-        fields = ('ri_id', 'ingredient_name', 'amt', 'unit', 'prep', 'ri_ing')
-        read_only_fields = ['ri_id', 'ingredient_name', 'ri_ing']
+        fields = ('ri_id', 'ingredient_name', 'amt', 'unit', 'prep')
+        read_only_fields = ('ri_id',)
 
 class RecipeInstructionsSerializer(ModelSerializer):
     class Meta():
@@ -53,12 +53,12 @@ class RecipeInstructionsSerializer(ModelSerializer):
         fields = ('step_no', 'step_inst', 'stn_name')
 
 class RecipePackagingSerializer(ModelSerializer):
-    pkg_type = serializers.CharField(read_only=True, source='rp_pkg.package_type')
+    rp_id = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta():
         model = RecipePackaging
         # depth = 1
         fields = ('rp_id', 'pkg_type', 'amt', 'rp_pkg', 'rp_pkg')
-        read_only_fields = ['rp_id', 'pkg_type', 'rp_pkg']
+        read_only_fields = ['rp_id', 'rp_pkg']
 
 
 class RecipeImageSerializer(serializers.ModelSerializer):
@@ -117,14 +117,14 @@ class RecipeCardView(viewsets.ViewSet):
 class RecipesSerializer(ModelSerializer):
     r_num = serializers.CharField(max_length=200)
     r_name = serializers.CharField(max_length=200)
-    r_img_path = serializers.CharField(required=False)
-    r_card_path = serializers.CharField(required=False)
+    r_img_path = serializers.CharField(read_only=True)
+    r_card_path = serializers.CharField(read_only=True)
     r_ingredients = RecipeIngredientSerializer(many=True)
     r_packaging = RecipePackagingSerializer(many=True)
     r_diets = RecipeDietsSerializer(many=True)
     r_allergies = AllergySerializer(many=True)
     r_instructions = RecipeInstructionsSerializer(many=True)
-    m_s = serializers.BooleanField()
+    m_s = serializers.IntegerField()
 
     class Meta():
         model = Recipes
@@ -136,7 +136,7 @@ class RecipesSerializer(ModelSerializer):
         pkgs = validated_data.pop('r_packaging')
         diets = validated_data.pop('r_diets')
         instructions = validated_data.pop('r_instructions')
-        for ing in ings:
+        for ing in ings: 
             RecipeIngredients(ing).save()
         for pkg in pkgs:
             RecipePackaging(pkg).save()
@@ -157,60 +157,65 @@ class RecipesSerializer(ModelSerializer):
         instructions = validated_data.pop('r_instructions')
         allergies = validated_data.pop('r_allergies')
 		# ing_instance = Ingredients.objects.create(**validated_data)
-        if ings:
-            RecipeIngredients.objects.all().filter(ri_recipe_num = recipe_instance).delete()
-            for ing in ings:
-                if (RecipeIngredients.objects.count() > 0):
-                    latest_id = RecipeIngredients.objects.latest('ri_id').ri_id +1
-                else:
-                    latest_id = 0
-                ing['ri_id'] = latest_id
-                ing['ri_recipe_num'] = recipe_instance
-                # raise serializers.ValidationError(usage)
-                RecipeIngredients.objects.create(**ing)
-        if pkgs:
-          RecipePackaging.objects.all().filter(rp_recipe_num = recipe_instance).delete()
-          for pkg in pkgs:
-              if (RecipePackaging.objects.count() > 0):
-                  latest_id = RecipePackaging.objects.latest('rp_id').rp_id +1
-              else:
-                  latest_id = 0
-              pkg['rp_id'] = latest_id
-              pkg['rp_recipe_num'] = recipe_instance
-              # raise serializers.ValidationError(usage)
-              RecipePackaging.objects.create(**pkg)
-        if diets:
-            RecipeDiets.objects.all().filter(rd_recipe_num = recipe_instance).delete()
-            for diet in diets:
-                if (RecipeDiets.objects.count() > 0):
-                    latest_id = RecipeDiets.objects.latest('rd_id').rd_id + 1
-                else:
-                    latest_id = 0
-                diet['rd_id'] = latest_id
-                diet['rd_recipe_num'] = recipe_instance
-                RecipeDiets.objects.create(**diet)
-        if instructions:
-            RecipeInstructions.objects.all().filter(inst_recipe_num = recipe_instance).delete()
-            for inst in instructions:
-                if (RecipeInstructions.objects.count() > 0):
-                    latest_id = RecipeInstructions.objects.latest('inst_id').inst_id + 1
-                else:
-                    latest_id = 0
-                inst['inst_id'] = latest_id
-                inst['inst_recipe_num'] = recipe_instance
-                RecipeInstructions.objects.create(**inst)
-        if allergies:
-            RecipeAllergies.objects.all().filter(ra_recipe_num = recipe_instance).delete()
-            for allergy in allergies:
-                if (RecipeAllergies.objects.count() > 0):
-                    latest_id = RecipeAllergies.objects.latest('ra_id').ra_id + 1
-                else:
-                    latest_id = 0
-                allergy['ra_id'] = latest_id
-                allergy['ra_recipe_num'] = recipe_instance
-                RecipeAllergies.objects.create(**allergy)
+
+        RecipeIngredients.objects.all().filter(ri_recipe_num = recipe_instance).delete()
+        for ing in ings:
+            if (RecipeIngredients.objects.count() > 0):
+                latest_id = RecipeIngredients.objects.latest('ri_id').ri_id +1
+            else:
+                latest_id = 0
+            ing['ri_id'] = latest_id
+            ing['ri_recipe_num'] = recipe_instance
+            # raise serializers.ValidationError(usage)
+            RecipeIngredients.objects.create(**ing)
+        
+        RecipePackaging.objects.all().filter(rp_recipe_num = recipe_instance).delete()
+        for pkg in pkgs:
+            if (RecipePackaging.objects.count() > 0):
+                latest_id = RecipePackaging.objects.latest('rp_id').rp_id +1
+            else:
+                latest_id = 0
+            pkg['rp_id'] = latest_id
+            pkg['rp_recipe_num'] = recipe_instance
+            # raise serializers.ValidationError(usage)
+            RecipePackaging.objects.create(**pkg)
+        
+        RecipeDiets.objects.all().filter(rd_recipe_num = recipe_instance).delete()
+        for diet in diets:
+            if (RecipeDiets.objects.count() > 0):
+                latest_id = RecipeDiets.objects.latest('rd_id').rd_id + 1
+            else:
+                latest_id = 0
+            diet['rd_id'] = latest_id
+            diet['rd_recipe_num'] = recipe_instance
+            RecipeDiets.objects.create(**diet)
+        
+        RecipeInstructions.objects.all().filter(inst_recipe_num = recipe_instance).delete()
+        for inst in instructions:
+            if (RecipeInstructions.objects.count() > 0):
+                latest_id = RecipeInstructions.objects.latest('inst_id').inst_id + 1
+            else:
+                latest_id = 0
+            inst['inst_id'] = latest_id
+            inst['inst_recipe_num'] = recipe_instance
+            RecipeInstructions.objects.create(**inst)
+        
+        RecipeAllergies.objects.all().filter(ra_recipe_num = recipe_instance).delete()
+        for allergy in allergies:
+            if (RecipeAllergies.objects.count() > 0):
+                latest_id = RecipeAllergies.objects.latest('ra_id').ra_id + 1
+            else:
+                latest_id = 0
+            allergy['ra_id'] = latest_id
+            allergy['ra_recipe_num'] = recipe_instance
+            RecipeAllergies.objects.create(**allergy)
         recipe_instance.r_num = validated_data.get('r_num')
         recipe_instance.r_name = validated_data.get('r_name')
+        recipe_instance.m_s = validated_data.get('m_s')
+        print(validated_data.get('m_s'))
+        print(recipe_instance.m_s)
+        recipe_instance.save()
+        # print(recipe_instance.m_s)
         return recipe_instance
 
 

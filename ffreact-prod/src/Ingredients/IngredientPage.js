@@ -103,6 +103,7 @@ export default function IngredientPage() {
             if (params.value.length > 0) return params.value[params.value.length - 1].used_date}}},
         { field: 'ingredient_usage2', headerName: 'Units Used', width: 100, type: 'number', editable: true, valueFormatter: (params) => {if (params.value) {
             if (params.value.length > 0) return params.value[params.value.length - 1].used_qty}}},
+        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false}
     ]
 
     return(

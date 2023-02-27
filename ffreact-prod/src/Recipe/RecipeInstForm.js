@@ -9,16 +9,14 @@ import { Grid, Typography, Card, Input, InputLabel, Select, MenuItem, Button} fr
 // Ingredient Form component
 // Takes AddIngredient callback function
 // Returns a form that can be used to define a new ingredient object in a IngredientList
-const RecipeIngForm = (props) => {
+const RecipeInstForm = (props) => {
     const addEntry = props.addEntry;
     const handleClose = props.handleClose;
     
     // The state of this Ingredient Form with each attribute of Ingredient
-    const [ingredient, setIngredient] = useState({
-        ingredient_name: '',
-        amt: '',
-        unit: '',
-        prep: '',
+    const [instruction, setInstruction] = useState({
+        step_inst: '',
+        stn_name: '',
     });
 
     // Handle form submission (prevent refresh, pass ingredient to addIngredient, and clear form state)
@@ -28,16 +26,16 @@ const RecipeIngForm = (props) => {
         // Prevent refresh
         event.preventDefault();
         // Pass ingredient object to IngredientList callback
-        addEntry(ingredient);
+        addEntry(instruction);
         handleClose();
     }
 
     const updateEditForm = (names, values) => {
-        const newIngredient = {...ingredient};
+        const newInstruction = {...instruction};
         for (let i = 0; i < names.length; i++) {
-            newIngredient[names[i]] = values[i];
+            newInstruction[names[i]] = values[i];
         }
-        setIngredient(newIngredient);
+        setInstruction(newInstruction);
     }
 
     // Handle the data inputted to each form input and set the state with the new values
@@ -48,7 +46,7 @@ const RecipeIngForm = (props) => {
         // Get the name and value of the changed field
         const fieldName = event.target.getAttribute('name');
         const fieldValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        // Create new ingredient object before setting state
+        // Create new instruction object before setting state
         updateEditForm([fieldName], [fieldValue]);
         // updateEditForm('aFlag', true);
     }
@@ -56,22 +54,16 @@ const RecipeIngForm = (props) => {
     // HTML structure of this component
     return (
     <form onSubmit={handleSubmit}>
-        {/* Basic ingredient info */}
+        {/* Basic instruction info */}
         <Card sx={{marginTop: '1em', padding: '1em'}}>
-            <Typography variant='h5'>Add Ingredient</Typography>
+            <Typography variant='h5'>Add Instruction</Typography>
             <Grid container direction='row' spacing={4}>
             <Grid item>
-                <InputLabel>Ingredient Name: </InputLabel>
-                <Input name="ingredient_name" type="text" maxLength='30' value={ingredient.ingredient_name} onChange={handleFormChange}/>
-                
-                <InputLabel>Amount: </InputLabel>
-                <Input name='amt' type="text" value={ingredient.storage_type} onChange={handleFormChange}/>
+                <InputLabel>Step Instruction: </InputLabel>
+                <Input name='step_inst' type="text" value={instruction.step_inst} onChange={handleFormChange}/>
 
-                <InputLabel>Unit: </InputLabel>
-                <Input name='unit' type="text" value={ingredient.unit} onChange={handleFormChange}/>
-                
-                <InputLabel>Prep: </InputLabel>
-                <Input name="prep" type="text" value={ingredient.prep} onChange={handleFormChange}/>
+                <InputLabel>Station: </InputLabel>
+                <Input name='stn_name' type="text" value={instruction.stn_name} onChange={handleFormChange}/>
             </Grid>
             <Grid item>
                 <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>
@@ -82,4 +74,4 @@ const RecipeIngForm = (props) => {
     );
 }
 
-export default RecipeIngForm
+export default RecipeInstForm

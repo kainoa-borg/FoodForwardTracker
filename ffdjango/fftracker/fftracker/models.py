@@ -322,10 +322,11 @@ class RecipeDiets(models.Model):
 
 class RecipeIngredients(models.Model):
     ri_id = models.SmallIntegerField(primary_key=True)
+    ingredient_name = models.CharField(max_length=100)
     amt = models.SmallIntegerField()
     unit = models.CharField(max_length=10)
     prep = models.CharField(max_length=100)
-    ri_ing = models.ForeignKey('Ingredients', models.CASCADE, related_name='ing_name')
+    # ri_ing = models.ForeignKey('Ingredients', models.CASCADE, related_name='ing_name')
     ri_recipe_num = models.ForeignKey('Recipes', models.CASCADE, related_name='r_ingredients', db_column='ri_recipe_num')
 
     class Meta:
