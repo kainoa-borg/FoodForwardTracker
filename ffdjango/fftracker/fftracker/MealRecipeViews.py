@@ -43,7 +43,8 @@ class RecipeIngredientSerializer(ModelSerializer):
     class Meta():
         model = RecipeIngredients
         # depth = 1
-        fields = ('ingredient_name', 'amt', 'unit', 'prep', 'ri_ing')
+        fields = ('ri_id', 'ingredient_name', 'amt', 'unit', 'prep', 'ri_ing')
+        read_only_fields = ['ri_id', 'ingredient_name', 'ri_ing']
 
 class RecipeInstructionsSerializer(ModelSerializer):
     class Meta():
@@ -56,7 +57,9 @@ class RecipePackagingSerializer(ModelSerializer):
     class Meta():
         model = RecipePackaging
         # depth = 1
-        fields = ('amt', 'pkg_type', 'rp_pkg')
+        fields = ('rp_id', 'pkg_type', 'amt', 'rp_pkg', 'rp_pkg')
+        read_only_fields = ['rp_id', 'pkg_type', 'rp_pkg']
+
 
 class RecipeImageSerializer(serializers.ModelSerializer):
     class Meta():
@@ -101,9 +104,9 @@ class RecipeCardView(viewsets.ViewSet):
             except:
                 print('image corrupt')
                 return Response(request)
-            img = Image.open(request.data['file'])
-            abs_file_path = 'var/www/html/Images/r_%s_card.jpg'%(pk)
-            rel_file_path = 'Images/r_%s_card.jpg'%(pk)
+            img = Image.open(request.data['file']).convert('RGB')
+            abs_file_path = 'var/www/html/Images/r_%s_card.pdf'%(pk)
+            rel_file_path = 'Images/r_%s_card.pdf'%(pk)
             img.save(abs_file_path)
             queryset[0].r_card_path = rel_file_path
             queryset[0].save()
@@ -114,18 +117,19 @@ class RecipeCardView(viewsets.ViewSet):
 class RecipesSerializer(ModelSerializer):
     r_num = serializers.CharField(max_length=200)
     r_name = serializers.CharField(max_length=200)
-    r_img_path = serializers.CharField()
-    r_card_path = serializers.CharField()
+    r_img_path = serializers.CharField(required=False)
+    r_card_path = serializers.CharField(required=False)
     r_ingredients = RecipeIngredientSerializer(many=True)
     r_packaging = RecipePackagingSerializer(many=True)
     r_diets = RecipeDietsSerializer(many=True)
     r_allergies = AllergySerializer(many=True)
     r_instructions = RecipeInstructionsSerializer(many=True)
+    m_s = serializers.BooleanField()
 
     class Meta():
         model = Recipes
         # depth = 1
-        fields = ('r_num', 'r_name', 'r_img_path', 'r_card_path', 'r_ingredients', 'r_packaging', 'r_diets', 'r_instructions', 'r_allergies')
+        fields = ('r_num', 'r_name', 'r_img_path', 'r_card_path', 'r_ingredients', 'r_packaging', 'r_diets', 'r_instructions', 'r_allergies', 'm_s')
 
     def create(self, validated_data):
         ings = validated_data.pop('r_ingredients')

@@ -10,18 +10,17 @@ export default function RecipePage(props) {
 
     const [recipes, setRecipes] = useState();
     const [recipeData, setRecipeData] = useState();
-    const [recipeEditID, setRecipeEditID] = useState();
 
     const setCurrPage = props.setCurrPage;
-
-    const getDBRecipes = () => {
+s
+    const getDBIngredients = () => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/recipe-list"
+            url:"http://4.236.185.213:8000/api/ingredient-inventory"
         }).then((response)=>{
         setRecipes(response.data);
         }).catch((error) => {
-        if (error.response) {
+        if (error.response) {S
             console.log(error.response);
             console.log(error.response.status);
             console.log(error.response.headers);
@@ -63,12 +62,11 @@ export default function RecipePage(props) {
     }
     else {
         if (!(recipeData === undefined))
-            setCurrPage(<Recipe recipeData={recipeData} setRecipeData={setRecipeData} getDBRecipeData={getDBRecipeData} setCurrPage={setCurrPage}></Recipe>);
+            setCurrPage(<Recipe recipeData={recipeData} setCurrPage={setCurrPage}></Recipe>);
     }
 
     const handleRowClick = (params) => {
         getDBRecipeData(params.row.r_num);
-        setRecipeEditID(params.row.r_num);
         return (
             <>loading...</>
         );
@@ -79,7 +77,7 @@ export default function RecipePage(props) {
         <Box sx={{height: '80vh'}}>
             <DataGrid 
             onRowClick={handleRowClick} 
-            rows={recipes}
+            rows={recipes} 
             columns={columns} 
             getRowId={(row) => row.r_num}>
             </DataGrid>

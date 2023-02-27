@@ -1,4 +1,4 @@
-import { Button, Typography, Box, Grid } from "@mui/material";
+import { Button, Typography, Box, Grid, Checkbox, Snackbar } from "@mui/material";
 import React, {useState, useEffect, createRef} from 'react';
 import { DataGrid } from "@mui/x-data-grid";
 import { Stack } from "@mui/material";
@@ -9,8 +9,11 @@ import ModularRecipeDatagrid from "../components/ModularRecipeDatagrid.js";
 import RecipeIngForm from "./RecipeIngForm.js"
 
 export default function Recipe(props) {
-    const [recipeData, setRecipeData] = useState(props.recipeData);
+    // const [recipeData, setRecipeData] = useState(props.recipeData);
+    const recipeData = props.recipeData;
+    const setRecipeData = props.setRecipeData;
     const setCurrPage = props.setCurrPage;
+    const getDBRecipeData = props.getDBRecipeData;
 
     const ingredientsColumns = [
         {
@@ -85,7 +88,10 @@ export default function Recipe(props) {
     const dietRows = recipeData.r_diets
     const allergyRows = recipeData.r_allergies
 
-    console.log(ingredientRows)
+    // Boolean 'request made' message state
+    const [updateSBOpen, setUpdateSBOpen] = useState(false);
+    // Boolean 'request success' message state
+    const [updateDoneSBOpen, setUpdateDoneSBOpen] = useState(false);
 
     const handleCloseClick = () => {
         // Return to recipe list when close is clicked
@@ -109,13 +115,14 @@ export default function Recipe(props) {
         formData.append('file', file);
         axios({
             method: "PATCH",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/" + recipeData.r_num + '/',
+            url:"http://localhost:8000/api/" + apiEndpoint + "/" + recipeData.r_num + '/',
             data: formData,
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         }).then((response)=>{
             console.log('success!')
+            getDBRecipeData(recipeData.r_num);
         }).catch((error) => {
         if (error.response) {
             console.log(error.response);
@@ -125,15 +132,26 @@ export default function Recipe(props) {
         });
     }
 
+    // Helper function closes Snackbar notification
+    const handleSBClose = (event, reason, setOpen) => {
+        if (reason === 'clickaway') {
+            setOpen(false);
+        }
+        setOpen(false);
+    }
+
     const handleUpdateRecipe = () => {
         const r_data = {...recipeData, r_ingredients: ingredientRows, r_packaging: packagingRows, r_instructions: instructionRows}
         console.log(r_data);
+        setUpdateSBOpen(true);
         axios({
             method: "PATCH",
             url:"http://4.236.185.213:8000/api/mealrecipes/" + recipeData.r_num + '/',
             data: r_data,
         }).then((response)=>{
             console.log('success!')
+            setUpdateDoneSBOpen(true);
+            getDBRecipeData(recipeData.r_num);
         }).catch((error) => {
         if (error.response) {
             console.log(error.response);
@@ -141,6 +159,12 @@ export default function Recipe(props) {
             console.log(error.response.headers);
             }
         });
+    }
+
+    const handleMealSnackChange = (event) => {
+        const newRecipeData = {...recipeData};
+        newRecipeData['m_s'] = event.target.checked;
+        setRecipeData(newRecipeData);
     }
 
     return (
@@ -158,6 +182,8 @@ export default function Recipe(props) {
             {/* Recipe Image and Card Stack */}
             <Stack item spacing={3}>
                 <Typography variant='h4' sx={{textDecoration: 'underline'}}>{recipeData.r_name}</Typography>
+                <Typography variant='h5'>Meal?</Typography>
+                <Checkbox checked={recipeData.m_s} onChange={handleMealSnackChange} inputProps={{'aria-label': 'controlled'}}/>
                 <RecipeImage image_source={recipeData.r_img_path}/>
                 <Button color='lightGreen' variant='contained' component='label'>
                     Upload Image
@@ -166,7 +192,7 @@ export default function Recipe(props) {
                 <RecipeImage image_source={recipeData.r_card_path}/>
                 <Button color='lightGreen' variant='contained' component='label'>
                     Upload Recipe Card
-                    <input id='recipe_card' type='file' accept='.jpg' onChange={(event) => handleImageUpload(event, 'mealrecipe-card')} hidden></input>
+                    <input id='recipe_card' type='file' accept='.jpg,.pdf,.doc,.docx' onChange={(event) => handleImageUpload(event, 'mealrecipe-card')} hidden></input>
                 </Button>
             </Stack>
 
@@ -180,7 +206,7 @@ export default function Recipe(props) {
                             setRows={setIngredientRows}
                             columns={ingredientsColumns}
                             addFormComponent={RecipeIngForm}
-                            keyFieldName={'ri_ing'}
+                            keyFieldName={'ri_id'}
                         ></ModularRecipeDatagrid>
                     </Box>
                 </Box>
@@ -191,7 +217,7 @@ export default function Recipe(props) {
                             rows={packagingRows}
                             columns={packagingColumns}
                             setRows={setPackagingRows}
-                            keyFieldName={'rp_pkg'}
+                            keyFieldName={'rp_id'}
                         ></ModularRecipeDatagrid>
                     </Box>    
                 </Box>
@@ -207,8 +233,21 @@ export default function Recipe(props) {
                     </Box>
                 </Box>
             </Stack>
-
         </Grid>
+        {/* Save Click 'request sent' Notice */}
+        <Snackbar
+            open={updateSBOpen}
+            autoHideDuration={3000}
+            onClose={(event, reason) => handleSBClose(event, reason, setUpdateSBOpen)}
+            message="Saving..."
+        />
+        {/* Save Complete 'request success' Notice */}
+        <Snackbar
+            open={updateDoneSBOpen}
+            autoHideDuration={3000}
+            onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
+            message="Changes saved!"
+        />
         </div>
     )
 }
