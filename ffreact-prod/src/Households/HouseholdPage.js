@@ -55,6 +55,7 @@ export default function HouseholdPage() {
                 getEstimatedRowHeight={() => 300} 
                 keyFieldName={'hh_name'} 
                 apiEndpoint={'households'}
+                entryName={'Client'}
                 AddFormComponent={HouseholdForm}>
             </NewModularDatagrid>
         </Box>

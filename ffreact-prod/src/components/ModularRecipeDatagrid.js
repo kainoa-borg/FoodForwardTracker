@@ -19,6 +19,7 @@ export default function ModularRecipeDatagrid(props) {
     // const apiEndpoint = props.apiEndpoint;
     const keyFieldName = props.keyFieldName;
     const setRows = props.setRows;
+    const entryName = props.entryName;
     const columns = [...props.columns, 
         { field: 'actions', type: 'actions', headerName: 'Actions', width: 100,
             getActions: (params) => modularActions(params, rowModesModel, setRowModesModel, setUpdateSBOpen)
@@ -195,13 +196,11 @@ export default function ModularRecipeDatagrid(props) {
     }
 
     function CustomToolbar() {
+        const e_name = entryName ? entryName : 'Entry'
         return (
           <GridToolbarContainer>
-            <GridToolbarColumnsButton />
-            <GridToolbarFilterButton />
-            <GridToolbarDensitySelector />
-            <GridToolbarExport />
-            <Button color='lightBlue' variant='contained' onClick={() => {setAddFormOpen(true)}}>Add Entry</Button>
+            <Button color='lightBlue' variant='contained' onClick={() => {setAddFormOpen(true)}}>Add {e_name}</Button>
+            <GridToolbarExport color='lightBlue'/>
           </GridToolbarContainer>
         );
     }

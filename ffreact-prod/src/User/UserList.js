@@ -25,6 +25,7 @@ export default function UserList() {
               getEstimatedRowHeight={() => 300} 
               keyFieldName={'u_id'} 
               apiEndpoint={'users'}
+              entryName={'User'}
               AddFormComponent={UserForm}>
             </NewModularDatagrid>
         </Box>

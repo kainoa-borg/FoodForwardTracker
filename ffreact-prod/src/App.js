@@ -106,7 +106,7 @@ const App = () => {
             case 'meal-plan-report': setCurrPage(<MealPlanReport handlePageClick={handlePageClick} />); break;
             case 'meal-history': setCurrPage(<MealHistory handlePageClick={handlePageClick} />); break;
             case 'recipes': setCurrPage(<Recipe handlePageClick={handlePageClick} />); break;
-            case 'recipePage': setCurrPage(<RecipePage handlePageClick={handlePageClick} />); break;
+            case 'recipePage': setCurrPage(<RecipePage handlePageClick={handlePageClick} setCurrPage={setCurrPage} />); break;
             case 'reports': setCurrPage(<ReportsPage handlePageClick={handlePageClick} />); break;
             case 'userPage': setCurrPage(<UserPage handlePageClick={handlePageClick} />); break;
             case 'userList': setCurrPage(<UserList handlePageClick={handlePageClick} />); break;

@@ -202,6 +202,7 @@ export default function PackagingPage() {
                 columns={columns} 
                 apiEndpoint='packaging-inventory'
                 keyFieldName='p_id'
+                entryName='Packaging'
                 AddFormComponent={PackagingForm}
             />            
             </div>

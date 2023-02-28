@@ -26,7 +26,6 @@ export default function FormDialog(props) {
     return (
         <div>
         <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Add Entry</DialogTitle>
             <DialogContent>
                 {/* <AddForm addEntry={addEntry} handleClose={handleClose} latestKey={latestKey}/> */}
                 <Typography variant='h6'>Placeholder</Typography>
@@ -43,7 +42,6 @@ export default function FormDialog(props) {
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add Entry</DialogTitle>
         <DialogContent>
             <AddForm addEntry={addEntry} handleClose={handleClose} latestKey={latestKey}/>
             {/* <Typography variant='h6'>Placeholder</Typography> */}

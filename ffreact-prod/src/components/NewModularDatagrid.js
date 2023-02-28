@@ -23,6 +23,10 @@ export default function NewModularDatagrid(props) {
     const keyFieldName = props.keyFieldName;
     // Add entry form to be passed to FormDialog
     const AddFormComponent = props.AddFormComponent;
+
+    // Entry Name
+    const entryName = props.entryName;
+
     // Append passed columns with default actions
     const columns = [...props.columns, 
         { field: 'actions', type: 'actions', headerName: 'Actions', width: 100,
@@ -248,13 +252,11 @@ export default function NewModularDatagrid(props) {
         }
     }
     function CustomToolbar() {
+        const e_name = entryName ? entryName : 'Entry'
         return (
           <GridToolbarContainer>
-            <GridToolbarColumnsButton />
-            <GridToolbarFilterButton />
-            <GridToolbarDensitySelector />
-            <GridToolbarExport />
-            <Button color='lightBlue' variant='contained' onClick={() => {setAddFormOpen(true)}}>Add Entry</Button>
+            <Button color='lightBlue' variant='contained' onClick={() => {setAddFormOpen(true)}}>Add {e_name}</Button>
+            <GridToolbarExport color='lightBlue'/>
           </GridToolbarContainer>
         );
     }
