@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import { AppBar, Button, Typography, Toolbar, Tabs, 
-  useMediaQuery, useTheme, Grid} from "@mui/material"
+import { AppBar, Button, Typography, Toolbar, Tabs, Grid} from "@mui/material"
 import Dropdown from './components/Dropdown'
 
-
-const PAGES = ["Landing Page", "Clients", "Households", "Inventory", "Meals", "Reports", "Administration"]
+// const PAGES = ["Landing Page", "Clients", "Households", "Inventory", "Meals", "Reports", "Administration"]
 // console.log(PAGES)
-const Navbar = (props) => {
+  const Navbar = (props) => {
   const [value, setValue] = useState();
-  const theme = useTheme();
+  // const theme = useTheme();
   // console.log(theme);
-  const isMatch = useMediaQuery(theme.breakpoints.down(""))
+  // const isMatch = useMediaQuery(theme.breakpoints.down(""))
   // console.log(isMatch)
   const loginState = props.loginState;
   const handleLogout = props.handleLogout;

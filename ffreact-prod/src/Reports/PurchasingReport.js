@@ -1,18 +1,15 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
-import { useGridApiContext, gridClasses} from '@mui/x-data-grid'
-import { Box } from '@mui/material'
-import ModularDatagrid from '../components/ModularDatagrid';
 import ReusableTable from '../ReusableTable.js'
 
 // Packaging List Component
 export default function PurchasingReport() {
     const [packaging, setPackaging] = useState(undefined);
-    const [ingredients, setIngredients] = useState(undefined);
+    // const [ingredients, setIngredients] = useState(undefined);
 
     useEffect(() => {
         getDBPackaging();
-        getDBIngredients();
+        // getDBIngredients();
     }, []);
 
     const getDBPackaging = () => {
@@ -31,7 +28,7 @@ export default function PurchasingReport() {
           });
     }
 
-    const getDBIngredients = () => {
+    /* const getDBIngredients = () => {
         axios({
             method: "GET",
             url:"http://4.236.185.213:8000/api/ingredients-report"
@@ -45,7 +42,7 @@ export default function PurchasingReport() {
               console.log(error.response.headers);
               }
           });
-    }
+    }*/
 
     if (packaging === undefined) {
         return (<>loading</>);

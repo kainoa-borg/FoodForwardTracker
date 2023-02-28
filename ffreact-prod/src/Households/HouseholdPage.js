@@ -17,7 +17,8 @@ export default function HouseholdPage() {
         const api = useGridApiContext();
         const updateCellValue = (a, b) => {
             const newAllergies = b[0];
-            const {id, value, field} = params;
+            // const {id, value, field} = params;
+            const {id, field} = params;
             api.current.setEditCellValue({id, field, value: newAllergies, debounceMs: 200})
         }
         return <AllergiesList allergies={params.value} isEditable={true} updateEditForm={updateCellValue}/>

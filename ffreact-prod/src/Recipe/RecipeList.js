@@ -5,10 +5,6 @@ import EditableRecipeRow from './EditableRecipeRow.js'
 import RecipeRow from './RecipeRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
-import ReusableTable from '../ReusableTable.js'
-import RecipeDropDown from './RecipeDropDown.js'
-
-import MealsPage from '../MealsPage'
 import './RecipeList.css'
 
 

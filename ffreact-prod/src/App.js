@@ -31,7 +31,7 @@ import React from 'react'
 import { useState } from 'react'
 import { Box } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import Dropdown, { useOutsideClick} from './components/Dropdown'
+// import { useOutsideClick} from './components/Dropdown'
 import './App.css';
 
 // SERVER IP 4.236.185.213
@@ -44,23 +44,20 @@ const style = {
 };
 
 const App = () => {
-    const [open, setOpen] = React.useState(false);
-    const [count, setCount] = React.useState(0);
     const [loginState, setLoginState] = useState({
         username: "",
         isAuthenticated: false,
         isAdmin: false
     })
 
-    const handleClickOutside = () => {
-      };
-    const ref = useOutsideClick(handleClickOutside);
+    // const handleClickOutside = () => {};
+    // const ref = useOutsideClick(handleClickOutside);
     
     const handleHeaderClick = (event) => {
         event.stopPropagation();
       };
 
-    const readLoginCookie = () => {
+    /*const readLoginCookie = () => {
         const parseCookie = str =>
             str
             .split(';')
@@ -70,7 +67,7 @@ const App = () => {
             return acc;
         }, {});
         return parseCookie(document.cookie);
-    }
+    }*/
 
     const handleLogout = () => {
         document.cookie = 'username=;'
@@ -114,6 +111,7 @@ const App = () => {
             case 'userPage': setCurrPage(<UserPage handlePageClick={handlePageClick} />); break;
             case 'userList': setCurrPage(<UserList handlePageClick={handlePageClick} />); break;
             case 'entryPage': setCurrPage(<EntryPage handlePageClick={handlePageClick}/>); break;
+            default: setCurrPage(<LandingPage handlePageClick={handlePageClick} />); break;
         }
     }
 
@@ -151,8 +149,7 @@ const App = () => {
         <div className="App" style={style} onClick={handleHeaderClick}>
             <Navbar handlePageClick={handlePageClick} handleLogout={handleLogout} loginState={loginState} />
             <Box sx={{
-                bgcolor: (theme) => theme.
-                palette.background.default,
+                bgcolor: (theme) => theme.palette.background.default,
                 minHeight: "100%",
                 width: '90%',
                 margin: 'auto',

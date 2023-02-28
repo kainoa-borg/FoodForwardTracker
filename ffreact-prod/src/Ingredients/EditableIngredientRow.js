@@ -5,7 +5,7 @@ import EditableIngUsageTable from '../Ingredients/EditableIngUsageTable.js'
 // Takes: key of current row, the state of the Ingredients Page's editFormData, updateIngredients callback, handleEditFormChange callback, and handleCancelClick callback
 // Returns an editable ingredients table row component
 const EditableIngredientRow = (props) => {
-    const {thisKey, editFormData, suppliers, updateIngredient, handleEditFormChange, handleCancelClick, updateAllergies, updateEditForm} = props
+    const {thisKey, editFormData, suppliers, updateIngredient, handleEditFormChange, handleCancelClick, updateEditForm} = props
     const ingredient = editFormData;
     const key = thisKey;
 
@@ -39,7 +39,7 @@ const EditableIngredientRow = (props) => {
               <option selected={true} value={null}>N/A</option>
               {suppliers.map((supplier, key) => {
                 const thisKey = key;
-                const isSelected = (suppliers[thisKey].s_id == ingredient.isupplier_id)
+                const isSelected = (suppliers[thisKey].s_id === ingredient.isupplier_id)
                 return(
                   <option selected={isSelected} value={supplier.s_id}>{supplier.s_name}</option>
                 )
@@ -52,7 +52,7 @@ const EditableIngredientRow = (props) => {
               <option selected={true} value={null}>N/A</option>
               {suppliers.map((supplier, key) => {
                 const thisKey = key;
-                const isSelected = (suppliers[thisKey].s_id == ingredient.pref_isupplier_id)
+                const isSelected = (suppliers[thisKey].s_id === ingredient.pref_isupplier_id)
                 return(
                   <option selected={isSelected} value={supplier.s_id}>{supplier.s_name}</option>
                 )

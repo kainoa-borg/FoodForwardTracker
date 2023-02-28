@@ -1,6 +1,6 @@
-import React, {Fragment, useState, useEffect, Suspense} from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCell, GridRowModes, GridActionsCellItem} from '@mui/x-data-grid'
+import {DataGrid, GridToolbar, GridRowModes, GridActionsCellItem} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import { Button, Popover, Snackbar, Typography } from '@mui/material';
@@ -14,7 +14,7 @@ import { Button, Popover, Snackbar, Typography } from '@mui/material';
     // Datagrid component with table data
 export default function ModularDatagrid(props) {
     
-    const apiIP = props.apiIP;
+    // const apiIP = props.apiIP;
     const apiEndpoint = props.apiEndpoint;
     const keyFieldName = props.keyFieldName;
     const columns = [...props.columns, 

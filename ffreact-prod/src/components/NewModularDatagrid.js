@@ -16,7 +16,7 @@ import FormDialog from '../components/FormDialog.js'
     // Datagrid component with table data
 export default function NewModularDatagrid(props) {
     
-    const apiIP = props.apiIP;
+    // const apiIP = props.apiIP;
     // Name of the api endpoint to send requests to
     const apiEndpoint = props.apiEndpoint;
     // Field name of the row key/id
@@ -258,7 +258,12 @@ export default function NewModularDatagrid(props) {
           </GridToolbarContainer>
         );
     }
-      
+    
+    if (tableData === undefined) {
+        return (
+            <>loading...</>
+        )
+    }
 
     // The HTML structure of this component
     return(

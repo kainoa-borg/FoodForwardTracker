@@ -39,7 +39,7 @@ const EditablePackagingRow = (props) => {
               <option defaultValue={true} value={null}>N/A</option>
               {suppliers.map((supplier, key) => {
                 const thisKey = key;
-                const isSelected = (suppliers[thisKey].s_id == pkg.psupplier_id)
+                const isSelected = (suppliers[thisKey].s_id === pkg.psupplier_id)
                 return(
                   <option defaultValue={isSelected} value={supplier.s_id}>{supplier.s_name}</option>
                 )
@@ -52,7 +52,7 @@ const EditablePackagingRow = (props) => {
               <option defaultValue={true} value={null}>N/A</option>
               {suppliers.map((supplier, key) => {
                 const thisKey = key;
-                const isSelected = (suppliers[thisKey].s_id == pkg.pref_psupplier_id)
+                const isSelected = (suppliers[thisKey].s_id === pkg.pref_psupplier_id)
                 return(
                   <option defaultValue={isSelected} value={supplier.s_id}>{supplier.s_name}</option>
                 )
