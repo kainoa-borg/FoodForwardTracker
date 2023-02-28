@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useGridApiContext, gridClasses} from '@mui/x-data-grid'
+import React from 'react'
+import { useGridApiContext } from '@mui/x-data-grid'
 import './HouseholdList.css'
 import { Box } from '@mui/material'
 import AllergiesList from './AllergiesList';
@@ -17,7 +17,8 @@ export default function HouseholdPage() {
         const api = useGridApiContext();
         const updateCellValue = (a, b) => {
             const newAllergies = b[0];
-            const {id, value, field} = params;
+            // const {id, value, field} = params;
+            const {id, field} = params;
             api.current.setEditCellValue({id, field, value: newAllergies, debounceMs: 200})
         }
         return <AllergiesList allergies={params.value} isEditable={true} updateEditForm={updateCellValue}/>
@@ -54,8 +55,7 @@ export default function HouseholdPage() {
                 getEstimatedRowHeight={() => 300} 
                 keyFieldName={'hh_name'} 
                 apiEndpoint={'households'}
-                AddFormComponent={HouseholdForm}
-            >
+                AddFormComponent={HouseholdForm}>
             </NewModularDatagrid>
         </Box>
         </div>

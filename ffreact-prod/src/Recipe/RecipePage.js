@@ -1,16 +1,14 @@
-import React, {Fragment, useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import {DataGrid, GridColDef, GridValueGetterParams} from '@mui/x-data-grid'
+import {DataGrid} from '@mui/x-data-grid'
 import { Box } from '@mui/system';
-import { waitFor } from '@testing-library/react';
-import { wait } from '@testing-library/user-event/dist/utils';
 import Recipe from './Recipe.js'
 
 export default function RecipePage(props) {
 
     const [recipes, setRecipes] = useState();
     const [recipeData, setRecipeData] = useState();
-
+    const [recipeEditID, setRecipeEditID] = useState();
     const setCurrPage = props.setCurrPage;
 
     const getDBRecipes = () => {
@@ -31,7 +29,7 @@ export default function RecipePage(props) {
     const getDBRecipeData = (pk) => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/mealrecipes/" + pk + '/'
+            url:"http://localhost:8000/api/mealrecipes/" + pk + '/'
         }).then((response)=>{
         setRecipeData(response.data);
         }).catch((error) => {
@@ -62,11 +60,12 @@ export default function RecipePage(props) {
     }
     else {
         if (!(recipeData === undefined))
-            setCurrPage(<Recipe recipeData={recipeData} setCurrPage={setCurrPage}></Recipe>);
+            setCurrPage(<Recipe recipeData={recipeData} setRecipeData={setRecipeData} getDBRecipeData={getDBRecipeData} setCurrPage={setCurrPage}></Recipe>);
     }
 
     const handleRowClick = (params) => {
         getDBRecipeData(params.row.r_num);
+        setRecipeEditID(params.row.r_num);
         return (
             <>loading...</>
         );
@@ -77,7 +76,7 @@ export default function RecipePage(props) {
         <Box sx={{height: '80vh'}}>
             <DataGrid 
             onRowClick={handleRowClick} 
-            rows={recipes} 
+            rows={recipes}
             columns={columns} 
             getRowId={(row) => row.r_num}>
             </DataGrid>

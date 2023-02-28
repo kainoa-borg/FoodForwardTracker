@@ -1,33 +1,14 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import LoginPage from './LoginPage.js'
-import LandingPage from './LandingPage.js'
-import MealsPage from './MealsPage.js'
-import InventoryPage from './InventoryPage.js'
-import HouseholdForm from './Households/HouseholdForm.js'
-import HouseholdList from './Households/HouseholdList.js'
-import HouseholdsReport from './Households/HouseholdsReport.js'
-import Ingredients from './Ingredients/IngredientList.js'
-//import IngredientReport from './Ingredients/IngredientReport.js'
-import StationList from './Stations/StationList.js'
-import ReportsPage from "./ReportsPage.js"
-import UserPage from "./UserPage.js"
-import UserList from "./User/UserList.js"
-import NewUserPage from "./NewUserPage.js"
-import Recipe from './Recipe/RecipeList.js'
-import RecipePage from './Recipe/RecipePage.js'
-import MealPlan from './Meals/MealList.js'
-import ff_logo from './Images/ff_logo.jpg'
+import { AppBar, Button, Typography, Toolbar, Tabs, Grid} from "@mui/material"
+import Dropdown from './components/Dropdown'
 
-import { AppBar, Typography, Toolbar, Tabs, Button, useMediaQuery, useTheme, Grid} from "@mui/material"
-
-const PAGES = ["Landing Page", "Clients", "Households", "Inventory", "Meals", "Reports", "Administration"]
+// const PAGES = ["Landing Page", "Clients", "Households", "Inventory", "Meals", "Reports", "Administration"]
 // console.log(PAGES)
-const Navbar = (props) => {
+  const Navbar = (props) => {
   const [value, setValue] = useState();
-  const theme = useTheme();
+  // const theme = useTheme();
   // console.log(theme);
-  const isMatch = useMediaQuery(theme.breakpoints.down(""))
+  // const isMatch = useMediaQuery(theme.breakpoints.down(""))
   // console.log(isMatch)
   const loginState = props.loginState;
   const handleLogout = props.handleLogout;
@@ -63,8 +44,7 @@ const Navbar = (props) => {
           onChange={(e, value) => setValue(value)}
         >
         </Tabs>
-        
-          
+      
         <Grid container justifyContent='space-between' alignItems='center' direction='row'>
           <Grid item sx={{width: '60%'}} container alignItems='center' direction='row'>
             <Typography component='img' sx={{width: '7%'}} src="ffreact-prod/src/Images/ff_logo.jpg" onClick = {() => handlePageClick('landingPage')}/>
@@ -74,15 +54,43 @@ const Navbar = (props) => {
             <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('households')}>
                 Clients
             </Button>
-            <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('inventoryPage')}>
-                Inventory
-            </Button>
-            <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('mealsPage')}>
-                Meals
-            </Button>
-            <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('reports')}>
-                Reports
-            </Button>
+            <Dropdown
+            trigger={<Button color='lightGreen' variant='contained'> Inventory </Button>}
+            menu={[
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('ingredientPage')}>
+                    Ingredients</Button>,
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('packagingPage')}>
+                    Packaging</Button>
+                ]}/>
+            <Dropdown
+            trigger={<Button color='lightGreen' variant='contained'> Meals </Button>}
+            menu={[
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('meals')}>
+                    Meal Plans</Button>,
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('recipePage')}>
+                    Recipes</Button>
+                ]}/>
+            <Dropdown
+            sx={{ alignItems: 'left' }}
+            trigger={<Button color='lightGreen' variant='contained'> Reports </Button>}
+            menu={[
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                    Households Report</Button>,
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                    Ingredients Report</Button>,
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                    Packaging Report</Button>,
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                    Purchasing Report</Button>,
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                    Packaging Returns</Button>,
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                    Meal Plan Report</Button>,
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                    Meal History</Button>,
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                    Cost Totals</Button>,
+                ]}/>
             <Button color='lightGreen' variant="contained" onClick={() => handlePageClick('userList')}>
                 Administration
             </Button>

@@ -1,5 +1,4 @@
 import React from 'react'
-import AllergiesList from '../Households/AllergiesList.js'
 
 // Station Row component
 // Takes: key of current row, the state of the Station Page's list, deleteStation callback, handleEditClick callback

@@ -1,10 +1,6 @@
-import React, {Fragment, useState, useEffect, Suspense} from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCell, GridRowModes, GridActionsCellItem} from '@mui/x-data-grid'
-import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
-import { Button, Popover, Snackbar, Typography } from '@mui/material';
-import { wait } from '@testing-library/user-event/dist/utils';
 import IngredientForm from './IngredientForm.js'
 import NewModularDatagrid from '../components/NewModularDatagrid.js';
 import './IngredientList.css'
@@ -79,15 +75,14 @@ export default function IngredientPage() {
             <>loading...</>
         )
     }
-    // The HTML structure of this component
 
-    const supplierNameFormatter = (value) => {
+    /*const supplierNameFormatter = (value) => {
         if (value) {
             let idx = suppliers.findIndex((suppliers.s_id === value));
             console.log(idx);
             if (idx) return suppliers[idx].s_name;
         }
-    }
+    }*/
     
     const columns = [
         { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
@@ -103,6 +98,7 @@ export default function IngredientPage() {
             if (params.value.length > 0) return params.value[params.value.length - 1].used_date}}},
         { field: 'ingredient_usage2', headerName: 'Units Used', width: 100, type: 'number', editable: true, valueFormatter: (params) => {if (params.value) {
             if (params.value.length > 0) return params.value[params.value.length - 1].used_qty}}},
+        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false}
     ]
 
     return(

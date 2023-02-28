@@ -1,14 +1,9 @@
-import React, {Fragment, useState, useEffect, Suspense} from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import {DataGrid, GridColDef, GridValueGetterParams} from '@mui/x-data-grid'
+import {DataGrid} from '@mui/x-data-grid'
 import { Box } from '@mui/system';
 import { wait } from '@testing-library/user-event/dist/utils';
 import './MealList.css'
-
-const currencyFormatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-});
 
 // mealPlan List Component
 export default function MealPlanPage() {

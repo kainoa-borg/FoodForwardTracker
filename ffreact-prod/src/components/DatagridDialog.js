@@ -5,14 +5,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Typography } from '@mui/material';
 
-export default function FormDialog(props) {
+export default function DataGridDialog(props) {
 //   const [open, setOpen] = React.useState(false);
 
   const open = props.open;
   const setOpen = props.setOpen;
-  const AddForm = props.AddFormComponent;
-  const addEntry = props.addEntry;
-  const latestKey = props.latestKey;
+  const DataGridComponent = props.DataGridComponent;
+  const setID = props.setID;
 
   /*const handleClickOpen = () => {
     setOpen(true);
@@ -22,7 +21,7 @@ export default function FormDialog(props) {
     setOpen(false);
   };
 
-  if (!AddForm) {
+  if (!DataGridComponent) {
     return (
         <div>
         <Dialog open={open} onClose={handleClose}>
@@ -43,9 +42,9 @@ export default function FormDialog(props) {
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add Entry</DialogTitle>
+        <DialogTitle>Select</DialogTitle>
         <DialogContent>
-            <AddForm addEntry={addEntry} handleClose={handleClose} latestKey={latestKey}/>
+            <DataGridComponent setID={setID} handleClose={handleClose}/>
             {/* <Typography variant='h6'>Placeholder</Typography> */}
         </DialogContent>
         <DialogActions>

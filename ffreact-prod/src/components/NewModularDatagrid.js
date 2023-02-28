@@ -1,6 +1,6 @@
-import React, {Fragment, useState, useEffect, Suspense, useRef, createRef, useMemo} from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCell, GridRowModes, GridActionsCellItem, useGridApiRef, gridSortedRowEntriesSelector, useGridApiContext, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
+import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import { Button, Popover, Snackbar, Typography } from '@mui/material';
@@ -16,7 +16,7 @@ import FormDialog from '../components/FormDialog.js'
     // Datagrid component with table data
 export default function NewModularDatagrid(props) {
     
-    const apiIP = props.apiIP;
+    // const apiIP = props.apiIP;
     // Name of the api endpoint to send requests to
     const apiEndpoint = props.apiEndpoint;
     // Field name of the row key/id
@@ -258,7 +258,12 @@ export default function NewModularDatagrid(props) {
           </GridToolbarContainer>
         );
     }
-      
+    
+    if (tableData === undefined) {
+        return (
+            <>loading...</>
+        )
+    }
 
     // The HTML structure of this component
     return(

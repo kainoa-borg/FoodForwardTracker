@@ -1,12 +1,8 @@
 import * as React from 'react'
 import {useState} from 'react'
-import {Fragment} from 'react'
 import axios from 'axios'
-import NewUserPage from "./NewUserPage.js"
-import PwResetPage from './PwResetPage.js'
-
 import Button from '@mui/material/Button'
-import { Grid, Typography, Stack, Paper, Box} from '@mui/material'
+import { Grid, Typography, Stack, Box} from '@mui/material'
 import TextField from '@mui/material/TextField'
 import { Card } from '@mui/material'
 
@@ -30,7 +26,6 @@ const LoginPage = (props) => {
     );
 
     const setLoginCookie = (username, isAuthenticated, isAdmin) => {
-        var now = new Date();
         var now = new Date();
         var time = now.getTime();
         var expireTime = time + 1000*36000;

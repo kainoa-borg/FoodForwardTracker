@@ -5,19 +5,13 @@ import EditableStationRow from './EditableStationRow.js'
 import StationRow from './StationRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
-import { Button, Box, Paper, Table, TableBody, 
-    TableCell, TableContainer, TableHead, TableRow, 
-    IconButton } from "@mui/material"
-import EditIcon from "@mui/icons-material"
-import MealsPage from '../MealsPage'
-import { BrowserRouter as Router, Link } from "react-router-dom"
-import RecipeDropDown from '../Recipe/RecipeDropDown'
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material"
 import './StationList.css'
 
 // Station List Component
 
 export default function StationList() {
-    const [recipes] = useState(undefined);
+    //const [recipes] = useState(undefined);
     const [stations, setStations] = useState(undefined);
     const [households, setHouseholds] = useState(undefined);
     const [editStationID, setEditStationID] = useState(null);
@@ -36,7 +30,7 @@ export default function StationList() {
                 <Error text="Station Name already found!"/>
             )
         }
-        else if (errCode = 'empty') {
+        else if (errCode === 'empty') {
             setErrorComponent(
                 <Error text="There doesn't seem to be any data!"/>
             )
@@ -125,7 +119,7 @@ export default function StationList() {
         clearError();
     }
     const deleteStation = (key) => {
-        const stationID = key; 
+        // const stationID = key; 
         axios({
             method: "DELETE",
             url: "http://4.236.185.213:8000/api/stations/" + stations[key].stn_name,
@@ -260,37 +254,3 @@ export default function StationList() {
             </div>
     )
 }
-/*
-<table className='main-table'>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th># Adults</th>
-                        <th># Children 0-6</th>
-                        <th># Children 7-17</th>
-                        <th>SMS</th>
-                        <th>Vegan</th>
-                        <th>Allergies</th>
-                        <th>Gluten Free</th>
-                        <th>Lactose Free</th>
-                        <th>Paused</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {/* Show a row for each station in stations.}
-                    {households.map((hhref, key) => {
-                        const thisKey = key;
-                        return(
-                            <Fragment key={thisKey}>
-                                {
-                                // If this Station is the one to be edited, show an editable row instead
-                                <HhrefRow thisKey={thisKey} hhref={hhref}/>
-                                }
-                            </Fragment>
-                        );
-                    })}
-                    {/* If the list is empty display EmptyTableMessage }
-                    {households.length < 1 ? handleError('empty') : null}
-                </tbody>
-            </table>
-        */

@@ -3,7 +3,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ArrowRight from '@mui/icons-material/ArrowRight';
 
-const TRANSPARENT = 'rgba(0,0,0,0)';
+// const TRANSPARENT = 'rgba(0,0,0,0)';
 
 const NestedMenuItem = React.forwardRef((props, ref) => {
   const {

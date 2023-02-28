@@ -5,11 +5,7 @@ import EditableMealRow from './EditableMealRow.js'
 import MealPlanRow from './MealPlanRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
-import ReusableTable from '../ReusableTable.js'
-
 import './MealList.css'
-// import Table from 'react-bootstrap/Table'
-import Table from '@mui/material/Table'
 
 // Meal List Component
 export default function MealList() {
@@ -55,7 +51,7 @@ export default function MealList() {
           });
     }
 
-    const getDBServingCalculations = () => {
+  /*  const getDBServingCalculations = () => {
         console.log('MAKING REQUEST TO DJANGO')
         axios({
             method: "GET",
@@ -69,7 +65,7 @@ export default function MealList() {
               console.log(error.response.headers);
               }
           });
-    }
+    }*/
 
     const postDBMealPlan = (meal) => {
         console.log(JSON.stringify(meal));

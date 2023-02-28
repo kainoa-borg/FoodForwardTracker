@@ -1,6 +1,5 @@
-import React, {Fragment, useState, useEffect, Suspense, useRef, createRef, useMemo} from 'react'
-import axios from 'axios'
-import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCell, GridRowModes, GridActionsCellItem, useGridApiRef, gridSortedRowEntriesSelector, useGridApiContext, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
+import React, { useState } from 'react'
+import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import { Button, Popover, Snackbar, Typography } from '@mui/material';
@@ -16,7 +15,7 @@ import FormDialog from './FormDialog';
 // Returns:
     // Datagrid component with table data
 export default function ModularRecipeDatagrid(props) {    
-    const apiIP = props.apiIP;
+    // const apiIP = props.apiIP;
     // const apiEndpoint = props.apiEndpoint;
     const keyFieldName = props.keyFieldName;
     const setRows = props.setRows;
@@ -40,7 +39,7 @@ export default function ModularRecipeDatagrid(props) {
     // Struct of row modes (view/edit)
     const [rowModesModel, setRowModesModel] = useState({});
 
-    const dataGridApiRef = useGridApiRef();
+    // const dataGridApiRef = useGridApiRef();
 
     // Helper function closes Snackbar notification
     const handleSBClose = (event, reason, setOpen) => {
@@ -52,7 +51,9 @@ export default function ModularRecipeDatagrid(props) {
 
     // Helper function gets the latest key value of the table
     const getLatestKey = () => {
-        return Math.max(...tableData.map(row => row[keyFieldName])) // Get the max id of all rows
+        const keyList = [...tableData.map(row => row[keyFieldName])];
+        if (keyList.length < 1) return 0;
+        return Math.max(...keyList); // Get the max id of all rows
     }
 
     // Generalized Add Row
@@ -60,7 +61,8 @@ export default function ModularRecipeDatagrid(props) {
         // If a form doesn't take the latest key, it should be added for the datagrid
         if (!formData[keyFieldName])
             formData[keyFieldName] = getLatestKey() + 1;
-        console.log(formData);
+        console.log(tableData);
+        console.log(keyFieldName, formData);
         const newTableData = [...tableData, formData];
         setTableData(newTableData);
         setRows(newTableData);
@@ -79,13 +81,17 @@ export default function ModularRecipeDatagrid(props) {
     const processRowUpdate = (newRow) => {
         const updatedRow = {...newRow, isNew: false};
         
+        console.log(newRow);
+
         // Find row to update
         const rowIndex = tableData.findIndex((row) => row[keyFieldName] === newRow[keyFieldName])
         // Update that row of tableData with newRow
         const newTableData = [...tableData];
         newTableData[rowIndex] = newRow;
+        console.log(newTableData);
         // Set the parent rows state with the updated tableData
         setRows(newTableData);
+        setTableData(newTableData);
 
         return updatedRow;
     }
@@ -100,7 +106,6 @@ export default function ModularRecipeDatagrid(props) {
     const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteAnchor: null, confirmCancelAnchor: null});
 
     const handleRowEditStop = (params, event) => {
-        console.log(params.reason);
         if (params.reason === 'escapeKeyDown') {event.defaultMuiPrevented = true; setPopoverAnchors({...popoverAnchors, confirmCancelAnchor: event.target})};
     }
 

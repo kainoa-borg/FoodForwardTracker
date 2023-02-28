@@ -1,14 +1,12 @@
 import { Fragment } from "react";
 import { useState, useEffect } from 'react';
-import DisplayMessage from '../DisplayMessage.js'
 import React from 'react'
 
 // Allergy List Component
 const AllergiesList = (props) => {
     const [allergies, setAllergies] = useState(props.allergies);
     const [currAllergy, setCurrAllergy] = useState({aType: ''});
-    const [displayMsgComponent, setDisplayMsgComponent] = useState(null);
-    const [isEditable, setIsEditable] = useState(props.isEditable);
+    const [isEditable /*, setIsEditable*/] = useState(props.isEditable);
 
     useEffect( () => {
         setAllergies(props.allergies);

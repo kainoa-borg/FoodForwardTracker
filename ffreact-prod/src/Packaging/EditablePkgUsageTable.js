@@ -1,4 +1,4 @@
-import React, {useState, useEffect, Fragment} from 'react'
+import React, {useState, Fragment} from 'react'
 
 export default function EditablePkgUsageTable(props) {
     const [currUsage, setCurrUsage] = useState({used_date: null, used_qty: null});

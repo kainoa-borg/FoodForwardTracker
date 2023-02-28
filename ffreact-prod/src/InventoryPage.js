@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Container, Button, Typography } from '@mui/material'
+import { Button } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import { CssBaseline, Box } from '@mui/material'
+import { CssBaseline } from '@mui/material'
 import Packaging from './Packaging/PackagingList.js'
 import PackagingPage from './Packaging/PackagingPage.js'
 import Ingredients from './Ingredients/IngredientList.js'
@@ -50,7 +50,7 @@ const InventoryPage = (props) => {
             case 'packaging': setCurrPage(<Packaging handlePageClick={handlePageClick} />); break;
             case 'packagingPage': setCurrPage(<PackagingPage></PackagingPage>); break;
             case 'ingredientPage': setCurrPage(<IngredientPage></IngredientPage>); break;
-
+            default : break;
         }
     } 
     return (

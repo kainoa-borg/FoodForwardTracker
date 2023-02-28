@@ -1,25 +1,23 @@
 import React from 'react'
-import { useState } from 'react'
-import { Fragment } from 'react'
-import axios from 'axios'
+//import { useState } from 'react'
 
 const UserPage = (props) => {
     const handlePageClick = props.handlePageClick;
     // HTML structure of this component
-    const [user, setUser] = useState(
+    /*const [user, setUser] = useState(
         {
             username: '',
             email: ''
         }
-    );
+    );*/
 
-    const handleUser = (event) => {
+   /* const handleUser = (event) => {
         const fieldName = event.target.name;
         const fieldValue = event.target.value;
         const thisUser = { ...user };
         thisUser[fieldName] = fieldValue;
         setUser(thisUser);
-    }
+    }*/
    
     // HTML structure of this component
     return (

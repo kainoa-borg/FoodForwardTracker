@@ -9,16 +9,14 @@ import { Grid, Typography, Card, Input, InputLabel, Button} from '@mui/material'
 // Ingredient Form component
 // Takes AddIngredient callback function
 // Returns a form that can be used to define a new ingredient object in a IngredientList
-const RecipeIngForm = (props) => {
+const RecipePkgForm = (props) => {
     const addEntry = props.addEntry;
     const handleClose = props.handleClose;
     
     // The state of this Ingredient Form with each attribute of Ingredient
-    const [ingredient, setIngredient] = useState({
-        ingredient_name: '',
+    const [packaging, setPackaging] = useState({
+        pkg_type: '',
         amt: '',
-        unit: '',
-        prep: '',
     });
 
     // Handle form submission (prevent refresh, pass ingredient to addIngredient, and clear form state)
@@ -28,16 +26,16 @@ const RecipeIngForm = (props) => {
         // Prevent refresh
         event.preventDefault();
         // Pass ingredient object to IngredientList callback
-        addEntry(ingredient);
+        addEntry(packaging);
         handleClose();
     }
 
     const updateEditForm = (names, values) => {
-        const newIngredient = {...ingredient};
+        const newPackaging = {...packaging};
         for (let i = 0; i < names.length; i++) {
-            newIngredient[names[i]] = values[i];
+            newPackaging[names[i]] = values[i];
         }
-        setIngredient(newIngredient);
+        setPackaging(newPackaging);
     }
 
     // Handle the data inputted to each form input and set the state with the new values
@@ -48,38 +46,32 @@ const RecipeIngForm = (props) => {
         // Get the name and value of the changed field
         const fieldName = event.target.getAttribute('name');
         const fieldValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        // Create new ingredient object before setting state
+        // Create new packaging object before setting state
         updateEditForm([fieldName], [fieldValue]);
         // updateEditForm('aFlag', true);
     }
 
     // HTML structure of this component
     return (
-    <form onSubmit={handleSubmit}>
-        {/* Basic ingredient info */}
-        <Card sx={{marginTop: '1em', padding: '1em'}}>
-            <Typography variant='h5'>Add Ingredient</Typography>
-            <Grid container direction='row' spacing={4}>
-            <Grid item>
-                <InputLabel>Ingredient Name: </InputLabel>
-                <Input name="ingredient_name" type="text" maxLength='30' value={ingredient.ingredient_name} onChange={handleFormChange}/>
-                
-                <InputLabel>Amount: </InputLabel>
-                <Input name='amt' type="text" value={ingredient.storage_type} onChange={handleFormChange}/>
-
-                <InputLabel>Unit: </InputLabel>
-                <Input name='unit' type="text" value={ingredient.unit} onChange={handleFormChange}/>
-                
-                <InputLabel>Prep: </InputLabel>
-                <Input name="prep" type="text" value={ingredient.prep} onChange={handleFormChange}/>
-            </Grid>
-            <Grid item>
-                <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>
-            </Grid>
-            </Grid>
-        </Card>
-    </form>
+        <form onSubmit={handleSubmit}>
+            {/* Basic packaging info */}
+            <Card sx={{marginTop: '1em', padding: '1em'}}>
+                <Typography variant='h5'>Add Ingredient</Typography>
+                <Grid container direction='row' spacing={4}>
+                <Grid item>
+                    <InputLabel>Package Type: </InputLabel>
+                    <Input name="pkg_type" type="text" maxLength='30' value={packaging.pkg_type} onChange={handleFormChange}/>
+                    
+                    <InputLabel>Amount: </InputLabel>
+                    <Input name='amt' type="text" value={packaging.amt} onChange={handleFormChange}/>
+                </Grid>
+                <Grid item>
+                    <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>
+                </Grid>
+                </Grid>
+            </Card>
+        </form>
     );
 }
 
-export default RecipeIngForm
+export default RecipePkgForm
