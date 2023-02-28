@@ -56,6 +56,7 @@ export default function HouseholdPage() {
                 keyFieldName={'hh_name'} 
                 apiEndpoint={'households'}
                 entryName={'Client'}
+                searchField={'hh_name'}
                 AddFormComponent={HouseholdForm}>
             </NewModularDatagrid>
         </Box>

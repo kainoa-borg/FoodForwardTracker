@@ -26,6 +26,7 @@ export default function UserList() {
               keyFieldName={'u_id'} 
               apiEndpoint={'users'}
               entryName={'User'}
+              searchField={'username'}
               AddFormComponent={UserForm}>
             </NewModularDatagrid>
         </Box>

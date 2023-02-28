@@ -5,6 +5,7 @@ import { Box } from '@mui/system';
 import { Button, Popover, Snackbar, Typography } from '@mui/material';
 
 import FormDialog from './FormDialog';
+import SearchToolBar from './SearchToolBar'
 
 
 // Modularized Datagrid with prompts/notifications
@@ -20,6 +21,7 @@ export default function ModularRecipeDatagrid(props) {
     const keyFieldName = props.keyFieldName;
     const setRows = props.setRows;
     const entryName = props.entryName;
+    const searchField = props.searchField;
     const columns = [...props.columns, 
         { field: 'actions', type: 'actions', headerName: 'Actions', width: 100,
             getActions: (params) => modularActions(params, rowModesModel, setRowModesModel, setUpdateSBOpen)
@@ -39,6 +41,9 @@ export default function ModularRecipeDatagrid(props) {
     
     // Struct of row modes (view/edit)
     const [rowModesModel, setRowModesModel] = useState({});
+
+    // Struct of filterModel items (How to filter datagrid)
+    const [filterModel, setFilterModel] = useState();
 
     // const dataGridApiRef = useGridApiRef();
 
@@ -205,10 +210,10 @@ export default function ModularRecipeDatagrid(props) {
         );
     }
       
-
     // The HTML structure of this component
     return(
         <div class='table-div'>
+        {/* <SearchToolBar setFilterModel={setFilterModel} searchField={searchField}/> */}
         <Box sx={{height: 'auto', overflow: 'auto'}}>
             <DataGrid
             components={{ Toolbar: CustomToolbar }}

@@ -112,6 +112,7 @@ export default function IngredientPage() {
                 apiEndpoint='ingredient-inventory'
                 keyFieldName='i_id'
                 entryName='Ingredient'
+                searchField='ingredient_name'
                 AddFormComponent={IngredientForm}
                 >
                 </NewModularDatagrid>

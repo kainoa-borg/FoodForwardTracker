@@ -3,9 +3,10 @@ import axios from 'axios'
 import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
-import { Button, Popover, Snackbar, Typography } from '@mui/material';
+import { Button, Popover, Snackbar, TextField, Typography } from '@mui/material';
 
-import FormDialog from '../components/FormDialog.js'
+import FormDialog from './FormDialog.js'
+import SearchToolBar from './SearchToolBar.js'
 
 // Modularized Datagrid with prompts/notifications
 // Takes:
@@ -23,6 +24,8 @@ export default function NewModularDatagrid(props) {
     const keyFieldName = props.keyFieldName;
     // Add entry form to be passed to FormDialog
     const AddFormComponent = props.AddFormComponent;
+
+    const searchField = props.searchField;
 
     // Entry Name
     const entryName = props.entryName;
@@ -44,6 +47,9 @@ export default function NewModularDatagrid(props) {
     
     // Struct of row modes (view/edit)
     const [rowModesModel, setRowModesModel] = useState({});
+
+    // Struct of filterModel items (How to filter datagrid)
+    const [filterModel, setFilterModel] = useState();
 
     // Open state of the Add form popup
     const [addFormOpen, setAddFormOpen] = useState(false);
@@ -251,6 +257,7 @@ export default function NewModularDatagrid(props) {
             ]
         }
     }
+
     function CustomToolbar() {
         const e_name = entryName ? entryName : 'Entry'
         return (
@@ -269,7 +276,8 @@ export default function NewModularDatagrid(props) {
 
     // The HTML structure of this component
     return(
-        <div class='table-div'>
+        <div>
+        <SearchToolBar setFilterModel={setFilterModel} searchField={searchField}/>
         <Box sx={{height: 'auto', overflow: 'auto'}}>
             <DataGrid
             components={{ Toolbar: CustomToolbar }}
@@ -278,6 +286,7 @@ export default function NewModularDatagrid(props) {
             autoHeight={true}
             editMode='row'
             rowModesModel={rowModesModel}
+            filterModel={filterModel}
             onRowModesModelChange={(newModel) => {setRowModesModel(newModel)}}
             // onRowEditStop={handleRowEditStop}
             getRowId={(row) => row[keyFieldName]}

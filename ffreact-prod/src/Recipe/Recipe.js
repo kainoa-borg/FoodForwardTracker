@@ -247,6 +247,7 @@ export default function Recipe(props) {
                             columns={ingredientsColumns}
                             addFormComponent={RecipeIngForm}
                             keyFieldName={'ri_id'}
+                            searchField={'ingredient_name'}
                             entryName={'Recipe Ingredient'}
                         ></ModularRecipeDatagrid>
                     </Box>
@@ -260,6 +261,7 @@ export default function Recipe(props) {
                             setRows={setPackagingRows}
                             addFormComponent={RecipePkgForm}
                             keyFieldName={'rp_id'}
+                            searchField={'pkg_type'}
                             entryName={'Recipe Packaging'}
                         ></ModularRecipeDatagrid>
                     </Box>    
@@ -273,6 +275,7 @@ export default function Recipe(props) {
                             setRows={setInstructionRows}
                             addFormComponent={RecipeInstForm}
                             keyFieldName={'step_no'}
+                            searchField={'step_inst'}
                             entryName={'Instruction Step'}
                         ></ModularRecipeDatagrid>
                     </Box>

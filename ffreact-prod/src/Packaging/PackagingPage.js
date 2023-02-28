@@ -203,6 +203,7 @@ export default function PackagingPage() {
                 apiEndpoint='packaging-inventory'
                 keyFieldName='p_id'
                 entryName='Packaging'
+                searchField='package_type'
                 AddFormComponent={PackagingForm}
             />            
             </div>
