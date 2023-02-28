@@ -7,7 +7,7 @@ const SearchToolBar = (props) => {
     const searchField = props.searchField;
 
     const lodash = require('lodash');
-    const debounceMs = 1000;
+    const debounceMs = 600;
 
     const [searchValue, setSearchValue] = useState();
 

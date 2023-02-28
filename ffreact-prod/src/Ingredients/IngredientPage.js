@@ -104,19 +104,17 @@ export default function IngredientPage() {
     return(
         <div class='table-div'>
         <h3>Ingredients</h3>
-        <Box sx={{display: 'flex', height: '60%', width: '100%'}}>
-            <div style={{flexGrow: 1}}>
-                <NewModularDatagrid 
-                rows={ingredients}
-                columns={columns}
-                apiEndpoint='ingredient-inventory'
-                keyFieldName='i_id'
-                entryName='Ingredient'
-                searchField='ingredient_name'
-                AddFormComponent={IngredientForm}
-                >
-                </NewModularDatagrid>
-            </div>
+            <Box sx={{height: '70vh'}}>
+            <NewModularDatagrid 
+            rows={ingredients}
+            columns={columns}
+            apiEndpoint='ingredient-inventory'
+            keyFieldName='i_id'
+            entryName='Ingredient'
+            searchField='ingredient_name'
+            AddFormComponent={IngredientForm}
+            >
+            </NewModularDatagrid>
         </Box>
         {/* Add entry notice */}
         </div>

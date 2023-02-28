@@ -18,7 +18,7 @@ export default function UserList() {
     return (
         <div class='table-div'>
         <h3>Administration</h3>
-        <Box sx={{height: '80vh'}}>
+        <Box sx={{height: '70vh'}}>
             <NewModularDatagrid 
               columns={columns} 
               getRowHeight={() => 'auto'} 

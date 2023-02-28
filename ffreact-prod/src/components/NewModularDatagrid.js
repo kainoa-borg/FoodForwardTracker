@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import axios from 'axios'
 import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
-import { Button, Popover, Snackbar, TextField, Typography } from '@mui/material';
+import { Button, Popover, Snackbar, Stack, TextField, Typography } from '@mui/material';
 
 import FormDialog from './FormDialog.js'
 import SearchToolBar from './SearchToolBar.js'
@@ -276,44 +276,49 @@ export default function NewModularDatagrid(props) {
 
     // The HTML structure of this component
     return(
-        <div>
-        <SearchToolBar setFilterModel={setFilterModel} searchField={searchField}/>
-        <Box sx={{height: 'auto', overflow: 'auto'}}>
-            <DataGrid
-            components={{ Toolbar: CustomToolbar }}
-            rows={tableData}
-            columns={columns}
-            autoHeight={true}
-            editMode='row'
-            rowModesModel={rowModesModel}
-            filterModel={filterModel}
-            onRowModesModelChange={(newModel) => {setRowModesModel(newModel)}}
-            // onRowEditStop={handleRowEditStop}
-            getRowId={(row) => row[keyFieldName]}
-            pageSize={10}
-            processRowUpdate={processRowUpdate}
-            //rowsPerPageOptions={[5]}
-            disableSelectionOnClick
-            // disableVirtualization
-            experimentalFeatures={{ newEditingApi: true }}>
-            </DataGrid>
-        </Box>
-        {/* Add Form Dialog */}
-        <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={AddFormComponent} addEntry={addEntry} latestKey={getLatestKey()}/>
-        {/* Save Click 'request sent' Notice */}
-        <Snackbar
-            open={updateSBOpen}
-            autoHideDuration={3000}
-            onClose={(event, reason) => handleSBClose(event, reason, setUpdateSBOpen)}
-            message="Saving..."
-        />
-        {/* Save Complete 'request success' Notice */}
-        <Snackbar
-            open={updateDoneSBOpen}
-            autoHideDuration={3000}
-            onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
-            message="Changes saved!"
-        />
-        </div>
+        <Fragment>
+            <Stack direction='row' sx={{width: '100%'}}>
+                <SearchToolBar sx={{marginLeft: 'auto'}} setFilterModel={setFilterModel} searchField={searchField}/>
+            </Stack>
+            <Box sx={{display: 'flex', height: '100%'}}>
+                <Box sx={{flexGrow: 1}}>
+                    <DataGrid
+                    components={{ Toolbar: CustomToolbar }}
+                    rows={tableData}
+                    columns={columns}
+                    // autoHeight={true}
+                    editMode='row'
+                    rowModesModel={rowModesModel}
+                    filterModel={filterModel}
+                    onRowModesModelChange={(newModel) => {setRowModesModel(newModel)}}
+                    // onRowEditStop={handleRowEditStop}
+                    getRowId={(row) => row[keyFieldName]}
+                    pageSize={10}
+                    processRowUpdate={processRowUpdate}
+                    //rowsPerPageOptions={[5]}
+                    disableSelectionOnClick
+                    // disableVirtualization
+                    experimentalFeatures={{ newEditingApi: true }}>
+                    </DataGrid>
+                </Box>
+                {/* Add Form Dialog */}
+                <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={AddFormComponent} addEntry={addEntry} latestKey={getLatestKey()}/>
+                {/* Save Click 'request sent' Notice */}
+                <Snackbar
+                    open={updateSBOpen}
+                    autoHideDuration={3000}
+                    onClose={(event, reason) => handleSBClose(event, reason, setUpdateSBOpen)}
+                    message="Saving..."
+                />
+                {/* Save Complete 'request success' Notice */}
+                <Snackbar
+                    open={updateDoneSBOpen}
+                    autoHideDuration={3000}
+                    onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
+                    message="Changes saved!"
+                />
+            </Box>
+        </Fragment>
+        
     )
 }

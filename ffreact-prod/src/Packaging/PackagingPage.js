@@ -195,8 +195,7 @@ export default function PackagingPage() {
     return(
         <div class='table-div'>
         <h3>Packaging</h3>
-        <Box sx={{display: 'flex', height: '60%', width: '100%'}}>
-            <div style={{flexGrow: 1}}>
+        <Box sx={{height: '70vh'}}>
             <NewModularDatagrid 
                 rows={packaging} 
                 columns={columns} 
@@ -206,7 +205,6 @@ export default function PackagingPage() {
                 searchField='package_type'
                 AddFormComponent={PackagingForm}
             />            
-            </div>
         </Box>
         {/* Save Click Notice */}
         <Snackbar
