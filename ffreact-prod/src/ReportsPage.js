@@ -69,7 +69,7 @@ const ReportsPage = (props) => {
             menu={[
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Households Report</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('ingredients-report')}>
                     Ingredients Report</button>,
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Packaging Report</button>,
