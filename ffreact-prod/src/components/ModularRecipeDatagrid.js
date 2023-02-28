@@ -1,6 +1,5 @@
-import React, {Fragment, useState, useEffect, Suspense, useRef, createRef, useMemo} from 'react'
-import axios from 'axios'
-import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCell, GridRowModes, GridActionsCellItem, useGridApiRef, gridSortedRowEntriesSelector, useGridApiContext, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
+import React, { useState } from 'react'
+import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import { Button, Popover, Snackbar, Typography } from '@mui/material';
@@ -15,7 +14,7 @@ import FormDialog from './FormDialog';
 // Returns:
     // Datagrid component with table data
 export default function ModularRecipeDatagrid(props) {    
-    const apiIP = props.apiIP;
+    // const apiIP = props.apiIP;
     // const apiEndpoint = props.apiEndpoint;
     const keyFieldName = props.keyFieldName;
     const setRows = props.setRows;
@@ -39,7 +38,7 @@ export default function ModularRecipeDatagrid(props) {
     // Struct of row modes (view/edit)
     const [rowModesModel, setRowModesModel] = useState({});
 
-    const dataGridApiRef = useGridApiRef();
+    // const dataGridApiRef = useGridApiRef();
 
     // Helper function closes Snackbar notification
     const handleSBClose = (event, reason, setOpen) => {

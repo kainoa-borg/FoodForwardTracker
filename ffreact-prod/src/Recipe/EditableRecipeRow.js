@@ -4,7 +4,7 @@ import React from 'react'
 // Takes: key of current row, the state of the Meal Plans Page's editFormData, updateMealPlan callback, handleEditFormChange callback, and handleCancelClick callback
 // Returns an editable Meal Plan table row component
 const EditableRecipeRow = (props) => {
-    const {thisKey, editFormData, updateRecipe, handleEditFormChange, handleCancelClick, updateAllergies, updateEditForm} = props
+    const {thisKey, editFormData, updateRecipe, handleEditFormChange, handleCancelClick } = props
     const recipe = editFormData;
     const key = thisKey;
 

@@ -7,9 +7,6 @@ import React from 'react'
 // Takes AddStation callback function
 // Returns a form that can be used to define a new Station object in a StationList
 const StationForm = (props) => {
-  
-  const HouseholdsList = props.households;
-
   const clearStation = () => {
     return {
       stn_name: "",

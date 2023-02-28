@@ -4,7 +4,6 @@ import PackagingForm from './PackagingForm.js'
 import EditablePackagingRow from './EditablePackagingRow.js'
 import PackagingRow from './PackagingRow.js'
 import Error from '../Error.js'
-import DisplayMessage from '../DisplayMessage.js'
 import './PackagingList.css'
 
 // Packaging List Component
@@ -12,6 +11,8 @@ export default function PackagingList() {
     const [packaging, setPackaging] = useState(undefined);
     const [suppliers, setSuppliers] = useState(undefined);
     const [editPackagingID, setEditPackagingID] = useState(null);
+    const [errorComponent, setErrorComponent] = useState(null);
+    const [loadingComponent, setLoadingComponent] = useState(null);
     const [editFormData, setEditFormData] = useState({
         p_id: '',
         package_type: "",
@@ -28,9 +29,6 @@ export default function PackagingList() {
         psupplier_id: '',
         pref_psupplier_id: ''
     });
-    const [errorComponent, setErrorComponent] = useState(null);
-    const [displayMsgComponent, setdisplayMsgComponent] = useState(null);
-    const [loadingComponent, setLoadingComponent] = useState(null);
 
     const handleError = (errCode) => {
         if (errCode === 'DuplicateKey') {
@@ -86,23 +84,6 @@ export default function PackagingList() {
               console.log(error.response.headers);
               }
           });
-    }
-
-    const postDBPackaging = () => {
-        axios({
-            method: "POST",
-            url:"/packaging/",
-            data: packaging
-          }).then((response)=>{
-            getDBPackaging();
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-        setdisplayMsgComponent(<DisplayMessage msg='Submitting changes to database!'/>);
     }
 
     const addPackaging = (pkg) => {
@@ -221,7 +202,6 @@ export default function PackagingList() {
             {loadingComponent}
             <PackagingForm addPackaging={addPackaging} suppliers={suppliers}></PackagingForm>
             {errorComponent}
-            {displayMsgComponent}
         </div>
     )
 }

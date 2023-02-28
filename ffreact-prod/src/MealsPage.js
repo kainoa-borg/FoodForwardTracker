@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Container, Button, Typography } from '@mui/material'
+import { Button } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import { CssBaseline, Box } from '@mui/material'
+import { CssBaseline } from '@mui/material'
 import Dropdown from './components/Dropdown'
 import StationList from './Stations/StationList.js'
 import RecipePage from './Recipe/RecipePage.js'
@@ -52,6 +52,7 @@ const MealsPage = (props) => {
             case 'mealsPage': setCurrPage(<MealPlanPage handlePageClick={handlePageClick} />); break;
             case 'recipePage': setCurrPage(<RecipePage setCurrPage={setCurrPage}></RecipePage>); break;
             case 'recipe': setCurrPage(<Recipe/>); break;
+            default : break;
         }
     } 
     // HTML structure of this component

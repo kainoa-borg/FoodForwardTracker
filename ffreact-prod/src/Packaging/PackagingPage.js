@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { GridRowModes, GridActionsCellItem} from '@mui/x-data-grid'
-import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
+// import { GridRowModes, GridActionsCellItem} from '@mui/x-data-grid'
+// import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
-import { Button, Popover, Snackbar, Typography } from '@mui/material';
+// import { Button, Popover, Snackbar, Typography } from '@mui/material';
+import { Snackbar } from '@mui/material';
 import PackagingForm from './PackagingForm.js'
 import NewModularDatagrid from '../components/NewModularDatagrid.js';
 import './PackagingList.css'
@@ -17,7 +18,6 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 export default function PackagingPage() {
     const [packaging, setPackaging] = useState(undefined);
     const [suppliers, setSuppliers] = useState(undefined);
-    const [rowModesModel, setRowModesModel] = useState({});
     const [updateSBOpen, setUpdateSBOpen] = useState(false);
     const [updateDoneSBOpen, setUpdateDoneSBOpen] = useState(false);
     const [supplierOptions, setSupplierOptions] = useState();
@@ -30,7 +30,7 @@ export default function PackagingPage() {
     }
 
     // Delete Packaging Row
-    const deletePackaging = (key) => {
+/*    const deletePackaging = (key) => {
         const pkgID = packaging[key]['p_id']; 
         axios({
             method: "DELETE",
@@ -44,7 +44,7 @@ export default function PackagingPage() {
               console.log(error.response.headers);
               }
           });
-    }  
+    }*/
 
     // Get suppliers from database
     // Set supplier variable with supplier data
@@ -103,7 +103,7 @@ export default function PackagingPage() {
         )
     }
 
-    const modularActions = (params, rowModesModel, setRowModesModel, setUpdateSBOpen) => {
+/*    const modularActions = (params, rowModesModel, setRowModesModel, setUpdateSBOpen) => {
         // Struct with all popover anchors
         const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteAnchor: null, confirmCancelAnchor: null});
         const [deleteParams, setDeleteParams] = useState(null);
@@ -172,12 +172,12 @@ export default function PackagingPage() {
                     }}
                 >
                     <Typography>Delete this entry?</Typography>
-                    {/* Confirm button fires deletePackaging using row params state */}
+                    {/* Confirm button fires deletePackaging using row params state *//*}
                     <Button variant='contained' onClick={() => deletePackaging(deleteParams)}>Confirm</Button>
                 </Popover>
             ]
         }
-    }
+    }*/
 
     const columns = [
         { field: 'package_type', headerName: 'Packaging Type', width: 150, editable: true },

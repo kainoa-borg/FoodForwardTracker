@@ -1,9 +1,7 @@
-import React, {Fragment, useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import {DataGrid, GridColDef, GridValueGetterParams} from '@mui/x-data-grid'
+import {DataGrid} from '@mui/x-data-grid'
 import { Box } from '@mui/system';
-import { waitFor } from '@testing-library/react';
-import { wait } from '@testing-library/user-event/dist/utils';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -14,9 +12,6 @@ export default function RecipeIngList(props) {
 
     const [ingredients, setIngredients] = useState();
     const [suppliers, setSuppliers] = useState();
-
-
-    // Get props
     const setIngID = props.setID;
     const handleClose = props.handleClose;
 
@@ -51,13 +46,13 @@ export default function RecipeIngList(props) {
           });
     }
 
-    const supplierNameFormatter = (value) => {
+/*    const supplierNameFormatter = (value) => {
         if (value) {
             let idx = suppliers.findIndex((suppliers.s_id === value));
             console.log(idx);
             if (idx) return suppliers[idx].s_name;
         }
-    }
+    } */
 
     useEffect(() => {
         getDBIngredients();

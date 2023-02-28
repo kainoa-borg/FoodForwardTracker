@@ -4,7 +4,7 @@ import React from 'react'
 // Takes: key of current row, the state of the Station Page's editFormData, updateStation callback, handleEditFormChange callback, and handleCancelClick callback
 // Returns an editable Station table row component
 const EditableStationRow = (props) => {
-    const { thisKey, editFormData, updateStation, handleEditFormChange, handleCancelClick, updateAllergies, updateEditForm} = props
+    const { thisKey, editFormData, updateStation, handleEditFormChange, handleCancelClick } = props
     const s = editFormData;
     const key = thisKey;
 

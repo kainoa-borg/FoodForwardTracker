@@ -75,15 +75,14 @@ export default function IngredientPage() {
             <>loading...</>
         )
     }
-    // The HTML structure of this component
 
-    const supplierNameFormatter = (value) => {
+    /*const supplierNameFormatter = (value) => {
         if (value) {
             let idx = suppliers.findIndex((suppliers.s_id === value));
             console.log(idx);
             if (idx) return suppliers[idx].s_name;
         }
-    }
+    }*/
     
     const columns = [
         { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
