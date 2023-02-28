@@ -1,10 +1,11 @@
-import React, {Fragment, useState, useEffect, Suspense} from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import {DataGrid, GridToolbar, GridColDef, GridValueGetterParams, GridActionsCell, GridRowModes, GridActionsCellItem} from '@mui/x-data-grid'
+import { GridRowModes, GridActionsCellItem} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import { Button, Popover, Snackbar, Typography } from '@mui/material';
 import PackagingForm from './PackagingForm.js'
+import NewModularDatagrid from '../components/NewModularDatagrid.js';
 import './PackagingList.css'
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -28,25 +29,6 @@ export default function PackagingPage() {
         setOpen(false);
     }
 
-    // Add Packaging from form
-    const addPackaging = (pkg) => {
-        const lastID = packaging[packaging.length - 1]['p_id'];
-        pkg['p_id'] = lastID + 1;
-        axios({
-            method: "POST",
-            url:"http://4.236.185.213:8000/api/packaging-inventory/",
-            data: pkg
-          }).then((response)=>{
-            getDBPackaging();
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-    }
-
     // Delete Packaging Row
     const deletePackaging = (key) => {
         const pkgID = packaging[key]['p_id']; 
@@ -62,30 +44,7 @@ export default function PackagingPage() {
               console.log(error.response.headers);
               }
           });
-    }
-
-    // Update Packaging Row
-    const processRowUpdate = (newRow) => {
-        const updatedRow = {...newRow, isNew: false};
-
-        console.log(updatedRow);
-        
-        axios({
-            method: "PATCH",
-            url:"http://4.236.185.213:8000/api/packaging-inventory/"+ newRow.p_id +'/',
-            data: newRow
-            }).then((response)=>{
-            getDBPackaging();
-            }).catch((error) => {
-            if (error.response) {
-                console.log(error.response);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                }
-        });
-
-        return updatedRow;
-    }    
+    }  
 
     // Get suppliers from database
     // Set supplier variable with supplier data
@@ -222,8 +181,8 @@ export default function PackagingPage() {
 
     const columns = [
         { field: 'package_type', headerName: 'Packaging Type', width: 150, editable: true },
-        { field: 'unit', headerName: 'Unit', width: 6, editable: true },
-        { field: 'qty_holds', headerName: 'Size', width: 5, editable: true },
+        { field: 'unit', headerName: 'Unit', width: 100, editable: true },
+        { field: 'qty_holds', headerName: 'Size', width: 10, editable: true },
         { field: 'returnable', headerName: 'Returnable', width: 90, type: 'boolean', editable: true },
         { field: 'unit_cost', headerName: 'Unit Cost', width: 90, valueFormatter: ({ value }) => currencyFormatter.format(value), editable: true },
         { field: 'pref_psupplier', headerName: 'Supplier', width: 80, valueFormatter: ({ value }) => value.s_name },
@@ -231,31 +190,22 @@ export default function PackagingPage() {
         { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
         { field: 'tmp_1', headerName: 'Date Used', width: 100, type: 'date', editable: true },
         { field: 'tmp_2', headerName: 'Units Used', width: 100, type: 'number', editable: true },
-        { field: 'actions', type: 'actions', width: 100,
-            getActions: (params) => modularActions(params, rowModesModel, setRowModesModel, setUpdateSBOpen)
-        }
     ]
     
     return(
         <div class='table-div'>
         <h3>Packaging</h3>
-        <Box sx={{height: '80vh'}}>
-            <DataGrid 
-            components={{ Toolbar: GridToolbar }}
-            rows={packaging} 
-            columns={columns} 
-            editMode='row'
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={(newModel) => {setRowModesModel(newModel)}}
-            getRowId={(row) => row.p_id}
-            pageSize={10}
-            processRowUpdate={processRowUpdate}
-            //rowsPerPageOptions={[5]}
-            disableSelectionOnClick
-            experimentalFeatures={{ newEditingApi: true }}>
-            </DataGrid>
+        <Box sx={{display: 'flex', height: '60%', width: '100%'}}>
+            <div style={{flexGrow: 1}}>
+            <NewModularDatagrid 
+                rows={packaging} 
+                columns={columns} 
+                apiEndpoint='packaging-inventory'
+                keyFieldName='p_id'
+                AddFormComponent={PackagingForm}
+            />            
+            </div>
         </Box>
-            <PackagingForm addPackaging={addPackaging} suppliers={suppliers}></PackagingForm>
         {/* Save Click Notice */}
         <Snackbar
             open={updateSBOpen}

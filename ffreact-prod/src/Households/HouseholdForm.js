@@ -10,10 +10,8 @@ import { Card } from '@mui/material'
 // Takes AddHousehold callback function
 // Returns a form that can be used to define a new household object in a HouseholdList
 const HouseholdForm = (props) => {
-
   const addEntry = props.addEntry;
   const handleClose = props.handleClose;
-
   const clearHousehold = () => {
     return {
       hh_name: "",

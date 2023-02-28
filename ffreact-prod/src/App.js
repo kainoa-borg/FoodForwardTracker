@@ -7,6 +7,7 @@ import InventoryPage from './InventoryPage.js'
 import HouseholdPage from './Households/HouseholdPage.js'
 import HouseholdsReport from './Households/HouseholdsReport.js'
 import Ingredients from './Ingredients/IngredientList.js'
+import IngredientPage from './Ingredients/IngredientPage.js'
 import IngredientsReport from './Ingredients/IngredientsReport.js'
 import StationList from './Stations/StationList.js'
 import ReportsPage from "./ReportsPage.js"
@@ -16,16 +17,20 @@ import NewUserPage from "./NewUserPage.js"
 import Recipe from './Recipe/RecipeList.js'
 import RecipePage from './Recipe/RecipePage.js'
 import MealPlan from './Meals/MealList.js'
+import MealPlanReport from './Reports/MealPlanReport.js'
+import MealHistory from './Reports/MealHistory.js'
+import CostTotals from './Reports/CostTotals.js'
 import Packaging from './Packaging/PackagingList.js'
+import PackagingPage from './Packaging/PackagingPage.js'
 import PackagingReport from './Packaging/PackagingReport.js'
+import PackagingReturns from './Reports/PackagingReturns.js'
+import PurchasingReport from './Reports/PurchasingReport.js'
 import EntryPage from './EntryPage.js'
-import Search from './Search.js'
 import Navbar from './Navbar.js'
 import React from 'react'
 import { useState } from 'react'
 import { Box } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import NavBar from './components/NavBar'
 import Dropdown, { useOutsideClick} from './components/Dropdown'
 import './App.css';
 
@@ -81,6 +86,7 @@ const App = () => {
     const handlePageClick = (pageName) => {
         console.log(pageName)
         switch(pageName) {
+            case 'cost-totals': setCurrPage(<CostTotals handlePageClick={handlePageClick} />); break;
             case 'loginPage': setCurrPage(<LoginPage loginState={loginState} setLoginState={setLoginState} handlePageClick={handlePageClick} />); break;
             case 'newUserPage': setCurrPage(<NewUserPage handlePageClick={handlePageClick} />); break;
             case 'pwResetPage': setCurrPage(<PwResetPage handlePageClick={handlePageClick} />); break;
@@ -90,13 +96,20 @@ const App = () => {
             case 'householdForm': setCurrPage(<HouseholdForm />); break;
             case 'households-report': setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />); break;
             case 'ingredients': setCurrPage(<Ingredients handlePageClick={handlePageClick} />); break;
+            case 'ingredientPage': setCurrPage(<IngredientPage handlePageClick={handlePageClick} />); break;
             case 'ingredients-report': setCurrPage(<IngredientsReport handlePageClick={handlePageClick} />); break;
             case 'inventoryPage': setCurrPage(<InventoryPage handlePageClick={handlePageClick} />); break;
             case 'packaging': setCurrPage(<Packaging handlePageClick={handlePageClick} />); break;
+            case 'packagingPage': setCurrPage(<PackagingPage handlePageClick={handlePageClick} />); break;
             case 'packaging-report': setCurrPage(<PackagingReport handlePageClick={handlePageClick} />); break;
+            case 'packaging-returns': setCurrPage(<PackagingReturns handlePageClick={handlePageClick} />); break;
+            case 'purchasing-report': setCurrPage(<PurchasingReport handlePageClick={handlePageClick} />); break;
             case 'stations': setCurrPage(<StationList handlePageClick={handlePageClick} />); break;
             case 'meals': setCurrPage(<MealPlan handlePageClick={handlePageClick} />); break;
+            case 'meal-plan-report': setCurrPage(<MealPlanReport handlePageClick={handlePageClick} />); break;
+            case 'meal-history': setCurrPage(<MealHistory handlePageClick={handlePageClick} />); break;
             case 'recipes': setCurrPage(<Recipe handlePageClick={handlePageClick} />); break;
+            case 'recipePage': setCurrPage(<RecipePage handlePageClick={handlePageClick} />); break;
             case 'reports': setCurrPage(<ReportsPage handlePageClick={handlePageClick} />); break;
             case 'userPage': setCurrPage(<UserPage handlePageClick={handlePageClick} />); break;
             case 'userList': setCurrPage(<UserList handlePageClick={handlePageClick} />); break;

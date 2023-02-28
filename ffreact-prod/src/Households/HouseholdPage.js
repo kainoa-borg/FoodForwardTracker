@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useGridApiContext, gridClasses} from '@mui/x-data-grid'
+import React from 'react'
+import { useGridApiContext } from '@mui/x-data-grid'
 import './HouseholdList.css'
 import { Box } from '@mui/material'
 import AllergiesList from './AllergiesList';
@@ -54,8 +54,7 @@ export default function HouseholdPage() {
                 getEstimatedRowHeight={() => 300} 
                 keyFieldName={'hh_name'} 
                 apiEndpoint={'households'}
-                AddFormComponent={HouseholdForm}
-            >
+                AddFormComponent={HouseholdForm}>
             </NewModularDatagrid>
         </Box>
         </div>
