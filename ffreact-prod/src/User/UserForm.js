@@ -9,7 +9,8 @@ import { Card } from '@mui/material'
 // Takes AddUser callback function
 // Returns a form that can be used to define a new User object in a UserList
 const UserForm = (props) => {
-
+    const addEntry = props.addEntry;
+    const handleClose = props.handleClose;
     const clearUser = () => {
     return {
       u_id: 0,
@@ -17,8 +18,6 @@ const UserForm = (props) => {
       password: "",
       admin_flag: 0,
       email: ""
-     
-     // hh_allergies: []
     }
   }
 
@@ -32,9 +31,10 @@ const UserForm = (props) => {
       // Prevent refresh
       event.preventDefault();
       // Pass User object to UserList callback
-        props.addUser(user)
+      // props.addUser(user)
+      addEntry(user);
       // Clear the form state
-        setUser(clearUser());
+      setUser(clearUser());
     }
 
     const updateEditForm = (names, values) => {
@@ -42,7 +42,7 @@ const UserForm = (props) => {
       for (let i = 0; i < names.length; i++) {
           newUser[names[i]] = values[i];
       }
-        setUser(newUser);
+      setUser(newUser);
     }
 
     // Handle the data inputted to each form input and set the state with the new values
@@ -82,7 +82,7 @@ const UserForm = (props) => {
                 <Input name='admin_flag' id='admin_flag' type='checkbox' value={user.admin_flag} onChange={handleFormChange}/>
               </Grid>
             </Grid>
-            <Button type='Submit' color='lightBlue' variant='contained'>Add User</Button>
+            <Button type='Submit' color='lightBlue' variant='contained' onClick={handleClose}>Add User</Button>
           </form>
       </Card>
     );
