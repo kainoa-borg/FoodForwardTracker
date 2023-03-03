@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react'
 import axios from 'axios'
 import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
-import { Box } from '@mui/system';
+import { Box } from '@mui/material';
 import { Button, Popover, Snackbar, Stack, TextField, Typography } from '@mui/material';
 
 import FormDialog from './FormDialog.js'
@@ -274,11 +274,19 @@ export default function NewModularDatagrid(props) {
         )
     }
 
+    const SearchFunction = (props) => {
+        if (props.searchField) {
+            return (
+                <SearchToolBar sx={{marginLeft: 'auto'}} setFilterModel={setFilterModel} searchField={searchField}/>
+            )
+        }
+    }
+
     // The HTML structure of this component
     return(
         <Fragment>
             <Stack direction='row' sx={{width: '100%'}}>
-                <SearchToolBar sx={{marginLeft: 'auto'}} setFilterModel={setFilterModel} searchField={searchField}/>
+                <SearchFunction searchField={searchField} />
             </Stack>
             <Box sx={{display: 'flex', height: '100%'}}>
                 <Box sx={{flexGrow: 1}}>
