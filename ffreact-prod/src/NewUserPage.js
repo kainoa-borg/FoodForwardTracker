@@ -2,6 +2,8 @@ import React from 'react'
 import { useState } from 'react'
 import axios from 'axios'
 import { Typography, Stack, Button, Box, Card, Grid, TextField} from "@mui/material"
+import ffLogo from './Images/ff_logo.jpg'
+
 // Login Page Component
 // Takes handlePageClick callback function to enable page switching when login is completed
 // Returns a login page component that allows users to enter account information 
@@ -60,13 +62,11 @@ const NewUserPage = (props) => {
 
     // HTML structure of this component
     return (
-
-
         <Grid container spacing='12' sx={{margin: 'auto', marginTop: '1em', maxWidth: '90%', justifyContent: 'center', alignItems: 'center'}}>
             
             {/* Logo and Welcome Message (left-side) */}
             <Grid item md={7} sx={{display: {xs: 'none', md: 'block'}}}>
-                <Box component='img' sx={{width: '80%'}} src="/Images/ff_logo.jpg"/>
+                <Box component='img' sx={{width: '80%'}} src={ffLogo}/>
                 <Typography variant='h3' sx={{paddingBottom: '1em'}}>Welcome to Food Forward!</Typography>
             </Grid>
 
@@ -86,7 +86,7 @@ const NewUserPage = (props) => {
                         />
                         
                         <TextField
-                        type = 'text'
+                        type='password'
                         maxLength = '30' 
                         label = 'Password'
                         name = 'password' 
@@ -95,7 +95,7 @@ const NewUserPage = (props) => {
                         />
 
                         <TextField
-                        type = 'text'
+                        type = 'email'
                         maxLength = '30' 
                         label = 'Email'
                         name = 'email'
@@ -109,7 +109,6 @@ const NewUserPage = (props) => {
                 </form>
             </Grid>
         </Grid>
-
     );
 }
 

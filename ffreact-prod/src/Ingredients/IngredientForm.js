@@ -11,33 +11,10 @@ import { Grid, Typography, Card, Input, InputLabel, Select, MenuItem, Button} fr
 // Takes AddIngredient callback function
 // Returns a form that can be used to define a new ingredient object in a IngredientList
 const IngredientForm = (props) => {
-
-  // Get suppliers from database
-  // Return supplierData
-  const getDBSuppliers = () => {
-    console.log("MAKING REQUEST TO DJANGO")
-    axios({
-        method: "GET",
-        url:"http://4.236.185.213:8000/api/suppliers"
-      }).then((response)=>{
-        setSupplierList(response.data)
-      }).catch((error) => {
-        if (error.response) {
-          console.log(error.response);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-          }
-      });
-  }
-
   const [supplierList, setSupplierList] = useState();
   const addEntry = props.addEntry;
   const handleClose = props.handleClose;
   const latestKey = props.latestKey;
-
-  useEffect(() => {
-    getDBSuppliers();
-  }, []);
 
   const clearIngredient = () => {
     return {
@@ -56,6 +33,28 @@ const IngredientForm = (props) => {
       isupplier_id: null,
       pref_isupplier_id: null
   }
+  }
+  
+  useEffect(() => {
+    getDBSuppliers();
+  }, []);
+
+    // Get suppliers from database
+  // Return supplierData
+  const getDBSuppliers = () => {
+    console.log("MAKING REQUEST TO DJANGO")
+    axios({
+        method: "GET",
+        url:"http://4.236.185.213:8000/api/suppliers"
+      }).then((response)=>{
+        setSupplierList(response.data)
+      }).catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          }
+      });
   }
 
   // The state of this Ingredient Form with each attribute of Ingredient
