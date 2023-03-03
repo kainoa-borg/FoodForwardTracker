@@ -189,7 +189,7 @@ export default function Recipe(props) {
         setUpdateSBOpen(true);
         axios({
             method: "PATCH",
-            url:"http://localhost:8000/api/mealrecipes/" + recipeData.r_num + '/',
+            url:"http://4.236.185.213:8000/api/mealrecipes/" + recipeData.r_num + '/',
             data: r_data,
         }).then((response)=>{
             console.log('success!')
@@ -247,6 +247,8 @@ export default function Recipe(props) {
                             columns={ingredientsColumns}
                             addFormComponent={RecipeIngForm}
                             keyFieldName={'ri_id'}
+                            searchField={'ingredient_name'}
+                            entryName={'Recipe Ingredient'}
                         ></ModularRecipeDatagrid>
                     </Box>
                 </Box>
@@ -259,6 +261,8 @@ export default function Recipe(props) {
                             setRows={setPackagingRows}
                             addFormComponent={RecipePkgForm}
                             keyFieldName={'rp_id'}
+                            searchField={'pkg_type'}
+                            entryName={'Recipe Packaging'}
                         ></ModularRecipeDatagrid>
                     </Box>    
                 </Box>
@@ -271,6 +275,8 @@ export default function Recipe(props) {
                             setRows={setInstructionRows}
                             addFormComponent={RecipeInstForm}
                             keyFieldName={'step_no'}
+                            searchField={'step_inst'}
+                            entryName={'Instruction Step'}
                         ></ModularRecipeDatagrid>
                     </Box>
                 </Box>

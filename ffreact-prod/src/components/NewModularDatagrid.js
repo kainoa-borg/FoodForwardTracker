@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import axios from 'axios'
 import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
-import { Button, Popover, Snackbar, Typography } from '@mui/material';
+import { Button, Popover, Snackbar, Stack, TextField, Typography } from '@mui/material';
 
-import FormDialog from '../components/FormDialog.js'
+import FormDialog from './FormDialog.js'
+import SearchToolBar from './SearchToolBar.js'
 
 // Modularized Datagrid with prompts/notifications
 // Takes:
@@ -23,6 +24,12 @@ export default function NewModularDatagrid(props) {
     const keyFieldName = props.keyFieldName;
     // Add entry form to be passed to FormDialog
     const AddFormComponent = props.AddFormComponent;
+
+    const searchField = props.searchField;
+
+    // Entry Name
+    const entryName = props.entryName;
+
     // Append passed columns with default actions
     const columns = [...props.columns, 
         { field: 'actions', type: 'actions', headerName: 'Actions', width: 100,
@@ -40,6 +47,9 @@ export default function NewModularDatagrid(props) {
     
     // Struct of row modes (view/edit)
     const [rowModesModel, setRowModesModel] = useState({});
+
+    // Struct of filterModel items (How to filter datagrid)
+    const [filterModel, setFilterModel] = useState();
 
     // Open state of the Add form popup
     const [addFormOpen, setAddFormOpen] = useState(false);
@@ -247,14 +257,13 @@ export default function NewModularDatagrid(props) {
             ]
         }
     }
+
     function CustomToolbar() {
+        const e_name = entryName ? entryName : 'Entry'
         return (
           <GridToolbarContainer>
-            <GridToolbarColumnsButton />
-            <GridToolbarFilterButton />
-            <GridToolbarDensitySelector />
-            <GridToolbarExport />
-            <Button color='lightBlue' variant='contained' onClick={() => {setAddFormOpen(true)}}>Add Entry</Button>
+            <Button color='lightBlue' variant='contained' onClick={() => {setAddFormOpen(true)}}>Add {e_name}</Button>
+            <GridToolbarExport color='lightBlue'/>
           </GridToolbarContainer>
         );
     }
@@ -267,42 +276,49 @@ export default function NewModularDatagrid(props) {
 
     // The HTML structure of this component
     return(
-        <div class='table-div'>
-        <Box sx={{height: 'auto', overflow: 'auto'}}>
-            <DataGrid
-            components={{ Toolbar: CustomToolbar }}
-            rows={tableData}
-            columns={columns}
-            autoHeight={true}
-            editMode='row'
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={(newModel) => {setRowModesModel(newModel)}}
-            // onRowEditStop={handleRowEditStop}
-            getRowId={(row) => row[keyFieldName]}
-            pageSize={10}
-            processRowUpdate={processRowUpdate}
-            //rowsPerPageOptions={[5]}
-            disableSelectionOnClick
-            // disableVirtualization
-            experimentalFeatures={{ newEditingApi: true }}>
-            </DataGrid>
-        </Box>
-        {/* Add Form Dialog */}
-        <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={AddFormComponent} addEntry={addEntry} latestKey={getLatestKey()}/>
-        {/* Save Click 'request sent' Notice */}
-        <Snackbar
-            open={updateSBOpen}
-            autoHideDuration={3000}
-            onClose={(event, reason) => handleSBClose(event, reason, setUpdateSBOpen)}
-            message="Saving..."
-        />
-        {/* Save Complete 'request success' Notice */}
-        <Snackbar
-            open={updateDoneSBOpen}
-            autoHideDuration={3000}
-            onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
-            message="Changes saved!"
-        />
-        </div>
+        <Fragment>
+            <Stack direction='row' sx={{width: '100%'}}>
+                <SearchToolBar sx={{marginLeft: 'auto'}} setFilterModel={setFilterModel} searchField={searchField}/>
+            </Stack>
+            <Box sx={{display: 'flex', height: '100%'}}>
+                <Box sx={{flexGrow: 1}}>
+                    <DataGrid
+                    components={{ Toolbar: CustomToolbar }}
+                    rows={tableData}
+                    columns={columns}
+                    // autoHeight={true}
+                    editMode='row'
+                    rowModesModel={rowModesModel}
+                    filterModel={filterModel}
+                    onRowModesModelChange={(newModel) => {setRowModesModel(newModel)}}
+                    // onRowEditStop={handleRowEditStop}
+                    getRowId={(row) => row[keyFieldName]}
+                    pageSize={10}
+                    processRowUpdate={processRowUpdate}
+                    //rowsPerPageOptions={[5]}
+                    disableSelectionOnClick
+                    // disableVirtualization
+                    experimentalFeatures={{ newEditingApi: true }}>
+                    </DataGrid>
+                </Box>
+                {/* Add Form Dialog */}
+                <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={AddFormComponent} addEntry={addEntry} latestKey={getLatestKey()}/>
+                {/* Save Click 'request sent' Notice */}
+                <Snackbar
+                    open={updateSBOpen}
+                    autoHideDuration={3000}
+                    onClose={(event, reason) => handleSBClose(event, reason, setUpdateSBOpen)}
+                    message="Saving..."
+                />
+                {/* Save Complete 'request success' Notice */}
+                <Snackbar
+                    open={updateDoneSBOpen}
+                    autoHideDuration={3000}
+                    onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
+                    message="Changes saved!"
+                />
+            </Box>
+        </Fragment>
+        
     )
 }

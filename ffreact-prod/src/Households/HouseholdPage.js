@@ -48,13 +48,15 @@ export default function HouseholdPage() {
     return(
         <div class='table-div'>
         <h3>Clients</h3>
-        <Box sx={{height: '80%'}}>
+        <Box sx={{height: '70vh'}}>
             <NewModularDatagrid 
                 columns={columns} 
                 getRowHeight={() => 'auto'}
                 getEstimatedRowHeight={() => 300} 
                 keyFieldName={'hh_name'} 
                 apiEndpoint={'households'}
+                entryName={'Client'}
+                searchField={'hh_name'}
                 AddFormComponent={HouseholdForm}>
             </NewModularDatagrid>
         </Box>

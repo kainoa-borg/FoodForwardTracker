@@ -11,32 +11,8 @@ from .models import MealPlans, Recipes, Households
 class MealPlansSerializer(ModelSerializer):
 	# meal_name = serializers.CharField(max_length=50)
 	# snack_name = serializers.CharField(max_length=50)
-	class Meta():
-		model = MealPlans
-		#fields = ('m_id', 'm_date', 'meal_r_num', 'snack_r_num', 'meal_servings', 'snack_servings')
-		fields = ('__all__')
-
-class MealPlansView(viewsets.ModelViewSet):
-	# def list(self, request):
-	# 	# keys = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'meal_servings', 'snack_servings', 'meal_name', 'snack_name')
-	# 	# query = "SELECT mp.*, (SELECT r_name FROM recipes WHERE mp.meal_r_num = r_num) AS meal_name, (SELECT r_name FROM recipes WHERE mp.snack_r_num = r_num) AS snack_name FROM meal_plans mp"
-	# 	queryset = MealPlans.objects.all()
-	# 	serializer = MealPlansSerializer(queryset, many=True)
-	# 	return Response(serializer.data)
-	# def retrieve(self, request, pk):
-	# 	query = "SELECT mp.*, (SELECT r_name FROM recipes WHERE mp.meal_r_num = r_num) AS meal_name, (SELECT r_name FROM recipes WHERE mp.snack_r_num = r_num) AS snack_name FROM meal_plans mp WHERE mp.m_id=%s"%(pk)
-	# 	keys = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'meal_name', 'snack_name')
-	# 	queryset = execute_query(query, keys)
-	# 	serializer = MealPlansSerializer(queryset)
-	# 	return Response(serializer.data)
-	# def update(self, request):
-	# 	data = request.data
-	# 	serializer = MealPlansSerializer(data)
-	# 	if serializer.is_valid():
-	# 		serializer.save()
-	# 		return Response(status=status.HTTP_200_OK)
-	# 	return Response(status=status.HTTP_200_BADREQUEST)
-	def create(self, request):
+	def create(self, validated_data):
+		latest_key = MealPlans.objects.latest('m_id').m_id + 1
 		queryset = Households.objects.filter(paused_flag=False)
 		meal_servings = 0
 		snack_servings = 0
@@ -45,13 +21,19 @@ class MealPlansView(viewsets.ModelViewSet):
 			meal_servings += household.num_adult + household.num_child_gt_6 + (household.num_child_lt_6 *.5)
 			snack_servings += household.num_adult + household.num_child_gt_6 + household.num_child_lt_6
 
-		request.data['meal_servings'] = meal_servings
-		request.data['snack_servings'] = snack_servings
-		serializer = MealPlansSerializer(data=request.data)
-		if serializer.is_valid():
-			serializer.save()
-			return Response(status=status.HTTP_200_OK)
-		return Response(status=status.HTTP_200_BADREQUEST)
+		validated_data['m_id'] = latest_key
+		validated_data['meal_servings'] = meal_servings
+		validated_data['snack_servings'] = snack_servings
+		mp = MealPlans.objects.create(**validated_data)
+		return mp
+
+	class Meta():
+		model = MealPlans
+		#fields = ('m_id', 'm_date', 'meal_r_num', 'snack_r_num', 'meal_servings', 'snack_servings')
+		fields = ('__all__')
+		read_only_fields = ('m_id',)
+
+class MealPlansView(viewsets.ModelViewSet):
 
 	queryset = MealPlans.objects.all()
 	serializer_class = MealPlansSerializer
