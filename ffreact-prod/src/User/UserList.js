@@ -8,7 +8,7 @@ export default function UserList() {
  
     const columns = [
         { field: 'username', headerName: 'User Name', type: 'string', width: 200, editable: true },
-        { field: 'password', headerName: 'Password', type: 'password', width: 100, editable: true, 
+        { field: 'password', headerName: 'Password', type: 'password', width: 100, editable: false, 
           renderCell: (cellValues) => {
           return (<text>*****</text>);} },
         { field: 'admin_flag', headerName: 'Administrator', type: 'boolean', width: 100, editable: true },

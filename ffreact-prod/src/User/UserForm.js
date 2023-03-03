@@ -71,7 +71,7 @@ const UserForm = (props) => {
               </Grid>
               <Grid item>
                 <InputLabel htmlFor='password'>Password: </InputLabel>
-                <Input name='password' id='password' type='password' value={user.password} onChange={handleFormChange}/>
+                <Input name='password' id='password' type='password'/>
               </Grid>
               <Grid item>
                 <InputLabel htmlFor='email'>Email: </InputLabel>
