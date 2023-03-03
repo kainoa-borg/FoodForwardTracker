@@ -1,5 +1,6 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import React from 'react'
+import axios from 'axios'
 import { Grid, Typography, Card, Input, InputLabel, Select, MenuItem, Button} from '@mui/material';
 
 // Kainoa Borges
@@ -9,12 +10,14 @@ import { Grid, Typography, Card, Input, InputLabel, Select, MenuItem, Button} fr
 // Takes AddPackaging callback function
 // Returns a form that can be used to define a new packaging object in a PackagingList
 const PackagingForm = (props) => {
-
-  const supplierList = props.suppliers;
+  const [supplierList, setSupplierList] = useState();
+  const addEntry = props.addEntry;
+  const handleClose = props.handleClose;
+  const latestKey = props.latestKey;
 
   const clearPackaging = () => {
     return {
-      p_id: null,
+      p_id: latestKey + 1,
       package_type: "",
       unit_qty: null,
       qty_holds: null,
@@ -31,6 +34,28 @@ const PackagingForm = (props) => {
   }
   }
 
+  useEffect(() => {
+    getDBSuppliers();
+  }, []);
+
+  // Get suppliers from database
+  // Return supplierData
+  const getDBSuppliers = () => {
+    console.log("MAKING REQUEST TO DJANGO")
+    axios({
+        method: "GET",
+        url:"http://4.236.185.213:8000/api/suppliers"
+      }).then((response)=>{
+        setSupplierList(response.data)
+      }).catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          }
+      });
+  }
+
   // The state of this Packaging Form with each attribute of Packaging
   const [packaging, setPackaging] = useState(clearPackaging());
 
@@ -41,7 +66,9 @@ const PackagingForm = (props) => {
       // Prevent refresh
       event.preventDefault();
       // Pass packaging object to PackagingList callback
-      props.addPackaging(packaging)
+      // props.addPackaging(packaging)
+      addEntry(packaging);
+      handleClose();
       // Clear the form state
       setPackaging(clearPackaging());
     }
@@ -65,6 +92,10 @@ const PackagingForm = (props) => {
       // Create new packaging object before setting state
       updateEditForm([fieldName], [fieldValue]);
       // updateEditForm('aFlag', true);
+    }
+
+    if (supplierList === undefined) {
+      return (<>loading...</>)
     }
 
     // HTML structure of this component
