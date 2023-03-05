@@ -1,5 +1,5 @@
-import { Button, Typography, Box, Grid, Checkbox, Snackbar, FormControlLabel } from "@mui/material";
-import React, {useState, useEffect, createRef} from 'react';
+import { Button, Typography, Box, Grid, Checkbox, Snackbar, FormControlLabel, TextField, InputLabel } from "@mui/material";
+import React, {useState, useEffect, useCallback} from 'react';
 import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
 import { Stack } from "@mui/material";
 import axios from 'axios'
@@ -14,11 +14,14 @@ import RecipeIngList from "./RecipeIngList.js"
 import DataGridDialog from '../components/DatagridDialog.js'
 
 export default function Recipe(props) {
-    // const [recipeData, setRecipeData] = useState(props.recipeData);
-    const recipeData = props.recipeData;
-    const setRecipeData = props.setRecipeData;
+    // If recipeData prop is passed, use that, otherwise use empty recipeData
+    const [recipeData, setRecipeData] = useState(props.recipeData);
+    const [recipeName, setRecipeName] = useState(props.recipeData.r_name);
+    // const setRecipeData = props.setRecipeData;
     const setCurrPage = props.setCurrPage;
     const getDBRecipeData = props.getDBRecipeData;
+    // Are we adding a recipe?
+    const isAdding = props.isAdding;
 
     const IngredientNameEditCell = (params) => {
         const api = useGridApiContext();
@@ -182,48 +185,76 @@ export default function Recipe(props) {
         setOpen(false);
     }
 
-    const handleUpdateRecipe = () => {
+    const handleSaveClick = () => {
         console.log(recipeData);
-        const r_data = {...recipeData, r_ingredients: ingredientRows, r_packaging: packagingRows, r_instructions: instructionRows, m_s: m_s}
+        const r_data = {...recipeData, r_name: recipeName, r_ingredients: ingredientRows, r_packaging: packagingRows, r_instructions: instructionRows, m_s: m_s}
         console.log(JSON.stringify(r_data));
         setUpdateSBOpen(true);
-        axios({
-            method: "PATCH",
-            url:"http://4.236.185.213:8000/api/mealrecipes/" + recipeData.r_num + '/',
-            data: r_data,
-        }).then((response)=>{
-            console.log('success!')
-            setUpdateDoneSBOpen(true);
-            getDBRecipeData(recipeData.r_num);
-        }).catch((error) => {
-        if (error.response) {
-            console.log(error.response);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-            }
-        });
+        if (isAdding) {
+            axios({
+                method: "POST",
+                url:"http://localhost:8000/api/mealrecipes/",
+                data: r_data,
+            }).then((response)=>{
+                console.log('success!')
+                setUpdateDoneSBOpen(true);
+                getDBRecipeData(recipeData.r_num);
+            }).catch((error) => {
+            if (error.response) {
+                console.log(error.response);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                }
+            });
+        }
+        else {
+            axios({
+                method: "PATCH",
+                url:"http://localhost:8000/api/mealrecipes/" + recipeData.r_num + '/',
+                data: r_data,
+            }).then((response)=>{
+                console.log('success!')
+                setUpdateDoneSBOpen(true);
+                getDBRecipeData(recipeData.r_num);
+            }).catch((error) => {
+            if (error.response) {
+                console.log(error.response);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                }
+            });
+        }
     }
+
+    const handleNameChange = useCallback((event) => {
+        setRecipeName(event.target.value);
+    })
 
     const handleMealSnackChange = (event) => {
         setM_S(event.target.checked ? 1 : 0);
     }
 
+    const dummySubmit = (event) => {
+        event.preventDefault();
+    }
+
     return (
         <div>
+        <form onSubmit={dummySubmit}>
         
         {/* 'Close' button that goes back to recipe list */}
         <Button color='lightGreen' variant='contained' onClick={handleCloseClick}><Typography variant='h6'>Close</Typography></Button>
         
         {/* 'Save' button that saves recipe data */}
-        <Button color='lightGreen' variant='contained' onClick={handleUpdateRecipe}><Typography variant='h6'>Save</Typography></Button>
+        <Button color='lightGreen' variant='contained' type={'submit'} onClick={handleSaveClick}><Typography variant='h6'>Save</Typography></Button>
 
         {/* Recipe Page */}
         <Grid container justifyContent='space-between' direction='row'>
             
             {/* Recipe Image and Card Stack */}
             <Stack item spacing={3}>
-                <Typography variant='h4' sx={{textDecoration: 'underline'}}>{recipeData.r_name}</Typography>
-                <FormControlLabel control={<Checkbox checked={m_s ? 1 : 0} onChange={handleMealSnackChange}/>} label="Meal Recipe?"/>
+                <TextField required label={'Recipe Name'} onChange={handleNameChange} value={recipeName}/>
+                <FormControlLabel control={<Checkbox checked={m_s===1 ? true : false} onChange={handleMealSnackChange}/>} label="Meal Recipe?"/>
                 <RecipeImage image_source={recipeData.r_img_path}/>
                 <Button color='lightGreen' variant='contained' component='label'>
                     Upload Image
@@ -296,6 +327,7 @@ export default function Recipe(props) {
             onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
             message="Changes saved!"
         />
+        </form>
         </div>
     )
 }

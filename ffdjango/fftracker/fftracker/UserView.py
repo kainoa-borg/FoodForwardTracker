@@ -11,10 +11,20 @@ class UserSerializer(serializers.ModelSerializer):
 		read_only_fields = ['u_id']
 
 	def update(self, instance, validated_data):
-		instance['username'] = validated_data.get('username')
-		instance['password'] = make_password(validated_data.get('password'))
-		instance['email'] = validated_data.get('email')
-		instance['admin_flag'] = validated_data.get('admin_flag')
+		username = validated_data.pop('username')
+		password = validated_data.pop('password')
+		email = validated_data.pop('email')
+		admin_flag = validated_data.pop('admin_flag')
+		print(password)
+		if username:
+			instance.username = username
+		if password:
+			instance.password = make_password(password)
+		if email:
+			instance.email = email
+		if admin_flag:
+			instance.admin_flag = admin_flag
+		instance.save()
 		return instance
 
 	def create(self, validated_data):
