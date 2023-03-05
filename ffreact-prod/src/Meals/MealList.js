@@ -7,7 +7,7 @@ import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
 import './MealList.css'
 
-import {Box} from '@mui/material'
+import {Box, Typography} from '@mui/material'
 import NewModularDatagrid from '../components/NewModularDatagrid.js'
 
 // Meal List Component
@@ -57,17 +57,21 @@ export default function MealList() {
 
     // The HTML structure of this component
     return (
-      <Box sx={{height: '70vh'}}>
-        <NewModularDatagrid
-          apiEndpoint={'mealplans'}
-          columns={columns}
-          keyFieldName={'m_id'}
-          entryName={'Planned Meal'}
-          AddFormComponent={MealPlanForm}
-          // searchField={''}
+      <Fragment>
+        <Typography variant='h5'>Meal Plans</Typography>
+        <Box sx={{height: '70vh'}}>
+          <NewModularDatagrid
+            apiEndpoint={'mealplans'}
+            columns={columns}
+            keyFieldName={'m_id'}
+            entryName={'Planned Meal'}
+            AddFormComponent={MealPlanForm}
+            // searchField={''}
 
-        ></NewModularDatagrid>
-      </Box>
+          ></NewModularDatagrid>
+        </Box>
+      </Fragment>
+      
 
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         // <div class='table-div'>
