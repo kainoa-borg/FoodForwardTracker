@@ -193,7 +193,7 @@ export default function Recipe(props) {
         if (isAdding) {
             axios({
                 method: "POST",
-                url:"http://localhost:8000/api/mealrecipes/",
+                url:"http://4.236.185.213:8000/api/mealrecipes/",
                 data: r_data,
             }).then((response)=>{
                 console.log('success!')
@@ -210,7 +210,7 @@ export default function Recipe(props) {
         else {
             axios({
                 method: "PATCH",
-                url:"http://localhost:8000/api/mealrecipes/" + recipeData.r_num + '/',
+                url:"http://4.236.185.213:8000/api/mealrecipes/" + recipeData.r_num + '/',
                 data: r_data,
             }).then((response)=>{
                 console.log('success!')
