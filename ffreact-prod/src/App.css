@@ -4,6 +4,7 @@
   
   .menu {
     position: absolute;
+    z-index: 9999;
   
     list-style-type: none;
     margin: 5px 0;
@@ -28,7 +29,7 @@
     height: 100%;
     text-align: left;
   
-    background: none;
+    /* background: none; */
     color: inherit;
     border: none;
     padding: 5px;
