@@ -16,6 +16,7 @@
   
   .menu > li {
     margin: 0;
+    transition: all .5s ease;
   
     background-color: white;
   }

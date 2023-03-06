@@ -11,7 +11,7 @@ import Dropdown from './components/Dropdown';
 
 const cardStyle = {
     height: '100%',
-    borderWidth: '.1rem',
+    borderWidth: '.15rem',
 }
 
 const LandingPage = (props) => {

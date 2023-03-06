@@ -1,5 +1,5 @@
-import { Button, Typography, Box, Grid, Checkbox, Snackbar, FormControlLabel, TextField, InputLabel } from "@mui/material";
-import React, {useState, useEffect, useCallback} from 'react';
+import { Button, Typography, Box, Grid, Checkbox, Snackbar, FormControlLabel, TextField, InputLabel, Paper } from "@mui/material";
+import React, {useState, useEffect, useCallback, Fragment} from 'react';
 import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
 import { Stack } from "@mui/material";
 import axios from 'axios'
@@ -12,6 +12,7 @@ import RecipeInstForm from './RecipeInstForm.js'
 import RecipeIngList from "./RecipeIngList.js"
 
 import DataGridDialog from '../components/DatagridDialog.js'
+import { number } from "yup";
 
 export default function Recipe(props) {
     // If recipeData prop is passed, use that, otherwise use empty recipeData
@@ -28,7 +29,6 @@ export default function Recipe(props) {
         const [selectDialogOpen, setSelectDialogOpen] = useState(false);
 
         const setIngID = (ingName, ingID, unit) => {
-            //api.current.updateRows([{ri_id: params.id, ingredient_name: ingName, ri_ing: ingID, unit: unit}]);
             const {id, value, field} = params;
             api.current.setEditCellValue({id, field: 'ingredient_name', value: ingName});
             api.current.setEditCellValue({id, field: 'ri_ing', value: ingID});
@@ -54,11 +54,11 @@ export default function Recipe(props) {
             width: 100,
             type: 'string',
             editable: true,
-            // renderEditCell: (params) => {
-            //     return (
-            //         <IngredientNameEditCell {...params}/>
-            //     )
-            // }
+            renderEditCell: (params) => {
+                return (
+                    <IngredientNameEditCell {...params}/>
+                )
+            }
         },
         {
             field: 'amt',
@@ -74,19 +74,19 @@ export default function Recipe(props) {
             type: 'string',
             editable: true,
         },
-        {
-            field: 'prep',
-            headerName: 'Prep',
-            width: 80,
-            type: 'string',
-            editable: true,
-        },
+        // {
+        //     field: 'prep',
+        //     headerName: 'Prep',
+        //     width: 80,
+        //     type: 'string',
+        //     editable: true,
+        // },
         {
             field: 'ri_ing',
             headerName: '',
             width: 0,
             type: 'number',
-            editable: true
+            editable: false
         }
     ]
 
@@ -95,12 +95,6 @@ export default function Recipe(props) {
             field: 'pkg_type',
             headerName: 'Packaging',
             width: 200,
-            editable: true
-        },
-        {
-            field: 'amt',
-            headerName: 'Qty',
-            width: 70,
             editable: true
         },
     ]
@@ -122,7 +116,7 @@ export default function Recipe(props) {
             field: 'stn_name',
             headerName: 'Station',
             width: 100,
-            editale: true
+            editable: true
         },
     ]
 
@@ -141,16 +135,6 @@ export default function Recipe(props) {
     const handleCloseClick = () => {
         // Return to recipe list when close is clicked
         setCurrPage(<RecipePage setCurrPage={setCurrPage}></RecipePage>)
-    }
-
-    const RecipeImage = (props) => {
-        // Replace image with a prompt if undefined
-        if (!(props.image_source === undefined)) {
-            return (<img style={{width: '30vw'}} src={props.image_source}></img>);
-        }
-        else {
-            return (<Typography>Enter a recipe image</Typography>)
-        }
     }
 
     const handleImageUpload = (event, apiEndpoint) => {
@@ -234,100 +218,128 @@ export default function Recipe(props) {
         setM_S(event.target.checked ? 1 : 0);
     }
 
-    const dummySubmit = (event) => {
-        event.preventDefault();
+    const RecipeImage = (props) => {
+        console.log(props.image_source);
+        // Replace image with a prompt if undefined
+        if (!(props.image_source === undefined)) {
+            return (<img style={{width: '30vw'}} src={props.image_source}></img>);
+        }
+        else {
+            return (<Typography>Enter a recipe image</Typography>)
+        }
+    }
+
+    const RecipeCard = (props) => {
+        console.log(props.image_source);
+        // Replace image with a prompt if undefined
+        if (!(props.image_source === undefined)) {
+            return (<iframe style={{width: '30vw'}} src={props.image_source}></iframe>);
+        }
+        else {
+            return (<Typography>Enter a recipe image</Typography>)
+        }
     }
 
     return (
-        <div>
-        <form onSubmit={dummySubmit}>
-        
-        {/* 'Close' button that goes back to recipe list */}
-        <Button color='lightGreen' variant='contained' onClick={handleCloseClick}><Typography variant='h6'>Close</Typography></Button>
-        
-        {/* 'Save' button that saves recipe data */}
-        <Button color='lightGreen' variant='contained' type={'submit'} onClick={handleSaveClick}><Typography variant='h6'>Save</Typography></Button>
-
-        {/* Recipe Page */}
-        <Grid container justifyContent='space-between' direction='row'>
+        <Fragment>
             
-            {/* Recipe Image and Card Stack */}
-            <Stack item spacing={3}>
-                <TextField required label={'Recipe Name'} onChange={handleNameChange} value={recipeName}/>
-                <FormControlLabel control={<Checkbox checked={m_s===1 ? true : false} onChange={handleMealSnackChange}/>} label="Meal Recipe?"/>
-                <RecipeImage image_source={recipeData.r_img_path}/>
-                <Button color='lightGreen' variant='contained' component='label'>
-                    Upload Image
-                    <input id='recipe_image' type='file' accept='.jpg' onChange={(event) => handleImageUpload(event, 'mealrecipe-image')} hidden></input>
-                </Button>
-                <RecipeImage image_source={recipeData.r_card_path}/>
-                <Button color='lightGreen' variant='contained' component='label'>
-                    Upload Recipe Card
-                    <input id='recipe_card' type='file' accept='.jpg,.pdf,.doc,.docx' onChange={(event) => handleImageUpload(event, 'mealrecipe-card')} hidden></input>
-                </Button>
-            </Stack>
 
-            {/* Recipe Info Lists Stack */}
-            <Stack item spacing={10}>
-                <Box>
-                    <Typography variant='h6'>Ingredients</Typography>
-                    <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
-                        <ModularRecipeDatagrid 
-                            rows={ingredientRows} 
-                            setRows={setIngredientRows}
-                            columns={ingredientsColumns}
-                            addFormComponent={RecipeIngForm}
-                            keyFieldName={'ri_id'}
-                            searchField={'ingredient_name'}
-                            entryName={'Recipe Ingredient'}
-                        ></ModularRecipeDatagrid>
+            <Box component={Paper} elevation={5} sx={{paddingLeft: '2%', paddingRight: '2%', paddingTop: '2%', paddingBottom: '2%'}}>
+            <form onSubmit={(event) => event.preventDefault()}>
+            
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <Typography variant='h5'>{isAdding ? 'Add ' : 'Edit '}Recipe</Typography>
+                <div>
+                    {/* 'Save' button that saves recipe data */}
+                    <Button color='lightGreen' variant='contained' type={'submit'} onClick={handleSaveClick}><Typography variant='h6'>Save</Typography></Button>
+                    {/* 'Close' button that goes back to recipe list */}
+                    <Button color='lightGreen' variant='contained' onClick={handleCloseClick}><Typography variant='h6'>Close</Typography></Button>    
+                </div>
+            </div>
+            
+
+            {/* Recipe Page */}
+            <Grid container justifyContent='space-between' direction='row' sx={{paddingTop: '2%'}}>
+                
+                {/* Recipe Image and Card Stack */}
+                <Stack item spacing={3}>
+                    <TextField required label={'Recipe Name'} onChange={handleNameChange} value={recipeName}/>
+                    <FormControlLabel control={<Checkbox checked={m_s===1 ? true : false} onChange={handleMealSnackChange}/>} label="Meal Recipe?"/>
+                    <RecipeImage image_source={recipeData.r_img_path}/>
+                    <Button color='lightBlue' variant='contained' component='label'>
+                        Upload Image
+                        <input id='recipe_image' type='file' accept='.jpg' onChange={(event) => handleImageUpload(event, 'mealrecipe-image')} hidden></input>
+                    </Button>
+                    <RecipeCard image_source={recipeData.r_card_path}/>
+                    <Button color='lightBlue' variant='contained' component='label'>
+                        Upload Recipe Card
+                        <input id='recipe_card' type='file' accept='.jpg,.pdf,.doc,.docx' onChange={(event) => handleImageUpload(event, 'mealrecipe-card')} hidden></input>
+                    </Button>
+                </Stack>
+
+                {/* Recipe Info Lists Stack */}
+                <Stack item spacing={10}>
+                    <Box>
+                        <Typography variant='h6'>Ingredients</Typography>
+                        <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
+                            <ModularRecipeDatagrid 
+                                rows={ingredientRows} 
+                                setRows={setIngredientRows}
+                                columns={ingredientsColumns}
+                                addFormComponent={RecipeIngForm}
+                                keyFieldName={'ri_id'}
+                                searchField={'ingredient_name'}
+                                entryName={'Recipe Ingredient'}
+                            ></ModularRecipeDatagrid>
+                        </Box>
                     </Box>
-                </Box>
-                <Box>
-                    <Typography variant='h6'>Packaging</Typography>
-                    <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
-                        <ModularRecipeDatagrid 
-                            rows={packagingRows}
-                            columns={packagingColumns}
-                            setRows={setPackagingRows}
-                            addFormComponent={RecipePkgForm}
-                            keyFieldName={'rp_id'}
-                            searchField={'pkg_type'}
-                            entryName={'Recipe Packaging'}
-                        ></ModularRecipeDatagrid>
-                    </Box>    
-                </Box>
-                <Box>
-                    <Typography variant='h6'>Instructions</Typography>
-                    <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
-                        <ModularRecipeDatagrid 
-                            rows={instructionRows}
-                            columns={instructionColumns} 
-                            setRows={setInstructionRows}
-                            addFormComponent={RecipeInstForm}
-                            keyFieldName={'step_no'}
-                            searchField={'step_inst'}
-                            entryName={'Instruction Step'}
-                        ></ModularRecipeDatagrid>
+                    <Box>
+                        <Typography variant='h6'>Packaging</Typography>
+                        <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
+                            <ModularRecipeDatagrid 
+                                rows={packagingRows}
+                                columns={packagingColumns}
+                                setRows={setPackagingRows}
+                                addFormComponent={RecipePkgForm}
+                                keyFieldName={'rp_id'}
+                                searchField={'pkg_type'}
+                                entryName={'Recipe Packaging'}
+                            ></ModularRecipeDatagrid>
+                        </Box>    
                     </Box>
-                </Box>
-            </Stack>
-        </Grid>
-        {/* Save Click 'request sent' Notice */}
-        <Snackbar
-            open={updateSBOpen}
-            autoHideDuration={3000}
-            onClose={(event, reason) => handleSBClose(event, reason, setUpdateSBOpen)}
-            message="Saving..."
-        />
-        {/* Save Complete 'request success' Notice */}
-        <Snackbar
-            open={updateDoneSBOpen}
-            autoHideDuration={3000}
-            onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
-            message="Changes saved!"
-        />
-        </form>
-        </div>
+                    <Box>
+                        <Typography variant='h6'>Instructions</Typography>
+                        <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
+                            <ModularRecipeDatagrid 
+                                rows={instructionRows}
+                                columns={instructionColumns} 
+                                setRows={setInstructionRows}
+                                addFormComponent={RecipeInstForm}
+                                keyFieldName={'step_no'}
+                                searchField={'step_inst'}
+                                entryName={'Instruction Step'}
+                            ></ModularRecipeDatagrid>
+                        </Box>
+                    </Box>
+                </Stack>
+            </Grid>
+            {/* Save Click 'request sent' Notice */}
+            <Snackbar
+                open={updateSBOpen}
+                autoHideDuration={3000}
+                onClose={(event, reason) => handleSBClose(event, reason, setUpdateSBOpen)}
+                message="Saving..."
+            />
+            {/* Save Complete 'request success' Notice */}
+            <Snackbar
+                open={updateDoneSBOpen}
+                autoHideDuration={3000}
+                onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
+                message="Changes saved!"
+            />
+            </form>
+            </Box>
+        </Fragment>
+        
     )
 }
