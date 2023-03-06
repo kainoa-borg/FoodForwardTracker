@@ -278,19 +278,11 @@ export default function NewModularDatagrid(props) {
         )
     }
 
-    const SearchFunction = (props) => {
-        if (props.searchField) {
-            return (
-                <SearchToolBar sx={{marginLeft: 'auto'}} setFilterModel={setFilterModel} searchField={searchField}/>
-            )
-        }
-    }
-
     // The HTML structure of this component
     return(
         <Fragment>
             <Stack direction='row' sx={{width: '100%'}}>
-                <SearchFunction searchField={searchField} />
+                {searchField ? <SearchToolBar setFilterModel={setFilterModel} searchField={searchField} /> : <></>}
             </Stack>
             <Box sx={{display: 'flex', height: '100%'}}>
                 <Box sx={{flexGrow: 1}}>
