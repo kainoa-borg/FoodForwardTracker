@@ -91,6 +91,17 @@ const MealPlanForm = (props) => {
       return <>loading...</>
     }
 
+    // Format recipes into valueOptions
+    const getRecipeOptions = (m_or_s) => {
+      let rOptions = recipeList.map((recipe) => {
+        if (m_or_s === 'meal' && recipe.m_s === 1)
+          return(<MenuItem value={recipe.r_num}>{recipe.r_name}</MenuItem>)
+        else if (m_or_s === 'snack' && recipe.m_s === 0)
+          return(<MenuItem value={recipe.r_num}>{recipe.r_name}</MenuItem>)
+      });
+      return rOptions.filter((element) => {return element !== undefined});
+    }
+
     // HTML structure of this component
     return (
       <form onSubmit={handleSubmit}>
@@ -102,16 +113,12 @@ const MealPlanForm = (props) => {
 
             <InputLabel htmlFor="meal_r_num">Meal: </InputLabel>
             <Select name='meal_r_num' required meal={meal.meal_r_num} onChange={handleFormChange}>
-              {recipeList.map((recipe) => {
-                return(<MenuItem value={recipe.r_num}>{recipe.r_name}</MenuItem>)
-              })}
+              {getRecipeOptions('meal')}
             </Select>
             
             <InputLabel htmlFor='snack_r_num'>Snack: </InputLabel>
             <Select name='snack_r_num' required value={meal.snack_r_num} onChange={handleFormChange}>
-              {recipeList.map((recipe) => {
-                return(<MenuItem value={recipe.r_num}>{recipe.r_name}</MenuItem>)
-              })}
+              {getRecipeOptions('snack')}
             </Select>
 
             <Button color='darkGreen' variant='contained' type='Submit'>Add</Button>
