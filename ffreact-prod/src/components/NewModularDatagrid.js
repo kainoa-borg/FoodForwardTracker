@@ -41,6 +41,8 @@ export default function NewModularDatagrid(props) {
         }                     
     ];
 
+    const columnGroupingModel = props.columnGroupingModel;
+    
     // Row data of the table
     const [tableData, setTableData] = useState([]);
 
@@ -302,7 +304,8 @@ export default function NewModularDatagrid(props) {
                     //rowsPerPageOptions={[5]}
                     disableSelectionOnClick
                     // disableVirtualization
-                    experimentalFeatures={{ newEditingApi: true }}>
+                    experimentalFeatures={{ newEditingApi: true , columnGrouping: true }}
+                    columnGroupingModel={columnGroupingModel}>
                     </DataGrid>
                 </Box>
                 {/* Add Form Dialog */}

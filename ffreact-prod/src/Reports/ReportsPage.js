@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 import { Button, CssBaseline } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-import Dropdown from './components/Dropdown'
+import Dropdown from '../components/Dropdown'
 
-import HouseholdsReport from './Households/HouseholdsReport.js'
-import IngredientsReport from './Ingredients/IngredientsReport.js'
-import PackagingReport from './Packaging/PackagingReport.js'
-import PurchasingReport from './Reports/PurchasingReport.js'
-import PackagingReturns from './Reports/PackagingReturns.js'
-import MealPlanReport from './Reports/MealPlanReport.js'
-import MealHistory from './Reports/MealHistory.js'
-import CostTotals from './Reports/CostTotals.js'
+import HouseholdsReport from './HouseholdsReport.js'
+import IngredientsReport from '../Ingredients/IngredientsReport.js'
+import PackagingReport from './PackagingReport.js'
+import PurchasingReport from './PurchasingReport.js'
+import PackagingReturns from './PackagingReturns.js'
+import MealPlanReport from './MealPlanReport.js'
+import MealHistory from './MealHistory.js'
+import CostTotals from './CostTotals.js'
 
 const theme = createTheme({
     palette: {

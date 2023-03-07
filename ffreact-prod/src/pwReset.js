@@ -71,4 +71,4 @@ const pwReset = (props) => {
     );
 }
 
-export default LoginPage;
+export default pwReset;
