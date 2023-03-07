@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { Button } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
-import Dropdown from './components/Dropdown'
-import StationList from './Stations/StationList.js'
-import RecipePage from './Recipe/RecipePage.js'
-import Recipe from './Recipe/Recipe.js'
-import MealPlan from './Meals/MealList.js'
-import MealPlanPage from './Meals/MealPlanPage.js'
+import Dropdown from '../components/Dropdown'
+import StationList from '../Stations/StationList.js'
+import RecipePage from '../Recipe/RecipePage.js'
+import Recipe from '../Recipe/Recipe.js'
+import MealPlan from './MealList.js'
+import MealPlanPage from './MealPlanPage.js'
 
 
 const theme = createTheme({

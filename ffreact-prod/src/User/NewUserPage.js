@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import axios from 'axios'
 import { Typography, Stack, Button, Box, Card, Grid, TextField} from "@mui/material"
-import ffLogo from './Images/ff_logo.jpg'
+import ffLogo from '../Images/ff_logo.jpg'
 
 // Login Page Component
 // Takes handlePageClick callback function to enable page switching when login is completed
