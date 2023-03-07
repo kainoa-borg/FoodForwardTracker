@@ -7,7 +7,7 @@ import ReportsPage from '../ReportsPage.js';
 import { Box, Button, setAddFormOpen } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import { GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid';
-import { Toolbar } from 'material';
+import { Toolbar } from '@mui/icons-material';
 import ReusableTable from '../ReusableTable.js'
 // import Error from '../Error.js'
 // import DisplayMessage from '../DisplayMessage.js'
@@ -93,7 +93,7 @@ export default function IngredientReport() {
 
     // The HTML structure of this component
     return (
-        <Box sx={{height: '100%'}}>
+        <Box sx={{height: '80%'}}>
             {/* Show a row for each ingredient in ingredientts.*/}
             <DataGrid
                 columns={columns}
