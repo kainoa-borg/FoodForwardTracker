@@ -375,7 +375,7 @@ class Recipes(models.Model):
 class StationIngredients(models.Model):
     si_id = models.SmallIntegerField(primary_key=True)
     si_ing = models.ForeignKey(Ingredients, models.CASCADE, blank=True, null=True)
-    si_station_name = models.ForeignKey('Stations', models.CASCADE, db_column='si_station_name', blank=True, null=True)
+    # si_station_name = models.ForeignKey('Stations', models.CASCADE, db_column='si_station_name', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -385,7 +385,7 @@ class StationIngredients(models.Model):
 class StationPackaging(models.Model):
     sp_id = models.SmallIntegerField(primary_key=True)
     sp_pkg = models.ForeignKey(Packaging, models.CASCADE, blank=True, null=True)
-    sp_station_name = models.ForeignKey('Stations', models.CASCADE, db_column='sp_station_name', blank=True, null=True)
+    # sp_station_name = models.ForeignKey('Stations', models.CASCADE, db_column='sp_station_name', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -393,8 +393,10 @@ class StationPackaging(models.Model):
 
 
 class Stations(models.Model):
-    stn_name = models.CharField(primary_key=True, max_length=50)
-    num_servings = models.SmallIntegerField(blank=True, null=True)
+    stn_num = models.IntegerField(primary_key=True)
+    stn_name = models.CharField(max_length=50, blank=True, null=False)
+    stn_desc = models.TextField(blank=True, null=False)
+    # num_servings = models.SmallIntegerField(blank=True, null=True)
 
     class Meta:
         managed = False

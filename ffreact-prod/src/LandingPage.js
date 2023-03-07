@@ -65,7 +65,7 @@ const LandingPage = (props) => {
                                 </ul>
                             </div>
                             
-                            <RestaurantIcon fontSize='large'></RestaurantIcon>
+                            <RestaurantIcon color='darkBlue' fontSize='large'></RestaurantIcon>
                         </Stack>
                     </CardContent>
                     </CardActionArea>
@@ -94,7 +94,7 @@ const LandingPage = (props) => {
                                         <li><Typography component='p' variant='body1'>Add/Update ingredients and packaging</Typography></li>
                                     </ul>
                                 </div>
-                                <InventoryIcon fontSize='large'></InventoryIcon>
+                                <InventoryIcon color='darkBlue' fontSize='large'></InventoryIcon>
                             </Stack>
                         </CardContent>
                     </CardActionArea>
@@ -124,7 +124,7 @@ const LandingPage = (props) => {
                                         <li><Typography component='p' variant='body1'>Print or send reports via email</Typography></li>
                                     </ul>
                                 </div>
-                                <AssessmentIcon fontSize='large'></AssessmentIcon>
+                                <AssessmentIcon color='darkBlue' fontSize='large'></AssessmentIcon>
                             </Stack>
                         </CardContent>
                     </CardActionArea>
@@ -162,7 +162,7 @@ const LandingPage = (props) => {
                                         <li><Typography component='p' variant='body1'>Add/edit users</Typography></li>
                                     </ul>
                                 </div>
-                                <AdminPanelSettingsIcon fontSize='large'></AdminPanelSettingsIcon>
+                                <AdminPanelSettingsIcon color='darkBlue' fontSize='large'></AdminPanelSettingsIcon>
                             </Stack>
                         </CardContent>
                     </CardActionArea>

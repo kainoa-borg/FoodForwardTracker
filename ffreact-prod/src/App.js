@@ -126,19 +126,20 @@ const App = () => {
                 contrastText: '#fff'
             },
             darkGreen: {
-                main: '#093B31',
+                main: '#5f5f5f',
                 contrastText: '#fff'
             },
             lightBlue: {
-                main: '#3E8477',
+                main: '#5f5f5f',
                 contrastText: '#fff'
             },
             lightOrange: {
-                main: '#A35426',
+                main: '#5f5f5f',
                 contrastText: '#fff'
             },
             darkBlue: {
-                main: '#070D3A',
+                // main: '#404851',
+                main: '#5f5f5f',
                 contrastText: '#fff'
             }
         }

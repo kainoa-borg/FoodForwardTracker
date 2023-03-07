@@ -22,41 +22,48 @@ class HhServingsSerializer(ModelSerializer):
     
 
 class StationsSerializer(ModelSerializer):
-    hh_servings = HhServingsSerializer(required=False, allow_null=True, many=True)
+    # hh_servings = HhServingsSerializer(required=False, allow_null=True, many=True)
     class Meta():
         model = Stations
-        fields = ('stn_name', 'hh_servings')
+        fields = ('stn_num', 'stn_name', 'stn_desc')
+        read_only_fields = ('stn_num',)
 
     def create(self, validated_data):
-        hh_servings = validated_data.pop('households')
-        hh_list = Stations.objects.create(**validated_data)
-        for item in hh_servings:
-            hh_model = Households.objects.create(**item)
-        return hh_list
-    def update(self, hh_instance, validated_data):
+        # hh_servings = validated_data.pop('households')
+        # hh_list = Stations.objects.create(**validated_data)
+        # for item in hh_servings:
+            # hh_model = Households.objects.create(**item)
+        # return hh_list
+    # def update(self, hh_instance, validated_data):
         # Create nested allergy objects
-        hh_servings = validated_data.pop('hh_allergies')
-        Households.objects.all().filter(a_hh_name = hh_instance).delete()
-        for item in hh_servings:
-            hh_model = Households.objects.create(**item)
-        logging.warning(hh_instance.hh_name)
-        return super().update(hh_instance, validated_data)
+        # hh_servings = validated_data.pop('hh_allergies')
+        # Households.objects.all().filter(a_hh_name = hh_instance).delete()
+        # for item in hh_servings:
+            # hh_model = Households.objects.create(**item)
+        # logging.warning(hh_instance.hh_name)
+        # return super().update(hh_instance, validated_data)
 
-        for hh in hh_list:
-                latest_id = Households.objects.latest('hh_name').hh_name
-                hh['hh_name'] = latest_id
-                tmp = Households.objects.create(**hh)
-                stn_instance[hh] = tmp['hh_name', 'num_adult', 'hh_name', 'num_child_gt_6', 'num_child_lt_6', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag']
+        # for hh in hh_list:
+                # latest_id = Households.objects.latest('hh_name').hh_name
+                # hh['hh_name'] = latest_id
+                # tmp = Households.objects.create(**hh)
+                # stn_instance[hh] = tmp['hh_name', 'num_adult', 'hh_name', 'num_child_gt_6', 'num_child_lt_6', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag']
 
-        hh_portions = validated_data.pop('hh_servings')
+        # hh_portions = validated_data.pop('hh_servings')
+        if Stations.objects.count() < 1:
+             latest_key = 0
+        else:
+            latest_key = Stations.objects.latest('stn_num').stn_num
+            
+        validated_data['stn_num'] = latest_key + 1
         stn_instance = Stations.objects.create(**validated_data)
-        if hh_portions:
-            Households.objects.all().filter(paused_flag = 0).delete()
-            for hh in hh_portions:
-                latest_id = Households.objects.latest('hh_name').hh_name
-                hh['hh_name'] = latest_id
-                tmp = Households.objects.create(**hh)
-                stn_instance[hh] = tmp['hh_name', 'num_adult', 'hh_name', 'num_child_gt_6', 'num_child_lt_6', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag']
+        # if hh_portions:
+            # Households.objects.all().filter(paused_flag = 0).delete()
+            # for hh in hh_portions:
+                # latest_id = Households.objects.latest('hh_name').hh_name
+                # hh['hh_name'] = latest_id
+                # tmp = Households.objects.create(**hh)
+                # stn_instance[hh] = tmp['hh_name', 'num_adult', 'hh_name', 'num_child_gt_6', 'num_child_lt_6', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag']
         return stn_instance
         
     ##def update(self, ing_instance, validated_data):

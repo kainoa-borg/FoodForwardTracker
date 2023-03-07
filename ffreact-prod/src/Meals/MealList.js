@@ -49,7 +49,6 @@ export default function MealList() {
           return {value: recipe.r_num, label: recipe.r_name};
       });
       return rOptions.filter((element) => {return element !== undefined});
-
     }
 
     const recipeFormatter = (params) => { if (params.value) {return recipeList.find((recipe) => recipe.r_num === params.value).r_name;}}

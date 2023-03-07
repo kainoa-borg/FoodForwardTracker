@@ -101,7 +101,7 @@ export default function Recipe(props) {
 
     const instructionColumns = [
         {
-            field: 'step_no',
+            field: 'stn_name',
             headerName: 'Step #',
             width: 80,
             editable: true
@@ -243,7 +243,7 @@ export default function Recipe(props) {
     return (
         <Fragment>
             
-
+            {/* Recipe Header */}
             <Box component={Paper} elevation={5} sx={{paddingLeft: '2%', paddingRight: '2%', paddingTop: '2%', paddingBottom: '2%'}}>
             <form onSubmit={(event) => event.preventDefault()}>
             
@@ -258,7 +258,7 @@ export default function Recipe(props) {
             </div>
             
 
-            {/* Recipe Page */}
+            {/* Recipe Info Lists */}
             <Grid container justifyContent='space-between' direction='row' sx={{paddingTop: '2%'}}>
                 
                 {/* Recipe Image and Card Stack */}
