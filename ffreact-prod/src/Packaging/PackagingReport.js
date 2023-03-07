@@ -44,8 +44,6 @@ export default function PackagingReport() {
         { field: 'pref_psupplier', headerName: 'Supplier', width: 80, valueFormatter: ({ value }) => value.s_name },
         { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
         { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
-        { field: 'tmp_1', headerName: 'Date Used', width: 100, type: 'date', editable: true },
-        { field: 'tmp_2', headerName: 'Units Used', width: 100, type: 'number', editable: true },
     ]
 
     if (packaging === undefined) {
