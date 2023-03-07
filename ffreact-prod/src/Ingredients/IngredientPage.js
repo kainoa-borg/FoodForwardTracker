@@ -3,6 +3,7 @@ import axios from 'axios'
 import { Box } from '@mui/system';
 import IngredientForm from './IngredientForm.js'
 import NewModularDatagrid from '../components/NewModularDatagrid.js';
+import ModularSelect from '../components/ModularSelect.js'
 import './IngredientList.css'
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -85,7 +86,7 @@ export default function IngredientPage() {
     }*/
     
     const columns = [
-        { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
+        { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true, renderEditCell: (params) => <ModularSelect options={ingredients} searchField={'ingredient_name'} selectedValue={params.value} isRequired={true}/> },
         { field: 'storage_type', headerName: 'Category', width: 150, editable: true },
         { field: 'pkg_type', headerName: 'Package Type', width: 120, editable: true },
         { field: 'unit', headerName: 'Measure', width: 90, editable: true },

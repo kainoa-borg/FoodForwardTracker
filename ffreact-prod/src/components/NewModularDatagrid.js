@@ -76,6 +76,7 @@ export default function NewModularDatagrid(props) {
     // Generalized Add Row
     const addEntry = (formData) => {
         // If a form doesn't take the latest key, it should be added for the datagrid
+        // console.log(formData);
         if (!formData[keyFieldName])
             formData[keyFieldName] = getLatestKey() + 1;
         console.log(formData);
@@ -119,7 +120,10 @@ export default function NewModularDatagrid(props) {
 
     // Generalized Update Row
     const processRowUpdate = (newRow) => {
-        const updatedRow = {...newRow, isNew: false};        
+        const updatedRow = {...newRow, isNew: false}; 
+        
+        console.log(newRow);
+
         axios({
             method: "PATCH",
             url:"http://"+apiIP+":8000/api/" + apiEndpoint + "/" + newRow[keyFieldName] +'/',
