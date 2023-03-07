@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import React from 'react'
-import { Grid, Typography, Card, Input, InputLabel, Button} from '@mui/material';
+import { Grid, Typography, Card, Input, InputLabel, Button, TextField} from '@mui/material';
 
 // Kainoa Borges
 // Angela McNeese
@@ -15,8 +15,8 @@ const RecipeInstForm = (props) => {
     
     // The state of this Ingredient Form with each attribute of Ingredient
     const [instruction, setInstruction] = useState({
-        step_inst: '',
         stn_name: '',
+        stn_desc: '',
     });
 
     // Handle form submission (prevent refresh, pass ingredient to addIngredient, and clear form state)
@@ -59,11 +59,11 @@ const RecipeInstForm = (props) => {
             <Typography variant='h5'>Add Instruction</Typography>
             <Grid container direction='row' spacing={4}>
             <Grid item>
-                <InputLabel>Step Instruction: </InputLabel>
-                <Input name='step_inst' type="text" value={instruction.step_inst} onChange={handleFormChange}/>
-
-                <InputLabel>Station: </InputLabel>
+                <InputLabel>Station Name: </InputLabel>
                 <Input name='stn_name' type="text" value={instruction.stn_name} onChange={handleFormChange}/>
+
+                <InputLabel>Station Description: </InputLabel>
+                <TextField name='stn_desc' multiline rows={4} value={instruction.stn_desc} onChange={handleFormChange}/>
             </Grid>
             <Grid item>
                 <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>

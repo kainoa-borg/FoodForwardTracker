@@ -396,6 +396,7 @@ class Stations(models.Model):
     stn_num = models.IntegerField(primary_key=True)
     stn_name = models.CharField(max_length=50, blank=True, null=False)
     stn_desc = models.TextField(blank=True, null=False)
+    stn_recipe_num = models.ForeignKey(Recipes, models.CASCADE, blank=False, null=False, related_name='r_stations', db_column='stn_recipe_num')
     # num_servings = models.SmallIntegerField(blank=True, null=True)
 
     class Meta:

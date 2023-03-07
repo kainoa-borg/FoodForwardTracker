@@ -99,30 +99,30 @@ export default function Recipe(props) {
         },
     ]
 
-    const instructionColumns = [
+    const stationColumns = [
         {
             field: 'stn_name',
-            headerName: 'Step #',
-            width: 80,
-            editable: true
-        },
-        {
-            field: 'step_inst',
-            headerName: 'Instruction',
+            headerName: 'Station Name',
             width: 200,
             editable: true
         },
         {
-            field: 'stn_name',
-            headerName: 'Station',
-            width: 100,
+            field: 'stn_desc',
+            headerName: 'Description',
+            width: 300,
             editable: true
         },
+        // {
+        //     field: 'stn_num',
+        //     headerName: '',
+        //     width: 0,
+        //     editable: false
+        // },
     ]
 
     const [ingredientRows, setIngredientRows] = useState(recipeData.r_ingredients);
     const [packagingRows, setPackagingRows] = useState(recipeData.r_packaging)
-    const [instructionRows, setInstructionRows] = useState(recipeData.r_instructions)
+    const [stationRows, setStationRows] = useState(recipeData.r_stations)
     const [m_s, setM_S] = useState(recipeData.m_s);
     const dietRows = recipeData.r_diets
     const allergyRows = recipeData.r_allergies
@@ -171,7 +171,7 @@ export default function Recipe(props) {
 
     const handleSaveClick = () => {
         console.log(recipeData);
-        const r_data = {...recipeData, r_name: recipeName, r_ingredients: ingredientRows, r_packaging: packagingRows, r_instructions: instructionRows, m_s: m_s}
+        const r_data = {...recipeData, r_name: recipeName, r_ingredients: ingredientRows, r_packaging: packagingRows, r_stations: stationRows, m_s: m_s}
         console.log(JSON.stringify(r_data));
         setUpdateSBOpen(true);
         if (isAdding) {
@@ -308,16 +308,16 @@ export default function Recipe(props) {
                         </Box>    
                     </Box>
                     <Box>
-                        <Typography variant='h6'>Instructions</Typography>
+                        <Typography variant='h6'>Station</Typography>
                         <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
                             <ModularRecipeDatagrid 
-                                rows={instructionRows}
-                                columns={instructionColumns} 
-                                setRows={setInstructionRows}
+                                rows={stationRows}
+                                columns={stationColumns} 
+                                setRows={setStationRows}
                                 addFormComponent={RecipeInstForm}
-                                keyFieldName={'step_no'}
-                                searchField={'step_inst'}
-                                entryName={'Instruction Step'}
+                                keyFieldName={'stn_num'}
+                                searchField={'stn_name'}
+                                entryName={'Station'}
                             ></ModularRecipeDatagrid>
                         </Box>
                     </Box>

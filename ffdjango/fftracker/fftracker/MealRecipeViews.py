@@ -8,7 +8,7 @@ from rest_framework import status
 from PIL import Image
 import json
 
-from .models import Recipes, RecipeAllergies, RecipeDiets, RecipeIngredients, RecipeInstructions, RecipePackaging
+from .models import Recipes, RecipeAllergies, RecipeDiets, RecipeIngredients, Stations, RecipePackaging, RecipeInstructions
 from .IngredientViews import IngredientNameSerializer
 # Create your views here.
 
@@ -46,11 +46,12 @@ class RecipeIngredientSerializer(ModelSerializer):
         fields = ('ri_id', 'ingredient_name', 'amt', 'unit', 'prep')
         read_only_fields = ('ri_id',)
 
-class RecipeInstructionsSerializer(ModelSerializer):
+class RecipeStationSerializer(ModelSerializer):
     class Meta():
-        model = RecipeInstructions
+        model = Stations
         # depth = 1
-        fields = ('step_no', 'step_inst', 'stn_name')
+        fields = ('stn_num', 'stn_name', 'stn_desc')
+        read_only_fields = ('stn_num',)
 
 class RecipePackagingSerializer(ModelSerializer):
     rp_id = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -123,13 +124,13 @@ class RecipesSerializer(ModelSerializer):
     r_packaging = RecipePackagingSerializer(many=True)
     r_diets = RecipeDietsSerializer(many=True)
     r_allergies = AllergySerializer(many=True)
-    r_instructions = RecipeInstructionsSerializer(many=True)
+    r_stations = RecipeStationSerializer(many=True)
     m_s = serializers.IntegerField()
 
     class Meta():
         model = Recipes
         # depth = 1
-        fields = ('r_num', 'r_name', 'r_img_path', 'r_card_path', 'r_ingredients', 'r_packaging', 'r_diets', 'r_instructions', 'r_allergies', 'm_s')
+        fields = ('r_num', 'r_name', 'r_img_path', 'r_card_path', 'r_ingredients', 'r_packaging', 'r_diets', 'r_stations', 'r_allergies', 'm_s')
         read_only_fields = ('r_num',)
 
     def create(self, validated_data):
@@ -139,7 +140,7 @@ class RecipesSerializer(ModelSerializer):
         pkgs = validated_data.pop('r_packaging')
         diets = validated_data.pop('r_diets')
         allergies = validated_data.pop('r_allergies')
-        instructions = validated_data.pop('r_instructions')
+        stations = validated_data.pop('r_stations')
 
         recipe_instance = Recipes.objects.create(**validated_data)
 
@@ -158,11 +159,11 @@ class RecipesSerializer(ModelSerializer):
             diet['rd_id'] = latest_key + 1
             diet['rd_recipe_num'] = recipe_instance
             RecipeDiets(**diet).save()
-        for instruction in instructions:
-            latest_key = RecipeInstructions.objects.latest('inst_id').inst_id
-            instruction['inst_id'] = latest_key + 1
-            instruction['inst_recipe_num'] = recipe_instance
-            RecipeInstructions(**instruction).save()
+        for station in stations:
+            latest_key = Stations.objects.latest('stn_num').stn_num
+            station['stn_num'] = latest_key + 1
+            station['stn_recipe_num'] = recipe_instance
+            Stations(**station).save()
         for allergy in allergies:
             latest_key = RecipeAllergies.objects.latest('ra_id').ra_id
             allergy['ra_id'] = latest_key + 1
@@ -176,11 +177,11 @@ class RecipesSerializer(ModelSerializer):
         ings = validated_data.pop('r_ingredients')
         pkgs = validated_data.pop('r_packaging')
         diets = validated_data.pop('r_diets')
-        instructions = validated_data.pop('r_instructions')
+        stations = validated_data.pop('r_stations')
         allergies = validated_data.pop('r_allergies')
 		# ing_instance = Ingredients.objects.create(**validated_data)
 
-        RecipeIngredients.objects.all().filter(ri_recipe_num = recipe_instance).delete()
+        RecipeIngredients.objects.filter(ri_recipe_num = recipe_instance).delete()
         for ing in ings:
             if (RecipeIngredients.objects.count() > 0):
                 latest_id = RecipeIngredients.objects.latest('ri_id').ri_id +1
@@ -191,7 +192,7 @@ class RecipesSerializer(ModelSerializer):
             # raise serializers.ValidationError(usage)
             RecipeIngredients.objects.create(**ing)
         
-        RecipePackaging.objects.all().filter(rp_recipe_num = recipe_instance).delete()
+        RecipePackaging.objects.filter(rp_recipe_num = recipe_instance).delete()
         for pkg in pkgs:
             if (RecipePackaging.objects.count() > 0):
                 latest_id = RecipePackaging.objects.latest('rp_id').rp_id +1
@@ -202,7 +203,7 @@ class RecipesSerializer(ModelSerializer):
             # raise serializers.ValidationError(usage)
             RecipePackaging.objects.create(**pkg)
         
-        RecipeDiets.objects.all().filter(rd_recipe_num = recipe_instance).delete()
+        RecipeDiets.objects.filter(rd_recipe_num = recipe_instance).delete()
         for diet in diets:
             if (RecipeDiets.objects.count() > 0):
                 latest_id = RecipeDiets.objects.latest('rd_id').rd_id + 1
@@ -212,17 +213,17 @@ class RecipesSerializer(ModelSerializer):
             diet['rd_recipe_num'] = recipe_instance
             RecipeDiets.objects.create(**diet)
         
-        RecipeInstructions.objects.all().filter(inst_recipe_num = recipe_instance).delete()
-        for inst in instructions:
-            if (RecipeInstructions.objects.count() > 0):
-                latest_id = RecipeInstructions.objects.latest('inst_id').inst_id + 1
+        Stations.objects.filter(stn_recipe_num = recipe_instance).delete()
+        for station in stations:
+            if (Stations.objects.count() > 0):
+                latest_id = Stations.objects.latest('stn_num').stn_num + 1
             else:
                 latest_id = 0
-            inst['inst_id'] = latest_id
-            inst['inst_recipe_num'] = recipe_instance
-            RecipeInstructions.objects.create(**inst)
+            station['stn_num'] = latest_id
+            station['stn_recipe_num'] = recipe_instance
+            Stations.objects.create(**station)
         
-        RecipeAllergies.objects.all().filter(ra_recipe_num = recipe_instance).delete()
+        RecipeAllergies.objects.filter(ra_recipe_num = recipe_instance).delete()
         for allergy in allergies:
             if (RecipeAllergies.objects.count() > 0):
                 latest_id = RecipeAllergies.objects.latest('ra_id').ra_id + 1
@@ -272,7 +273,7 @@ class RecipeView(viewsets.ModelViewSet):
         # queryset = execute_query(query, keys)
         # serializer = RecipesSerializer(queryset)
         # return Response(serializer.data)
-        queryset = Recipes.objects.all().prefetch_related('r_ingredients').prefetch_related('r_packaging').prefetch_related('r_diets').prefetch_related('r_instructions').prefetch_related('r_allergies')
+        queryset = Recipes.objects.all().prefetch_related('r_ingredients').prefetch_related('r_packaging').prefetch_related('r_diets').prefetch_related('r_stations').prefetch_related('r_allergies')
         serializer = RecipesSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -285,7 +286,7 @@ class RecipeView(viewsets.ModelViewSet):
         # serializer = RecipesSerializer(queryset)
         # return Response(serializer.data)
     
-    queryset = Recipes.objects.all().prefetch_related('r_ingredients').prefetch_related('r_packaging').prefetch_related('r_diets').prefetch_related('r_instructions').prefetch_related('r_allergies')
+    queryset = Recipes.objects.all().prefetch_related('r_ingredients').prefetch_related('r_packaging').prefetch_related('r_diets').prefetch_related('r_stations').prefetch_related('r_allergies')
     serializer_class = RecipesSerializer
 
 class RecipeIngredientsView(viewsets.ViewSet):
