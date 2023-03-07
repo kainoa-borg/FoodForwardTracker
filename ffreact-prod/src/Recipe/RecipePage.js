@@ -42,7 +42,7 @@ export default function RecipePage(props) {
     const getDBRecipeData = (pk) => {
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/mealrecipes/" + pk + '/'
+            url:"http://4.236.185.213:8000/api/mealrecipes/" + pk + '/'
         }).then((response)=>{
         setRecipeData(response.data);
         }).catch((error) => {
