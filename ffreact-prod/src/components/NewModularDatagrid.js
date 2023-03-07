@@ -79,7 +79,7 @@ export default function NewModularDatagrid(props) {
         // console.log(formData);
         if (!formData[keyFieldName])
             formData[keyFieldName] = getLatestKey() + 1;
-        console.log(formData);
+        // console.log(formData);
         axios({
             method: 'POST',
             url:"http://"+apiIP+":8000/api/" + apiEndpoint + '/',
@@ -122,7 +122,7 @@ export default function NewModularDatagrid(props) {
     const processRowUpdate = (newRow) => {
         const updatedRow = {...newRow, isNew: false}; 
         
-        console.log(newRow);
+        // console.log(newRow);
 
         axios({
             method: "PATCH",
@@ -260,7 +260,7 @@ export default function NewModularDatagrid(props) {
                         horizontal: 'left',
                     }}
                 >
-                    <Typography onClick={() => console.log(deleteParams)}>Delete this entry?</Typography>
+                    <Typography>Delete this entry?</Typography>
                     {/* Confirm button fires deleteIngredient using row params state */}
                     <Button variant='contained' onClick={() => deleteEntry(deleteParams)}>Confirm</Button>
                 </Popover>

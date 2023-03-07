@@ -13,6 +13,7 @@ import RecipeIngList from "./RecipeIngList.js"
 
 import DataGridDialog from '../components/DatagridDialog.js'
 import { number } from "yup";
+import ModularSelect from "../components/ModularSelect.js";
 
 export default function Recipe(props) {
     // If recipeData prop is passed, use that, otherwise use empty recipeData
@@ -47,6 +48,26 @@ export default function Recipe(props) {
         )
     }
 
+    const [ingredients, setIngredients] = useState();
+    const getDBIngredients = () => {
+        axios({
+            method: "GET",
+            url:"http://4.236.185.213:8000/api/ingredient-inventory"
+        }).then((response)=>{
+            setIngredients(response.data);
+        }).catch((error) => {
+        if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
+    }
+
+    useEffect(() => {
+        getDBIngredients();
+    }, [])
+
     const ingredientsColumns = [
         {
             field: 'ingredient_name',
@@ -55,9 +76,20 @@ export default function Recipe(props) {
             type: 'string',
             editable: true,
             renderEditCell: (params) => {
-                return (
-                    <IngredientNameEditCell {...params}/>
-                )
+                axios({
+                    method: "GET",
+                    url:"http://4.236.185.213:8000/api/ingredient-inventory"
+                }).then((response)=>{
+                    return (
+                        <ModularSelect {...params} noDuplicates options={response.data} searchField={'ingredient_name'}/>
+                    )
+                }).catch((error) => {
+                if (error.response) {
+                    console.log(error.response);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                    }
+                });
             }
         },
         {

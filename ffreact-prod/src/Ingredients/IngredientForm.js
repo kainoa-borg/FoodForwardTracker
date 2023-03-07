@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react'
 import React from 'react'
 import axios from 'axios'
 import { Grid, Typography, Card, Input, InputLabel, Select, MenuItem, Button} from '@mui/material';
+import ModularSelect from '../components/ModularSelect.js';
 
 // Kainoa Borges
 // Angela McNeese
@@ -12,6 +13,7 @@ import { Grid, Typography, Card, Input, InputLabel, Select, MenuItem, Button} fr
 // Returns a form that can be used to define a new ingredient object in a IngredientList
 const IngredientForm = (props) => {
   const [supplierList, setSupplierList] = useState();
+  const [ingredients, setIngredients] = useState();
   const addEntry = props.addEntry;
   const handleClose = props.handleClose;
   const latestKey = props.latestKey;
@@ -34,9 +36,29 @@ const IngredientForm = (props) => {
       pref_isupplier_id: null
   }
   }
+
+    // Get suppliers from database
+  // Return supplierData
+  const getDBIngredients = () => {
+    console.log("MAKING REQUEST TO DJANGO")
+    axios({
+        method: "GET",
+        url:"http://4.236.185.213:8000/api/ingredient-inventory"
+      }).then((response)=>{
+        setIngredients(response.data)
+      }).catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          }
+      });
+  }
+
   
   useEffect(() => {
     getDBSuppliers();
+    getDBIngredients();
   }, []);
 
     // Get suppliers from database
@@ -87,15 +109,16 @@ const IngredientForm = (props) => {
   // Takes input change event information (name, type, and value)
   // Returns None
   const handleFormChange = (event) => {
+    console.log(event.target.name, event.target.value);
     // Get the name and value of the changed field
-    const fieldName = event.target.getAttribute('name');
+    const fieldName = event.target.name;
     const fieldValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
     // Create new ingredient object before setting state
     updateEditForm([fieldName], [fieldValue]);
     // updateEditForm('aFlag', true);
   }
 
-  if (supplierList === undefined) {
+  if (!ingredients || !supplierList) {
     return (<>loading...</>)
   }
 
@@ -108,22 +131,27 @@ const IngredientForm = (props) => {
           <Grid container direction='row' spacing={4}>
             <Grid item>
               <InputLabel htmlFor="ingredient_name">Ingredient Name: </InputLabel>
-              <Input name="ingredient_name" type="text" maxLength='30' value={ingredient.ingredient_name} onChange={handleFormChange}/>
-              
+              {/* <Input name="ingredient_name" type="text" maxLength='30' value={ingredient.ingredient_name} onChange={handleFormChange}/> */}
+              <ModularSelect value={ingredient.ingredient_name} options={ingredients} noDuplicates searchField={'ingredient_name'} onChange={handleFormChange}/>
+
               <InputLabel htmlFor='storage_type'>Category: </InputLabel>
-              <Input name='storage_type' type="text" value={ingredient.storage_type} onChange={handleFormChange}/>
+              {/* <Input name='storage_type' type="text" value={ingredient.storage_type} onChange={handleFormChange}/> */}
+              <ModularSelect value={ingredient.storage_type} options={ingredients} noDuplicates searchField={'storage_type'} onChange={handleFormChange} />
 
               <InputLabel htmlFor='pkg_type'>Package Type: </InputLabel>
-              <Input name='pkg_type' type="text" value={ingredient.pkg_type} onChange={handleFormChange}/>
-              
+              {/* <Input name='pkg_type' type="text" value={ingredient.pkg_type} onChange={handleFormChange}/> */}
+              <ModularSelect value={ingredient.pkg_type} options={ingredients} noDuplicates searchField={'pkg_type'} onChange={handleFormChange}/>
+
               <InputLabel htmlFor="unit">Measure: </InputLabel>
-              <Input name="unit" type="text" value={ingredient.unit} onChange={handleFormChange}/>
+              {/* <Input name="unit" type="text" value={ingredient.unit} onChange={handleFormChange}/> */}
+              <ModularSelect value={ingredient.unit} options={ingredients} noDuplicates searchField={'unit'} onChange={handleFormChange}/>
             </Grid>
             <Grid item>
               <InputLabel htmlFor="unit_cost">Unit Cost: </InputLabel>
               <Input name="unit_cost" type="number" step="0.01" value={ingredient.unit_cost} onChange={handleFormChange}/>
 
               <InputLabel htmlFor="pref_isupplier">Supplier: </InputLabel>
+              {/* <ModularSelect options={supplierList} noDuplicates searchField={'s_name'} onChange={handleFormChange}/> */}
               <Select type='select' name="pref_isupplier_id" value={undefined} label={'Supplier'}>
                 <MenuItem value={'Select A Supplier'}></MenuItem>
                 {supplierList.map((supplier, key) => {

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import { useGridApiContext } from '@mui/x-data-grid';
 
 const filter = createFilterOptions();
 
@@ -8,31 +9,56 @@ const filter = createFilterOptions();
     // options - list of select options
     // searchField - The field of each option that will be the value selected/searched
     // selectedValue - The default value (Data already in this field)
-    // isRequired - Whether this TextField will be considered required in forms
+    // required - Whether this TextField will be considered required in forms
+    // id and field - Datagrid row params passed in renderEditCell
 // Returns autocomplete select with add functionality
-export default function ModularSelect({options, searchField, selectedValue, isRequired}) {
-//   const options = props.options;
-//   const searchField = props.searchField;
-  if (isRequired === undefined) isRequired = false;
-  if (selectedValue === undefined) selectedValue = null;
-  
-  const [value, setValue] = React.useState(selectedValue);
+export default function ModularSelect({id, field, value, options, searchField, required, onChange}) {
+
+  const [selectValue, setSelectValue] = value ? React.useState({[searchField]: value}) : React.useState();
+
+
+  // Remove duplicate options
+  // Get array of all searchField values
+  const optionSearchFields = options.map((options => options[searchField]));
+  // Make set of that array (remove duplicates)
+  const optionsSet = new Set(optionSearchFields);
+  // Rebuild options array (key/value pairs)
+  options = [...optionsSet].map((opt) => { return {[searchField]: opt} });
+
+
+  // If this is an editable column, use datagrid api to update cell
+  if (id && field) {
+    const api = useGridApiContext();
+    React.useEffect(() => {
+        api.current.setEditCellValue({id, field, value: selectValue[searchField], debounceMs: 200})
+    }, [selectValue])
+  }
 
   return (
     <Autocomplete
-      value={value}
+      value={selectValue}   
       onChange={(event, newValue) => {
+        // Use passed onChange callback to set parent value
+        if (onChange) {
+            // Using handleFormChange here -> passing event.target with name and value
+            onChange({target: 
+                {
+                    name: searchField,
+                    value: newValue[searchField]
+                }
+            });
+        }
         if (typeof newValue === 'string') {
-          setValue({
+          setSelectValue({
             [searchField]: newValue,
           });
         } else if (newValue && newValue.inputValue) {
           // Create a new value from the user input
-          setValue({
+          setSelectValue({
             [searchField]: newValue.inputValue,
           });
         } else {
-          setValue(newValue);
+          setSelectValue(newValue);
         }
       }}
       filterOptions={(options, params) => {
@@ -71,7 +97,7 @@ export default function ModularSelect({options, searchField, selectedValue, isRe
       sx={{ width: 300 }}
       freeSolo
       renderInput={(params) => (
-        <TextField {...params} required={isRequired} label="Select..." />
+        <TextField {...params} name={searchField} required={required} label="Select..." />
       )}
     />
   );

@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useGridApiContext } from '@mui/x-data-grid'
 import './HouseholdList.css'
 import { Box } from '@mui/material'
 import AllergiesList from './AllergiesList';
 import NewModularDatagrid from '../components/NewModularDatagrid';
 import HouseholdForm from './HouseholdForm.js'
+import ModularSelect from '../components/ModularSelect';
+import axios from 'axios';
 
 // Households/Clients List Component
 export default function HouseholdPage() {
@@ -23,12 +25,12 @@ export default function HouseholdPage() {
         }
         return <AllergiesList allergies={params.value} isEditable={true} updateEditForm={updateCellValue}/>
     }
-      
+
     const columns = [
-        { field: 'hh_name', headerName: 'Name', type: 'string', width: 90, editable: true },
-        { field: 'num_adult', headerName: 'Adults', type: 'number', width: 50, editable: true },
-        { field: 'num_child_gt_6', headerName: '7-17',  type: 'number', width: 50, editable: true },
-        { field: 'num_child_lt_6', headerName: '0-6', type: 'number', width: 50, editable: true },
+        { field: 'hh_name', headerName: 'Name', type: 'string', width: 120, editable: false},
+        { field: 'num_adult', headerName: 'Adults', type: 'number', width: 70, editable: true },
+        { field: 'num_child_gt_6', headerName: '7-17',  type: 'number', width: 70, editable: true },
+        { field: 'num_child_lt_6', headerName: '0-6', type: 'number', width: 70, editable: true },
         { field: 'phone', headerName: 'Phone Number', width: 110, type: 'number', editable: true },
         { field: 'street', headerName: 'Street', width: 160, type: 'string', editable: true },
         { field: 'city', headerName: 'City', width: 100, type: 'string', editable: true },
