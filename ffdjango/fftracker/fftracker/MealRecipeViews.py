@@ -115,7 +115,7 @@ class RecipeCardView(viewsets.ViewSet):
 
 
 class RecipesSerializer(ModelSerializer):
-    r_num = serializers.CharField(max_length=200)
+    # r_num = serializers.CharField(max_length=200)
     r_name = serializers.CharField(max_length=200)
     r_img_path = serializers.CharField(read_only=True)
     r_card_path = serializers.CharField(read_only=True)
@@ -130,22 +130,44 @@ class RecipesSerializer(ModelSerializer):
         model = Recipes
         # depth = 1
         fields = ('r_num', 'r_name', 'r_img_path', 'r_card_path', 'r_ingredients', 'r_packaging', 'r_diets', 'r_instructions', 'r_allergies', 'm_s')
+        read_only_fields = ('r_num',)
 
     def create(self, validated_data):
+        latest_key = Recipes.objects.latest('r_num').r_num
+        validated_data['r_num'] = latest_key + 1
         ings = validated_data.pop('r_ingredients')
         pkgs = validated_data.pop('r_packaging')
         diets = validated_data.pop('r_diets')
+        allergies = validated_data.pop('r_allergies')
         instructions = validated_data.pop('r_instructions')
-        for ing in ings: 
-            RecipeIngredients(ing).save()
-        for pkg in pkgs:
-            RecipePackaging(pkg).save()
-        for diet in diets:
-            RecipeDiets(diet).save()
-        for instruction in instructions:
-            RecipeInstructions(instruction).save()
-        
+
         recipe_instance = Recipes.objects.create(**validated_data)
+
+        for ing in ings:
+            latest_key = RecipeIngredients.objects.latest('ri_id').ri_id
+            ing['ri_id'] = latest_key + 1
+            ing['ri_recipe_num'] = recipe_instance
+            RecipeIngredients(**ing).save()
+        for pkg in pkgs:
+            latest_key = RecipePackaging.objects.latest('rp_id').rp_id
+            pkg['rp_id'] = latest_key + 1
+            pkg['rp_recipe_num'] = recipe_instance
+            RecipePackaging(**pkg).save()
+        for diet in diets:
+            latest_key = RecipeDiets.objects.latest('rd_id').rd_id
+            diet['rd_id'] = latest_key + 1
+            diet['rd_recipe_num'] = recipe_instance
+            RecipeDiets(**diet).save()
+        for instruction in instructions:
+            latest_key = RecipeInstructions.objects.latest('inst_id').inst_id
+            instruction['inst_id'] = latest_key + 1
+            instruction['inst_recipe_num'] = recipe_instance
+            RecipeInstructions(**instruction).save()
+        for allergy in allergies:
+            latest_key = RecipeAllergies.objects.latest('ra_id').ra_id
+            allergy['ra_id'] = latest_key + 1
+            allergy['ra_recipe_num'] = recipe_instance
+            RecipeAllergies(**allergy).save()
 
         return recipe_instance
 
@@ -209,7 +231,7 @@ class RecipesSerializer(ModelSerializer):
             allergy['ra_id'] = latest_id
             allergy['ra_recipe_num'] = recipe_instance
             RecipeAllergies.objects.create(**allergy)
-        recipe_instance.r_num = validated_data.get('r_num')
+        # recipe_instance.r_num = validated_data.get('r_num')
         recipe_instance.r_name = validated_data.get('r_name')
         recipe_instance.m_s = validated_data.get('m_s')
         print(validated_data.get('m_s'))

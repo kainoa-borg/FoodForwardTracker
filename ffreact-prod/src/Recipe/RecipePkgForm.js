@@ -56,7 +56,7 @@ const RecipePkgForm = (props) => {
         <form onSubmit={handleSubmit}>
             {/* Basic packaging info */}
             <Card sx={{marginTop: '1em', padding: '1em'}}>
-                <Typography variant='h5'>Add Ingredient</Typography>
+                <Typography variant='h5'>Add Package</Typography>
                 <Grid container direction='row' spacing={4}>
                 <Grid item>
                     <InputLabel>Package Type: </InputLabel>

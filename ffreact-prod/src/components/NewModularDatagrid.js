@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react'
 import axios from 'axios'
 import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
-import { Box } from '@mui/system';
+import { Box } from '@mui/material';
 import { Button, Popover, Snackbar, Stack, TextField, Typography } from '@mui/material';
 
 import FormDialog from './FormDialog.js'
@@ -20,6 +20,10 @@ export default function NewModularDatagrid(props) {
     // const apiIP = props.apiIP;
     // Name of the api endpoint to send requests to
     const apiEndpoint = props.apiEndpoint;
+    // IP of the api to send requests to
+    var apiIP = props.apiIP;
+    // If apiIP prop not defined, default to server 
+    if (!apiIP) apiIP = '4.236.185.213';
     // Field name of the row key/id
     const keyFieldName = props.keyFieldName;
     // Add entry form to be passed to FormDialog
@@ -75,7 +79,7 @@ export default function NewModularDatagrid(props) {
         console.log(formData);
         axios({
             method: 'POST',
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint + '/',
+            url:"http://"+apiIP+":8000/api/" + apiEndpoint + '/',
             data: formData
         }).then((response)=>{
             getDBData();
@@ -97,7 +101,7 @@ export default function NewModularDatagrid(props) {
 
         axios({
             method: "DELETE",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/"+params.id+'/',
+            url:"http://"+apiIP+":8000/api/" + apiEndpoint + "/"+params.id+'/',
           }).then((response)=>{
             getDBData();
             // Open saving changes success notification
@@ -116,7 +120,7 @@ export default function NewModularDatagrid(props) {
         const updatedRow = {...newRow, isNew: false};        
         axios({
             method: "PATCH",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/" + newRow[keyFieldName] +'/',
+            url:"http://"+apiIP+":8000/api/" + apiEndpoint + "/" + newRow[keyFieldName] +'/',
             data: newRow
             }).then((response)=>{
             getDBData();
@@ -137,7 +141,7 @@ export default function NewModularDatagrid(props) {
     const getDBData = () => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint
+            url:"http://"+apiIP+":8000/api/" + apiEndpoint
         }).then((response)=>{
         setTableData(response.data);
         }).catch((error) => {
@@ -278,7 +282,7 @@ export default function NewModularDatagrid(props) {
     return(
         <Fragment>
             <Stack direction='row' sx={{width: '100%'}}>
-                <SearchToolBar sx={{marginLeft: 'auto'}} setFilterModel={setFilterModel} searchField={searchField}/>
+                {searchField ? <SearchToolBar setFilterModel={setFilterModel} searchField={searchField} /> : <></>}
             </Stack>
             <Box sx={{display: 'flex', height: '100%'}}>
                 <Box sx={{flexGrow: 1}}>

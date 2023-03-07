@@ -54,7 +54,7 @@ const LoginPage = (props) => {
                 handlePageClick('landingPage');
             }
             else if (response.data === 500) {
-                // Password incorrect
+                // User not found
                 console.log('user not found');
                 setErrorState('usernameError');
                 setLoginState({
@@ -64,7 +64,7 @@ const LoginPage = (props) => {
                 })
             }
             else if (response.data === 400) {
-                // User not found
+                // Password incorrect
                 console.log('password incorrect');
                 setErrorState('pwError');
                 setLoginState({

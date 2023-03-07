@@ -37,6 +37,7 @@ import Dropdown from './components/Dropdown'
   const handlePageClick = props.handlePageClick;
   return (
     <React.Fragment>
+      {/* #9AB847 */}
       <AppBar sx={{ background: '#9AB847'}}>
         <Toolbar>
         <Tabs
@@ -46,7 +47,7 @@ import Dropdown from './components/Dropdown'
         </Tabs>
       
         <Grid container justifyContent='space-between' alignItems='center' direction='row'>
-          <Grid item sx={{width: '60%'}} container alignItems='center' direction='row'>
+          <Grid item sx={{width: '70%'}} container alignItems='center' direction='row'>
             <Typography component='img' sx={{width: '7%'}} src="ffreact-prod/src/Images/ff_logo.jpg" onClick = {() => handlePageClick('landingPage')}/>
             <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('landingPage')}>
               Landing Page

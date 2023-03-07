@@ -10,6 +10,23 @@ class UserSerializer(serializers.ModelSerializer):
 		fields = ('u_id', 'username', 'password', 'email', 'admin_flag')
 		read_only_fields = ['u_id']
 
+	def update(self, instance, validated_data):
+		username = validated_data.pop('username')
+		password = validated_data.pop('password')
+		email = validated_data.pop('email')
+		admin_flag = validated_data.pop('admin_flag')
+		print(password)
+		if username:
+			instance.username = username
+		if password:
+			instance.password = make_password(password)
+		if email:
+			instance.email = email
+		if admin_flag:
+			instance.admin_flag = admin_flag
+		instance.save()
+		return instance
+
 	def create(self, validated_data):
 		latest_id = Users.objects.all().latest('u_id').u_id
 		user = {
@@ -50,11 +67,14 @@ class UserAuth(viewsets.ViewSet):
 			if check_password(request.data['password'], queryset[0].password):
 				authedPass = True
 		else:
+			# user not found
 			return Response(500)
 
 		serializer = UserSerializer(queryset)
 
 		if authedPass:
+			# user authed
 			return Response(200)
 		else:
+			# user coudn't be authed
 			return Response(400)

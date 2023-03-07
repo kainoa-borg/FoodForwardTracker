@@ -25,10 +25,10 @@ export default function HouseholdPage() {
     }
 
     const columns = [
-        { field: 'hh_name', headerName: 'Name', type: 'string', width: 80, editable: true },
-        { field: 'num_adult', headerName: 'Adults', type: 'number', width: 80, editable: true },
-        { field: 'num_child_lt_6', headerName: '0-6', type: 'number', width: 80, editable: true },
-        { field: 'num_child_gt_6', headerName: '7-17', type: 'number', width: 80, editable: true },
+        { field: 'hh_name', headerName: 'Name', type: 'string', width: 90, editable: true },
+        { field: 'num_adult', headerName: '# Adults', type: 'number', width: 90, editable: true },
+        { field: 'num_child_lt_6', headerName: '# Age 0-6', type: 'number', width: 90, editable: true },
+        { field: 'num_child_gt_6', headerName: '# Age 7-17', type: 'number', width: 90, editable: true },
         { field: 'phone', headerName: 'Phone Number', width: 110, type: 'number', editable: true },
         { field: 'street', headerName: 'Street', width: 160, type: 'string', editable: true },
         { field: 'city', headerName: 'City', width: 100, type: 'string', editable: true },

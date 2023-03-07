@@ -8,7 +8,7 @@ export default function UserList() {
  
     const columns = [
         { field: 'username', headerName: 'User Name', type: 'string', width: 200, editable: true },
-        { field: 'password', headerName: 'Password', type: 'password', width: 100, editable: false, 
+        { field: 'password', headerName: 'Password', type: 'password', width: 100, editable: true, 
           renderCell: (cellValues) => {
           return (<text>*****</text>);} },
         { field: 'admin_flag', headerName: 'Administrator', type: 'boolean', width: 100, editable: true },
@@ -25,6 +25,7 @@ export default function UserList() {
               getEstimatedRowHeight={() => 300} 
               keyFieldName={'u_id'} 
               apiEndpoint={'users'}
+              // apiIP={'localhost'}
               entryName={'User'}
               searchField={'username'}
               AddFormComponent={UserForm}>
