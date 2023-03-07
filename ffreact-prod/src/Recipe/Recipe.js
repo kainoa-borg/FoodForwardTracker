@@ -221,7 +221,7 @@ export default function Recipe(props) {
     const RecipeImage = (props) => {
         console.log(props.image_source);
         // Replace image with a prompt if undefined
-        if (!(props.image_source === undefined)) {
+        if (props.image_source) {
             return (<img style={{width: '30vw'}} src={props.image_source}></img>);
         }
         else {
@@ -230,13 +230,13 @@ export default function Recipe(props) {
     }
 
     const RecipeCard = (props) => {
-        console.log(props.image_source);
+        console.log(props.card_source)
         // Replace image with a prompt if undefined
-        if (!(props.image_source === undefined)) {
-            return (<iframe style={{width: '30vw'}} src={props.image_source}></iframe>);
+        if (props.card_source) {
+            return (<iframe style={{height: '40vh', width: '30vw'}} src={props.card_source} type='application/pdf'/>);
         }
         else {
-            return (<Typography>Enter a recipe image</Typography>)
+            return (<Typography>Enter a recipe card</Typography>)
         }
     }
 
@@ -270,7 +270,7 @@ export default function Recipe(props) {
                         Upload Image
                         <input id='recipe_image' type='file' accept='.jpg' onChange={(event) => handleImageUpload(event, 'mealrecipe-image')} hidden></input>
                     </Button>
-                    <RecipeCard image_source={recipeData.r_card_path}/>
+                    <RecipeCard card_source={recipeData.r_card_path}/>
                     <Button color='lightBlue' variant='contained' component='label'>
                         Upload Recipe Card
                         <input id='recipe_card' type='file' accept='.jpg,.pdf,.doc,.docx' onChange={(event) => handleImageUpload(event, 'mealrecipe-card')} hidden></input>
