@@ -4,7 +4,7 @@ import ReusableTable from '../ReusableTable.js'
 
 // Packaging List Component
 export default function PurchasingReport() {
-    const [packaging, setPackaging] = useState(undefined);
+    const [purchasing, setPurchasing] = useState(undefined);
     // const [ingredients, setIngredients] = useState(undefined);
 
     useEffect(() => {
@@ -15,10 +15,10 @@ export default function PurchasingReport() {
     const getDBPackaging = () => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/packaging-reports"
+            url:"http://4.236.185.213:8000/api/pack-purchase-list/"
           }).then((response)=>{
             const pkgRetData = response.data
-            setPackaging(pkgRetData);
+            setPurchasing(pkgRetData);
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -44,15 +44,24 @@ export default function PurchasingReport() {
           });
     }*/
 
-    if (packaging === undefined) {
+    if (purchasing === undefined) {
         return (<>loading</>);
     }
 
+    
+
     // The HTML structure of this component
     return (
-        <div className='table-div'>
-            {/* Show a row for each entry in packaging.*/}
-            <ReusableTable data={packaging}/>
-        </div>
+      <Box sx={{height: '35%'}}>
+      {/* Show a row for each ingredient in packaging.*/}
+      <DataGrid
+          columns={columns}
+          rows={purchasing}
+          components = {{Toolbar:CustomToolbar}}
+          getRowId={(row) => row.m_id}
+          autoHeight = {true}
+      >
+      </DataGrid>
+  </Box>
     )
 }
