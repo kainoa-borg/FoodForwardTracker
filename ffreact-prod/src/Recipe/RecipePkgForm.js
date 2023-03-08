@@ -16,7 +16,6 @@ const RecipePkgForm = (props) => {
     // The state of this Ingredient Form with each attribute of Ingredient
     const [packaging, setPackaging] = useState({
         pkg_type: '',
-        amt: '',
     });
 
     // Handle form submission (prevent refresh, pass ingredient to addIngredient, and clear form state)
@@ -56,14 +55,11 @@ const RecipePkgForm = (props) => {
         <form onSubmit={handleSubmit}>
             {/* Basic packaging info */}
             <Card sx={{marginTop: '1em', padding: '1em'}}>
-                <Typography variant='h5'>Add Ingredient</Typography>
+                <Typography variant='h5'>Add Package</Typography>
                 <Grid container direction='row' spacing={4}>
                 <Grid item>
                     <InputLabel>Package Type: </InputLabel>
                     <Input name="pkg_type" type="text" maxLength='30' value={packaging.pkg_type} onChange={handleFormChange}/>
-                    
-                    <InputLabel>Amount: </InputLabel>
-                    <Input name='amt' type="text" value={packaging.amt} onChange={handleFormChange}/>
                 </Grid>
                 <Grid item>
                     <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>

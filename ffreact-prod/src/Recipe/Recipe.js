@@ -1,5 +1,5 @@
-import { Button, Typography, Box, Grid, Checkbox, Snackbar, FormControlLabel } from "@mui/material";
-import React, {useState, useEffect, createRef} from 'react';
+import { Button, Typography, Box, Grid, Checkbox, Snackbar, FormControlLabel, TextField, InputLabel, Paper } from "@mui/material";
+import React, {useState, useEffect, useCallback, Fragment} from 'react';
 import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
 import { Stack } from "@mui/material";
 import axios from 'axios'
@@ -12,20 +12,24 @@ import RecipeInstForm from './RecipeInstForm.js'
 import RecipeIngList from "./RecipeIngList.js"
 
 import DataGridDialog from '../components/DatagridDialog.js'
+import { number } from "yup";
+import ModularSelect from "../components/ModularSelect.js";
 
 export default function Recipe(props) {
-    // const [recipeData, setRecipeData] = useState(props.recipeData);
-    const recipeData = props.recipeData;
-    const setRecipeData = props.setRecipeData;
+    // If recipeData prop is passed, use that, otherwise use empty recipeData
+    const [recipeData, setRecipeData] = useState(props.recipeData);
+    const [recipeName, setRecipeName] = useState(props.recipeData.r_name);
+    // const setRecipeData = props.setRecipeData;
     const setCurrPage = props.setCurrPage;
     const getDBRecipeData = props.getDBRecipeData;
+    // Are we adding a recipe?
+    const isAdding = props.isAdding;
 
     const IngredientNameEditCell = (params) => {
         const api = useGridApiContext();
         const [selectDialogOpen, setSelectDialogOpen] = useState(false);
 
         const setIngID = (ingName, ingID, unit) => {
-            //api.current.updateRows([{ri_id: params.id, ingredient_name: ingName, ri_ing: ingID, unit: unit}]);
             const {id, value, field} = params;
             api.current.setEditCellValue({id, field: 'ingredient_name', value: ingName});
             api.current.setEditCellValue({id, field: 'ri_ing', value: ingID});
@@ -44,6 +48,26 @@ export default function Recipe(props) {
         )
     }
 
+    const [ingredients, setIngredients] = useState();
+    const getDBIngredients = () => {
+        axios({
+            method: "GET",
+            url:"http://4.236.185.213:8000/api/ingredient-inventory"
+        }).then((response)=>{
+            setIngredients(response.data);
+        }).catch((error) => {
+        if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
+    }
+
+    useEffect(() => {
+        getDBIngredients();
+    }, [])
+
     const ingredientsColumns = [
         {
             field: 'ingredient_name',
@@ -51,11 +75,22 @@ export default function Recipe(props) {
             width: 100,
             type: 'string',
             editable: true,
-            // renderEditCell: (params) => {
-            //     return (
-            //         <IngredientNameEditCell {...params}/>
-            //     )
-            // }
+            renderEditCell: (params) => {
+                axios({
+                    method: "GET",
+                    url:"http://4.236.185.213:8000/api/ingredient-inventory"
+                }).then((response)=>{
+                    return (
+                        <ModularSelect {...params} noDuplicates options={response.data} searchField={'ingredient_name'}/>
+                    )
+                }).catch((error) => {
+                if (error.response) {
+                    console.log(error.response);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                    }
+                });
+            }
         },
         {
             field: 'amt',
@@ -71,19 +106,19 @@ export default function Recipe(props) {
             type: 'string',
             editable: true,
         },
-        {
-            field: 'prep',
-            headerName: 'Prep',
-            width: 80,
-            type: 'string',
-            editable: true,
-        },
+        // {
+        //     field: 'prep',
+        //     headerName: 'Prep',
+        //     width: 80,
+        //     type: 'string',
+        //     editable: true,
+        // },
         {
             field: 'ri_ing',
             headerName: '',
             width: 0,
             type: 'number',
-            editable: true
+            editable: false
         }
     ]
 
@@ -94,38 +129,32 @@ export default function Recipe(props) {
             width: 200,
             editable: true
         },
-        {
-            field: 'amt',
-            headerName: 'Qty',
-            width: 70,
-            editable: true
-        },
     ]
 
-    const instructionColumns = [
+    const stationColumns = [
         {
-            field: 'step_no',
-            headerName: 'Step #',
-            width: 80,
-            editable: true
-        },
-        {
-            field: 'step_inst',
-            headerName: 'Instruction',
+            field: 'stn_name',
+            headerName: 'Station Name',
             width: 200,
             editable: true
         },
         {
-            field: 'stn_name',
-            headerName: 'Station',
-            width: 100,
-            editale: true
+            field: 'stn_desc',
+            headerName: 'Description',
+            width: 300,
+            editable: true
         },
+        // {
+        //     field: 'stn_num',
+        //     headerName: '',
+        //     width: 0,
+        //     editable: false
+        // },
     ]
 
     const [ingredientRows, setIngredientRows] = useState(recipeData.r_ingredients);
     const [packagingRows, setPackagingRows] = useState(recipeData.r_packaging)
-    const [instructionRows, setInstructionRows] = useState(recipeData.r_instructions)
+    const [stationRows, setStationRows] = useState(recipeData.r_stations)
     const [m_s, setM_S] = useState(recipeData.m_s);
     const dietRows = recipeData.r_diets
     const allergyRows = recipeData.r_allergies
@@ -138,16 +167,6 @@ export default function Recipe(props) {
     const handleCloseClick = () => {
         // Return to recipe list when close is clicked
         setCurrPage(<RecipePage setCurrPage={setCurrPage}></RecipePage>)
-    }
-
-    const RecipeImage = (props) => {
-        // Replace image with a prompt if undefined
-        if (!(props.image_source === undefined)) {
-            return (<img style={{width: '30vw'}} src={props.image_source}></img>);
-        }
-        else {
-            return (<Typography>Enter a recipe image</Typography>)
-        }
     }
 
     const handleImageUpload = (event, apiEndpoint) => {
@@ -182,120 +201,177 @@ export default function Recipe(props) {
         setOpen(false);
     }
 
-    const handleUpdateRecipe = () => {
+    const handleSaveClick = () => {
         console.log(recipeData);
-        const r_data = {...recipeData, r_ingredients: ingredientRows, r_packaging: packagingRows, r_instructions: instructionRows, m_s: m_s}
+        const r_data = {...recipeData, r_name: recipeName, r_ingredients: ingredientRows, r_packaging: packagingRows, r_stations: stationRows, m_s: m_s}
         console.log(JSON.stringify(r_data));
         setUpdateSBOpen(true);
-        axios({
-            method: "PATCH",
-            url:"http://4.236.185.213:8000/api/mealrecipes/" + recipeData.r_num + '/',
-            data: r_data,
-        }).then((response)=>{
-            console.log('success!')
-            setUpdateDoneSBOpen(true);
-            getDBRecipeData(recipeData.r_num);
-        }).catch((error) => {
-        if (error.response) {
-            console.log(error.response);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-            }
-        });
+        if (isAdding) {
+            axios({
+                method: "POST",
+                url:"http://4.236.185.213:8000/api/mealrecipes/",
+                data: r_data,
+            }).then((response)=>{
+                console.log('success!')
+                setUpdateDoneSBOpen(true);
+                getDBRecipeData(recipeData.r_num);
+            }).catch((error) => {
+            if (error.response) {
+                console.log(error.response);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                }
+            });
+        }
+        else {
+            axios({
+                method: "PATCH",
+                url:"http://4.236.185.213:8000/api/mealrecipes/" + recipeData.r_num + '/',
+                data: r_data,
+            }).then((response)=>{
+                console.log('success!')
+                setUpdateDoneSBOpen(true);
+                getDBRecipeData(recipeData.r_num);
+            }).catch((error) => {
+            if (error.response) {
+                console.log(error.response);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                }
+            });
+        }
     }
+
+    const handleNameChange = useCallback((event) => {
+        setRecipeName(event.target.value);
+    })
 
     const handleMealSnackChange = (event) => {
         setM_S(event.target.checked ? 1 : 0);
     }
 
+    const RecipeImage = (props) => {
+        console.log(props.image_source);
+        // Replace image with a prompt if undefined
+        if (props.image_source) {
+            return (<img style={{width: '30vw'}} src={props.image_source}></img>);
+        }
+        else {
+            return (<Typography>Enter a recipe image</Typography>)
+        }
+    }
+
+    const RecipeCard = (props) => {
+        console.log(props.card_source)
+        // Replace image with a prompt if undefined
+        if (props.card_source) {
+            return (<iframe style={{height: '40vh', width: '30vw'}} src={props.card_source} type='application/pdf'/>);
+        }
+        else {
+            return (<Typography>Enter a recipe card</Typography>)
+        }
+    }
+
     return (
-        <div>
-        
-        {/* 'Close' button that goes back to recipe list */}
-        <Button color='lightGreen' variant='contained' onClick={handleCloseClick}><Typography variant='h6'>Close</Typography></Button>
-        
-        {/* 'Save' button that saves recipe data */}
-        <Button color='lightGreen' variant='contained' onClick={handleUpdateRecipe}><Typography variant='h6'>Save</Typography></Button>
-
-        {/* Recipe Page */}
-        <Grid container justifyContent='space-between' direction='row'>
+        <Fragment>
             
-            {/* Recipe Image and Card Stack */}
-            <Stack item spacing={3}>
-                <Typography variant='h4' sx={{textDecoration: 'underline'}}>{recipeData.r_name}</Typography>
-                <FormControlLabel control={<Checkbox checked={m_s ? 1 : 0} onChange={handleMealSnackChange}/>} label="Meal Recipe?"/>
-                <RecipeImage image_source={recipeData.r_img_path}/>
-                <Button color='lightGreen' variant='contained' component='label'>
-                    Upload Image
-                    <input id='recipe_image' type='file' accept='.jpg' onChange={(event) => handleImageUpload(event, 'mealrecipe-image')} hidden></input>
-                </Button>
-                <RecipeImage image_source={recipeData.r_card_path}/>
-                <Button color='lightGreen' variant='contained' component='label'>
-                    Upload Recipe Card
-                    <input id='recipe_card' type='file' accept='.jpg,.pdf,.doc,.docx' onChange={(event) => handleImageUpload(event, 'mealrecipe-card')} hidden></input>
-                </Button>
-            </Stack>
+            {/* Recipe Header */}
+            <Box component={Paper} elevation={5} sx={{paddingLeft: '2%', paddingRight: '2%', paddingTop: '2%', paddingBottom: '2%'}}>
+            <form onSubmit={(event) => event.preventDefault()}>
+            
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <Typography variant='h5'>{isAdding ? 'Add ' : 'Edit '}Recipe</Typography>
+                <div>
+                    {/* 'Save' button that saves recipe data */}
+                    <Button color='lightGreen' variant='contained' type={'submit'} onClick={handleSaveClick}><Typography variant='h6'>Save</Typography></Button>
+                    {/* 'Close' button that goes back to recipe list */}
+                    <Button color='lightGreen' variant='contained' onClick={handleCloseClick}><Typography variant='h6'>Close</Typography></Button>    
+                </div>
+            </div>
+            
 
-            {/* Recipe Info Lists Stack */}
-            <Stack item spacing={10}>
-                <Box>
-                    <Typography variant='h6'>Ingredients</Typography>
-                    <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
-                        <ModularRecipeDatagrid 
-                            rows={ingredientRows} 
-                            setRows={setIngredientRows}
-                            columns={ingredientsColumns}
-                            addFormComponent={RecipeIngForm}
-                            keyFieldName={'ri_id'}
-                            searchField={'ingredient_name'}
-                            entryName={'Recipe Ingredient'}
-                        ></ModularRecipeDatagrid>
+            {/* Recipe Info Lists */}
+            <Grid container justifyContent='space-between' direction='row' sx={{paddingTop: '2%'}}>
+                
+                {/* Recipe Image and Card Stack */}
+                <Stack item spacing={3}>
+                    <TextField required label={'Recipe Name'} onChange={handleNameChange} value={recipeName}/>
+                    <FormControlLabel control={<Checkbox checked={m_s===1 ? true : false} onChange={handleMealSnackChange}/>} label="Meal Recipe?"/>
+                    <RecipeImage image_source={recipeData.r_img_path}/>
+                    <Button color='lightBlue' variant='contained' component='label'>
+                        Upload Image
+                        <input id='recipe_image' type='file' accept='.jpg' onChange={(event) => handleImageUpload(event, 'mealrecipe-image')} hidden></input>
+                    </Button>
+                    <RecipeCard card_source={recipeData.r_card_path}/>
+                    <Button color='lightBlue' variant='contained' component='label'>
+                        Upload Recipe Card
+                        <input id='recipe_card' type='file' accept='.jpg,.pdf,.doc,.docx' onChange={(event) => handleImageUpload(event, 'mealrecipe-card')} hidden></input>
+                    </Button>
+                </Stack>
+
+                {/* Recipe Info Lists Stack */}
+                <Stack item spacing={10}>
+                    <Box>
+                        <Typography variant='h6'>Ingredients</Typography>
+                        <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
+                            <ModularRecipeDatagrid 
+                                rows={ingredientRows} 
+                                setRows={setIngredientRows}
+                                columns={ingredientsColumns}
+                                addFormComponent={RecipeIngForm}
+                                keyFieldName={'ri_id'}
+                                searchField={'ingredient_name'}
+                                entryName={'Recipe Ingredient'}
+                            ></ModularRecipeDatagrid>
+                        </Box>
                     </Box>
-                </Box>
-                <Box>
-                    <Typography variant='h6'>Packaging</Typography>
-                    <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
-                        <ModularRecipeDatagrid 
-                            rows={packagingRows}
-                            columns={packagingColumns}
-                            setRows={setPackagingRows}
-                            addFormComponent={RecipePkgForm}
-                            keyFieldName={'rp_id'}
-                            searchField={'pkg_type'}
-                            entryName={'Recipe Packaging'}
-                        ></ModularRecipeDatagrid>
-                    </Box>    
-                </Box>
-                <Box>
-                    <Typography variant='h6'>Instructions</Typography>
-                    <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
-                        <ModularRecipeDatagrid 
-                            rows={instructionRows}
-                            columns={instructionColumns} 
-                            setRows={setInstructionRows}
-                            addFormComponent={RecipeInstForm}
-                            keyFieldName={'step_no'}
-                            searchField={'step_inst'}
-                            entryName={'Instruction Step'}
-                        ></ModularRecipeDatagrid>
+                    <Box>
+                        <Typography variant='h6'>Packaging</Typography>
+                        <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
+                            <ModularRecipeDatagrid 
+                                rows={packagingRows}
+                                columns={packagingColumns}
+                                setRows={setPackagingRows}
+                                addFormComponent={RecipePkgForm}
+                                keyFieldName={'rp_id'}
+                                searchField={'pkg_type'}
+                                entryName={'Recipe Packaging'}
+                            ></ModularRecipeDatagrid>
+                        </Box>    
                     </Box>
-                </Box>
-            </Stack>
-        </Grid>
-        {/* Save Click 'request sent' Notice */}
-        <Snackbar
-            open={updateSBOpen}
-            autoHideDuration={3000}
-            onClose={(event, reason) => handleSBClose(event, reason, setUpdateSBOpen)}
-            message="Saving..."
-        />
-        {/* Save Complete 'request success' Notice */}
-        <Snackbar
-            open={updateDoneSBOpen}
-            autoHideDuration={3000}
-            onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
-            message="Changes saved!"
-        />
-        </div>
+                    <Box>
+                        <Typography variant='h6'>Station</Typography>
+                        <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
+                            <ModularRecipeDatagrid 
+                                rows={stationRows}
+                                columns={stationColumns} 
+                                setRows={setStationRows}
+                                addFormComponent={RecipeInstForm}
+                                keyFieldName={'stn_num'}
+                                searchField={'stn_name'}
+                                entryName={'Station'}
+                            ></ModularRecipeDatagrid>
+                        </Box>
+                    </Box>
+                </Stack>
+            </Grid>
+            {/* Save Click 'request sent' Notice */}
+            <Snackbar
+                open={updateSBOpen}
+                autoHideDuration={3000}
+                onClose={(event, reason) => handleSBClose(event, reason, setUpdateSBOpen)}
+                message="Saving..."
+            />
+            {/* Save Complete 'request success' Notice */}
+            <Snackbar
+                open={updateDoneSBOpen}
+                autoHideDuration={3000}
+                onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
+                message="Changes saved!"
+            />
+            </form>
+            </Box>
+        </Fragment>
+        
     )
 }

@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import React from 'react';
 
 const Dropdown = ({ trigger, menu }) => {
@@ -7,8 +8,13 @@ const Dropdown = ({ trigger, menu }) => {
     setOpen(!open);
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  }
+  const ref = useOutsideClick(handleClose);
+
   return (
-    <div className="dropdown">
+    <Box className="dropdown" sx={{height: '100%'}} ref={ref}>
       {React.cloneElement(trigger, {
         onClick: handleOpen,
       })}
@@ -26,7 +32,7 @@ const Dropdown = ({ trigger, menu }) => {
           ))}
         </ul>
       ) : null}
-    </div>
+    </Box>
   );
 };
 

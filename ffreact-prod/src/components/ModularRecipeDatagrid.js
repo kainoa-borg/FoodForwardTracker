@@ -132,7 +132,7 @@ export default function ModularRecipeDatagrid(props) {
         // Open 'request sent' snackbar
         const handleSaveClick = (params) => {
             setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.View}})
-            setUpdateSBOpen(true);
+            // setUpdateSBOpen(true);
         }
 
         // Open 'confirm cancel' popover on the Cancel button
@@ -205,7 +205,7 @@ export default function ModularRecipeDatagrid(props) {
         return (
           <GridToolbarContainer>
             <Button color='lightBlue' variant='contained' onClick={() => {setAddFormOpen(true)}}>Add {e_name}</Button>
-            <GridToolbarExport color='lightBlue'/>
+            {/* <GridToolbarExport color='lightBlue'/> */}
           </GridToolbarContainer>
         );
     }

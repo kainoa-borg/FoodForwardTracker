@@ -1,5 +1,7 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import React from 'react'
+import axios from 'axios'
+import { Stack, Input, InputLabel, Select, MenuItem, Typography, Card, Button } from '@mui/material';
 // import ReusableForm from '../ReusableForm.js'
 
 // Sabona Abubeker
@@ -9,7 +11,9 @@ import React from 'react'
 // Returns a form that can be used to define a new meal object in a mealList
 const MealPlanForm = (props) => {
 
-  const recipeList = props.recipeList;
+  const [recipeList, setRecipeList] = useState();
+  const addEntry = props.addEntry;
+  const handleClose = props.handleClose;
   
   const clearMeal = () => {
     return {
@@ -22,6 +26,24 @@ const MealPlanForm = (props) => {
     }
   }
 
+  const getDBRecipeList = () => {
+    console.log('MAKING REQUEST TO DJANGO')
+    axios({
+      method: "GET",
+      url:"http://4.236.185.213:8000/api/recipe-list/"
+    }).then((response)=>{
+      const recipeData = response.data
+      setRecipeList(recipeData);
+      console.log(recipeData);
+    }).catch((error) => {
+      if (error.response) {
+        console.log(error.response);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        }
+    });
+  }
+
   // The state of this Meal Plan Form with each attribute of Meals
   const [meal, setMeal] = useState(clearMeal());
   //const [mealList, setMealList] = useState([{m_id: 1, meal_r_num: 'Meal Name'}, {m_id: 2, meal_r_num: 'Meal Name'}]);
@@ -32,9 +54,9 @@ const MealPlanForm = (props) => {
     const handleSubmit = (event) => {
       // Prevent refresh
       event.preventDefault();
-      // Pass Meal object to MealList callback
-      console.log('HERE IN MEAL PLAN FORM SUBMIT');
-      props.addMeal(meal)
+      // Pass Meal object to NewModularDatagrid callback
+      addEntry(meal);
+      handleClose();
       // Clear the form state
       setMeal(clearMeal());
     }
@@ -54,35 +76,55 @@ const MealPlanForm = (props) => {
     // Returns None
     const handleFormChange = (event) => {
       // Get the name and value of the changed field
-      const fieldName = event.target.getAttribute('name');
+      const fieldName = event.target.name;
       const fieldValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
       // Create new ingredient object before setting state
       updateEditForm([fieldName], [fieldValue]);
       // updateEditForm('aFlag', true);
     }
 
+    useEffect(() => {
+      getDBRecipeList();
+    })
+
+    if (recipeList === undefined) {
+      return <>loading...</>
+    }
+
+    // Format recipes into valueOptions
+    const getRecipeOptions = (m_or_s) => {
+      let rOptions = recipeList.map((recipe) => {
+        if (m_or_s === 'meal' && recipe.m_s === 1)
+          return(<MenuItem value={recipe.r_num}>{recipe.r_name}</MenuItem>)
+        else if (m_or_s === 'snack' && recipe.m_s === 0)
+          return(<MenuItem value={recipe.r_num}>{recipe.r_name}</MenuItem>)
+      });
+      return rOptions.filter((element) => {return element !== undefined});
+    }
+
     // HTML structure of this component
     return (
       <form onSubmit={handleSubmit}>
-          {/* Basic Meal Plan info */}
-          <label htmlFor="m_date">Next Delivery Date: </label>
-          <input name="m_date" type="date" maxLength='50' value={meal.m_date} onChange={handleFormChange}/>
+        <Card sx={{marginTop: '1em', padding: '1em'}}>
+        <Typography variant='h5'>Add Planned Meal</Typography>
+          <Stack>
+            <InputLabel htmlFor="m_date">Next Delivery Date: </InputLabel>
+            <Input name="m_date" required type="date" maxLength='50' value={meal.m_date} onChange={handleFormChange}/>
 
-          <label htmlFor="meal_r_num">Meal: </label>
-          <select name='meal_r_num' meal={meal.meal_r_num} onChange={handleFormChange}>
-            {recipeList.map((recipe) => {
-              return(<option value={recipe.r_num}>{recipe.r_name}</option>)
-            })}
-          </select>
-          
-          <label htmlFor='snack_r_num'>Snack: </label>
-          <select name='snack_r_num' value={meal.snack_r_num} onChange={handleFormChange}>
-            {recipeList.map((recipe) => {
-              return(<option value={recipe.r_num}>{recipe.r_name}</option>)
-            })}
-          </select>
+            <InputLabel htmlFor="meal_r_num">Meal: </InputLabel>
+            <Select name='meal_r_num' required meal={meal.meal_r_num} onChange={handleFormChange}>
+              {getRecipeOptions('meal')}
+            </Select>
+            
+            <InputLabel htmlFor='snack_r_num'>Snack: </InputLabel>
+            <Select name='snack_r_num' required value={meal.snack_r_num} onChange={handleFormChange}>
+              {getRecipeOptions('snack')}
+            </Select>
 
-          <button type='Submit'>Add</button>
+            <Button color='darkGreen' variant='contained' type='Submit'>Add</Button>
+          </Stack>
+        </Card>
+                  
       </form>
     );
 }

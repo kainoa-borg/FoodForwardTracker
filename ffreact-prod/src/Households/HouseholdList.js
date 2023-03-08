@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import HouseholdModularDatagrid from './HouseholdModularDatagrid.js'
 
-//import './HouseholdList.css'
-import {Table, TableHead, TableRow, TableCell, TableBody, Paper} from '@mui/material'
 
 // Household List Component
 export default function HouseholdList() {

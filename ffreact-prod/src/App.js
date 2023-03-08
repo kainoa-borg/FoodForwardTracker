@@ -1,31 +1,31 @@
-import HouseholdForm from './Households/HouseholdForm.js'
+import EntryPage from './EntryPage.js'
 import LoginPage from './LoginPage.js'
 import PwResetPage from './PwResetPage.js'
 import LandingPage from './LandingPage.js'
-import MealsPage from './MealsPage.js'
+import MealsPage from './Meals/MealsPage.js'
 import InventoryPage from './InventoryPage.js'
+import HouseholdForm from './Households/HouseholdForm.js'
 import HouseholdPage from './Households/HouseholdPage.js'
-import HouseholdsReport from './Households/HouseholdsReport.js'
+import HouseholdsReport from './Reports/HouseholdsReport.js'
 import Ingredients from './Ingredients/IngredientList.js'
 import IngredientPage from './Ingredients/IngredientPage.js'
 import IngredientsReport from './Ingredients/IngredientsReport.js'
 import StationList from './Stations/StationList.js'
-import ReportsPage from "./ReportsPage.js"
-import UserPage from "./UserPage.js"
+import ReportsPage from "./Reports/ReportsPage.js"
+import UserPage from "./User/UserPage.js"
 import UserList from "./User/UserList.js"
-import NewUserPage from "./NewUserPage.js"
-import Recipe from './Recipe/RecipeList.js'
-import RecipePage from './Recipe/RecipePage.js'
+import NewUserPage from "./User/NewUserPage.js"
 import MealPlan from './Meals/MealList.js'
 import MealPlanReport from './Reports/MealPlanReport.js'
 import MealHistory from './Reports/MealHistory.js'
 import CostTotals from './Reports/CostTotals.js'
 import Packaging from './Packaging/PackagingList.js'
 import PackagingPage from './Packaging/PackagingPage.js'
-import PackagingReport from './Packaging/PackagingReport.js'
+import PackagingReport from './Reports/PackagingReport.js'
 import PackagingReturns from './Reports/PackagingReturns.js'
 import PurchasingReport from './Reports/PurchasingReport.js'
-import EntryPage from './EntryPage.js'
+import Recipe from './Recipe/RecipeList.js'
+import RecipePage from './Recipe/RecipePage.js'
 import Navbar from './Navbar.js'
 import React from 'react'
 import { useState } from 'react'
@@ -126,19 +126,20 @@ const App = () => {
                 contrastText: '#fff'
             },
             darkGreen: {
-                main: '#093B31',
+                main: '#5f5f5f',
                 contrastText: '#fff'
             },
             lightBlue: {
-                main: '#3E8477',
+                main: '#5f5f5f',
                 contrastText: '#fff'
             },
             lightOrange: {
-                main: '#A35426',
+                main: '#5f5f5f',
                 contrastText: '#fff'
             },
             darkBlue: {
-                main: '#070D3A',
+                // main: '#404851',
+                main: '#5f5f5f',
                 contrastText: '#fff'
             }
         }

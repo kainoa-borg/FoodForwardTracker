@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-// import { GridRowModes, GridActionsCellItem} from '@mui/x-data-grid'
-// import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
-// import { Button, Popover, Snackbar, Typography } from '@mui/material';
 import { Snackbar } from '@mui/material';
 import PackagingForm from './PackagingForm.js'
 import NewModularDatagrid from '../components/NewModularDatagrid.js';
@@ -18,6 +15,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 export default function PackagingPage() {
     const [packaging, setPackaging] = useState(undefined);
     const [suppliers, setSuppliers] = useState(undefined);
+    
     const [updateSBOpen, setUpdateSBOpen] = useState(false);
     const [updateDoneSBOpen, setUpdateDoneSBOpen] = useState(false);
     const [supplierOptions, setSupplierOptions] = useState();
@@ -28,23 +26,6 @@ export default function PackagingPage() {
         }
         setOpen(false);
     }
-
-    // Delete Packaging Row
-/*    const deletePackaging = (key) => {
-        const pkgID = packaging[key]['p_id']; 
-        axios({
-            method: "DELETE",
-            url:"http://4.236.185.213:8000/api/packaging-inventory/"+pkgID+'/',
-          }).then((response)=>{
-            getDBPackaging();
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-    }*/
 
     // Get suppliers from database
     // Set supplier variable with supplier data
@@ -103,82 +84,6 @@ export default function PackagingPage() {
         )
     }
 
-/*    const modularActions = (params, rowModesModel, setRowModesModel, setUpdateSBOpen) => {
-        // Struct with all popover anchors
-        const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteAnchor: null, confirmCancelAnchor: null});
-        const [deleteParams, setDeleteParams] = useState(null);
-        let isInEditMode = false;
-        if (rowModesModel[params.id]) isInEditMode = rowModesModel[params.id].mode === GridRowModes.Edit;
-
-        const handleEditClick = (params) => {
-            setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.Edit}});
-        }
-        const handleSaveClick = (params) => {
-            setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.View}})
-            setUpdateSBOpen(true);
-        }
-        const handleCancelClick = (event, params) => {
-            setPopoverAnchors({...popoverAnchors, confirmCancelAnchor: event.currentTarget})
-        }
-        const handleDeleteClick = (event, params) => {
-            // Set the confirmDeleteAnchor in popoverAnchors to the delete button
-            setPopoverAnchors({...popoverAnchors, confirmDeleteAnchor: event.currentTarget});
-            // Save the params as state variable
-            setDeleteParams(params);
-        }
-    
-    
-        // confirmDeleteOpen flag/id
-        const confirmDeleteOpen = Boolean(popoverAnchors.confirmDeleteAnchor);
-        const confirmDeleteID = confirmDeleteOpen ? 'simple-popover' : undefined;
-        
-        // confirmCancelOpen flag/id
-        const confirmCancelOpen = Boolean(popoverAnchors.confirmCancelAnchor);
-        const confirmCancelID = confirmCancelOpen ? 'simple-popover' : undefined;
-
-        // Show Edit Actions
-        if (isInEditMode) {
-            return [
-                <GridActionsCellItem icon={<Save/>} onClick={() => {handleSaveClick(params)}} color="darkBlue"/>,
-                <GridActionsCellItem icon={<Cancel/>} onClick={(event) => {handleCancelClick(event, params)}} color="darkBlue"/>,
-                <Popover
-                    id={confirmCancelID}
-                    open={confirmCancelOpen}
-                    anchorEl={popoverAnchors.confirmCancelAnchor}
-                    onClose={() => setPopoverAnchors({...popoverAnchors, confirmCancelAnchor: null})}
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                    }}
-                >
-                    <Typography>Canceling will revert all changes</Typography>
-                    <Button variant='contained' onClick={() => {setPopoverAnchors({...popoverAnchors, confirmCancelAnchor: null}); setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.View, ignoreModifications: true}});}}>Confirm</Button>
-                </Popover>
-            ];
-        }
-        // Show View Actions
-        else {
-            return [
-                <GridActionsCellItem icon={<Edit/>} onClick={() => handleEditClick(params)} color="darkBlue"/>,
-                <GridActionsCellItem aria-describedby={confirmDeleteID} icon={<Delete/>} onClick={(event) => {handleDeleteClick(event, params); setPopoverAnchors({...popoverAnchors, confirmDeleteAnchor: null})}} color="darkBlue"/>,
-                <Popover
-                    id={confirmDeleteID}
-                    open={confirmDeleteOpen}
-                    anchorEl={popoverAnchors.confirmDeleteAnchor}
-                    onClose={() => setPopoverAnchors({...popoverAnchors, confirmDeleteAnchor: null})}
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                    }}
-                >
-                    <Typography>Delete this entry?</Typography>
-                    {/* Confirm button fires deletePackaging using row params state *//*}
-                    <Button variant='contained' onClick={() => deletePackaging(deleteParams)}>Confirm</Button>
-                </Popover>
-            ]
-        }
-    }*/
-
     const columns = [
         { field: 'package_type', headerName: 'Packaging Type', width: 150, editable: true },
         { field: 'unit', headerName: 'Unit', width: 100, editable: true },
@@ -220,7 +125,7 @@ export default function PackagingPage() {
             onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
             message="Changes saved!"
         />
-        {/* Add entry notice */}
+        {/* Add entry notice */} 
         </div>
     )
 }

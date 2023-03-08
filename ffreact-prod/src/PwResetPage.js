@@ -1,7 +1,8 @@
 import React from 'react'
-import {useState} from 'react'
-import {Fragment} from 'react'
 import axios from 'axios'
+import {useState} from 'react'
+import { Typography, Stack, Button, Box, Card, Grid, TextField} from "@mui/material"
+import ffLogo from './Images/ff_logo.jpg'
 
 // PW Reset Page Component
 // Takes handlePageClick callback function to enable page switching when reset request is complete
@@ -18,7 +19,7 @@ const PwResetPage = (props) => {
     const sendResetRequest = () => {
         axios({
             method: "POST",
-            url:"",
+            url:"http://4.236.185.213:8000/api/users/",
             data: user
           }).then((response)=>{
             const data = response.data;
@@ -59,16 +60,43 @@ const PwResetPage = (props) => {
     
     // HTML structure of this component
     return (
-        <Fragment>
-            <h3>Password Reset Page</h3>
-            <form onSubmit={handleResetSubmit}>
-                <label htmlFor='username'>Username: </label>
-                <input type='text' maxLength='30' name='username' value={user.username} onChange={handleResetChange}></input>
-                <br/><label htmlFor='username'>Email: </label>
-                <input type='email' maxLength='30' name='email' value={user.email} onChange={handleResetChange}></input>
-                <br/><br/><button type='Submit'>Submit</button>
-            </form>
-        </Fragment>
+        <Grid container spacing='12' sx={{margin: 'auto', marginTop: '1em', maxWidth: '90%', justifyContent: 'center', alignItems: 'center'}}>
+            
+            {/* Logo and Welcome Message (left-side) */}
+            <Grid item md={7} sx={{display: {xs: 'none', md: 'block'}}}>
+                <Box component='img' sx={{width: '80%'}} src={ffLogo}/>
+            </Grid>
+
+            {/* Sign up Box */}
+            <Grid item component={Card} md={5} sm={12} elevation='4' sx={{padding: '2em', marginBottom: '5em', height: 'fit-content'}}>
+                <Typography variant='h5' sx={{paddingBottom: '1em'}}>Password Reset</Typography>
+                <form onSubmit={handleResetSubmit}>
+            
+                    <Stack sx={{textAlign: 'center', justifyContent: 'center', marginTop: '2em'}}>
+                        <TextField
+                        type = 'text'
+                        maxLength = '30' 
+                        label = 'Username'
+                        name = 'username' 
+                        value = {user.username} 
+                        onChange = {handleResetChange}
+                        />
+
+                        <TextField
+                        type = 'text'
+                        maxLength = '30' 
+                        label = 'Email'
+                        name = 'email'
+                        value = {user.email} 
+                        onChange = {handleResetChange}
+                        />
+                        <Button color='lightGreen' variant='contained' type='Submit' onClick={sendResetRequest}>
+                            Submit
+                        </Button>
+                    </Stack>            
+                </form>
+            </Grid>
+        </Grid>
     );
 }
 

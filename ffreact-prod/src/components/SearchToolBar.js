@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, useRef } from 'react'
 import debounce, { update } from 'lodash'
 import {TextField} from '@mui/material'
 
@@ -11,22 +11,22 @@ const SearchToolBar = (props) => {
 
     const [searchValue, setSearchValue] = useState();
 
-    const handleSearchSubmit = (event) => {
-        event.preventDefault();
-        // Search the searchField for the value of this text field
-        setFilterModel({ items: [
-            {id: 0, columnField: searchField, operatorValue: 'contains', value: searchValue}
-        ]})
-    }
+    // const handleSearchSubmit = (event) => {
+    //     event.preventDefault();
+    //     // Search the searchField for the value of this text field
+    //     setFilterModel({ items: [
+    //         {id: 0, columnField: searchField, operatorValue: 'contains', value: searchValue}
+    //     ]})
+    // }
 
-    const updateFilterModel = lodash.debounce(() => {
+    const updateFilterModel = lodash.debounce((value) => {
         setFilterModel({ items: [
-            {id: 0, columnField: searchField, operatorValue: 'contains', value: searchValue}
+            {id: 0, columnField: searchField, operatorValue: 'contains', value: value}
         ]})
     }, debounceMs)
 
     useEffect(() => {
-        updateFilterModel();
+        updateFilterModel(searchValue);
     }, [searchValue])
 
     const handleSearchChange = (event) => {
@@ -34,14 +34,12 @@ const SearchToolBar = (props) => {
     }
 
     return (
-        <form onSubmit={handleSearchSubmit}>
-            <TextField 
-                // type={'search'} 
-                value={searchValue} 
-                onChange={handleSearchChange}
-                label='Search...'    
-            ></TextField>
-        </form>
+        <TextField 
+            // type={'search'} 
+            value={searchValue}
+            onChange={handleSearchChange}
+            label='Search...'    
+        ></TextField>
     )
 }
 

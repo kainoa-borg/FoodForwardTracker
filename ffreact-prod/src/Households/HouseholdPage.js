@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useGridApiContext } from '@mui/x-data-grid'
 import './HouseholdList.css'
 import { Box } from '@mui/material'
 import AllergiesList from './AllergiesList';
 import NewModularDatagrid from '../components/NewModularDatagrid';
 import HouseholdForm from './HouseholdForm.js'
+import ModularSelect from '../components/ModularSelect';
+import axios from 'axios';
 
 // Households/Clients List Component
 export default function HouseholdPage() {
@@ -25,10 +27,10 @@ export default function HouseholdPage() {
     }
 
     const columns = [
-        { field: 'hh_name', headerName: 'Name', type: 'string', width: 80, editable: true },
-        { field: 'num_adult', headerName: 'Adults', type: 'number', width: 80, editable: true },
-        { field: 'num_child_lt_6', headerName: '0-6', type: 'number', width: 80, editable: true },
-        { field: 'num_child_gt_6', headerName: '7-17', type: 'number', width: 80, editable: true },
+        { field: 'hh_name', headerName: 'Name', type: 'string', width: 120, editable: false},
+        { field: 'num_adult', headerName: 'Adults', type: 'number', width: 70, editable: true },
+        { field: 'num_child_gt_6', headerName: '7-17',  type: 'number', width: 70, editable: true },
+        { field: 'num_child_lt_6', headerName: '0-6', type: 'number', width: 70, editable: true },
         { field: 'phone', headerName: 'Phone Number', width: 110, type: 'number', editable: true },
         { field: 'street', headerName: 'Street', width: 160, type: 'string', editable: true },
         { field: 'city', headerName: 'City', width: 100, type: 'string', editable: true },
@@ -43,21 +45,43 @@ export default function HouseholdPage() {
             renderEditCell: (params) => <AllergyListEditCell {...params} sx={{height: 'auto', minHeight: 200, maxHeight: 1000}}/>
         },
         { field: 'paused_flag', headerName: 'Paused', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
+        { field: 'paying', headerName: 'Paying', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
     ]
     
+    const columnGroupingModel = [
+        { field: 'hh_name' },
+        {
+            groupId: 'ages',
+            headerName: 'Member Ages',
+            description: 'Number of members per household in each age range',
+            children: [{ field: 'num_adult' }, { field: 'num_child_gt_6' }, { field: 'num_child_lt_6' }],
+        },
+        { field: 'phone' },
+        {
+            groupId: 'contact',
+            headerName: 'Address',
+            children: [{ field: 'street' }, { field: 'city' }, { field: 'state' }, { field: 'pcode' }],
+        },
+        { field: 'delivery_notes'}, { field: 'sms_flag'},
+        { field: 'veg_flag' }, { field: 'gf_flag'}, { field: 'hh_allergies'},
+        { field: 'paused_flag' }, { field: 'paying'}
+    ];
+
     return(
         <div class='table-div'>
         <h3>Clients</h3>
         <Box sx={{height: '70vh'}}>
             <NewModularDatagrid 
                 columns={columns} 
+                columnGroupingModel={columnGroupingModel}
                 getRowHeight={() => 'auto'}
                 getEstimatedRowHeight={() => 300} 
                 keyFieldName={'hh_name'} 
                 apiEndpoint={'households'}
                 entryName={'Client'}
                 searchField={'hh_name'}
-                AddFormComponent={HouseholdForm}>
+                AddFormComponent={HouseholdForm}
+                experimentalFeatures={{ columnGrouping: true }}>
             </NewModularDatagrid>
         </Box>
         </div>

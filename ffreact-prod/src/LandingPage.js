@@ -1,16 +1,17 @@
 import React from 'react'
 import { Fragment } from 'react'
-import { Typography, Card, Grid, CardContent, CardActionArea } from '@mui/material'
+import { Typography, Card, Grid, CardContent, CardActionArea, Button } from '@mui/material'
 import { Stack } from '@mui/material'
 import HouseIcon from '@mui/icons-material/House';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import Dropdown from './components/Dropdown';
 
 const cardStyle = {
     height: '100%',
-    borderWidth: '.1rem',
+    borderWidth: '.15rem',
 }
 
 const LandingPage = (props) => {
@@ -50,27 +51,40 @@ const LandingPage = (props) => {
             </Grid>
 
             <Grid item sm={12} md={4}>
-                <Card variant='outlined' sx={cardStyle}>
-                    <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('mealsPage')}>
-                        <CardContent>
-                            <Stack spacing={4} justifyContent='space-between' direction='row'>
-                                <div>
-                                    <Typography component='h5' variant='h5'>Meals</Typography>
-                                    <ul>
-                                        <li><Typography component='p' variant='body1'>View meals</Typography></li>
-                                        <li><Typography component='p' variant='body1'>Add/Update meals</Typography></li>
-                                    </ul>
-                                </div>
-                                <RestaurantIcon fontSize='large'></RestaurantIcon>
-                            </Stack>
-                        </CardContent>
+                <Dropdown
+                    trigger={
+                    <Card variant='outlined' sx={cardStyle}>
+                    <CardActionArea sx={{height: '100%'}}/*onClick={() => handlePageClick('mealsPage')}*/>
+                    <CardContent>
+                        <Stack spacing={4} justifyContent='space-between' direction='row'>
+                            <div>
+                                <Typography component='h5' variant='h5'>Meals</Typography>
+                                <ul>
+                                    <li><Typography component='p' variant='body1'>View meals</Typography></li>
+                                    <li><Typography component='p' variant='body1'>Add/Update meals</Typography></li>
+                                </ul>
+                            </div>
+                            
+                            <RestaurantIcon color='darkBlue' fontSize='large'></RestaurantIcon>
+                        </Stack>
+                    </CardContent>
                     </CardActionArea>
-                </Card>    
+                    </Card>
+                    }
+                    menu={[
+                        <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('meals')}>
+                            Meal Plans</Button>,
+                        <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('recipePage')}>
+                            Recipes</Button>
+                        ]}
+                />
             </Grid>
 
             <Grid item sm={12} md={4}>
+                <Dropdown
+                trigger={
                 <Card variant='outlined' sx={cardStyle}>
-                    <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('inventoryPage')}>
+                    <CardActionArea sx={{height: '100%'}}>
                         <CardContent>
                             <Stack spacing={4} justifyContent='space-between' direction='row'>
                                 <div>
@@ -80,16 +94,27 @@ const LandingPage = (props) => {
                                         <li><Typography component='p' variant='body1'>Add/Update ingredients and packaging</Typography></li>
                                     </ul>
                                 </div>
-                                <InventoryIcon fontSize='large'></InventoryIcon>
+                                <InventoryIcon color='darkBlue' fontSize='large'></InventoryIcon>
                             </Stack>
                         </CardContent>
                     </CardActionArea>
-                </Card>    
+                </Card>
+                }
+                menu={[
+                    <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('ingredientPage')}>
+                        Ingredients</Button>,
+                    <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('packagingPage')}>
+                        Packaging</Button>
+                ]}/>
+                    
             </Grid>
 
             <Grid item sm={12} md={4}>
+                <Dropdown
+                sx={{ alignItems: 'left' }}
+                trigger={
                 <Card variant='outlined' sx={cardStyle}>
-                    <CardActionArea sx={{height: '100%'}} onClick={() => handlePageClick('reports')}>
+                    <CardActionArea sx={{height: '100%'}}>
                         <CardContent>
                             <Stack spacing={4} justifyContent='space-between' direction='row'>
                                 <div>
@@ -99,11 +124,30 @@ const LandingPage = (props) => {
                                         <li><Typography component='p' variant='body1'>Print or send reports via email</Typography></li>
                                     </ul>
                                 </div>
-                                <AssessmentIcon fontSize='large'></AssessmentIcon>
+                                <AssessmentIcon color='darkBlue' fontSize='large'></AssessmentIcon>
                             </Stack>
                         </CardContent>
                     </CardActionArea>
-                </Card>    
+                </Card>
+                }
+                menu={[
+                    <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                        Households Report</Button>,
+                    <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('ingredients-report')}>
+                        Ingredients Report</Button>,
+                    <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                        Packaging Report</Button>,
+                    <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                        Purchasing Report</Button>,
+                    <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                        Packaging Returns</Button>,
+                    <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                        Meal Plan Report</Button>,
+                    <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                        Meal History</Button>,
+                    <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                        Cost Totals</Button>,
+                ]}/>
             </Grid>
 
             <Grid item sm={12} md={4}>
@@ -118,7 +162,7 @@ const LandingPage = (props) => {
                                         <li><Typography component='p' variant='body1'>Add/edit users</Typography></li>
                                     </ul>
                                 </div>
-                                <AdminPanelSettingsIcon fontSize='large'></AdminPanelSettingsIcon>
+                                <AdminPanelSettingsIcon color='darkBlue' fontSize='large'></AdminPanelSettingsIcon>
                             </Stack>
                         </CardContent>
                     </CardActionArea>
