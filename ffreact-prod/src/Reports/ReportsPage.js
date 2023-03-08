@@ -49,14 +49,14 @@ const ReportsPage = (props) => {
     
     const handlePageClick = (pageName) => {
         console.log(pageName)
+        if (pageName === 'cost-totals') setCurrPage(<CostTotals handlePageClick={handlePageClick} />);
         if (pageName === 'households-report') setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />);
         if (pageName === 'ingredients-report') setCurrPage(<IngredientsReport handlePageClick={handlePageClick} />);
-        if (pageName === 'packaging-report') setCurrPage(<PackagingReport handlePageClick={handlePageClick} />);
-        if (pageName === 'purchasing-report') setCurrPage(<PurchasingReport handlePageClick={handlePageClick} />);
-        if (pageName === 'packaging-returns') setCurrPage(<PackagingReturns handlePageClick={handlePageClick} />);
-        if (pageName === 'meal-plan-report') setCurrPage(<MealPlanReport handlePageClick={handlePageClick} />);
         if (pageName === 'meal-history') setCurrPage(<MealHistory handlePageClick={handlePageClick} />);
-        else if (pageName === 'cost-totals') setCurrPage(<CostTotals handlePageClick={handlePageClick} />);
+        if (pageName === 'meal-plan-report') setCurrPage(<MealPlanReport handlePageClick={handlePageClick} />);
+        if (pageName === 'packaging-report') setCurrPage(<PackagingReport handlePageClick={handlePageClick} />);
+        if (pageName === 'packaging-returns') setCurrPage(<PackagingReturns handlePageClick={handlePageClick} />);
+        else if (pageName === 'purchasing-report') setCurrPage(<PurchasingReport handlePageClick={handlePageClick} />);
     }
 
     // HTML structure of this component
@@ -68,21 +68,21 @@ const ReportsPage = (props) => {
             trigger={<Button color='lightGreen' variant='contained'>Generate Report</Button>}
             menu={[
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
+                    Cost Totals</button>,
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Households Report</button>,
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('ingredients-report')}>
                     Ingredients Report</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('packaging-report')}>
-                    Packaging Report</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
-                    Purchasing Report</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
-                    Packaging Returns</button>,
-                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
-                    Meal Plan Report</button>,
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Meal History</button>,
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
-                    Cost Totals</button>,
+                    Meal Plan Report</button>,
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('packaging-report')}>
+                    Packaging Report</button>,
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
+                    Packaging Returns</button>,
+                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
+                    Purchasing Report</button>,
                 ]}/>
             {currPage}
         </div>

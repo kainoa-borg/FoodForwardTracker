@@ -17,17 +17,17 @@ import Dropdown from './components/Dropdown'
     if (loginState.isAuthenticated) {
       return (
         <Grid item>
-          <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('userPage')}>My Account</Button>
-          <Button color='lightGreen' variant='contained' onClick={handleLogout}>Sign Out</Button>
+          <Button color='lightGreen' sx={{boxShadow: '0'}} variant='contained' onClick={() => handlePageClick('userPage')}>My Account</Button>
+          <Button color='lightGreen' sx={{boxShadow: '0'}} variant='contained' onClick={handleLogout}>Sign Out</Button>
         </Grid>
       )
     }
     else {
       return (
         <Grid item>
-            <Button color='lightGreen' variant="contained" onClick={() => handlePageClick('loginPage')
+            <Button color='lightGreen' sx={{boxShadow:'0'}} variant="contained" onClick={() => handlePageClick('loginPage')
             }>Login{""}</Button>
-            <Button color='lightGreen' variant="contained" onClick={() => handlePageClick('newUserPage')}>Sign Up{""}</Button>
+            <Button color='lightGreen' sx={{boxShadow:'0'}} variant="contained" onClick={() => handlePageClick('newUserPage')}>Sign Up{""}</Button>
         </Grid>
       )
     }
@@ -53,7 +53,7 @@ import Dropdown from './components/Dropdown'
                 Clients
             </Button>
             <Dropdown
-            trigger={<Button color='lightGreen' variant='contained'> Inventory </Button>}
+            trigger={<Button color='lightGreen' sx={{boxShadow:'0'}} variant='contained'> Inventory </Button>}
             menu={[
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('ingredientPage')}>
                     Ingredients</Button>,
@@ -61,7 +61,7 @@ import Dropdown from './components/Dropdown'
                     Packaging</Button>
                 ]}/>
             <Dropdown
-            trigger={<Button color='lightGreen' variant='contained'> Meals </Button>}
+            trigger={<Button color='lightGreen' sx ={{boxShadow: '0'}} variant='contained'> Meals </Button>}
             menu={[
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('meals')}>
                     Meal Plans</Button>,
@@ -70,26 +70,26 @@ import Dropdown from './components/Dropdown'
                 ]}/>
             <Dropdown
             sx={{ alignItems: 'left' }}
-            trigger={<Button color='lightGreen' variant='contained'> Reports </Button>}
+            trigger={<Button color='lightGreen' sx={{boxShadow: '0'}} variant='contained'> Reports </Button>}
             menu={[
+              <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                    Cost Totals</Button>,
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
                     Households Report</Button>,
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('ingredients-report')}>
                     Ingredients Report</Button>,
-                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('packaging-report')}>
-                    Packaging Report</Button>,
-                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
-                    Purchasing Report</Button>,
-                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
-                    Packaging Returns</Button>,
-                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
-                    Meal Plan Report</Button>,
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
                     Meal History</Button>,
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
-                    Cost Totals</Button>,
+                    Meal Plan Report</Button>,
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('packaging-report')}>
+                    Packaging Report</Button>,
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                    Packaging Returns</Button>,
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                    Purchasing Report</Button>,
                 ]}/>
-            <Button color='lightGreen' variant="contained" onClick={() => handlePageClick('userList')}>
+            <Button color='lightGreen' sx={{boxShadow:'0'}} variant="contained" onClick={() => handlePageClick('userList')}>
                 Administration
             </Button>
           </Grid>
