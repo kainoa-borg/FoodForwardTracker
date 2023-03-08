@@ -48,10 +48,7 @@ import Dropdown from './components/Dropdown'
         <Grid container justifyContent='space-between' alignItems='center' direction='row'>
           <Grid item sx={{width: '60%'}} container alignItems='center' direction='row'>
             <Typography component='img' sx={{width: '7%'}} src="ffreact-prod/src/Images/ff_logo.jpg" onClick = {() => handlePageClick('landingPage')}/>
-            <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('landingPage')}>
-              Landing Page
-            </Button>
-            <Button color='lightGreen' variant='contained' onClick={() => handlePageClick('households')}>
+            <Button color='lightGreen' sx={{boxShadow:'0'}} variant='contained' onClick={() => handlePageClick('households')}>
                 Clients
             </Button>
             <Dropdown
