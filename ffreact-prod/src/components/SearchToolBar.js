@@ -42,6 +42,7 @@ const SearchToolBar = ({setFilterModel, searchField, searchLabel, filterField, f
     return (
         <Box>
             <TextField
+            size='small'
             sx={{width: '15rem'}}
             value={searchValue}
             onChange={handleSearchChange}
