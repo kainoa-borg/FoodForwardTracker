@@ -65,8 +65,8 @@ class IngredientInvSerializer(ModelSerializer):
 		# ing_usage['i_usage_id'] = latest_id
 		# ing_usage['used_ing_id'] = ing_instance
 		# IngredientUsages.objects.create(**ing_usage)
+		IngredientUsages.objects.filter(used_ing = ing_instance).delete()
 		if ing_usage:
-			IngredientUsages.objects.all().filter(used_ing = ing_instance).delete()
 			for usage in ing_usage:
 				used += int(usage['used_qty'])
 				if (IngredientUsages.objects.count() > 0):
@@ -80,7 +80,7 @@ class IngredientInvSerializer(ModelSerializer):
 		in_qty = validated_data['in_qty']
 		validated_data['qty_on_hand'] =  in_qty - used
 		return super().update(ing_instance, validated_data)
-
+# 
 
 # Create your views here.
 class IngredientInvView(ModelViewSet):
