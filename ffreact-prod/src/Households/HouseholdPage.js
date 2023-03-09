@@ -31,7 +31,7 @@ export default function HouseholdPage() {
         { field: 'num_adult', headerName: 'Adults', type: 'number', width: 70, editable: true },
         { field: 'num_child_gt_6', headerName: '7-17',  type: 'number', width: 70, editable: true },
         { field: 'num_child_lt_6', headerName: '0-6', type: 'number', width: 70, editable: true },
-        { field: 'phone', headerName: 'Phone Number', width: 110, type: 'number', editable: true },
+        { field: 'phone', headerName: 'Phone', width: 110, type: 'phone', editable: true },
         { field: 'street', headerName: 'Street', width: 160, type: 'string', editable: true },
         { field: 'city', headerName: 'City', width: 100, type: 'string', editable: true },
         { field: 'state', headerName: 'State', width: 70, type: 'string', editable: true },
@@ -56,14 +56,20 @@ export default function HouseholdPage() {
             description: 'Number of members per household in each age range',
             children: [{ field: 'num_adult' }, { field: 'num_child_gt_6' }, { field: 'num_child_lt_6' }],
         },
-        { field: 'phone' },
+        {
+            headerName: 'Contact Details',
+            children: [{field: 'phone' }, { field: 'sms_flag'}]
+        },
         {
             groupId: 'contact',
             headerName: 'Address',
             children: [{ field: 'street' }, { field: 'city' }, { field: 'state' }, { field: 'pcode' }],
         },
-        { field: 'delivery_notes'}, { field: 'sms_flag'},
-        { field: 'veg_flag' }, { field: 'gf_flag'}, { field: 'hh_allergies'},
+        { field: 'delivery_notes'},
+        {
+            headerName: 'Dietary Requirements',
+            children:[{ field: 'veg_flag' }, { field: 'gf_flag'}, { field: 'hh_allergies'}]
+        },
         { field: 'paused_flag' }, { field: 'paying'}
     ];
 
