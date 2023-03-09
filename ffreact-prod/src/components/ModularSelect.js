@@ -2,10 +2,24 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { useGridApiContext } from '@mui/x-data-grid';
-import { createTheme, ThemeProvider } from '@mui/material';
-// import { Input } from '@mui/material';
+import { createTheme, FilledInput, FormControl, Input, InputAdornment, InputLabel, ThemeProvider } from '@mui/material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const filter = createFilterOptions();
+
+const CustomInput = ({params, searchField, required}) => {
+  return (
+    // <TextField {...params} fullWidth name={searchField} required={required} />
+    <div ref={params.InputProps.ref} style={{height: '100%', width: '100%', textAlign: 'center'}}>
+    {/* <InputLabel htmlFor="component-filled" {...params.InputLabelProps}>Search...</InputLabel> */}
+    <Input {...params.inputProps} disableUnderline sx={{height: '100%', width: '100%', margin: 0, paddingLeft: '16px'}} name={searchField} required={required}
+      endAdornment={
+        <InputAdornment><ArrowDropDownIcon></ArrowDropDownIcon></InputAdornment>
+      }
+    />
+    </div>
+  );
+}
 
 // Takes:
     // options - list of select options
@@ -14,17 +28,6 @@ const filter = createFilterOptions();
     // required - Whether this TextField will be considered required in forms
     // id and field - Datagrid row params passed in renderEditCell
 // Returns autocomplete select with add functionality
-
-const filledInputTheme = createTheme({
-  overrides: {
-    MuiFilledInput: {
-      root: {
-        backgroundColor: "white",
-      }
-    }
-  }
-});
-
 export default function ModularSelect({id, field, value, options, searchField, required, onChange}) {
   const [selectValue, setSelectValue] = value ? React.useState({[searchField]: value}) : React.useState();
 
@@ -46,7 +49,7 @@ export default function ModularSelect({id, field, value, options, searchField, r
   }
 
   return (
-    <ThemeProvider theme={filledInputTheme}>
+    // <ThemeProvider theme={filledInputTheme}>
     <Autocomplete
       value={selectValue}   
       onChange={(event, newValue) => {
@@ -105,16 +108,21 @@ export default function ModularSelect({id, field, value, options, searchField, r
       isOptionEqualToValue={() => true}
       // renderOption={(props, option) => <li {...props}>{option[searchField]}</li>}
       size='small'
-      sx={{ width: '100%', height: '100%' }}
+      // sx={{ width: '100%', height: '100%' }}
       selectOnFocus
       clearOnBlur
       disableClearable
       // handleHomeEndKeys
       // freeSolo
-      renderInput={(params) => (
-        <TextField variant='filled' fullWidth={true} sx={{alignItems: 'center', justifyItems: 'center'}} {...params} name={searchField} required={required} />
-      )}
+      renderInput={(params) => {
+        if (onChange) {
+          return (<TextField {...params} name={searchField} required={required}/>);
+        }
+        else {
+          return (<CustomInput params={params} searchField={searchField} required={required}/>);
+        }
+      }}
     />
-    </ThemeProvider>
+    // </ThemeProvider>
   );
 }
