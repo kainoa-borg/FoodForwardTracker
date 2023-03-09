@@ -127,7 +127,7 @@ export default function NewModularDatagrid(props) {
     const processRowUpdate = (newRow) => {
         const updatedRow = {...newRow, isNew: false}; 
         
-        // console.log(newRow);
+        console.log(newRow);
 
         axios({
             method: "PATCH",

@@ -68,10 +68,9 @@ class PackagingInvSerializer(ModelSerializer):
 		# pkg_usage['p_usage_id'] = latest_id
 		# pkg_usage['used_pkg_id'] = pkg_instance
 		# IngredientUsages.objects.create(**pkg_usage)
+		PackagingUsages.objects.filter(used_pkg = pkg_instance).delete()
 		if pkg_usage:
-			delete_set = PackagingUsages.objects.all().filter(used_pkg = pkg_instance)
-			if delete_set:
-				delete_set.delete()
+			# PackagingUsages.objects.filter(used_pkg = pkg_instance).delete()
 			for usage in pkg_usage:
 				used += int(usage['used_qty'])
 				if (PackagingUsages.objects.count() > 0):
