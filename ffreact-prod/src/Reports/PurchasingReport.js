@@ -1,6 +1,9 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
-import ReusableTable from '../ReusableTable.js'
+import ReportsPage from './ReportsPage';
+import { Box, Button, setAddFormOpen} from '@mui/material'
+import { DataGrid } from '@mui/x-data-grid'
+import { ToolBar, GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid';
 
 // Packaging List Component
 export default function PurchasingReport() {
@@ -44,11 +47,21 @@ export default function PurchasingReport() {
           });
     }*/
 
+    const columns = [
+      
+    ]
+
     if (purchasing === undefined) {
         return (<>loading</>);
     }
 
-    
+    function CustomToolbar() {
+      return (
+        <GridToolbarContainer>
+          <GridToolbarExport />
+        </GridToolbarContainer>
+      );
+  }
 
     // The HTML structure of this component
     return (
