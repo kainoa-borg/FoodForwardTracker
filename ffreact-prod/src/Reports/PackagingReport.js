@@ -1,6 +1,10 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
+<<<<<<< HEAD
+import ReportsPage from '../Reports/ReportsPage.js'
+=======
 // import ReportsPage from '../ReportsPage.js'
+>>>>>>> a48dd72e4e4e1cb00da9b053e40b09e8917db4ea
 import { Box, Button, setAddFormOpen} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import { ToolBar, GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid';
@@ -60,7 +64,7 @@ export default function PackagingReport() {
 
     // The HTML structure of this component
     return (
-        <Box sx={{height: '100%'}}>
+        <Box sx={{height: '75%'}}>
             {/* Show a row for each ingredient in packaging.*/}
             <DataGrid
                 columns={columns}
