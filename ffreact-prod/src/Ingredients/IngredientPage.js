@@ -86,10 +86,10 @@ export default function IngredientPage() {
     }*/
     
     const columns = [
-        { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true, renderEditCell: (params) => <ModularSelect {...params} options={ingredients} searchField={'ingredient_name'} value={params.value} required/> },
-        { field: 'storage_type', headerName: 'Category', width: 150, editable: true, renderEditCell: (params) => <ModularSelect {...params} options={ingredients} searchField={'storage_type'} value={params.value}/> },
-        { field: 'pkg_type', headerName: 'Package Type', width: 120, editable: true, renderEditCell: (params) => <ModularSelect {...params} options={ingredients} searchField={'pkg_type'} value={params.value}/> },
-        { field: 'unit', headerName: 'Measure', width: 90, editable: true, renderEditCell: (params) => <ModularSelect options={ingredients} searchField={'unit'} value={params.value}/> },
+        { field: 'ingredient_name', headerName: 'Ingredient', width: 140, editable: true, renderEditCell: (params) => <ModularSelect {...params} options={ingredients} searchField={'ingredient_name'} value={params.value} required/> },
+        { field: 'storage_type', headerName: 'Category', width: 170, editable: true, renderEditCell: (params) => <ModularSelect {...params} options={ingredients} searchField={'storage_type'} value={params.value}/> },
+        { field: 'pkg_type', headerName: 'Package Type', width: 140, editable: true, renderEditCell: (params) => <ModularSelect {...params} options={ingredients} searchField={'pkg_type'} value={params.value}/> },
+        { field: 'unit', headerName: 'Measure', width: 110, editable: true, renderEditCell: (params) => <ModularSelect options={ingredients} searchField={'unit'} value={params.value}/> },
         { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
         { field: 'pref_isupplier_id', headerName: 'Supplier', type: 'singleSelect', valueOptions: supplierOptions, width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
         { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
@@ -113,6 +113,7 @@ export default function IngredientPage() {
             keyFieldName='i_id'
             entryName='Ingredient'
             searchField='ingredient_name'
+            searchLabel='Ingredient Names'
             AddFormComponent={IngredientForm}
             >
             </NewModularDatagrid>

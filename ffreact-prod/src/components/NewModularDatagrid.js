@@ -30,6 +30,10 @@ export default function NewModularDatagrid(props) {
     const AddFormComponent = props.AddFormComponent;
 
     const searchField = props.searchField;
+    const searchLabel = props.searchLabel;
+    // const filterType = props.filterType;
+    // const filterField = props.filterField;
+    // const filterOperator = props.filterOperator;
 
     // Entry Name
     const entryName = props.entryName;
@@ -75,6 +79,7 @@ export default function NewModularDatagrid(props) {
 
     // Generalized Add Row
     const addEntry = (formData) => {
+        console.log(formData);
         // If a form doesn't take the latest key, it should be added for the datagrid
         // console.log(formData);
         if (!formData[keyFieldName])
@@ -101,7 +106,7 @@ export default function NewModularDatagrid(props) {
     const deleteEntry = (params) => {
         // Open saving changes notification
         setUpdateSBOpen(true);
-
+        
         axios({
             method: "DELETE",
             url:"http://"+apiIP+":8000/api/" + apiEndpoint + "/"+params.id+'/',
@@ -175,8 +180,8 @@ export default function NewModularDatagrid(props) {
     // const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteAnchor: null, confirmCancelAnchor: null});
 
     // const handleRowEditStop = (params, event) => {
-    //     console.log(params.reason);
-    //     console.log(event);
+    //     // console.log(params.reason);
+    //     // console.log(event);
     //     if (params.reason === 'escapeKeyDown') {event.defaultMuiPrevented = true; setPopoverAnchors({confirmDeleteAnchor: null, confirmCancelAnchor: event.target})};
     // }
 
@@ -260,7 +265,7 @@ export default function NewModularDatagrid(props) {
                         horizontal: 'left',
                     }}
                 >
-                    <Typography>Delete this entry?</Typography>
+                    <Typography onClick={(params) => {console.log(deleteParams)}}>Delete this entry?</Typography>
                     {/* Confirm button fires deleteIngredient using row params state */}
                     <Button variant='contained' onClick={() => deleteEntry(deleteParams)}>Confirm</Button>
                 </Popover>
@@ -288,7 +293,7 @@ export default function NewModularDatagrid(props) {
     return(
         <Fragment>
             <Stack direction='row' sx={{width: '100%'}}>
-                {searchField ? <SearchToolBar setFilterModel={setFilterModel} searchField={searchField} /> : <></>}
+                {searchField ? <SearchToolBar setFilterModel={setFilterModel} searchField={searchField} searchLabel={searchLabel}/> : <></>}
             </Stack>
             <Box sx={{display: 'flex', height: '100%'}}>
                 <Box sx={{flexGrow: 1}}>
@@ -305,6 +310,13 @@ export default function NewModularDatagrid(props) {
                     getRowId={(row) => row[keyFieldName]}
                     pageSize={10}
                     processRowUpdate={processRowUpdate}
+                    onRowEditStop={
+                        (params, event) => {
+                            if (params.reason === 'escapeKeyDown' || params.reason === 'enterKeyDown') {
+                                event.defaultMuiPrevented = true;
+                            }
+                        }
+                    }
                     //rowsPerPageOptions={[5]}
                     disableSelectionOnClick
                     // disableVirtualization

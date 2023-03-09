@@ -28,6 +28,7 @@ export default function UserList() {
               // apiIP={'localhost'}
               entryName={'User'}
               searchField={'username'}
+              searchLabel={'User Names'}
               AddFormComponent={UserForm}>
             </NewModularDatagrid>
         </Box>

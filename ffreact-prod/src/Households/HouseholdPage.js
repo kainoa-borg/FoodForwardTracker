@@ -72,14 +72,15 @@ export default function HouseholdPage() {
         <h3>Clients</h3>
         <Box sx={{height: '70vh'}}>
             <NewModularDatagrid 
-                columns={columns} 
+                columns={columns}
                 columnGroupingModel={columnGroupingModel}
                 getRowHeight={() => 'auto'}
                 getEstimatedRowHeight={() => 300} 
-                keyFieldName={'hh_name'} 
+                keyFieldName={'hh_name'}
                 apiEndpoint={'households'}
                 entryName={'Client'}
                 searchField={'hh_name'}
+                searchLabel={'Client Names'}
                 AddFormComponent={HouseholdForm}
                 experimentalFeatures={{ columnGrouping: true }}>
             </NewModularDatagrid>

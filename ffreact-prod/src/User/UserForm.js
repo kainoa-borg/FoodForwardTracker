@@ -31,13 +31,13 @@ const UserForm = (props) => {
       // Prevent refresh
       event.preventDefault();
       // Pass User object to UserList callback
-      // props.addUser(user)
       addEntry(user);
       // Clear the form state
       setUser(clearUser());
     }
 
     const updateEditForm = (names, values) => {
+      console.log(names, values);
         const newUser = { ...user };
       for (let i = 0; i < names.length; i++) {
           newUser[names[i]] = values[i];
@@ -71,7 +71,7 @@ const UserForm = (props) => {
               </Grid>
               <Grid item>
                 <InputLabel htmlFor='password'>Password: </InputLabel>
-                <Input name='password' id='password' type='password'/>
+                <Input name='password' id='password' type='password' value={user.password} onChange={handleFormChange}/>
               </Grid>
               <Grid item>
                 <InputLabel htmlFor='email'>Email: </InputLabel>

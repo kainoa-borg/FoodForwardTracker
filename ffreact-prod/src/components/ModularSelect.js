@@ -2,6 +2,8 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { useGridApiContext } from '@mui/x-data-grid';
+import { createTheme, ThemeProvider } from '@mui/material';
+// import { Input } from '@mui/material';
 
 const filter = createFilterOptions();
 
@@ -12,10 +14,19 @@ const filter = createFilterOptions();
     // required - Whether this TextField will be considered required in forms
     // id and field - Datagrid row params passed in renderEditCell
 // Returns autocomplete select with add functionality
+
+const filledInputTheme = createTheme({
+  overrides: {
+    MuiFilledInput: {
+      root: {
+        backgroundColor: "white",
+      }
+    }
+  }
+});
+
 export default function ModularSelect({id, field, value, options, searchField, required, onChange}) {
-
   const [selectValue, setSelectValue] = value ? React.useState({[searchField]: value}) : React.useState();
-
 
   // Remove duplicate options
   // Get array of all searchField values
@@ -35,6 +46,7 @@ export default function ModularSelect({id, field, value, options, searchField, r
   }
 
   return (
+    <ThemeProvider theme={filledInputTheme}>
     <Autocomplete
       value={selectValue}   
       onChange={(event, newValue) => {
@@ -70,16 +82,13 @@ export default function ModularSelect({id, field, value, options, searchField, r
         if (inputValue !== '' && !isExisting) {
           filtered.push({
             inputValue,
-            [searchField]: `Add "${inputValue}"`,
+            [searchField]: inputValue
+            // [searchField]: `Add "${inputValue}"`,
           });
         }
 
         return filtered;
       }}
-      selectOnFocus
-      clearOnBlur
-      disableClearable
-      handleHomeEndKeys
       options={options}
       getOptionLabel={(option) => {
         // Value selected with enter, right from the input
@@ -93,17 +102,19 @@ export default function ModularSelect({id, field, value, options, searchField, r
         // Regular option
         return option[searchField];
       }}
-      renderOption={(props, option) => <li {...props}>{option[searchField]}</li>}
-      sx={{ width: 300 }}
-      freeSolo
+      isOptionEqualToValue={() => true}
+      // renderOption={(props, option) => <li {...props}>{option[searchField]}</li>}
+      size='small'
+      sx={{ width: '100%', height: '100%' }}
+      selectOnFocus
+      clearOnBlur
+      disableClearable
+      // handleHomeEndKeys
+      // freeSolo
       renderInput={(params) => (
-        <TextField {...params} name={searchField} required={required} label="Select..." />
+        <TextField variant='filled' fullWidth={true} sx={{alignItems: 'center', justifyItems: 'center'}} {...params} name={searchField} required={required} />
       )}
     />
+    </ThemeProvider>
   );
 }
-
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const top100Films = [
-  { title: 'The Shawshank Redemption', year: 1994 },
-];

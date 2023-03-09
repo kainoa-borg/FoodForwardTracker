@@ -108,6 +108,7 @@ export default function PackagingPage() {
                 keyFieldName='p_id'
                 entryName='Packaging'
                 searchField='package_type'
+                searchLabel='Packaging Types'
                 AddFormComponent={PackagingForm}
             />            
         </Box>
