@@ -59,29 +59,29 @@ class PackagingInvSerializer(ModelSerializer):
 		pkg_usage = validated_data.pop('packaging_usage')
 		# ing_instance = Ingredients.objects.create(**validated_data)
 		used = 0
-		pkg_usages = PackagingUsages.objects.filter(used_ing = pkg_instance)
-		if pkg_usages:
-			for pkg in pkg_usages:
-				used += pkg.used_qty
-		used += pkg_usage['used_qty']
-		latest_id = PackagingUsages.object.latest('p_usage_id').p_usage_id + 1
-		pkg_usage['p_usage_id'] = latest_id
-		pkg_usage['used_pkg_id'] = pkg_instance
-		IngredientUsages.objects.create(**pkg_usage)
-#		if pkg_usage:
-#			delete_set = PackagingUsages.objects.all().filter(used_pkg = pkg_instance)
-#			if delete_set:
-#				delete_set.delete()
-#			for usage in pkg_usage:
-#				used += int(usage['used_qty'])
-#				if (PackagingUsages.objects.count() > 0):
-#					latest_id = PackagingUsages.objects.latest('p_usage_id').p_usage_id +1
-#				else:
-#					latest_id = 0
-#				usage['p_usage_id'] = latest_id
-#				usage['used_pkg_id'] = validated_data.get('p_id')
-#				# raise serializers.ValidationError(usage)
-#				PackagingUsages.objects.create(**usage)
+		# pkg_usages = PackagingUsages.objects.filter(used_ing = pkg_instance)
+		# if pkg_usages:
+		# 	for pkg in pkg_usages:
+		# 		used += pkg.used_qty
+		# used += pkg_usage['used_qty']
+		# latest_id = PackagingUsages.object.latest('p_usage_id').p_usage_id + 1
+		# pkg_usage['p_usage_id'] = latest_id
+		# pkg_usage['used_pkg_id'] = pkg_instance
+		# IngredientUsages.objects.create(**pkg_usage)
+		if pkg_usage:
+			delete_set = PackagingUsages.objects.all().filter(used_pkg = pkg_instance)
+			if delete_set:
+				delete_set.delete()
+			for usage in pkg_usage:
+				used += int(usage['used_qty'])
+				if (PackagingUsages.objects.count() > 0):
+					latest_id = PackagingUsages.objects.latest('p_usage_id').p_usage_id +1
+				else:
+					latest_id = 0
+				usage['p_usage_id'] = latest_id
+				usage['used_pkg_id'] = validated_data.get('p_id')
+				# raise serializers.ValidationError(usage)
+				PackagingUsages.objects.create(**usage)
 		in_qty = validated_data['in_qty']
 		validated_data['qty_on_hand'] =  in_qty - used
 		return super().update(pkg_instance, validated_data)
