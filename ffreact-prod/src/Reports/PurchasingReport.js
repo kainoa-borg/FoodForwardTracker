@@ -9,6 +9,7 @@ import { ToolBar, GridToolbarExport, GridToolbarContainer } from '@mui/x-data-gr
 export default function PurchasingReport() {
     const [purchasing, setPurchasing] = useState(undefined);
     // const [ingredients, setIngredients] = useState(undefined);
+    const columns = []
 
     useEffect(() => {
         getDBPackaging();
@@ -70,7 +71,7 @@ export default function PurchasingReport() {
       <DataGrid
           columns={columns}
           rows={purchasing}
-          components = {{Toolbar:CustomToolbar}}
+          //components = {{Toolbar:CustomToolbar}}
           getRowId={(row) => row.m_id}
           autoHeight = {true}
       >

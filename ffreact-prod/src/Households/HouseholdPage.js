@@ -31,13 +31,13 @@ export default function HouseholdPage() {
         { field: 'num_adult', headerName: 'Adults', type: 'number', width: 70, editable: true },
         { field: 'num_child_gt_6', headerName: '7-17',  type: 'number', width: 70, editable: true },
         { field: 'num_child_lt_6', headerName: '0-6', type: 'number', width: 70, editable: true },
-        { field: 'phone', headerName: 'Phone Number', width: 110, type: 'number', editable: true },
+        { field: 'phone', headerName: 'Phone', width: 110, type: 'phone', editable: true },
+        { field: 'sms_flag', headerName: 'SMS', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'street', headerName: 'Street', width: 160, type: 'string', editable: true },
         { field: 'city', headerName: 'City', width: 100, type: 'string', editable: true },
         { field: 'state', headerName: 'State', width: 70, type: 'string', editable: true },
         { field: 'pcode', headerName: 'Zip Code', width: 80, type: 'string', editable: true, /*valueFormatter: (value) => {return value}*/ },
         { field: 'delivery_notes', headerName: 'Delivery Notes', width: 100, editable: true },
-        { field: 'sms_flag', headerName: 'SMS', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'veg_flag', headerName: 'Veg', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'gf_flag', headerName: 'Gluten Free', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0},
         { field: 'hh_allergies', headerName: 'Allergies', width: 100, type: 'string', editable: true, 
@@ -56,14 +56,22 @@ export default function HouseholdPage() {
             description: 'Number of members per household in each age range',
             children: [{ field: 'num_adult' }, { field: 'num_child_gt_6' }, { field: 'num_child_lt_6' }],
         },
-        { field: 'phone' },
+        {
+            groupId: 'contact_details',
+            headerName: 'Contact Details',
+            children: [{field: 'phone' }, { field: 'sms_flag'}]
+        },
         {
             groupId: 'contact',
             headerName: 'Address',
             children: [{ field: 'street' }, { field: 'city' }, { field: 'state' }, { field: 'pcode' }],
         },
-        { field: 'delivery_notes'}, { field: 'sms_flag'},
-        { field: 'veg_flag' }, { field: 'gf_flag'}, { field: 'hh_allergies'},
+        { field: 'delivery_notes'},
+        {
+            groupId: 'diet',
+            headerName: 'Dietary Requirements',
+            children:[{ field: 'veg_flag' }, { field: 'gf_flag'}, { field: 'hh_allergies'}]
+        },
         { field: 'paused_flag' }, { field: 'paying'}
     ];
 
@@ -72,14 +80,15 @@ export default function HouseholdPage() {
         <h3>Clients</h3>
         <Box sx={{height: '70vh'}}>
             <NewModularDatagrid 
-                columns={columns} 
+                columns={columns}
                 columnGroupingModel={columnGroupingModel}
                 getRowHeight={() => 'auto'}
                 getEstimatedRowHeight={() => 300} 
-                keyFieldName={'hh_name'} 
+                keyFieldName={'hh_name'}
                 apiEndpoint={'households'}
                 entryName={'Client'}
                 searchField={'hh_name'}
+                searchLabel={'Client Names'}
                 AddFormComponent={HouseholdForm}
                 experimentalFeatures={{ columnGrouping: true }}>
             </NewModularDatagrid>
