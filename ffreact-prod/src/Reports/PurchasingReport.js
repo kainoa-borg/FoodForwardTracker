@@ -48,9 +48,9 @@ export default function PurchasingReport() {
           });
     }*/
 
-    const columns = [
+    // const columns = [
       
-    ]
+    // ]
 
     if (purchasing === undefined) {
         return (<>loading</>);
