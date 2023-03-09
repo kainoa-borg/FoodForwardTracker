@@ -28,7 +28,7 @@ class PackagingInvSerializer(ModelSerializer):
 	pref_psupplier = SupplierSerializer(read_only=True)
 	psupplier_id = serializers.IntegerField(allow_null=True)
 	pref_psupplier_id = serializers.IntegerField(allow_null=True)
-	#packaging_usage = PackagingUsageSerializer(required=False, allow_null=True, many=True)
+	packaging_usage = PackagingUsageSerializer(required=False, allow_null=True, many=True)
 	class Meta():
 		model = Packaging
 		fields = ('p_id', 'package_type', 'unit_qty', 'qty_holds', 'unit', 'returnable', 'in_date', 'in_qty', 'packaging_usage', 'qty_on_hand', 'unit_cost', 'flat_fee', 'psupplier_id', 'pref_psupplier_id', 'psupplier', 'pref_psupplier')
