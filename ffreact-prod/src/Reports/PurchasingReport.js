@@ -48,11 +48,21 @@ export default function PurchasingReport() {
           });
     }*/
 
+    // const columns = [
+      
+    // ]
+
     if (purchasing === undefined) {
         return (<>loading</>);
     }
 
-    
+    function CustomToolbar() {
+      return (
+        <GridToolbarContainer>
+          <GridToolbarExport />
+        </GridToolbarContainer>
+      );
+  }
 
     // The HTML structure of this component
     return (
