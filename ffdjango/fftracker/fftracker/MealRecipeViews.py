@@ -6,6 +6,7 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from rest_framework import status
 from PIL import Image
+import os
 import json
 
 from .models import Recipes, RecipeAllergies, RecipeDiets, RecipeIngredients, Stations, RecipePackaging, RecipeInstructions

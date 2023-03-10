@@ -231,7 +231,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         // console.log(props.image_source);
         // Replace image with a prompt if undefined
         if (props.image_source) {
-            return (<img style={{width: '30vw'}} src={props.image_source}></img>);
+            return (<img style={{width: '30vw'}} src={`${props.image_source}?${Date.now()}`} key={props.image_source}></img>);
         }
         else {
             return (<Typography>Enter a recipe image</Typography>)
@@ -242,7 +242,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         // console.log(props.card_source)
         // Replace image with a prompt if undefined
         if (props.card_source) {
-            return (<iframe style={{height: '40vh', width: '30vw'}} src={props.card_source} type='application/pdf'/>);
+            return (<iframe style={{height: '40vh', width: '30vw'}} src={`${props.card_source}?${Date.now()}`} key={props.card_source} type='application/pdf'/>);
         }
         else {
             return (<Typography>Enter a recipe card</Typography>)
