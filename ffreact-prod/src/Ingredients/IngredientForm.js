@@ -37,8 +37,8 @@ const IngredientForm = (props) => {
   }
   }
 
-    // Get suppliers from database
-  // Return supplierData
+  // Get Ingredient data from database
+  // Set Ingredient variable with ingredient data
   const getDBIngredients = () => {
     console.log("MAKING REQUEST TO DJANGO")
     axios({
@@ -55,13 +55,7 @@ const IngredientForm = (props) => {
       });
   }
 
-  
-  useEffect(() => {
-    getDBSuppliers();
-    getDBIngredients();
-  }, []);
-
-    // Get suppliers from database
+  // Get suppliers from database
   // Return supplierData
   const getDBSuppliers = () => {
     console.log("MAKING REQUEST TO DJANGO")
@@ -78,6 +72,11 @@ const IngredientForm = (props) => {
           }
       });
   }
+
+  useEffect(() => {
+    getDBSuppliers();
+    getDBIngredients();
+  }, []);
 
   // The state of this Ingredient Form with each attribute of Ingredient
   const [ingredient, setIngredient] = useState(clearIngredient());

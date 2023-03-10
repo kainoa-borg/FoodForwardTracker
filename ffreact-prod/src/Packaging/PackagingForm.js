@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react'
 import React from 'react'
 import axios from 'axios'
 import { Grid, Typography, Card, Input, InputLabel, Select, MenuItem, Button} from '@mui/material';
+import ModularSelect from '../components/ModularSelect.js';
 
 // Kainoa Borges
 // Angela McNeese
@@ -10,12 +11,13 @@ import { Grid, Typography, Card, Input, InputLabel, Select, MenuItem, Button} fr
 // Takes AddPackaging callback function
 // Returns a form that can be used to define a new packaging object in a PackagingList
 const PackagingForm = (props) => {
+  const [packaging, setPackaging] = useState();
   const [supplierList, setSupplierList] = useState();
   const addEntry = props.addEntry;
   const handleClose = props.handleClose;
   const latestKey = props.latestKey;
 
-  const clearPackaging = () => {
+  const clearPackage = () => {
     return {
       p_id: latestKey + 1,
       package_type: "",
@@ -34,9 +36,22 @@ const PackagingForm = (props) => {
   }
   }
 
-  useEffect(() => {
-    getDBSuppliers();
-  }, []);
+    // Get packaging from database
+    // Set packaging variable with packaging data    
+    const getDBPackaging = () => {
+      axios({
+          method: "GET",
+          url:"http://4.236.185.213:8000/api/packaging-inventory"
+      }).then((response)=>{
+      setPackaging(response.data);
+      }).catch((error) => {
+      if (error.response) {
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          }
+      });
+  }
 
   // Get suppliers from database
   // Return supplierData
@@ -56,8 +71,13 @@ const PackagingForm = (props) => {
       });
   }
 
+  useEffect(() => {
+    getDBSuppliers();
+    getDBPackaging();
+  }, []);
+
   // The state of this Packaging Form with each attribute of Packaging
-  const [packaging, setPackaging] = useState(clearPackaging());
+  const [packageItem, setPackage] = useState(clearPackage());
 
     // Handle form submission (prevent refresh, pass packaging to addPackaging, and clear form state)
     // Takes submit event information (form submission)
@@ -67,18 +87,18 @@ const PackagingForm = (props) => {
       event.preventDefault();
       // Pass packaging object to PackagingList callback
       // props.addPackaging(packaging)
-      addEntry(packaging);
+      addEntry(packageItem);
       handleClose();
       // Clear the form state
-      setPackaging(clearPackaging());
+      setPackage(clearPackage());
     }
 
     const updateEditForm = (names, values) => {
-      const newPackaging = {...packaging};
+      const newPackage = {...packageItem};
       for (let i = 0; i < names.length; i++) {
-        newPackaging[names[i]] = values[i];
+        newPackage[names[i]] = values[i];
       }
-      setPackaging(newPackaging);
+      setPackage(newPackage);
     }
 
     // Handle the data inputted to each form input and set the state with the new values
@@ -86,15 +106,16 @@ const PackagingForm = (props) => {
     // Takes input change event information (name, type, and value)
     // Returns None
     const handleFormChange = (event) => {
+      console.log(event.target.name, event.target.value);
       // Get the name and value of the changed field
-      const fieldName = event.target.getAttribute('name');
+      const fieldName = event.target.name;
       const fieldValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
       // Create new packaging object before setting state
       updateEditForm([fieldName], [fieldValue]);
       // updateEditForm('aFlag', true);
     }
 
-    if (supplierList === undefined) {
+    if (!packaging || !supplierList) {
       return (<>loading...</>)
     }
 
@@ -107,21 +128,23 @@ const PackagingForm = (props) => {
             <Grid container direction='row' spacing={4}>
               <Grid item>
                 <InputLabel htmlFor="package_type">Package Type: </InputLabel>
-                <Input name="package_type" id="package_type" type="text" maxLength='30' required={true} value={packaging.package_type} onChange={handleFormChange}/>
-                
+                {/*<Input name="package_type" id="package_type" type="text" maxLength='30' required={true} value={packaging.package_type} onChange={handleFormChange}/>*/}
+                <ModularSelect value={packageItem.package_type} options={packaging} noDuplicates searchField={'package_type'} onChange={handleFormChange}/>
+
                 <InputLabel htmlFor='unit_qty'>Purchased Amount: </InputLabel>
-                <Input name='unit_qty' id="unit_qty" type="number" value={packaging.unit_qty} onChange={handleFormChange}/>
+                <Input name='unit_qty' id="unit_qty" type="number" value={packageItem.unit_qty} onChange={handleFormChange}/>
             </Grid>
             <Grid item>
               <InputLabel htmlFor='qty_holds'>Size: </InputLabel>
-              <Input name='qty_holds' id="qty_holds" type="number" value={packaging.qty_holds} onChange={handleFormChange}/>
+              <Input name='qty_holds' id="qty_holds" type="number" value={packageItem.qty_holds} onChange={handleFormChange}/>
                 
               <InputLabel htmlFor='unit_cost'>Unit Cost: </InputLabel>
-              <Input name='unit_cost' id="unit_cost" type="number" value={packaging.unit_cost} onChange={handleFormChange}/>
+              <Input name='unit_cost' id="unit_cost" type="number" value={packageItem.unit_cost} onChange={handleFormChange}/>
             </Grid>
             <Grid item>
               <InputLabel htmlFor='unit'>Unit: </InputLabel>
-              <Input name='unit' id="unit" type="text" value={packaging.unit} onChange={handleFormChange}/>
+              {/*<Input name='unit' id="unit" type="text" value={packaging.unit} onChange={handleFormChange}/>*/}
+              <ModularSelect value={packageItem.unit} options={packaging} noDuplicates searchField={'unit'} onChange={handleFormChange} />
 
               <InputLabel htmlFor='psupplier'>Supplier: </InputLabel>
               <Select type='select' name="psupplier_id" value={undefined} label={'Supplier'} style={{width: `170px`}} >
@@ -135,10 +158,10 @@ const PackagingForm = (props) => {
             </Grid>
             <Grid item>
               <InputLabel htmlFor='returnable'>Returnable: </InputLabel>          
-              <Input name='returnable' id='returnable' type="checkbox" checked={packaging.returnable} onChange={handleFormChange}/>
+              <Input name='returnable' id='returnable' type="checkbox" checked={packageItem.returnable} onChange={handleFormChange}/>
 
               <InputLabel htmlFor='in_date'>Purchased Date: </InputLabel>
-              <Input name='in_date' id="in_date" type="date" value={packaging.in_date} onChange={handleFormChange}/>
+              <Input name='in_date' id="in_date" type="date" value={packageItem.in_date} onChange={handleFormChange}/>
             </Grid>
           </Grid>
           <Button type='Submit' color='lightBlue' variant='contained'>Add Packaging</Button>
