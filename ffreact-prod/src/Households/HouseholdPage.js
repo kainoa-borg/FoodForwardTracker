@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useGridApiContext } from '@mui/x-data-grid'
 import './HouseholdList.css'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import AllergiesList from './AllergiesList';
 import NewModularDatagrid from '../components/NewModularDatagrid';
-import HouseholdForm from './HouseholdForm.js'
+import CellDialog from '../components/CellDialog.js';
+import HouseholdForm from './HouseholdForm.js';
 import ModularSelect from '../components/ModularSelect';
 import axios from 'axios';
 
@@ -40,9 +41,16 @@ export default function HouseholdPage() {
         { field: 'delivery_notes', headerName: 'Delivery Notes', width: 100, editable: true },
         { field: 'veg_flag', headerName: 'Veg', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'gf_flag', headerName: 'Gluten Free', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0},
-        { field: 'hh_allergies', headerName: 'Allergies', width: 100, type: 'string', editable: true, 
-            renderCell: AllergyListCell,
-            renderEditCell: (params) => <AllergyListEditCell {...params} sx={{height: 'auto', minHeight: 200, maxHeight: 1000}}/>
+        { field: 'hh_allergies', headerName: 'Allergies', width: 130, type: 'string', editable: true, 
+            renderCell: (params) => {
+                if (params.value && params.value.length > 0) {
+                    return <CellDialog buttonText={'View Allergies'} dialogTitle={'Allergies'} component={<AllergyListCell {...params}/>}/>
+                }
+                else {
+                    return <Typography variant='p'>No Allergies</Typography>
+                }
+            },
+            renderEditCell: (params) => <CellDialog buttonText={'Edit Allergies'} dialogTitle={'Edit Allergies'} component={<AllergyListEditCell {...params} sx={{height: 'auto', minHeight: 200, maxHeight: 1000}}/>}/>
         },
         { field: 'paused_flag', headerName: 'Paused', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'paying', headerName: 'Paying', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
