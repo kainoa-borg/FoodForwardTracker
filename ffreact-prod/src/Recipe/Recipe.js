@@ -129,7 +129,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
 
     const [ingredientRows, setIngredientRows] = useState(recipeData.r_ingredients);
     const [packagingRows, setPackagingRows] = useState(recipeData.r_packaging)
-    const [stationRows, setStationRows] = useState(recipeData.r_stations)
+    const [stationRows, setStationRows] = useState(recipeData.r_stations ? recipeData.r_stations : []);
     const [m_s, setM_S] = useState(recipeData.m_s);
     const dietRows = recipeData.r_diets
     const allergyRows = recipeData.r_allergies
@@ -290,7 +290,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 <Stack item spacing={10}>
                     <Box>
                         <Typography variant='h6'>Ingredients</Typography>
-                        <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
+                        <Box sx={{height: '50vh', width: {md: '45vw', sm: '80vw'}}}>
                             <ModularRecipeDatagrid 
                                 rows={ingredientRows} 
                                 setRows={setIngredientRows}
@@ -305,7 +305,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                     </Box>
                     <Box>
                         <Typography variant='h6'>Packaging</Typography>
-                        <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
+                        <Box sx={{height: '50vh', width: {md: '45vw', sm: '80vw'}}}>
                             <ModularRecipeDatagrid 
                                 rows={packagingRows}
                                 columns={packagingColumns}
@@ -320,7 +320,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                     </Box>
                     <Box>
                         <Typography variant='h6'>Station</Typography>
-                        <Box sx={{height: '40%', width: {md: '45vw', sm: '80vw'}}}>
+                        <Box sx={{height: '50vh', width: {md: '45vw', sm: '80vw'}}}>
                             <ModularRecipeDatagrid 
                                 rows={stationRows}
                                 columns={stationColumns} 
