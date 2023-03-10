@@ -1,5 +1,5 @@
 import { Button, Typography, Box, Grid, Checkbox, Snackbar, FormControlLabel, TextField, InputLabel, Paper } from "@mui/material";
-import React, {useState, useEffect, useCallback, Fragment} from 'react';
+import React, {useState, useEffect, useCallback, Fragment, useRef} from 'react';
 import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
 import { Stack } from "@mui/material";
 import axios from 'axios'
@@ -15,15 +15,10 @@ import DataGridDialog from '../components/DatagridDialog.js'
 import { number } from "yup";
 import ModularSelect from "../components/ModularSelect.js";
 
-export default function Recipe(props) {
+export default function Recipe({recipeData, setRecipeData, ingredientOptions, packagingOptions, setCurrPage, getDBRecipeData, isAdding}) {
     // If recipeData prop is passed, use that, otherwise use empty recipeData
-    const [recipeData, setRecipeData] = useState(props.recipeData);
-    const [recipeName, setRecipeName] = useState(props.recipeData.r_name);
-    // const setRecipeData = props.setRecipeData;
-    const setCurrPage = props.setCurrPage;
-    const getDBRecipeData = props.getDBRecipeData;
-    // Are we adding a recipe?
-    const isAdding = props.isAdding;
+    // const [recipeName, setRecipeName] = useState(recipeData.r_name);
+    const nameField = useRef();
 
     const IngredientNameEditCell = (params) => {
         const api = useGridApiContext();
@@ -47,26 +42,7 @@ export default function Recipe(props) {
             </div>
         )
     }
-
-    const [ingredients, setIngredients] = useState();
-    const getDBIngredients = () => {
-        axios({
-            method: "GET",
-            url:"http://4.236.185.213:8000/api/ingredient-inventory"
-        }).then((response)=>{
-            setIngredients(response.data);
-        }).catch((error) => {
-        if (error.response) {
-            console.log(error.response);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-            }
-        });
-    }
-
-    useEffect(() => {
-        getDBIngredients();
-    }, [])
+    // 4.236.185.213
 
     const ingredientsColumns = [
         {
@@ -76,20 +52,7 @@ export default function Recipe(props) {
             type: 'string',
             editable: true,
             renderEditCell: (params) => {
-                axios({
-                    method: "GET",
-                    url:"http://4.236.185.213:8000/api/ingredient-inventory"
-                }).then((response)=>{
-                    return (
-                        <ModularSelect {...params} noDuplicates options={response.data} searchField={'ingredient_name'}/>
-                    )
-                }).catch((error) => {
-                if (error.response) {
-                    console.log(error.response);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                    }
-                });
+                return <ModularSelect {...params} noDuplicates options={ingredientOptions} searchField={'ingredient_name'}/>
             }
         },
         {
@@ -127,8 +90,20 @@ export default function Recipe(props) {
             field: 'pkg_type',
             headerName: 'Packaging',
             width: 200,
-            editable: true
+            editable: true,
+            renderEditCell: (params) => {
+                return <ModularSelect {...params} options={packagingOptions} searchField={'package_type'}/>
+            }
         },
+        {
+            field: 'ing_name',
+            headerName: 'Ingredient',
+            width: 200,
+            editable: true,
+            renderEditCell: (params) => {
+                return <ModularSelect {...params} options={ingredientRows} searchField={'ingredient_name'}/>
+            }
+        }
     ]
 
     const stationColumns = [
@@ -174,6 +149,7 @@ export default function Recipe(props) {
         const file = event.target.files[0];
         const formData = new FormData();
         formData.append('file', file);
+        setUpdateSBOpen(true);
         axios({
             method: "PATCH",
             url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/" + recipeData.r_num + '/',
@@ -183,6 +159,7 @@ export default function Recipe(props) {
             }
         }).then((response)=>{
             console.log('success!')
+            setUpdateDoneSBOpen(true);
             getDBRecipeData(recipeData.r_num);
         }).catch((error) => {
         if (error.response) {
@@ -202,9 +179,9 @@ export default function Recipe(props) {
     }
 
     const handleSaveClick = () => {
-        console.log(recipeData);
-        const r_data = {...recipeData, r_name: recipeName, r_ingredients: ingredientRows, r_packaging: packagingRows, r_stations: stationRows, m_s: m_s}
-        console.log(JSON.stringify(r_data));
+        // console.log(recipeData);
+        const r_data = {...recipeData, r_name: nameField.current.value, r_ingredients: ingredientRows, r_packaging: packagingRows, r_stations: stationRows, m_s: m_s}
+        // console.log(JSON.stringify(r_data));
         setUpdateSBOpen(true);
         if (isAdding) {
             axios({
@@ -214,7 +191,7 @@ export default function Recipe(props) {
             }).then((response)=>{
                 console.log('success!')
                 setUpdateDoneSBOpen(true);
-                getDBRecipeData(recipeData.r_num);
+                // getDBRecipeData(recipeData.r_num);
             }).catch((error) => {
             if (error.response) {
                 console.log(error.response);
@@ -231,7 +208,7 @@ export default function Recipe(props) {
             }).then((response)=>{
                 console.log('success!')
                 setUpdateDoneSBOpen(true);
-                getDBRecipeData(recipeData.r_num);
+                // getDBRecipeData(recipeData.r_num);
             }).catch((error) => {
             if (error.response) {
                 console.log(error.response);
@@ -242,16 +219,16 @@ export default function Recipe(props) {
         }
     }
 
-    const handleNameChange = useCallback((event) => {
-        setRecipeName(event.target.value);
-    })
+    const handleNameChange = (event) => {
+        // setRecipeName(event.target.value);
+    }
 
     const handleMealSnackChange = (event) => {
         setM_S(event.target.checked ? 1 : 0);
     }
 
     const RecipeImage = (props) => {
-        console.log(props.image_source);
+        // console.log(props.image_source);
         // Replace image with a prompt if undefined
         if (props.image_source) {
             return (<img style={{width: '30vw'}} src={props.image_source}></img>);
@@ -262,7 +239,7 @@ export default function Recipe(props) {
     }
 
     const RecipeCard = (props) => {
-        console.log(props.card_source)
+        // console.log(props.card_source)
         // Replace image with a prompt if undefined
         if (props.card_source) {
             return (<iframe style={{height: '40vh', width: '30vw'}} src={props.card_source} type='application/pdf'/>);
@@ -295,7 +272,7 @@ export default function Recipe(props) {
                 
                 {/* Recipe Image and Card Stack */}
                 <Stack item spacing={3}>
-                    <TextField required label={'Recipe Name'} onChange={handleNameChange} value={recipeName}/>
+                    <TextField required inputProps={{ref: nameField}} label={'Recipe Name'} defaultValue={recipeData.r_name}/>
                     <FormControlLabel control={<Checkbox checked={m_s===1 ? true : false} onChange={handleMealSnackChange}/>} label="Meal Recipe?"/>
                     <RecipeImage image_source={recipeData.r_img_path}/>
                     <Button color='lightBlue' variant='contained' component='label'>
@@ -319,6 +296,7 @@ export default function Recipe(props) {
                                 setRows={setIngredientRows}
                                 columns={ingredientsColumns}
                                 addFormComponent={RecipeIngForm}
+                                addFormProps={{ingredients: ingredientOptions}}
                                 keyFieldName={'ri_id'}
                                 searchField={'ingredient_name'}
                                 entryName={'Recipe Ingredient'}
@@ -333,6 +311,7 @@ export default function Recipe(props) {
                                 columns={packagingColumns}
                                 setRows={setPackagingRows}
                                 addFormComponent={RecipePkgForm}
+                                addFormProps={{packaging: packagingOptions, ingRows: ingredientRows}}
                                 keyFieldName={'rp_id'}
                                 searchField={'pkg_type'}
                                 entryName={'Recipe Packaging'}

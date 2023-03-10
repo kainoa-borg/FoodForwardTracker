@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import React from 'react'
 import { Grid, Typography, Card, Input, InputLabel, Button} from '@mui/material';
+import ModularSelect from '../components/ModularSelect.js'
 
 // Kainoa Borges
 // Angela McNeese
@@ -12,10 +13,13 @@ import { Grid, Typography, Card, Input, InputLabel, Button} from '@mui/material'
 const RecipePkgForm = (props) => {
     const addEntry = props.addEntry;
     const handleClose = props.handleClose;
+    const packaging = props.packaging;
+    const ingRows = props.ingRows;
     
     // The state of this Ingredient Form with each attribute of Ingredient
-    const [packaging, setPackaging] = useState({
+    const [pkg, setPkg] = useState({
         pkg_type: '',
+        ing_name: '',
     });
 
     // Handle form submission (prevent refresh, pass ingredient to addIngredient, and clear form state)
@@ -25,16 +29,17 @@ const RecipePkgForm = (props) => {
         // Prevent refresh
         event.preventDefault();
         // Pass ingredient object to IngredientList callback
-        addEntry(packaging);
+        console.log(pkg);
+        addEntry(pkg);
         handleClose();
     }
 
     const updateEditForm = (names, values) => {
-        const newPackaging = {...packaging};
+        const newPackaging = {...pkg};
         for (let i = 0; i < names.length; i++) {
             newPackaging[names[i]] = values[i];
         }
-        setPackaging(newPackaging);
+        setPkg(newPackaging);
     }
 
     // Handle the data inputted to each form input and set the state with the new values
@@ -43,7 +48,7 @@ const RecipePkgForm = (props) => {
     // Returns None
     const handleFormChange = (event) => {
         // Get the name and value of the changed field
-        const fieldName = event.target.getAttribute('name');
+        const fieldName = event.target['name'];
         const fieldValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
         // Create new packaging object before setting state
         updateEditForm([fieldName], [fieldValue]);
@@ -59,7 +64,10 @@ const RecipePkgForm = (props) => {
                 <Grid container direction='row' spacing={4}>
                 <Grid item>
                     <InputLabel>Package Type: </InputLabel>
-                    <Input name="pkg_type" type="text" maxLength='30' value={packaging.pkg_type} onChange={handleFormChange}/>
+                    {/* <Input name="pkg_type" type="text" maxLength='30' value={packaging.pkg_type} onChange={handleFormChange}/> */}
+                    <ModularSelect fieldName={'pkg_type'} value={pkg.pkg_type} options={packaging} searchField={'package_type'} onChange={handleFormChange}/>
+                    <InputLabel>Ingredient Contents:</InputLabel>
+                    <ModularSelect fieldName={'ing_name'} value={pkg.ing_name} options={ingRows} searchField={'ingredient_name'} onChange={handleFormChange}/>
                 </Grid>
                 <Grid item>
                     <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>

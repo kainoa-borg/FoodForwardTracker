@@ -28,6 +28,7 @@ export default function ModularRecipeDatagrid(props) {
         }                     
     ];
     const addFormComponent = props.addFormComponent;
+    const addFormProps = props.addFormProps;
 
     const [tableData, setTableData] = useState(props.rows);
 
@@ -234,7 +235,7 @@ export default function ModularRecipeDatagrid(props) {
             </DataGrid>
         </Box>
         {/* Add Form Dialog */}
-        <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={addFormComponent} addEntry={addEntry}  latestKey={getLatestKey()}/>
+        <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={addFormComponent} addFormProps={addFormProps} addEntry={addEntry}  latestKey={getLatestKey()}/>
         {/* Save Click 'request sent' Notice */}
         <Snackbar
             open={updateSBOpen}

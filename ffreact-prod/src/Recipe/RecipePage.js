@@ -25,6 +25,7 @@ export default function RecipePage(props) {
     const setCurrPage = props.setCurrPage;
 
     const getDBRecipes = () => {
+        console.log('request')
         axios({
             method: "GET",
             url:"http://4.236.185.213:8000/api/recipe-list"
@@ -39,12 +40,57 @@ export default function RecipePage(props) {
         });
     }
 
+    const [ingredients, setIngredients] = useState();
+    const getDBIngredients = () => {
+        axios({
+            method: "GET",
+            url:"http://4.236.185.213:8000/api/ingredient-inventory"
+        }).then((response)=>{
+            setIngredients(response.data);
+        }).catch((error) => {
+        if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
+    }
+
+    const [packaging, setPackaging] = useState();
+    const getDBPackaging = () => {
+        axios({
+            method: "GET",
+            url:"http://4.236.185.213:8000/api/packaging-inventory"
+        }).then((response)=>{
+            setPackaging(response.data);
+        }).catch((error) => {
+        if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
+    }
+
+    useEffect(() => {
+        getDBIngredients();
+        getDBPackaging();
+    }, [])
+
     const getDBRecipeData = (pk) => {
         axios({
             method: "GET",
             url:"http://4.236.185.213:8000/api/mealrecipes/" + pk + '/'
         }).then((response)=>{
-        setRecipeData(response.data);
+        // setRecipeData(response.data);
+        setCurrPage(<Recipe 
+            recipeData={response.data} 
+            setRecipeData={setRecipeData} 
+            getDBRecipeData={getDBRecipeData} 
+            setCurrPage={setCurrPage}
+            ingredientOptions={ingredients}
+            packagingOptions={packaging}
+            ></Recipe>);
         }).catch((error) => {
         if (error.response) {
             console.log(error.response);
@@ -214,14 +260,10 @@ export default function RecipePage(props) {
         }
     }
 
-    if (recipes === undefined) {
+    if (recipes === undefined || ingredients === undefined || packaging == undefined) {
         return (
             <>loading...</>
         )
-    }
-    else {
-        if (!(recipeData === undefined))
-            setCurrPage(<Recipe recipeData={recipeData} setRecipeData={setRecipeData} getDBRecipeData={getDBRecipeData} setCurrPage={setCurrPage}></Recipe>);
     }
 
     const handleRowClick = (params) => {
