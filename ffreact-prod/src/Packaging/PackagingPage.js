@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Box } from '@mui/system';
-import { Snackbar } from '@mui/material';
+import { Snackbar, Typography } from '@mui/material';
 import PackagingForm from './PackagingForm.js'
 import NewModularDatagrid from '../components/NewModularDatagrid.js';
 import './PackagingList.css'
+import PkgUsageTable from './PkgUsageTable.js';
+import CellDialog from '../components/CellDialog.js';
+import EditablePkgUsageTable from './EditablePkgUsageTable.js';
+import { useGridApiContext } from '@mui/x-data-grid';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -85,7 +89,7 @@ export default function PackagingPage() {
     }
 
     const columns = [
-        { field: 'package_type', headerName: 'Packaging Type', width: 150, editable: true },
+        { field: 'package_type', headerName: 'Packaging Type', width: 150, editable: true},
         { field: 'unit', headerName: 'Unit', width: 100, editable: true },
         { field: 'qty_holds', headerName: 'Size', width: 10, editable: true },
         { field: 'returnable', headerName: 'Returnable', width: 90, type: 'boolean', editable: true },
@@ -93,8 +97,24 @@ export default function PackagingPage() {
         { field: 'pref_psupplier', headerName: 'Supplier', width: 80, valueFormatter: ({ value }) => value.s_name },
         { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
         { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
-        { field: 'tmp_1', headerName: 'Date Used', width: 100, type: 'date', editable: true },
-        { field: 'tmp_2', headerName: 'Units Used', width: 100, type: 'number', editable: true },
+        { field: 'packaging_usage', headerName: 'Usages', width: 100, editable: true,
+            renderCell: (params) => {
+                if (params.value && params.value.length > 0) {
+                    return <CellDialog buttonText={'View Usages'} dialogTitle={'Usages'} component={<PkgUsageTable packaging_usage={params.value}/>}/>
+                }
+                else {
+                    return <Typography variant='p'>No Usages</Typography>
+                }
+            },
+            renderEditCell: (params) => {
+                const api = useGridApiContext();
+                const updateCellValue = (fieldName, newValue) => {
+                    const {id, field} = params;
+                    api.current.setEditCellValue({id, field, value: newValue, debounceMs: 200})
+                }
+                return <CellDialog buttonText={'Edit Usages'} dialogTitle={'Edit Usages'} component={<EditablePkgUsageTable packaging_usage={params.value} updateEditForm={updateCellValue}/>}/>
+            }
+        },
     ]
     
     return(
