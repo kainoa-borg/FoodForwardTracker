@@ -6,6 +6,7 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from rest_framework import status
 from PIL import Image
+import os
 import json
 
 from .models import Recipes, RecipeAllergies, RecipeDiets, RecipeIngredients, Stations, RecipePackaging, RecipeInstructions
@@ -44,7 +45,7 @@ class RecipeIngredientSerializer(ModelSerializer):
         model = RecipeIngredients
         # depth = 1
         fields = ('ri_id', 'ingredient_name', 'amt', 'unit', 'prep')
-        read_only_fields = ('ri_id',)
+        read_only_fields = ('ri_id', 'prep')
 
 class RecipeStationSerializer(ModelSerializer):
     class Meta():
@@ -58,8 +59,8 @@ class RecipePackagingSerializer(ModelSerializer):
     class Meta():
         model = RecipePackaging
         # depth = 1
-        fields = ('rp_id', 'pkg_type', 'amt', 'rp_pkg', 'rp_pkg')
-        read_only_fields = ['rp_id', 'rp_pkg']
+        fields = ('rp_id', 'pkg_type', 'ing_name', 'amt', 'rp_pkg')
+        read_only_fields = ['rp_id', 'rp_pkg', 'amt']
 
 
 class RecipeImageSerializer(serializers.ModelSerializer):

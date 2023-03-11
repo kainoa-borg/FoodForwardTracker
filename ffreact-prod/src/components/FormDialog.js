@@ -11,6 +11,7 @@ export default function FormDialog(props) {
   const open = props.open;
   const setOpen = props.setOpen;
   const AddForm = props.AddFormComponent;
+  const addFormProps = props.addFormProps;
   const addEntry = props.addEntry;
   const latestKey = props.latestKey;
 
@@ -43,7 +44,7 @@ export default function FormDialog(props) {
     <div>
       <Dialog open={open} onClose={handleClose}>
         <DialogContent>
-            <AddForm addEntry={addEntry} handleClose={handleClose} latestKey={latestKey}/>
+            <AddForm {...addFormProps} addEntry={addEntry} handleClose={handleClose} latestKey={latestKey}/>
             {/* <Typography variant='h6'>Placeholder</Typography> */}
         </DialogContent>
         <DialogActions>

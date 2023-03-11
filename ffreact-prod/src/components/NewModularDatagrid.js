@@ -278,7 +278,7 @@ export default function NewModularDatagrid(props) {
         return (
           <GridToolbarContainer>
             <Button color='lightBlue' variant='contained' onClick={() => {setAddFormOpen(true)}}>Add {e_name}</Button>
-            <GridToolbarExport color='lightBlue'/>
+            {/* <GridToolbarExport color='lightBlue'/> */}
           </GridToolbarContainer>
         );
     }

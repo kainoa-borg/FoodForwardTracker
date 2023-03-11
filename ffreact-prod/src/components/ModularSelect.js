@@ -7,7 +7,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const filter = createFilterOptions();
 
-const CustomInput = ({params, searchField, required}) => {
+const CustomInput = ({params, fieldName, searchField, required}) => {
   return (
     // <TextField {...params} fullWidth name={searchField} required={required} />
     <div ref={params.InputProps.ref} style={{height: '100%', width: '100%', textAlign: 'center'}}>
@@ -28,8 +28,12 @@ const CustomInput = ({params, searchField, required}) => {
     // required - Whether this TextField will be considered required in forms
     // id and field - Datagrid row params passed in renderEditCell
 // Returns autocomplete select with add functionality
-export default function ModularSelect({id, field, value, options, searchField, required, onChange}) {
-  const [selectValue, setSelectValue] = value ? React.useState({[searchField]: value}) : React.useState();
+export default function ModularSelect({id, field, value, options, fieldName, searchField, required, onChange}) {
+  const [selectValue, setSelectValue] = value ? React.useState({[searchField]: value}) : React.useState('');
+
+  if (!options) {
+    return <>loading...</>
+  }
 
   // Remove duplicate options
   // Get array of all searchField values
@@ -38,10 +42,11 @@ export default function ModularSelect({id, field, value, options, searchField, r
   const optionsSet = new Set(optionSearchFields);
   // Rebuild options array (key/value pairs)
   options = [...optionsSet].map((opt) => { return {[searchField]: opt} });
-
+  // console.log(options);
 
   // If this is an editable column, use datagrid api to update cell
   if (id && field) {
+    console.log(options);
     const api = useGridApiContext();
     React.useEffect(() => {
         api.current.setEditCellValue({id, field, value: selectValue[searchField], debounceMs: 200})
@@ -58,7 +63,7 @@ export default function ModularSelect({id, field, value, options, searchField, r
             // Using handleFormChange here -> passing event.target with name and value
             onChange({target: 
                 {
-                    name: searchField,
+                    name: fieldName ? fieldName : searchField,
                     value: newValue[searchField]
                 }
             });
@@ -116,7 +121,7 @@ export default function ModularSelect({id, field, value, options, searchField, r
       // freeSolo
       renderInput={(params) => {
         if (onChange) {
-          return (<TextField {...params} name={searchField} required={required}/>);
+          return (<TextField {...params} name={fieldName ? fieldName : searchField} required={required}/>);
         }
         else {
           return (<CustomInput params={params} searchField={searchField} required={required}/>);

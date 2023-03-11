@@ -84,15 +84,15 @@ export default function IngredientPage() {
     
     const columns = [
         { field: 'ingredient_name', headerName: 'Ingredient', width: 140, editable: true, renderEditCell: (params) => <ModularSelect {...params} options={ingredients} searchField={'ingredient_name'} value={params.value} required/> },
-        { field: 'storage_type', headerName: 'Category', width: 170, editable: true, renderEditCell: (params) => <ModularSelect {...params} options={ingredients} searchField={'storage_type'} value={params.value}/> },
-        { field: 'pkg_type', headerName: 'Package Type', width: 140, editable: true, renderEditCell: (params) => <ModularSelect {...params} options={ingredients} searchField={'pkg_type'} value={params.value}/> },
-        { field: 'unit', headerName: 'Measure', width: 110, editable: true, renderEditCell: (params) => <ModularSelect options={ingredients} searchField={'unit'} value={params.value}/> },
+        { field: 'storage_type', headerName: 'Category', width: 100, editable: true, renderEditCell: (params) => <ModularSelect {...params} options={ingredients} searchField={'storage_type'} value={params.value}/> },
+        { field: 'pkg_type', headerName: 'Package Type', width: 120, editable: true, renderEditCell: (params) => <ModularSelect {...params} options={ingredients} searchField={'pkg_type'} value={params.value}/> },
+        { field: 'unit', headerName: 'Measure', width: 100, editable: true, renderEditCell: (params) => <ModularSelect options={ingredients} searchField={'unit'} value={params.value}/> },
         { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
-        { field: 'pref_isupplier_id', headerName: 'Supplier', type: 'singleSelect', valueOptions: supplierOptions, width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
+        { field: 'pref_isupplier_id', headerName: 'Supplier', type: 'singleSelect', valueOptions: supplierOptions, width: 170, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
         { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
         { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
         { field: 'exp_date', headerName: 'Expiration Date', width: 140, editable: true},
-        { field: 'ingredient_usage', headerName: 'Usages', width: 170, editable: true,
+        { field: 'ingredient_usage', headerName: 'Usages', width: 150, editable: true,
             renderCell: (params) => {
                 if (params.value && params.value.length > 0)
                     return <CellDialog buttonText={'View Usages'} dialogTitle={'Usages'} component={<IngUsageTable ingredient_usages={params.value}/>}/>
@@ -108,7 +108,7 @@ export default function IngredientPage() {
                 return <CellDialog buttonText={'Edit Usages'} dialogTitle={'Edit Usages'} component={<EditableIngUsageTable ingredient_usage={params.value} updateEditForm={updateCellValue}/>}/>
             },
         },
-        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 70, type: 'number', editable: false}
+        { field: 'qty_on_hand', headerName: 'On Hand', width: 70, type: 'number', editable: false}
     ]
 
     return(

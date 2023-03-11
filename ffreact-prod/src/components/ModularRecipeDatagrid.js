@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
@@ -28,6 +28,7 @@ export default function ModularRecipeDatagrid(props) {
         }                     
     ];
     const addFormComponent = props.addFormComponent;
+    const addFormProps = props.addFormProps;
 
     const [tableData, setTableData] = useState(props.rows);
 
@@ -212,29 +213,30 @@ export default function ModularRecipeDatagrid(props) {
       
     // The HTML structure of this component
     return(
-        <div class='table-div'>
-        {/* <SearchToolBar setFilterModel={setFilterModel} searchField={searchField}/> */}
-        <Box sx={{height: 'auto', overflow: 'auto'}}>
-            <DataGrid
-            components={{ Toolbar: CustomToolbar }}
-            rows={tableData}
-            columns={columns}
-            autoHeight={true}
-            editMode='row'
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={(newModel) => {setRowModesModel(newModel)}}
-            onRowEditStop={handleRowEditStop}
-            getRowId={(row) => row[keyFieldName]}
-            pageSize={10}
-            processRowUpdate={processRowUpdate}
-            //rowsPerPageOptions={[5]}
-            disableSelectionOnClick
-            disableVirtualization
-            experimentalFeatures={{ newEditingApi: true }}>
-            </DataGrid>
+        <Fragment>
+        <Box sx={{display: 'flex', height: '100%'}}>
+            <Box sx={{flexGrow: 1}}>
+                <DataGrid
+                components={{ Toolbar: CustomToolbar }}
+                rows={tableData}
+                columns={columns}
+                // autoHeight={true}
+                editMode='row'
+                rowModesModel={rowModesModel}
+                onRowModesModelChange={(newModel) => {setRowModesModel(newModel)}}
+                onRowEditStop={handleRowEditStop}
+                getRowId={(row) => row[keyFieldName]}
+                pageSize={10}
+                processRowUpdate={processRowUpdate}
+                //rowsPerPageOptions={[5]}
+                disableSelectionOnClick
+                disableVirtualization
+                experimentalFeatures={{ newEditingApi: true }}>
+                </DataGrid>
+            </Box>
         </Box>
         {/* Add Form Dialog */}
-        <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={addFormComponent} addEntry={addEntry}  latestKey={getLatestKey()}/>
+        <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={addFormComponent} addFormProps={addFormProps} addEntry={addEntry}  latestKey={getLatestKey()}/>
         {/* Save Click 'request sent' Notice */}
         <Snackbar
             open={updateSBOpen}
@@ -249,6 +251,6 @@ export default function ModularRecipeDatagrid(props) {
             onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
             message="Changes saved!"
         />
-        </div>
+        </Fragment>
     )
 }
