@@ -30,17 +30,17 @@ export default function HouseholdPage() {
     const columns = [
         { field: 'hh_name', headerName: 'Name', type: 'string', width: 120, editable: false},
         { field: 'num_adult', headerName: 'Adults', type: 'number', width: 70, editable: true },
-        { field: 'num_child_gt_6', headerName: '7-17',  type: 'number', width: 70, editable: true },
-        { field: 'num_child_lt_6', headerName: '0-6', type: 'number', width: 70, editable: true },
+        { field: 'num_child_gt_6', headerName: '7-17',  type: 'number', description: 'Number of children from age 7 to 17', width: 70, editable: true },
+        { field: 'num_child_lt_6', headerName: '0-6', type: 'number', description: 'Number of children from age 0 to 6', width: 70, editable: true },
         { field: 'phone', headerName: 'Phone', width: 110, type: 'phone', editable: true },
-        { field: 'sms_flag', headerName: 'SMS', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
+        { field: 'sms_flag', headerName: 'SMS', width: 50, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'street', headerName: 'Street', width: 160, type: 'string', editable: true },
         { field: 'city', headerName: 'City', width: 100, type: 'string', editable: true },
-        { field: 'state', headerName: 'State', width: 70, type: 'string', editable: true },
+        { field: 'state', headerName: 'State', width: 50, type: 'string', editable: true },
         { field: 'pcode', headerName: 'Zip Code', width: 80, type: 'string', editable: true, /*valueFormatter: (value) => {return value}*/ },
         { field: 'delivery_notes', headerName: 'Delivery Notes', width: 100, editable: true },
-        { field: 'veg_flag', headerName: 'Veg', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
-        { field: 'gf_flag', headerName: 'Gluten Free', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0},
+        { field: 'veg_flag', headerName: 'Veg', width: 70, type: 'boolean', description: 'Vegetarian', editable: true, valueParser: (value) => value ? 1 : 0 },
+        { field: 'gf_flag', headerName: 'Gluten Free', width: 70, type: 'boolean', description: 'Gluten Free', editable: true, valueParser: (value) => value ? 1 : 0},
         { field: 'hh_allergies', headerName: 'Allergies', width: 130, type: 'string', editable: true, 
             renderCell: (params) => {
                 if (params.value && params.value.length > 0) {
