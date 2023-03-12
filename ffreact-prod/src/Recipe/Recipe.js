@@ -219,6 +219,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 method: "DELETE",
                 url:"http://4.236.185.213:8000/api/" + (imgOrCard==='image' ? 'mealrecipe-image' : 'mealrecipe-card') + "/" + recipeData.r_num
             }).then((response)=>{
+                setUpdateDoneSBOpen(true);
             }).catch((error) => {
             if (error.response) {
                 console.log(error.response);
