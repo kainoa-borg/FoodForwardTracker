@@ -17,7 +17,7 @@ export default function MealPlanReport() {
         setSearchingSBOpen(true);
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/mealplanreport/",
+            url:"http://4.236.185.213:8000/api/mealplanreport/",
             params: dateRange
           }).then((response)=>{
             // console.log(response.data);
