@@ -108,7 +108,7 @@ export default function IngredientPage() {
                 return <CellDialog buttonText={'Edit Usages'} dialogTitle={'Edit Usages'} component={<EditableIngUsageTable ingredient_usage={params.value} updateEditForm={updateCellValue}/>}/>
             },
         },
-        { field: 'qty_on_hand', headerName: 'On Hand', width: 70, type: 'number', editable: false}
+        { field: 'qty_on_hand', headerName: '# On Hand', width: 70, type: 'number', editable: false}
     ]
 
     return(

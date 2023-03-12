@@ -26,6 +26,7 @@ from .HouseholdViews import HouseholdsView, HouseholdsWithAllergies
 from .IngredientViews import IngredientInvView
 from .MenuView import MenuView
 from .MealPlanViews import MealPlansView
+from .MealPlanReportViews import MealPlanReportView
 from .MealView import MealView
 from .PackagingViews import PackagingInvView
 from .PacPurchaseList import PPLView
@@ -55,6 +56,7 @@ router.register(r'user-auth', UserAuth, basename='user-auth')
 router.register(r'menu', MenuView, basename='menu')
 router.register(r'meal', MealView, basename='meals-list')
 router.register(r'mealplans', MealPlansView, basename='mealplans')
+router.register(r'mealplanreport', MealPlanReportView, basename='mealplanreport')
 router.register(r'mealrecipes', RecipeView, basename='mealrecipes')
 router.register(r'mealrecipe-image', RecipeImageView, basename='mealrecipe-image')
 router.register(r'mealrecipe-card', RecipeCardView, basename='mealrecipe-card')

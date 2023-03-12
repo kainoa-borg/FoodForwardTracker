@@ -120,27 +120,6 @@ export default function RecipePage(props) {
         });
     }
 
-    // Generalized Update Row
-    const processRowUpdate = (newRow) => {
-        const updatedRow = {...newRow, isNew: false};        
-        axios({
-            method: "PATCH",
-            url:"http://4.236.185.213:8000/api/mealrecipes/" + newRow['r_num'] +'/',
-            data: newRow
-            }).then((response)=>{
-            getDBRecipes();
-            setUpdateDoneSBOpen(true);
-            }).catch((error) => {
-            if (error.response) {
-                console.log(error.response);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                }
-        });
-
-        return updatedRow;
-    }
-
     useEffect(() => {
         getDBRecipes();
     }, [])
@@ -278,8 +257,19 @@ export default function RecipePage(props) {
     function CustomToolbar() {
         return (
           <GridToolbarContainer>
-            <Button color='lightBlue' variant='contained' onClick={() => {
-                setCurrPage(<Recipe isAdding recipeData={addRecipeData} setRecipeData={setAddRecipeData} setCurrPage={setCurrPage}></Recipe>)}}
+            <Button 
+                color='lightBlue' 
+                variant='contained' 
+                onClick={() => {
+                    setCurrPage(
+                    <Recipe 
+                        isAdding 
+                        recipeData={addRecipeData} 
+                        setRecipeData={setAddRecipeData} 
+                        setCurrPage={setCurrPage} 
+                        ingredientOptions={ingredients}
+                        packagingOptions={packaging}>
+                    </Recipe>)}}
                 >Add Recipe
             </Button>
           </GridToolbarContainer>
