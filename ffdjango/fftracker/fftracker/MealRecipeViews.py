@@ -125,9 +125,10 @@ class RecipeImageView(viewsets.ViewSet):
         return Response(queryset[0].r_img_path)
     
     def destroy(self, request, pk):
-        queryset = Recipes.objects.filter(r_num = pk)
-        img_path = queryset[0].r_img_path
-        queryset[0].update(r_img_path = None)
+        r_obj = Recipes.objects.filter(r_num = pk)
+        img_path = r_obj.r_img_path
+        r_obj.r_img_path = None
+        r_obj.save()
         if (img_path and os.path.exists('var/www/html' + img_path)):
             os.remove('var/www/html/' + img_path)
         return Response(200)
@@ -157,9 +158,9 @@ class RecipeCardView(viewsets.ViewSet):
         return Response(queryset[0].r_img_path)
     
     def destroy(self, request, pk):
-        queryset = Recipes.objects.filter(r_num = pk)
-        card_path = queryset[0].r_card_path
-        queryset[0].update(r_card_path = None)
+        r_obj = Recipes.objects.filter(r_num = pk)
+        card_path = r_obj.r_card_path
+        r_obj.r_card_path = None
         if (card_path and os.path.exists('var/www/html' + card_path)):
             os.remove('var/www/html/' + card_path)
         return Response(200)
