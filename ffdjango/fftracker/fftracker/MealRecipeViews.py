@@ -69,7 +69,7 @@ class RecipeImageSerializer(serializers.ModelSerializer):
         model = Recipes
         fields = ('r_img_path')
 
-class TempImageUploadView(viewsets.ViewSet):
+class TempCardUploadView(viewsets.ViewSet):
     def create(self, request):
         # save the temporary image/card uploaded for this session
         # get image file from request
