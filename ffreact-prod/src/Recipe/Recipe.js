@@ -148,6 +148,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     const handleCloseClick = () => {
         // Return to recipe list when close is clicked
         setCurrPage(<RecipePage setCurrPage={setCurrPage}></RecipePage>)
+        URL.revokeObjectURL(imageURL);
     }
 
     const handleImageUpload = (file, r_num, apiEndpoint) => {
@@ -242,7 +243,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         if (props.image_source) {
             return (
                 <Box sx={{position: 'relative'}}>
-                    <Button color='lightBlue' variant='contained' sx={{position: 'absolute', right: '0%'}} onClick={() => console.log(imageFile)}>
+                    <Button color='lightBlue' variant='contained' sx={{position: 'absolute', right: '0%'}} onClick={() => console.log(props.image_source)}>
                         <HighlightOff/>
                     </Button>
                     <Box sx={{height: '100%', width: '100%'}}>
@@ -262,7 +263,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         if (props.card_source) {
             return (
                 <Box sx={{position: 'relative'}}>
-                    <Button color='lightBlue' variant='contained' sx={{position: 'absolute', right: '0%'}} onClick={() => console.log(imageFile)}>
+                    <Button color='lightBlue' variant='contained' sx={{position: 'absolute', right: '0%'}} onClick={() => console.log(props.card_source)}>
                         <HighlightOff/>
                     </Button>
                     <Box sx={{height: '100%', width: '100%'}}>
@@ -275,6 +276,44 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             return (<Typography>Enter a recipe card</Typography>)
         }
     }
+
+    const [imageURL, setImageURL] = useState();
+    const [cardURL, setCardURL] = useState();
+
+    useEffect(()=>{
+        if (imageURL) {
+            axios({
+                method: "GET",
+                url: imageURL,
+                responseType: 'blob'
+            }).then((response)=>{
+                setImageFile(response.data);
+            }).catch((error) => {
+            if (error.response) {
+                console.log(error.response);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                }
+            });
+        }
+    }, [imageURL])
+    useEffect(()=>{
+        if (imageURL) {
+            axios({
+                method: "GET",
+                url: cardURL,
+                responseType: 'blob'
+            }).then((response)=>{
+                setCardFile(response.data);
+            }).catch((error) => {
+            if (error.response) {
+                console.log(error.response);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                }
+            });
+        }
+    }, [cardURL])
 
     return (
         <Fragment>
@@ -304,17 +343,18 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                     <FormControlLabel control={<Checkbox checked={m_s===1 ? true : false} onChange={handleMealSnackChange}/>} label="Meal Recipe?"/>
                     
                     {/* Recipe Image */}
+                    {/* If the user uploaded an imageFile, display that new file */}
                     <RecipeImage image_source={imageFile ? imageFile : recipeData.r_img_path}/>
                     <Button color='lightBlue' variant='contained' component='label'>
                         Upload Image
-                        <input id='recipe_image' type='file' accept='.jpg,.png,.bmp' onChange={(event) => setImageFile(event.target.files[0])} hidden></input>
+                        <input id='recipe_image' type='file' accept='.jpg,.png,.bmp' onChange={(event) => {setImageURL(URL.createObjectURL(event.target.files[0]));}} hidden></input>
                     </Button>
 
                     {/* Recipe Card */}
                     <RecipeCard card_source={cardFile ? cardFile : recipeData.r_card_path}/>
                     <Button color='lightBlue' variant='contained' component='label'>
                         Upload Recipe Card
-                        <input id='recipe_card' type='file' accept='.jpg,.pdf,.doc,.docx' onChange={(event) => setCardFile(event.target.files[0])} hidden></input>
+                        <input id='recipe_card' type='file' accept='.jpg,.pdf,.doc,.docx' onChange={(event) => {setCardURL(URL.createObjectURL(event.target.files[0]));}} hidden></input>
                     </Button>
                 </Stack>
 
