@@ -127,8 +127,7 @@ class RecipeImageView(viewsets.ViewSet):
     def destroy(self, request, pk):
         queryset = Recipes.objects.filter(r_num = pk)
         img_path = queryset[0].r_img_path
-        queryset[0].r_img_path = None
-        queryset[0].save()
+        queryset[0].update(r_img_path = None)
         if (img_path):
             os.remove('var/www/html/' + img_path)
         return Response(200)
@@ -160,8 +159,7 @@ class RecipeCardView(viewsets.ViewSet):
     def destroy(self, request, pk):
         queryset = Recipes.objects.filter(r_num = pk)
         card_path = queryset[0].r_card_path
-        queryset[0].r_card_path = None
-        queryset[0].save()
+        queryset[0].update(r_card_path = None)
         if (card_path):
             os.remove('var/www/html/' + card_path)
         return Response(200)

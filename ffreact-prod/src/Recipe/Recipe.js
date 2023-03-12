@@ -313,8 +313,8 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             }).then((response)=>{
                 handleImageUpload(imageFile, response.data, 'mealrecipe-image');
                 handleImageUpload(cardFile, response.data, 'mealrecipe-card');
-                // console.log('success!')
-                // setUpdateDoneSBOpen(true);
+                console.log('success!')
+                setUpdateDoneSBOpen(true);
                 // getDBRecipeData(recipeData.r_num);
             }).catch((error) => {
             if (error.response) {
@@ -332,8 +332,8 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             }).then((response)=>{
                 handleImageUpload(imageFile, recipeData.r_num, 'mealrecipe-image');
                 handleImageUpload(cardFile, recipeData.r_num, 'mealrecipe-card');
-                // console.log('success!')
-                // setUpdateDoneSBOpen(true);
+                console.log('success!')
+                setUpdateDoneSBOpen(true);
                 // getDBRecipeData(recipeData.r_num);
             }).catch((error) => {
             if (error.response) {
