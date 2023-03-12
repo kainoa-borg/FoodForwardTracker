@@ -89,7 +89,7 @@ class RecipeImageView(viewsets.ViewSet):
             queryset[0].r_img_path = rel_file_path
             queryset[0].save()
             
-        return Response(200)
+        return Response(queryset[0].r_img_path)
 
 
 class RecipeCardView(viewsets.ViewSet):
@@ -113,7 +113,7 @@ class RecipeCardView(viewsets.ViewSet):
             queryset[0].r_card_path = rel_file_path
             queryset[0].save()
             
-        return Response(200)
+        return Response(queryset[0].r_img_path)
 
 
 class RecipesSerializer(ModelSerializer):
@@ -277,6 +277,13 @@ class RecipeView(viewsets.ModelViewSet):
         queryset = Recipes.objects.all().prefetch_related('r_ingredients').prefetch_related('r_packaging').prefetch_related('r_diets').prefetch_related('r_stations').prefetch_related('r_allergies')
         serializer = RecipesSerializer(queryset, many=True)
         return Response(serializer.data)
+    
+    def create(self, request):
+        serializer = RecipesSerializer(data=request.data)
+        r_instance = None
+        if serializer.is_valid():
+            r_instance = serializer.create(serializer.validated_data)
+        return Response(r_instance.r_num)
 
     # def retrieve(self, pk):
         # query = 'SELECT mp.m_date, ri.prep, ri.amt, ri.unit, i.ingredient_name, ra.allergy, rd.diet_category FROM ingredients AS i JOIN recipe_ingredients AS ri ON i.i_id = ri.ri_ing_id JOIN recipes AS r on ri.ri_recipe_num = r.r_num JOIN meal_plans AS mp ON r.r_num = mp.meal_r_num OR r.r_num = mp.snack_r_num LEFT JOIN recipe_allergies ra ON ra.ra_recipe_num = r.r_num LEFT JOIN recipe_diets rd ON rd.rd_recipe_num = r.r_num WHERE r.r_name = "pizza" OR mp.m_date = "22/11/7"=%s'%(pk)

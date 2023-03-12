@@ -1,4 +1,5 @@
 import { Button, Typography, Box, Grid, Checkbox, Snackbar, FormControlLabel, TextField, InputLabel, Paper } from "@mui/material";
+import { HighlightOff } from "@mui/icons-material";
 import React, {useState, useEffect, useCallback, Fragment, useRef} from 'react';
 import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
 import { Stack } from "@mui/material";
@@ -10,6 +11,8 @@ import RecipeIngForm from "./RecipeIngForm.js"
 import RecipePkgForm from "./RecipePkgForm.js"
 import RecipeInstForm from './RecipeInstForm.js'
 import RecipeIngList from "./RecipeIngList.js"
+
+import food_placeholder from '../Images/food_placeholder.jpg'
 
 import DataGridDialog from '../components/DatagridDialog.js'
 import { number } from "yup";
@@ -139,20 +142,22 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     // Boolean 'request success' message state
     const [updateDoneSBOpen, setUpdateDoneSBOpen] = useState(false);
 
+    const [imageFile, setImageFile] = useState();
+    const [cardFile, setCardFile] = useState();
+
     const handleCloseClick = () => {
         // Return to recipe list when close is clicked
         setCurrPage(<RecipePage setCurrPage={setCurrPage}></RecipePage>)
     }
 
-    const handleImageUpload = (event, apiEndpoint) => {
+    const handleImageUpload = (file, r_num, apiEndpoint) => {
         // Send file in request to api
-        const file = event.target.files[0];
         const formData = new FormData();
         formData.append('file', file);
-        setUpdateSBOpen(true);
+        // setUpdateSBOpen(true);
         axios({
             method: "PATCH",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/" + recipeData.r_num + '/',
+            url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/" + r_num + '/',
             data: formData,
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -160,7 +165,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         }).then((response)=>{
             console.log('success!')
             setUpdateDoneSBOpen(true);
-            getDBRecipeData(recipeData.r_num);
+            // getDBRecipeData(recipeData.r_num);
         }).catch((error) => {
         if (error.response) {
             console.log(error.response);
@@ -186,11 +191,13 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         if (isAdding) {
             axios({
                 method: "POST",
-                url:"http://4.236.185.213:8000/api/mealrecipes/",
+                url:"http://localhost:8000/api/mealrecipes/",
                 data: r_data,
             }).then((response)=>{
-                console.log('success!')
-                setUpdateDoneSBOpen(true);
+                handleImageUpload(imageFile, response.data, 'mealrecipe-image');
+                handleImageUpload(cardFile, response.data, 'mealrecipe-card');
+                // console.log('success!')
+                // setUpdateDoneSBOpen(true);
                 // getDBRecipeData(recipeData.r_num);
             }).catch((error) => {
             if (error.response) {
@@ -203,11 +210,13 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         else {
             axios({
                 method: "PATCH",
-                url:"http://4.236.185.213:8000/api/mealrecipes/" + recipeData.r_num + '/',
+                url:"http://localhost:8000/api/mealrecipes/" + recipeData.r_num + '/',
                 data: r_data,
             }).then((response)=>{
-                console.log('success!')
-                setUpdateDoneSBOpen(true);
+                handleImageUpload(imageFile, recipeData.r_num, 'mealrecipe-image');
+                handleImageUpload(cardFile, recipeData.r_num, 'mealrecipe-card');
+                // console.log('success!')
+                // setUpdateDoneSBOpen(true);
                 // getDBRecipeData(recipeData.r_num);
             }).catch((error) => {
             if (error.response) {
@@ -231,7 +240,16 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         // console.log(props.image_source);
         // Replace image with a prompt if undefined
         if (props.image_source) {
-            return (<img style={{width: '30vw'}} src={`${props.image_source}?${Date.now()}`} key={props.image_source}></img>);
+            return (
+                <Box sx={{position: 'relative'}}>
+                    <Button color='lightBlue' variant='contained' sx={{position: 'absolute', right: '0%'}} onClick={() => console.log(imageFile)}>
+                        <HighlightOff/>
+                    </Button>
+                    <Box sx={{height: '100%', width: '100%'}}>
+                        <iframe style={{height: '50vh', width: '30vw'}} src={`${props.image_source}?${Date.now()}`} key={props.image_source}></iframe>
+                    </Box>
+                </Box>                
+            );
         }
         else {
             return (<Typography>Enter a recipe image</Typography>)
@@ -242,7 +260,16 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         // console.log(props.card_source)
         // Replace image with a prompt if undefined
         if (props.card_source) {
-            return (<iframe style={{height: '40vh', width: '30vw'}} src={`${props.card_source}?${Date.now()}`} key={props.card_source} type='application/pdf'/>);
+            return (
+                <Box sx={{position: 'relative'}}>
+                    <Button color='lightBlue' variant='contained' sx={{position: 'absolute', right: '0%'}} onClick={() => console.log(imageFile)}>
+                        <HighlightOff/>
+                    </Button>
+                    <Box sx={{height: '100%', width: '100%'}}>
+                        <iframe style={{height: '50vh', width: '30vw'}} src={`${props.card_source}?${Date.now()}`} key={props.card_source} type='application/pdf'/>
+                    </Box>
+                </Box>
+            );
         }
         else {
             return (<Typography>Enter a recipe card</Typography>)
@@ -272,22 +299,29 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 
                 {/* Recipe Image and Card Stack */}
                 <Stack item spacing={3}>
+                    {/* Recipe Name */}
                     <TextField required inputProps={{ref: nameField}} label={'Recipe Name'} defaultValue={recipeData.r_name}/>
                     <FormControlLabel control={<Checkbox checked={m_s===1 ? true : false} onChange={handleMealSnackChange}/>} label="Meal Recipe?"/>
-                    <RecipeImage image_source={recipeData.r_img_path}/>
+                    
+                    {/* Recipe Image */}
+                    <RecipeImage image_source={imageFile ? imageFile : recipeData.r_img_path}/>
                     <Button color='lightBlue' variant='contained' component='label'>
                         Upload Image
-                        <input id='recipe_image' type='file' accept='.jpg' onChange={(event) => handleImageUpload(event, 'mealrecipe-image')} hidden></input>
+                        <input id='recipe_image' type='file' accept='.jpg,.png,.bmp' onChange={(event) => setImageFile(event.target.files[0])} hidden></input>
                     </Button>
-                    <RecipeCard card_source={recipeData.r_card_path}/>
+
+                    {/* Recipe Card */}
+                    <RecipeCard card_source={cardFile ? cardFile : recipeData.r_card_path}/>
                     <Button color='lightBlue' variant='contained' component='label'>
                         Upload Recipe Card
-                        <input id='recipe_card' type='file' accept='.jpg,.pdf,.doc,.docx' onChange={(event) => handleImageUpload(event, 'mealrecipe-card')} hidden></input>
+                        <input id='recipe_card' type='file' accept='.jpg,.pdf,.doc,.docx' onChange={(event) => setCardFile(event.target.files[0])} hidden></input>
                     </Button>
                 </Stack>
 
-                {/* Recipe Info Lists Stack */}
+                {/* Recipe Info Tables Stack */}
                 <Stack item spacing={10}>
+                    
+                    {/* Ingredient Table */}
                     <Box>
                         <Typography variant='h6'>Ingredients</Typography>
                         <Box sx={{height: '50vh', width: {md: '45vw', sm: '80vw'}}}>
@@ -303,6 +337,8 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                             ></ModularRecipeDatagrid>
                         </Box>
                     </Box>
+
+                    {/* Packaging Table */}
                     <Box>
                         <Typography variant='h6'>Packaging</Typography>
                         <Box sx={{height: '50vh', width: {md: '45vw', sm: '80vw'}}}>
@@ -318,6 +354,8 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                             ></ModularRecipeDatagrid>
                         </Box>    
                     </Box>
+                    
+                    {/* Station Table */}
                     <Box>
                         <Typography variant='h6'>Station</Typography>
                         <Box sx={{height: '50vh', width: {md: '45vw', sm: '80vw'}}}>
@@ -334,6 +372,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                     </Box>
                 </Stack>
             </Grid>
+
             {/* Save Click 'request sent' Notice */}
             <Snackbar
                 open={updateSBOpen}
