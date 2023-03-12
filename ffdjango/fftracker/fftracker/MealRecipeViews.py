@@ -6,6 +6,7 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from rest_framework import status
 from PIL import Image
+from datetime import datetime
 import os
 import json
 
@@ -67,6 +68,38 @@ class RecipeImageSerializer(serializers.ModelSerializer):
     class Meta():
         model = Recipes
         fields = ('r_img_path')
+
+class TempImageUploadView(viewsets.ViewSet):
+    def create(self, request):
+        # save the temporary image/card uploaded for this session
+        # get image file from request
+        img = Image.open(request.data['file']).convert('RGB')
+        # store image with identifier for this session
+        rel_file_path = 'Images/temp_r_card_%s.pdf'%(datetime.now())
+        abs_file_path = 'var/www/html/' + rel_file_path
+        img.save(abs_file_path)
+        # return a link to temporary image/card
+        return Response(rel_file_path)
+    
+    def destroy(self, request, pk=None):
+        os.remove(request.data)
+        return Response(200)
+
+class TempImageUploadView(viewsets.ViewSet):
+    def create(self, request):
+        # save the temporary image/card uploaded for this session
+        # get image file from request
+        img = Image.open(request.data['file'])
+        # store image with identifier for this session
+        rel_file_path = 'Images/temp_r_image_%s.jpg'%(datetime.now())
+        abs_file_path = 'var/www/html/' + rel_file_path
+        img.save(abs_file_path)
+        # return a link to temporary image/card and abs path
+        return Response(rel_file_path)
+    
+    def destroy(self, request, pk=None):
+        os.remove('var/www/html' + request.data)
+        return Response(200)
 
 class RecipeImageView(viewsets.ViewSet):
     def list(self, request):
