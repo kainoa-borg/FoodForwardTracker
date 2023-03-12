@@ -98,7 +98,7 @@ class TempImageUploadView(viewsets.ViewSet):
         return Response(rel_file_path)
     
     def destroy(self, request, pk=None):
-        os.remove('var/www/html' + request.data)
+        os.remove('var/www/html/' + request.data)
         return Response(200)
 
 class RecipeImageView(viewsets.ViewSet):
@@ -135,7 +135,7 @@ class RecipeImageView(viewsets.ViewSet):
         r_obj.r_img_path = None
         r_obj.save()
         print(img_path)
-        if (img_path and os.path.exists('var/www/html' + img_path)):
+        if (img_path and os.path.exists('var/www/html/' + img_path)):
             os.remove('var/www/html/' + img_path)
             return Response(200)
         else:
@@ -174,7 +174,7 @@ class RecipeCardView(viewsets.ViewSet):
         r_obj.r_card_path = None
         r_obj.save()
         print(card_path)
-        if (card_path and os.path.exists('var/www/html' + card_path)):
+        if (card_path and os.path.exists('var/www/html/' + card_path)):
             os.remove('var/www/html/' + card_path)
             return Response(200)
         else:
