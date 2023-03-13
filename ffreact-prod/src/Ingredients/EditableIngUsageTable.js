@@ -50,8 +50,8 @@ export default function EditableIngUsageTable(props) {
         return (
             <Table>
               <TableHead>
-              <TableCell>used date</TableCell>
-              <TableCell>used qty</TableCell>
+              <TableCell>Used Date</TableCell>
+              <TableCell>Used Amount</TableCell>
 
               </TableHead>
                 {ingUsages.map((usage, thisKey) => {
