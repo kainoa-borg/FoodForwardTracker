@@ -144,9 +144,12 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
 
     const [imageFile, setImageFile] = useState();
     const [cardFile, setCardFile] = useState();
-    
-    const [imageURL, setImageURL] = useState(recipeData ? recipeData.r_img_path : undefined);
-    const [cardURL, setCardURL] = useState(recipeData ? recipeData.r_card_path : undefined);
+
+    const [imagePath, setImagePath] = useState(recipeData.r_img_path);
+    const [cardPath, setCardPath] = useState(recipeData.r_card_path);
+
+    const [tempImagePath, setTempImagePath] = useState();
+    const [tempCardPath, setTempCardPath] = useState();
 
     const [deleteImage, setDeleteImage] = useState(false);
     const [deleteCard, setDeleteCard] = useState(false);
@@ -157,8 +160,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
 
     const handleCloseClick = () => {
         // Return to recipe list when close is clicked
-        handleDeleteTempImage('image');
-        handleDeleteTempImage('card');
+        handleClearTempFiles();
         setCurrPage(<RecipePage setCurrPage={setCurrPage}></RecipePage>)
     }
 
@@ -168,16 +170,16 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         // setUpdateSBOpen(true);
         axios({
             method: "POST",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint + '/',
+            url:"http://localhost:8000/api/" + apiEndpoint + '/',
             data: formData,
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         }).then((response)=>{
             if (apiEndpoint === 'tempimageupload')
-                setImageURL(response.data);
+                setTempImagePath(response.data);
             if (apiEndpoint === 'tempcardupload')
-                setCardURL(response.data);
+                setTempCardPath(response.data);
             // console.log(apiEndpoint, 'temp upload success')
         }).catch((error) => {
         if (error.response) {
@@ -189,10 +191,11 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     }
 
     const handleDeleteRecipeImage = (imgOrCard) => {
+        console.log(recipeData.r_num);
         if (recipeData.r_img_path || recipeData.r_card_path) {
             axios({
                 method: "DELETE",
-                url:"http://4.236.185.213:8000/api/" + (imgOrCard==='image' ? 'mealrecipe-image' : 'mealrecipe-card') + "/" + recipeData.r_num
+                url:"http://localhost:8000/api/" + (imgOrCard==='image' ? 'mealrecipe-image' : 'mealrecipe-card') + "/" + recipeData.r_num + '/'
             }).then((response)=>{
                 setUpdateDoneSBOpen(true);
                 // console.log(imgOrCard, 'delete recipe image success!')
@@ -206,15 +209,48 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         }
     }
 
-    const handleDeleteTempImage = (imgOrCard) => {
-        if (imgOrCard === 'image' && recipeData.r_img_path) setDeleteImage(true);
-        if (imgOrCard === 'card' && recipeData.r_card_path) setDeleteCard(true);
-        // console.log('handleDeleteTempImage: ', imageURL, cardURL);
-        if (imageURL || cardURL) {
+    const handleClearTempFiles = () => {
+        if (tempImagePath) {
             axios({
                 method: "PATCH",
-                url:"http://4.236.185.213:8000/api/" + (imgOrCard==='image' ? 'tempimageupload' : 'tempcardupload') + '/' + 0 + '/',
-                data: imgOrCard==='image' ? {path: imageURL} : {path: cardURL}
+                url:"http://localhost:8000/api/" + ('tempimageupload') + '/' + 0 + '/',
+                data: {path: tempImagePath}
+            }).then((response)=>{
+                // console.log(imgOrCard, 'temp image delete success!')
+            }).catch((error) => {
+            if (error.response) {
+                console.log(error.response);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                }
+            });
+        }
+        if (tempCardPath) {
+            axios({
+                method: "PATCH",
+                url:"http://localhost:8000/api/" + ('tempcardupload') + '/' + 0 + '/',
+                data: {path: tempCardPath}
+            }).then((response)=>{
+                // console.log(imgOrCard, 'temp image delete success!')
+            }).catch((error) => {
+            if (error.response) {
+                console.log(error.response);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                }
+            });
+        } 
+    }
+
+    const handleDeleteImageClick = (imgOrCard) => {
+        // if (imgOrCard === 'image' && recipeData.r_img_path) setDeleteImage(true);
+        // if (imgOrCard === 'card' && recipeData.r_card_path) setDeleteCard(true);
+        // console.log('handleDeleteImageClick: ', tempImagePath, tempCardPath);
+        if (tempImagePath || tempCardPath) {
+            axios({
+                method: "PATCH",
+                url:"http://localhost:8000/api/" + (imgOrCard==='image' ? 'tempimageupload' : 'tempcardupload') + '/' + 0 + '/',
+                data: (imgOrCard==='image') ? {path: tempImagePath} : {path: tempCardPath}
             }).then((response)=>{
                 // console.log(imgOrCard, 'temp image delete success!')
             }).catch((error) => {
@@ -227,12 +263,14 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         }
         if (imgOrCard==='image') {
             setImageFile();
-            setImageURL();
+            setTempImagePath();
+            setImagePath();
             setDeleteImage(true);
         }
         else if (imgOrCard==='card') {
             setCardFile();
-            setCardURL();
+            setTempCardPath();
+            setCardPath();
             setDeleteCard(true);
         }
     }
@@ -248,7 +286,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         // setUpdateSBOpen(true);
         axios({
             method: "PATCH",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/" + r_num + '/',
+            url:"http://localhost:8000/api/" + apiEndpoint + "/" + r_num + '/',
             data: formData,
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -283,20 +321,27 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         // console.log('deleteImage: ', deleteImage, 'deleteCard: ', deleteCard)
 
         if (deleteImage) {
+            console.log('THIS BETTER NOT RUN TWICE');
             handleDeleteRecipeImage('image')
+            setDeleteImage(false);
         }
         if (deleteCard) {
             handleDeleteRecipeImage('card')
+            setDeleteCard(false);
         }
 
         if (isAdding) {
             axios({
                 method: "POST",
-                url:"http://4.236.185.213:8000/api/mealrecipes/",
+                url:"http://localhost:8000/api/mealrecipes/",
                 data: r_data,
             }).then((response)=>{
-                handleImageUpload(imageFile, response.data, 'mealrecipe-image');
-                handleImageUpload(cardFile, response.data, 'mealrecipe-card');
+                if (imageFile) {
+                    handleImageUpload(imageFile, response.data, 'mealrecipe-image');
+                }
+                if (cardFile) {
+                    handleImageUpload(cardFile, response.data, 'mealrecipe-card');
+                }
                 // console.log('post success!')
                 setUpdateDoneSBOpen(true);
                 // getDBRecipeData(recipeData.r_num);
@@ -309,14 +354,18 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             });
         }
         else {
+            if (imageFile) {
+                handleImageUpload(imageFile, recipeData.r_num, 'mealrecipe-image');
+            }
+            if (cardFile) {
+                handleImageUpload(cardFile, recipeData.r_num, 'mealrecipe-card');
+            }
             axios({
                 method: "PATCH",
-                url:"http://4.236.185.213:8000/api/mealrecipes/" + recipeData.r_num + '/',
+                url:"http://localhost:8000/api/mealrecipes/" + recipeData.r_num + '/',
                 data: r_data,
             }).then((response)=>{
-                handleImageUpload(imageFile, recipeData.r_num, 'mealrecipe-image');
-                handleImageUpload(cardFile, recipeData.r_num, 'mealrecipe-card');
-                console.log('patch success!')
+                // console.log('patch success!')
                 setUpdateDoneSBOpen(true);
                 // getDBRecipeData(recipeData.r_num);
             }).catch((error) => {
@@ -343,7 +392,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         if (props.image_source) {
             return (
                 <Box sx={{position: 'relative'}}>
-                    <Button color='lightBlue' variant='contained' sx={{position: 'absolute', right: '0%'}} onClick={() => handleDeleteTempImage('image')}>
+                    <Button color='lightBlue' variant='contained' sx={{position: 'absolute', right: '0%'}} onClick={() => handleDeleteImageClick('image')}>
                         <HighlightOff/>
                     </Button>
                     <Box sx={{height: '100%', width: '100%'}}>
@@ -363,7 +412,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         if (props.card_source) {
             return (
                 <Box sx={{position: 'relative'}}>
-                    <Button color='lightBlue' variant='contained' sx={{position: 'absolute', right: '0%'}} onClick={() => {handleDeleteTempImage('card')}}>
+                    <Button color='lightBlue' variant='contained' sx={{position: 'absolute', right: '0%'}} onClick={() => {handleDeleteImageClick('card')}}>
                         <HighlightOff/>
                     </Button>
                     <Box sx={{height: '100%', width: '100%'}}>
@@ -405,14 +454,14 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                     <FormControlLabel control={<Checkbox checked={m_s===1 ? true : false} onChange={handleMealSnackChange}/>} label="Meal Recipe?"/>
                     
                     {/* Recipe Image */}
-                    <RecipeImage image_source={imageURL}/>
+                    <RecipeImage image_source={tempImagePath ? tempImagePath : imagePath}/>
                     <Button color='lightBlue' variant='contained' component='label'>
                         Upload Image
                         <input id='recipe_image' type='file' accept='.jpg,.png,.bmp' onChange={(event) => {handleTempUpload(event.target.files[0], 'tempimageupload'); setImageFile(event.target.files[0])}} hidden></input>
                     </Button>
 
                     {/* Recipe Card */}
-                    <RecipeCard card_source={cardURL}/>
+                    <RecipeCard card_source={tempCardPath ? tempCardPath : cardPath}/>
                     <Button color='lightBlue' variant='contained' component='label'>
                         Upload Recipe Card
                         <input id='recipe_card' type='file' accept='.jpg,.pdf,.doc,.docx' onChange={(event) => {handleTempUpload(event.target.files[0], 'tempcardupload'); setCardFile(event.target.files[0])}} hidden></input>

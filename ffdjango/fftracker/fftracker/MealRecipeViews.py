@@ -7,9 +7,11 @@ from rest_framework import serializers
 from rest_framework import status
 from rest_framework.decorators import action
 from PIL import Image
-from datetime import datetime
+from datetime import datetime as dt
 import os
 import json
+import string
+import subprocess
 
 from .models import Recipes, RecipeAllergies, RecipeDiets, RecipeIngredients, Stations, RecipePackaging, RecipeInstructions
 from .IngredientViews import IngredientNameSerializer
@@ -74,14 +76,21 @@ class TempCardUploadView(viewsets.ViewSet):
     def retrieve(self, request, pk):
         return Response(pk)
     def create(self, request):
-        # save the temporary image/card uploaded for this session
-        # get image file from request
+        # Creates hash based on current datetime
+        def hash_datetime():
+            curr_time = dt.now()
+            return (str(int(round(curr_time.timestamp())) % 12))
+        
+        # save the temporary card uploaded for this session
+        # get card file from request
         img = Image.open(request.data['file']).convert('RGB')
-        # store image with identifier for this session
-        rel_file_path = 'Images/temp_r_card_%s.pdf'%(datetime.now())
+        # store card with identifier for this session
+        rel_file_path = 'Images/temp_r_card_%s.pdf'%(hash_datetime())
         abs_file_path = 'var/www/html/' + rel_file_path
+        if not os.path.exists('var/www/html/Images'):
+            os.makedirs('var/www/html/Images')
         img.save(abs_file_path)
-        # return a link to temporary image/card
+        # return a link to temporary card
         return Response(rel_file_path)
     
     def patch(self, request, pk):
@@ -89,22 +98,36 @@ class TempCardUploadView(viewsets.ViewSet):
         return Response(200)
 
 class TempImageUploadView(viewsets.ViewSet):
+    def list(self, request):
+        return Response(os.path.abspath('var/www/Image'))
+
     def retrieve(self, request, pk):
         return Response(pk)
     
     def create(self, request):
-        # save the temporary image/card uploaded for this session
+        # Creates hash based on current datetime
+        def hash_datetime():
+            curr_time = dt.now()
+            return (str(int(round(curr_time.timestamp())) % 999999))
+        
+        # save the temporary image uploaded for this session
         # get image file from request
-        img = Image.open(request.data['file'])
+        img = Image.open(request.data['file']).convert('RGB')
         # store image with identifier for this session
-        rel_file_path = 'Images/temp_r_image_%s.jpg'%(datetime.now())
+        rel_file_path = 'Images/temp_r_image_%s.jpg'%(hash_datetime())
         abs_file_path = 'var/www/html/' + rel_file_path
+        # Create local debug image storage if it doesn't exist 
+        if not os.path.exists('var/www/html/Images'):
+            os.makedirs('var/www/html/Images')
         img.save(abs_file_path)
-        # return a link to temporary image/card and abs path
+        ###### COMMENT OUT IN PROD ######
+        # os.startfile(os.path.normpath('var/www/html/Images'))
+        ###### COMMENT OUT IN PROD ######
+        # return a link to temporary image and abs path
         return Response(rel_file_path)
     
     def patch(self, request, pk):
-        print(request.data)
+        print('request.data = %s'%(request.data))
         os.remove('var/www/html/' + request.data['path'])
         return Response(200)
 
@@ -114,38 +137,32 @@ class RecipeImageView(viewsets.ViewSet):
     def retrieve(self, request, pk):
         return Response(pk)
     def patch(self, request, pk):
-        queryset = Recipes.objects.filter(r_num = pk)
-        if len(queryset) > 0:
-            img = Image.open(request.data['file'])
-            try:
-                img.verify()
-            except:
-                print('image corrupt')
-                return Response(request)
-            img = Image.open(request.data['file'])
-            abs_file_path = 'var/www/html/Images/r_%s_image.jpg'%(pk)
-            rel_file_path = 'Images/r_%s_image.jpg'%(pk)
-            img.save(abs_file_path)
-            queryset[0].r_img_path = rel_file_path
-            queryset[0].save()
+        r_obj = Recipes.objects.get(r_num = pk)
+        img = Image.open(request.data['file'])
+        try:
+            img.verify()
+        except:
+            print('image corrupt')
+            return Response(request)
+        img = Image.open(request.data['file'])
+        abs_file_path = 'var/www/html/Images/r_%s_image.jpg'%(pk)
+        rel_file_path = 'Images/r_%s_image.jpg'%(pk)
+        img.save(abs_file_path)
+        r_obj.r_img_path = rel_file_path
+        r_obj.save(update_fields=['r_img_path'])
             
-        return Response(queryset[0].r_img_path)
+        return Response(r_obj.r_img_path)
     
     def destroy(self, request, pk):
-        r_obj = Recipes.objects.filter(r_num=pk)
-        r_obj = r_obj[0]
-        print(r_obj.r_name)
-        print(r_obj.r_img_path)
+        r_obj = Recipes.objects.get(pk=pk)
         img_path=''
-        if (r_obj.r_img_path):
-            img_path = r_obj.r_img_path[:]
-        Recipes.objects.filter(r_num=pk).update(r_img_path=None)
-        print(img_path)
+        img_path = r_obj.r_img_path[:]
+        # Recipes.objects.filter(r_num=pk).update(r_img_path=None)
+        r_obj.r_img_path = None
+        r_obj.save()
         if (img_path and os.path.exists('var/www/html/' + img_path)):
             os.remove('var/www/html/' + img_path)
-            return Response(200)
-        else:
-            return Response(406)
+         
 
 
 class RecipeCardView(viewsets.ViewSet):
@@ -167,17 +184,18 @@ class RecipeCardView(viewsets.ViewSet):
             rel_file_path = 'Images/r_%s_card.pdf'%(pk)
             img.save(abs_file_path)
             queryset[0].r_card_path = rel_file_path
-            queryset[0].save()
+            queryset[0].save(update_fields=['r_card_path'])
             
         return Response(queryset[0].r_img_path)
     
     def destroy(self, request, pk):
-        r_obj = Recipes.objects.filter(r_num=pk)
-        r_obj = r_obj[0]
-        print(r_obj.r_name)
-        print(r_obj.r_card_path)
+        r_obj = Recipes.objects.get(r_num=pk)
+        print('tmpCard: %s'%(r_obj.r_name))
+        print('tmpCard: %s'%(r_obj.r_card_path))
         card_path = r_obj.r_card_path[:]
-        Recipes.objects.filter(r_num=pk).update(r_card_path = None)
+        # Recipes.objects.filter(r_num=pk).update(r_card_path = None)
+        r_obj.r_card_path = None
+        r_obj.save(update_fields=['r_card_path'])
         print(card_path)
         if (card_path and os.path.exists('var/www/html/' + card_path)):
             os.remove('var/www/html/' + card_path)

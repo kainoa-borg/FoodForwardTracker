@@ -3,6 +3,9 @@
 #Recipe Images
 /Images/*
 
+#Debug Images
+/ffdjango/fftracker/var/www/html/Images/*
+
 #pycache
 .pyc
 .cpython
