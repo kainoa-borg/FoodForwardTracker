@@ -162,6 +162,9 @@ class RecipeImageView(viewsets.ViewSet):
         r_obj.save()
         if (img_path and os.path.exists('var/www/html/' + img_path)):
             os.remove('var/www/html/' + img_path)
+            return Response(200)
+        else:
+            return Response(500)
          
 
 
@@ -201,7 +204,7 @@ class RecipeCardView(viewsets.ViewSet):
             os.remove('var/www/html/' + card_path)
             return Response(200)
         else:
-            return Response(406)
+            return Response(500)
 
 
 class RecipesSerializer(ModelSerializer):
