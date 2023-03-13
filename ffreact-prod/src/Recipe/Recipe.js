@@ -157,34 +157,8 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
 
     const handleCloseClick = () => {
         // Return to recipe list when close is clicked
-        if (imageURL) {
-            axios({
-                method: "DELETE",
-                url:"http://4.236.185.213:8000/api/" + 'tempimageupload' + '/',
-                data: imageURL
-            }).then((response)=>{
-            }).catch((error) => {
-            if (error.response) {
-                console.log(error.response);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                }
-            });
-        }
-        if (cardURL) {
-            axios({
-                method: "DELETE",
-                url:"http://4.236.185.213:8000/api/" + 'tempcardupload' + '/',
-                data: cardURL
-            }).then((response)=>{
-            }).catch((error) => {
-            if (error.response) {
-                console.log(error.response);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                }
-            });
-        }
+        handleDeleteTempImage('image');
+        handleDeleteTempImage('card');
         setCurrPage(<RecipePage setCurrPage={setCurrPage}></RecipePage>)
     }
 
