@@ -159,7 +159,7 @@ class RecipeImageView(viewsets.ViewSet):
         img_path = r_obj.r_img_path[:]
         # Recipes.objects.filter(r_num=pk).update(r_img_path=None)
         r_obj.r_img_path = None
-        r_obj.save()
+        r_obj.save(update_fields=['r_img_path'])
         if (img_path and os.path.exists('var/www/html/' + img_path)):
             os.remove('var/www/html/' + img_path)
             return Response(200)
