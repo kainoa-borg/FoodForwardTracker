@@ -1,3 +1,4 @@
+import { Button, Input, Table, TableCell, TableHead, TableRow } from '@mui/material';
 import React, { useState } from 'react'
 
 export default function EditableIngUsageTable(props) {
@@ -47,25 +48,28 @@ export default function EditableIngUsageTable(props) {
 
     if (ingUsages) {
         return (
-            <table>
-                    <th>used date</th>
-                    <th>used qty</th>
+            <Table>
+              <TableHead>
+              <TableCell>used date</TableCell>
+              <TableCell>used qty</TableCell>
+
+              </TableHead>
                 {ingUsages.map((usage, thisKey) => {
                     return (
-                        <tr key={thisKey}>
-                            <td><input dataKey={thisKey} name="used_date" type="date" value={usage.used_date} onChange={handleKeyUsageChange}/></td>
-                            <td><input dataKey={thisKey} name="used_qty" value={usage.used_qty} onChange={handleKeyUsageChange}/></td>
-                            <td><button onClick={() => handleDeleteUsage(thisKey)}>Delete</button></td>
-                        </tr>
+                        <TableRow key={thisKey}>
+                            <TableCell><Input dataKey={thisKey} name="used_date" type="date" value={usage.used_date} onChange={handleKeyUsageChange}/></TableCell>
+                            <TableCell><Input dataKey={thisKey} name="used_qty" type='number' value={usage.used_qty} onChange={handleKeyUsageChange}/></TableCell>
+                            <TableCell><Button color='lightBlue' variant='contained' onClick={() => handleDeleteUsage(thisKey)}>Delete</Button></TableCell>
+                        </TableRow>
                         )
                     })
                 }
-                    <tr>
-                      <td><input name="used_date" value={currUsage.used_date} type="date" onChange={handleUsageChange}/></td>
-                      <td><input name="used_qty" value={currUsage.used_qty} onChange={handleUsageChange}/></td>
-                      <td><button onClick={handleAddUsage}>Add</button></td>
-                    </tr>
-            </table>
+                    <TableRow>
+                      <TableCell><Input name="used_date" value={currUsage.used_date} type="date" onChange={handleUsageChange}/></TableCell>
+                      <TableCell><Input name="used_qty" value={currUsage.used_qty} type='number' onChange={handleUsageChange}/></TableCell>
+                      <TableCell><Button color='lightBlue' variant='contained' onClick={handleAddUsage}>Add</Button></TableCell>
+                    </TableRow>
+            </Table>
         )
     }
 }

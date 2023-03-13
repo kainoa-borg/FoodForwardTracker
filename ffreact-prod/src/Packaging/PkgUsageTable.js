@@ -1,3 +1,4 @@
+import { Table, TableHead, TableCell, TableRow } from '@mui/material'
 import React from 'react'
 
 const PkgUsageTable = (props) => {
@@ -6,19 +7,21 @@ const PkgUsageTable = (props) => {
         // console.log(JSON.stringify(this_ing.usages))
         if (pkg_usages.length > 0) {
             return (
-                <table>
-                        <th>used date</th>
-                        <th>used qty</th>
+                <Table>
+                    <TableHead>
+                        <TableCell>Used Date</TableCell>
+                        <TableCell>Used Amount</TableCell>
+                    </TableHead>
                     {pkg_usages.map((usage, key) => {
                         return (
-                            <tr>
-                                <td>{usage.used_date}</td>
-                                <td>{usage.used_qty}</td>
-                            </tr>
+                            <TableRow>
+                                <TableCell>{usage.used_date}</TableCell>
+                                <TableCell>{usage.used_qty}</TableCell>
+                            </TableRow>
                             )
                         })
                     }
-                </table>
+                </Table>
             )
         }
     }

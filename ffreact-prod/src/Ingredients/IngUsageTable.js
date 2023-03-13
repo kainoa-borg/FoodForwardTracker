@@ -1,3 +1,4 @@
+import { Table, TableCell, TableHead, TableRow } from '@mui/material';
 import React from 'react'
 
 const IngUsageTable = (props) => {
@@ -5,21 +6,23 @@ const IngUsageTable = (props) => {
     if (ing_usages) {
         // console.log(JSON.stringify(this_ing.usages))
         if (ing_usages.length > 0) {
-            return(
-                <table>
-                        <th>used date</th>
-                        <th>used qty</th>
+            return (
+                <Table>
+                    <TableHead>
+                        <TableCell>Used Date</TableCell>
+                        <TableCell>Used Amount</TableCell>
+                    </TableHead>
                     {ing_usages.map((usage, key) => {
                         return (
-                            <tr>
-                                <td>{usage.used_date}</td>
-                                <td>{usage.used_qty}</td>
-                            </tr>
+                            <TableRow>
+                                <TableCell>{usage.used_date}</TableCell>
+                                <TableCell>{usage.used_qty}</TableCell>
+                            </TableRow>
                             )
                         })
                     }
-                </table>
-                    );
+                </Table>
+            );
         }
     }
     else {

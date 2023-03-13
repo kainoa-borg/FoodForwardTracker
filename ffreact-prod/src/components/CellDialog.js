@@ -21,7 +21,7 @@ export default function CellDialog({buttonText, dialogTitle, component}) {
                     {component}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleClose}>Close</Button>
                 </DialogActions>
             </Dialog>
         </Fragment>

@@ -116,6 +116,9 @@ export default function PackagingPage() {
                 return <CellDialog buttonText={'Edit Usages'} dialogTitle={'Edit Usages'} component={<EditablePkgUsageTable packaging_usage={params.value} updateEditForm={updateCellValue}/>}/>
             }
         },
+        {
+            field: 'qty_on_hand', headerName: "Qty On Hand", width: 100, editable: false
+        }
     ]
     
     return(
