@@ -85,7 +85,7 @@ export default function HouseholdPage() {
 
     return(
         <div class='table-div'>
-        <h3>Clients</h3>
+        <Typography id='page-header' variant='h5'>Clients</Typography>
         <Box sx={{height: '70vh'}}>
             <NewModularDatagrid 
                 columns={columns}
