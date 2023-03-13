@@ -137,7 +137,7 @@ class RecipeImageView(viewsets.ViewSet):
     def retrieve(self, request, pk):
         return Response(pk)
     def patch(self, request, pk):
-        r_obj = Recipes.objects.get(r_num = pk)
+        queryset = Recipes.objects.filter(r_num = pk)
         img = Image.open(request.data['file'])
         try:
             img.verify()
@@ -148,20 +148,23 @@ class RecipeImageView(viewsets.ViewSet):
         abs_file_path = 'var/www/html/Images/r_%s_image.jpg'%(pk)
         rel_file_path = 'Images/r_%s_image.jpg'%(pk)
         img.save(abs_file_path)
-        r_obj.r_img_path = rel_file_path
-        r_obj.save(update_fields=['r_img_path'])
+        # r_obj.r_img_path = rel_file_path
+        # r_obj.save(update_fields=['r_img_path'])
+        Recipes.objects.filter(r_num=pk).update(r_img_path = rel_file_path)
             
-        return Response(r_obj.r_img_path)
+        return Response(queryset[0].r_img_path)
     
     def destroy(self, request, pk):
         r_obj = Recipes.objects.get(pk=pk)
         img_path=''
         img_path = r_obj.r_img_path[:]
         # Recipes.objects.filter(r_num=pk).update(r_img_path=None)
-        r_obj.r_img_path = None
-        r_obj.save(update_fields=['r_img_path'])
+        # r_obj.r_img_path = None
+        # r_obj.save(update_fields=['r_img_path'])
+        updated_count = Recipes.objects.filter(pk=pk).update(r_img_path = None)
         if (img_path and os.path.exists('var/www/html/' + img_path)):
             os.remove('var/www/html/' + img_path)
+        if updated_count > 0:
             return Response(200)
         else:
             return Response(500)
@@ -186,10 +189,11 @@ class RecipeCardView(viewsets.ViewSet):
             abs_file_path = 'var/www/html/Images/r_%s_card.pdf'%(pk)
             rel_file_path = 'Images/r_%s_card.pdf'%(pk)
             img.save(abs_file_path)
-            queryset[0].r_card_path = rel_file_path
-            queryset[0].save(update_fields=['r_card_path'])
+            # queryset[0].r_card_path = rel_file_path
+            # queryset[0].save(update_fields=['r_card_path'])
+            queryset.update(r_card_path = rel_file_path)
             
-        return Response(queryset[0].r_img_path)
+        return Response(queryset[0].r_card_path)
     
     def destroy(self, request, pk):
         r_obj = Recipes.objects.get(r_num=pk)
@@ -197,15 +201,16 @@ class RecipeCardView(viewsets.ViewSet):
         print('tmpCard: %s'%(r_obj.r_card_path))
         card_path = r_obj.r_card_path[:]
         # Recipes.objects.filter(r_num=pk).update(r_card_path = None)
-        r_obj.r_card_path = None
-        r_obj.save(update_fields=['r_card_path'])
-        print(card_path)
+        # r_obj.r_card_path = None
+        # r_obj.save(update_fields=['r_card_path'])
+        # print(card_path)
+        updated_count = Recipes.objects.filter(pk=pk).update(r_card_path = None)
         if (card_path and os.path.exists('var/www/html/' + card_path)):
             os.remove('var/www/html/' + card_path)
+        if (updated_count > 0):
             return Response(200)
         else:
             return Response(500)
-
 
 class RecipesSerializer(ModelSerializer):
     # r_num = serializers.CharField(max_length=200)
@@ -233,6 +238,10 @@ class RecipesSerializer(ModelSerializer):
         diets = validated_data.pop('r_diets')
         allergies = validated_data.pop('r_allergies')
         stations = validated_data.pop('r_stations')
+        if validated_data.get('r_ing_path', None):
+            r_ing_path = validated_data.pop('r_ing_path')
+        if validated_data.get('r_card_path', None):
+            r_card_path = validated_data.pop('r_card_path')
 
         recipe_instance = Recipes.objects.create(**validated_data)
 
@@ -271,6 +280,10 @@ class RecipesSerializer(ModelSerializer):
         diets = validated_data.pop('r_diets')
         stations = validated_data.pop('r_stations')
         allergies = validated_data.pop('r_allergies')
+        if validated_data.get('r_ing_path', None):
+            r_ing_path = validated_data.pop('r_ing_path')
+        if validated_data.get('r_card_path', None):
+            r_card_path = validated_data.pop('r_card_path')
 		# ing_instance = Ingredients.objects.create(**validated_data)
 
         RecipeIngredients.objects.filter(ri_recipe_num = recipe_instance).delete()
@@ -329,7 +342,7 @@ class RecipesSerializer(ModelSerializer):
         recipe_instance.m_s = validated_data.get('m_s')
         print(validated_data.get('m_s'))
         print(recipe_instance.m_s)
-        recipe_instance.save()
+        recipe_instance.save(update_fields=['r_name', 'm_s'])
         # print(recipe_instance.m_s)
         return recipe_instance
 

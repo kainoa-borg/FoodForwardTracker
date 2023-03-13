@@ -45,7 +45,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             </div>
         )
     }
-    // 4.236.185.213
+    // localhost
 
     const ingredientsColumns = [
         {
@@ -170,7 +170,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         // setUpdateSBOpen(true);
         axios({
             method: "POST",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint + '/',
+            url:"http://localhost:8000/api/" + apiEndpoint + '/',
             data: formData,
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -195,7 +195,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         if (recipeData.r_img_path || recipeData.r_card_path) {
             axios({
                 method: "DELETE",
-                url:"http://4.236.185.213:8000/api/" + (imgOrCard==='image' ? 'mealrecipe-image' : 'mealrecipe-card') + "/" + recipeData.r_num + '/'
+                url:"http://localhost:8000/api/" + (imgOrCard==='image' ? 'mealrecipe-image' : 'mealrecipe-card') + "/" + recipeData.r_num + '/'
             }).then((response)=>{
                 setUpdateDoneSBOpen(true);
                 // console.log(imgOrCard, 'delete recipe image success!')
@@ -213,7 +213,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         if (tempImagePath) {
             axios({
                 method: "PATCH",
-                url:"http://4.236.185.213:8000/api/" + ('tempimageupload') + '/' + 0 + '/',
+                url:"http://localhost:8000/api/" + ('tempimageupload') + '/' + 0 + '/',
                 data: {path: tempImagePath}
             }).then((response)=>{
                 // console.log(imgOrCard, 'temp image delete success!')
@@ -228,7 +228,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         if (tempCardPath) {
             axios({
                 method: "PATCH",
-                url:"http://4.236.185.213:8000/api/" + ('tempcardupload') + '/' + 0 + '/',
+                url:"http://localhost:8000/api/" + ('tempcardupload') + '/' + 0 + '/',
                 data: {path: tempCardPath}
             }).then((response)=>{
                 // console.log(imgOrCard, 'temp image delete success!')
@@ -249,7 +249,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         if (tempImagePath || tempCardPath) {
             axios({
                 method: "PATCH",
-                url:"http://4.236.185.213:8000/api/" + (imgOrCard==='image' ? 'tempimageupload' : 'tempcardupload') + '/' + 0 + '/',
+                url:"http://localhost:8000/api/" + (imgOrCard==='image' ? 'tempimageupload' : 'tempcardupload') + '/' + 0 + '/',
                 data: (imgOrCard==='image') ? {path: tempImagePath} : {path: tempCardPath}
             }).then((response)=>{
                 // console.log(imgOrCard, 'temp image delete success!')
@@ -286,13 +286,14 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         // setUpdateSBOpen(true);
         axios({
             method: "PATCH",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/" + r_num + '/',
+            url:"http://localhost:8000/api/" + apiEndpoint + "/" + r_num + '/',
             data: formData,
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         }).then((response)=>{
             // console.log(apiEndpoint, 'image upload success!')
+            apiEndpoint==='mealrecipe-image' ? setImageFile() : setCardFile();
             setUpdateDoneSBOpen(true);
             // getDBRecipeData(recipeData.r_num);
         }).catch((error) => {
@@ -321,7 +322,6 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         // console.log('deleteImage: ', deleteImage, 'deleteCard: ', deleteCard)
 
         if (deleteImage) {
-            console.log('THIS BETTER NOT RUN TWICE');
             handleDeleteRecipeImage('image')
             setDeleteImage(false);
         }
@@ -333,7 +333,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         if (isAdding) {
             axios({
                 method: "POST",
-                url:"http://4.236.185.213:8000/api/mealrecipes/",
+                url:"http://localhost:8000/api/mealrecipes/",
                 data: r_data,
             }).then((response)=>{
                 if (imageFile) {
@@ -362,7 +362,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             }
             axios({
                 method: "PATCH",
-                url:"http://4.236.185.213:8000/api/mealrecipes/" + recipeData.r_num + '/',
+                url:"http://localhost:8000/api/mealrecipes/" + recipeData.r_num + '/',
                 data: r_data,
             }).then((response)=>{
                 // console.log('patch success!')
