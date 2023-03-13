@@ -280,6 +280,8 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         // console.log(JSON.stringify(r_data));
         setUpdateSBOpen(true);
 
+        console.log('deleteImage: ', deleteImage, 'deleteCard: ', deleteCard)
+
         if (deleteImage) {
             handleDeleteRecipeImage('image')
         }
