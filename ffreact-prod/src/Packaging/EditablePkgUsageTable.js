@@ -1,4 +1,4 @@
-import { Table, TableHead, TableRow, TableCell, Input, Button } from '@mui/material';
+import { Table, TableHead, TableRow, TableCell, Input, Button, TableContainer, Paper } from '@mui/material';
 import React, {useState, Fragment} from 'react'
 
 export default function EditablePkgUsageTable(props) {
@@ -48,6 +48,7 @@ export default function EditablePkgUsageTable(props) {
 
     if (pkgUsages) {
         return (
+          <TableContainer component={Paper}>
             <Table>
               <TableHead>
                 <TableCell>Used Date</TableCell>
@@ -71,6 +72,7 @@ export default function EditablePkgUsageTable(props) {
                       <TableCell><Button color="lightBlue" variant='contained' onClick={handleAddUsage}>Add</Button></TableCell>
                     </TableRow>
             </Table>
+          </TableContainer>
         )
     }
 }

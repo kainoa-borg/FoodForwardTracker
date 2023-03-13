@@ -1,4 +1,4 @@
-import { Button, Input, Table, TableCell, TableHead, TableRow } from '@mui/material';
+import { Button, Input, Paper, Table, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import React, { useState } from 'react'
 
 export default function EditableIngUsageTable(props) {
@@ -48,6 +48,7 @@ export default function EditableIngUsageTable(props) {
 
     if (ingUsages) {
         return (
+          <TableContainer component={Paper}>
             <Table>
               <TableHead>
               <TableCell>Used Date</TableCell>
@@ -70,6 +71,8 @@ export default function EditableIngUsageTable(props) {
                       <TableCell><Button color='lightBlue' variant='contained' onClick={handleAddUsage}>Add</Button></TableCell>
                     </TableRow>
             </Table>
+          </TableContainer>
+            
         )
     }
 }
