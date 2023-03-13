@@ -46,7 +46,6 @@ export default function ModularSelect({id, field, value, options, fieldName, sea
 
   // If this is an editable column, use datagrid api to update cell
   if (id && field) {
-    console.log(options);
     const api = useGridApiContext();
     React.useEffect(() => {
         api.current.setEditCellValue({id, field, value: selectValue[searchField], debounceMs: 200})

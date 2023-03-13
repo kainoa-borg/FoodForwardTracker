@@ -5,7 +5,9 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from rest_framework import status
+from rest_framework.decorators import action
 from PIL import Image
+from datetime import datetime
 import os
 import json
 
@@ -68,6 +70,44 @@ class RecipeImageSerializer(serializers.ModelSerializer):
         model = Recipes
         fields = ('r_img_path')
 
+class TempCardUploadView(viewsets.ViewSet):
+    def retrieve(self, request, pk):
+        return Response(pk)
+    def create(self, request):
+        # save the temporary image/card uploaded for this session
+        # get image file from request
+        img = Image.open(request.data['file']).convert('RGB')
+        # store image with identifier for this session
+        rel_file_path = 'Images/temp_r_card_%s.pdf'%(datetime.now())
+        abs_file_path = 'var/www/html/' + rel_file_path
+        img.save(abs_file_path)
+        # return a link to temporary image/card
+        return Response(rel_file_path)
+    
+    def patch(self, request, pk):
+        os.remove('var/www/html/' + request.data['path'])
+        return Response(200)
+
+class TempImageUploadView(viewsets.ViewSet):
+    def retrieve(self, request, pk):
+        return Response(pk)
+    
+    def create(self, request):
+        # save the temporary image/card uploaded for this session
+        # get image file from request
+        img = Image.open(request.data['file'])
+        # store image with identifier for this session
+        rel_file_path = 'Images/temp_r_image_%s.jpg'%(datetime.now())
+        abs_file_path = 'var/www/html/' + rel_file_path
+        img.save(abs_file_path)
+        # return a link to temporary image/card and abs path
+        return Response(rel_file_path)
+    
+    def patch(self, request, pk):
+        print(request.data)
+        os.remove('var/www/html/' + request.data['path'])
+        return Response(200)
+
 class RecipeImageView(viewsets.ViewSet):
     def list(self, request):
         return Response('list')
@@ -90,6 +130,23 @@ class RecipeImageView(viewsets.ViewSet):
             queryset[0].save()
             
         return Response(queryset[0].r_img_path)
+    
+    def destroy(self, request, pk):
+        r_obj = Recipes.objects.filter(r_num=pk)
+        r_obj = r_obj[0]
+        print(r_obj.r_name)
+        print(r_obj.r_img_path)
+        img_path=''
+        if (r_obj.r_img_path):
+            img_path = r_obj.r_img_path[:]
+        r_obj.r_img_path = None
+        r_obj.save()
+        print(img_path)
+        if (img_path and os.path.exists('var/www/html/' + img_path)):
+            os.remove('var/www/html/' + img_path)
+            return Response(200)
+        else:
+            return Response(406)
 
 
 class RecipeCardView(viewsets.ViewSet):
@@ -114,6 +171,21 @@ class RecipeCardView(viewsets.ViewSet):
             queryset[0].save()
             
         return Response(queryset[0].r_img_path)
+    
+    def destroy(self, request, pk):
+        r_obj = Recipes.objects.filter(r_num=pk)
+        r_obj = r_obj[0]
+        print(r_obj.r_name)
+        print(r_obj.r_card_path)
+        card_path = r_obj.r_card_path
+        r_obj.r_card_path = None
+        r_obj.save()
+        print(card_path)
+        if (card_path and os.path.exists('var/www/html/' + card_path)):
+            os.remove('var/www/html/' + card_path)
+            return Response(200)
+        else:
+            return Response(406)
 
 
 class RecipesSerializer(ModelSerializer):

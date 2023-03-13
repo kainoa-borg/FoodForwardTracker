@@ -60,6 +60,8 @@ router.register(r'mealplanreport', MealPlanReportView, basename='mealplanreport'
 router.register(r'mealrecipes', RecipeView, basename='mealrecipes')
 router.register(r'mealrecipe-image', RecipeImageView, basename='mealrecipe-image')
 router.register(r'mealrecipe-card', RecipeCardView, basename='mealrecipe-card')
+router.register(r'tempimageupload', TempImageUploadView, basename='tempimageupload')
+router.register(r'tempcardupload', TempCardUploadView, basename='tempcardupload')
 router.register(r'mealrecipe-ingredients', RecipeIngredientsView, basename='mealrecipe-ingredients')
 router.register(r'mealrecipe-packaging', RecipePackagingView, basename='mealrecipe-packaging')
 router.register(r'mealrecipe-diets', RecipeDietsView, basename='mealrecipe-diets')
@@ -86,5 +88,4 @@ urlpatterns = [
     path('api/get-mealplans', MealPlansView.as_view({'get': 'retrieve'})),
     path('api/get-mealrecipes', RecipeView.as_view({'get': 'retrieve'})),
     path('api/get-stations', StationsView.as_view({'get': 'list', 'get': 'retrieve'})),
-
 ]
