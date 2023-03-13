@@ -178,7 +178,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 setImageURL(response.data);
             if (apiEndpoint === 'tempcardupload')
                 setCardURL(response.data);
-            console.log(apiEndpoint, 'temp upload success')
+            // console.log(apiEndpoint, 'temp upload success')
         }).catch((error) => {
         if (error.response) {
             console.log(error.response);
@@ -195,7 +195,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 url:"http://4.236.185.213:8000/api/" + (imgOrCard==='image' ? 'mealrecipe-image' : 'mealrecipe-card') + "/" + recipeData.r_num
             }).then((response)=>{
                 setUpdateDoneSBOpen(true);
-                console.log(imgOrCard, 'delete recipe image success!')
+                // console.log(imgOrCard, 'delete recipe image success!')
             }).catch((error) => {
             if (error.response) {
                 console.log(error.response);
@@ -209,14 +209,14 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     const handleDeleteTempImage = (imgOrCard) => {
         if (imgOrCard === 'image' && recipeData.r_img_path) setDeleteImage(true);
         if (imgOrCard === 'card' && recipeData.r_card_path) setDeleteCard(true);
-        console.log('handleDeleteTempImage: ', imageURL, cardURL);
+        // console.log('handleDeleteTempImage: ', imageURL, cardURL);
         if (imageURL || cardURL) {
             axios({
                 method: "PATCH",
                 url:"http://4.236.185.213:8000/api/" + (imgOrCard==='image' ? 'tempimageupload' : 'tempcardupload') + '/' + 0 + '/',
                 data: imgOrCard==='image' ? {path: imageURL} : {path: cardURL}
             }).then((response)=>{
-                console.log(imgOrCard, 'temp image delete success!')
+                // console.log(imgOrCard, 'temp image delete success!')
             }).catch((error) => {
             if (error.response) {
                 console.log(error.response);
@@ -238,7 +238,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     }
 
     const handleImageUpload = (file, r_num, apiEndpoint) => {
-        console.log('handleImageUpload', apiEndpoint, file);
+        // console.log('handleImageUpload', apiEndpoint, file);
         if (!file) {
             return;
         }
@@ -254,7 +254,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 'Content-Type': 'multipart/form-data'
             }
         }).then((response)=>{
-            console.log(apiEndpoint, 'image upload success!')
+            // console.log(apiEndpoint, 'image upload success!')
             setUpdateDoneSBOpen(true);
             // getDBRecipeData(recipeData.r_num);
         }).catch((error) => {
@@ -280,7 +280,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         // console.log(JSON.stringify(r_data));
         setUpdateSBOpen(true);
 
-        console.log('deleteImage: ', deleteImage, 'deleteCard: ', deleteCard)
+        // console.log('deleteImage: ', deleteImage, 'deleteCard: ', deleteCard)
 
         if (deleteImage) {
             handleDeleteRecipeImage('image')
@@ -297,7 +297,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             }).then((response)=>{
                 handleImageUpload(imageFile, response.data, 'mealrecipe-image');
                 handleImageUpload(cardFile, response.data, 'mealrecipe-card');
-                console.log('post success!')
+                // console.log('post success!')
                 setUpdateDoneSBOpen(true);
                 // getDBRecipeData(recipeData.r_num);
             }).catch((error) => {
