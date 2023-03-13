@@ -156,7 +156,7 @@ const App = () => {
                 minHeight: "100%",
                 width: '90%',
                 margin: 'auto',
-                marginTop: {lg: '5%', md: '6%', sm: '12%', xs: '12%'},
+                marginTop: {lg: '5%', md: '6%', sm: '10%', xs: '12%'},
             }}>
                 {currPage}
             </Box>
