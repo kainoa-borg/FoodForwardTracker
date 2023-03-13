@@ -139,7 +139,7 @@ class RecipeImageView(viewsets.ViewSet):
         img_path=''
         if (r_obj.r_img_path):
             img_path = r_obj.r_img_path[:]
-        Recipes.objects.filter(r_num=pk).update(r_card_path=None)
+        Recipes.objects.filter(r_num=pk).update(r_img_path=None)
         print(img_path)
         if (img_path and os.path.exists('var/www/html/' + img_path)):
             os.remove('var/www/html/' + img_path)
