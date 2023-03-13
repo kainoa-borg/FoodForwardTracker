@@ -84,8 +84,7 @@ class TempCardUploadView(viewsets.ViewSet):
         # return a link to temporary image/card
         return Response(rel_file_path)
     
-    @action(detail=True, methods=['PATCH'])
-    def my_update(self, request, pk):
+    def patch(self, request, pk):
         os.remove('var/www/html/' + request.data)
         return Response(200)
 
@@ -104,8 +103,7 @@ class TempImageUploadView(viewsets.ViewSet):
         # return a link to temporary image/card and abs path
         return Response(rel_file_path)
     
-    @action(detail=True, methods=['PATCH'])
-    def my_update(self, request, pk):
+    def patch(self, request, pk):
         print(request.data)
         os.remove('var/www/html/' + request.data)
         return Response(200)
