@@ -435,12 +435,12 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <Typography variant='h5'>{isAdding ? 'Add ' : 'Edit '}Recipe</Typography>
-                <div>
+                <Box sx={{backgroundColor: '#9AB847'}}>
                     {/* 'Save' button that saves recipe data */}
-                    <Button color='lightGreen' variant='contained' type={'submit'} onClick={handleSaveClick}><Typography variant='h6'>Save</Typography></Button>
+                    <Button color='lightGreen' variant='contained' sx={{boxShadow:'0'}} type={'submit'} onClick={handleSaveClick}><Typography variant='h6'>Save</Typography></Button>
                     {/* 'Close' button that goes back to recipe list */}
-                    <Button color='lightGreen' variant='contained' onClick={handleCloseClick}><Typography variant='h6'>Close</Typography></Button>    
-                </div>
+                    <Button color='lightGreen' variant='contained' sx={{boxShadow:'0'}} onClick={handleCloseClick}><Typography variant='h6'>Close</Typography></Button>    
+                </Box>
             </div>
             
 

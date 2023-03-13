@@ -64,7 +64,7 @@ export default function MealList() {
     // The HTML structure of this component
     return (
       <Fragment>
-        <Typography variant='h5'>Meal Plans</Typography>
+        <Typography id='page-header' variant='h5'>Meal Plans</Typography>
         <Box sx={{height: '70vh'}}>
           <NewModularDatagrid
             apiEndpoint={'mealplans'}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import NewModularDatagrid from '../components/NewModularDatagrid.js'
 import UserForm from './UserForm.js'
 
@@ -17,7 +17,7 @@ export default function UserList() {
 
     return (
         <div class='table-div'>
-        <h3>Administration</h3>
+        <Typography id='page-header' variant='h5'>Administration</Typography>
         <Box sx={{height: '70vh'}}>
             <NewModularDatagrid 
               columns={columns} 

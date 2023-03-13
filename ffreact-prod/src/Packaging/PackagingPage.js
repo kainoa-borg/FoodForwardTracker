@@ -123,7 +123,7 @@ export default function PackagingPage() {
     
     return(
         <div class='table-div'>
-        <h3>Packaging</h3>
+        <Typography id='page-header' variant='h5'>Packaging</Typography>
         <Box sx={{height: '70vh'}}>
             <NewModularDatagrid 
                 rows={packaging} 

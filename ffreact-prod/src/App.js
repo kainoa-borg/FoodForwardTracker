@@ -118,6 +118,8 @@ const App = () => {
     const [currPage, setCurrPage] = useState(<EntryPage handlePageClick={handlePageClick} setLoginState={setLoginState} />);
 
     // useEffect(() => {setCurrPage(<EntryPage handlePageClick={handlePageClick}/>)}, [])
+    // Charcoal: #898989
+    // Ultraviolet: #5A5874
 
     const theme = createTheme({
         palette: {
@@ -126,22 +128,22 @@ const App = () => {
                 contrastText: '#fff'
             },
             darkGreen: {
-                main: '#5f5f5f',
+                main: '#5A5874',
                 contrastText: '#fff'
             },
             lightBlue: {
-                main: '#5f5f5f',
+                main: '#5A5874',
                 contrastText: '#fff'
             },
             lightOrange: {
-                main: '#5f5f5f',
+                main: '#5A5874',
                 contrastText: '#fff'
             },
             darkBlue: {
                 // main: '#404851',
-                main: '#5f5f5f',
+                main: '#5A5874',
                 contrastText: '#fff'
-            }
+            },
         }
     })
 
@@ -154,7 +156,7 @@ const App = () => {
                 minHeight: "100%",
                 width: '90%',
                 margin: 'auto',
-                marginTop: '5%',
+                marginTop: {lg: '5%', md: '6%', sm: '12%', xs: '12%'},
             }}>
                 {currPage}
             </Box>
