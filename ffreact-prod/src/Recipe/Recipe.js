@@ -231,10 +231,11 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     }
 
     const handleDeleteTempImage = (imgOrCard) => {
+        console.log(imageURL, cardURL);
         if (imageURL && !recipeData.r_img_path || cardURL && !recipeData.r_card_path) {
             axios({
-                method: "DELETE",
-                url:"http://4.236.185.213:8000/api/" + (imgOrCard==='image' ? 'tempimageupload' : 'tempcardupload') + '/',
+                method: "PATCH",
+                url:"http://4.236.185.213:8000/api/" + (imgOrCard==='image' ? 'tempimageupload' : 'tempcardupload') + '/' + 0 + '/',
                 data: imgOrCard==='image' ? imageURL : cardURL
             }).then((response)=>{
             }).catch((error) => {
@@ -312,6 +313,8 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 url:"http://4.236.185.213:8000/api/mealrecipes/",
                 data: r_data,
             }).then((response)=>{
+                handleDeleteTempImage('image');
+                handleDeleteTempImage('card');
                 handleImageUpload(imageFile, response.data, 'mealrecipe-image');
                 handleImageUpload(cardFile, response.data, 'mealrecipe-card');
                 console.log('success!')

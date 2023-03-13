@@ -88,5 +88,4 @@ urlpatterns = [
     path('api/get-mealplans', MealPlansView.as_view({'get': 'retrieve'})),
     path('api/get-mealrecipes', RecipeView.as_view({'get': 'retrieve'})),
     path('api/get-stations', StationsView.as_view({'get': 'list', 'get': 'retrieve'})),
-
 ]

@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from rest_framework import status
+from rest_framework.decorators import action
 from PIL import Image
 from datetime import datetime
 import os
@@ -70,6 +71,8 @@ class RecipeImageSerializer(serializers.ModelSerializer):
         fields = ('r_img_path')
 
 class TempCardUploadView(viewsets.ViewSet):
+    def retrieve(self, request, pk):
+        return Response(pk)
     def create(self, request):
         # save the temporary image/card uploaded for this session
         # get image file from request
@@ -81,11 +84,15 @@ class TempCardUploadView(viewsets.ViewSet):
         # return a link to temporary image/card
         return Response(rel_file_path)
     
-    def destroy(self, request, pk=None):
-        os.remove(request.data)
+    @action(detail=True, methods=['PATCH'])
+    def my_update(self, request, pk):
+        os.remove('var/www/html/' + request.data)
         return Response(200)
 
 class TempImageUploadView(viewsets.ViewSet):
+    def retrieve(self, request, pk):
+        return Response(pk)
+    
     def create(self, request):
         # save the temporary image/card uploaded for this session
         # get image file from request
@@ -97,7 +104,9 @@ class TempImageUploadView(viewsets.ViewSet):
         # return a link to temporary image/card and abs path
         return Response(rel_file_path)
     
-    def destroy(self, request, pk=None):
+    @action(detail=True, methods=['PATCH'])
+    def my_update(self, request, pk):
+        print(request.data)
         os.remove('var/www/html/' + request.data)
         return Response(200)
 
