@@ -11,7 +11,7 @@ export default function UserList() {
         { field: 'password', headerName: 'Password', type: 'password', width: 100, editable: true, 
           renderCell: (cellValues) => {
           return (<text>*****</text>);} },
-        { field: 'admin_flag', headerName: 'Administrator', type: 'boolean', width: 100, editable: true },
+        { field: 'admin_flag', headerName: 'Administrator', type: 'boolean', width: 100, editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'email', headerName: 'Email', type: 'email', width: 200, editable: true },
     ]
 
