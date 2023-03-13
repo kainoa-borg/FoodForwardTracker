@@ -210,7 +210,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             axios({
                 method: "PATCH",
                 url:"http://4.236.185.213:8000/api/" + (imgOrCard==='image' ? 'tempimageupload' : 'tempcardupload') + '/' + 0 + '/',
-                data: imgOrCard==='image' ? imageURL : cardURL
+                data: imgOrCard==='image' ? {path: imageURL} : {path: cardURL}
             }).then((response)=>{
             }).catch((error) => {
             if (error.response) {

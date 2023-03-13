@@ -85,7 +85,7 @@ class TempCardUploadView(viewsets.ViewSet):
         return Response(rel_file_path)
     
     def patch(self, request, pk):
-        os.remove('var/www/html/' + request.data)
+        os.remove('var/www/html/' + request.data['path'])
         return Response(200)
 
 class TempImageUploadView(viewsets.ViewSet):
@@ -105,7 +105,7 @@ class TempImageUploadView(viewsets.ViewSet):
     
     def patch(self, request, pk):
         print(request.data)
-        os.remove('var/www/html/' + request.data)
+        os.remove('var/www/html/' + request.data['path'])
         return Response(200)
 
 class RecipeImageView(viewsets.ViewSet):
