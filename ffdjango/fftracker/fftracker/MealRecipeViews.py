@@ -204,7 +204,7 @@ class RecipesSerializer(ModelSerializer):
         model = Recipes
         # depth = 1
         fields = ('r_num', 'r_name', 'r_img_path', 'r_card_path', 'r_ingredients', 'r_packaging', 'r_diets', 'r_stations', 'r_allergies', 'm_s')
-        read_only_fields = ('r_num',)
+        read_only_fields = ('r_num', 'r_img_path', 'r_card_path')
 
     def create(self, validated_data):
         latest_key = Recipes.objects.latest('r_num').r_num
