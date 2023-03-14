@@ -26,6 +26,7 @@ import PackagingReturns from './Reports/PackagingReturns.js'
 import PurchasingReport from './Reports/PurchasingReport.js'
 import Recipe from './Recipe/RecipeList.js'
 import RecipePage from './Recipe/RecipePage.js'
+import UnderConstruction from './components/UnderConstruction.js'
 import Navbar from './Navbar.js'
 import React from 'react'
 import { useState } from 'react'
@@ -111,6 +112,7 @@ const App = () => {
             case 'userPage': setCurrPage(<UserPage handlePageClick={handlePageClick} />); break;
             case 'userList': setCurrPage(<UserList handlePageClick={handlePageClick} />); break;
             case 'entryPage': setCurrPage(<EntryPage handlePageClick={handlePageClick}/>); break;
+            case 'under-construction': setCurrPage(<UnderConstruction handlePageClick={handlePageClick}/>); break;
             default: setCurrPage(<LandingPage handlePageClick={handlePageClick} />); break;
         }
     }
@@ -128,20 +130,20 @@ const App = () => {
                 contrastText: '#fff'
             },
             darkGreen: {
-                main: '#5A5874',
+                main: '#636182',
                 contrastText: '#fff'
             },
             lightBlue: {
-                main: '#5A5874',
+                main: '#636182',
                 contrastText: '#fff'
             },
             lightOrange: {
-                main: '#5A5874',
+                main: '#636182',
                 contrastText: '#fff'
             },
             darkBlue: {
                 // main: '#404851',
-                main: '#5A5874',
+                main: '#636182',
                 contrastText: '#fff'
             },
         }
