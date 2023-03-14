@@ -161,7 +161,7 @@ const PackagingForm = (props) => {
               <Input name='returnable' id='returnable' type="checkbox" checked={packageItem.returnable} onChange={handleFormChange}/>
 
               <InputLabel htmlFor='in_date'>Purchased Date: </InputLabel>
-              <Input name='in_date' id="in_date" type="date" value={packageItem.in_date} onChange={handleFormChange}/>
+              <Input name='in_date' id="in_date" type="date" data-date="" data-date-format="YYYY-MM-DD" value={packageItem.in_date} onChange={handleFormChange}/>
             </Grid>
           </Grid>
           <Button type='Submit' color='lightBlue' variant='contained'>Add Packaging</Button>
