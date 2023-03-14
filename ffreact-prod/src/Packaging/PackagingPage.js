@@ -98,7 +98,7 @@ export default function PackagingPage() {
         { field: 'unit_cost', headerName: 'Unit Cost', width: 90, valueFormatter: ({ value }) => currencyFormatter.format(value), editable: true },
         { field: 'pref_psupplier_id', headerName: 'Supplier', type: 'singleSelect', valueOptions: supplierOptions, width: 170, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}} },
         { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true, valueFormatter: params => moment(params.value).format('MM/DD/YYYY'), valueParser: value => moment(value).format("YYYY-MM-DD")},
-        { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
+        { field: 'in_qty', headerName: 'Purchased Amount', width: 140, type: 'number', editable: true },
         { field: 'packaging_usage', headerName: 'Usages', width: 100, editable: true,
             renderCell: (params) => {
                 if (params.value && params.value.length > 0) {
