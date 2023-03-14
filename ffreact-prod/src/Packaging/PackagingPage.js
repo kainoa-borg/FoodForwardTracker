@@ -97,7 +97,7 @@ export default function PackagingPage() {
         { field: 'returnable', headerName: 'Returnable', width: 90, type: 'boolean', editable: true },
         { field: 'unit_cost', headerName: 'Unit Cost', width: 90, valueFormatter: ({ value }) => currencyFormatter.format(value), editable: true },
         { field: 'pref_psupplier_id', headerName: 'Supplier', type: 'singleSelect', valueOptions: supplierOptions, width: 170, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}} },
-        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true, valueParser: params => moment(params.value).format("YYYY-MM-DD")},
+        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true, valueFormatter: params => moment(params.value).format('MM/DD/YYYY'), valueParser: value => moment(value).format("YYYY-MM-DD")},
         { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
         { field: 'packaging_usage', headerName: 'Usages', width: 100, editable: true,
             renderCell: (params) => {
@@ -118,7 +118,7 @@ export default function PackagingPage() {
             }
         },
         {
-            field: 'qty_on_hand', headerName: "Qty On Hand", width: 100, editable: false
+            field: 'qty_on_hand', headerName: "Amt On Hand", width: 100, editable: false
         }
     ]
     
