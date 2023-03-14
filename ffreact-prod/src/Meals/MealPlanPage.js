@@ -11,7 +11,7 @@ export default function MealPlanPage() {
     const [recipeList, setRecipeList] = useState(undefined);
     const columns = [
         { field: 'm.m_s', headerName: 'Meal/Snack', width: 100 },
-        { field: 'meal_name', headerName: 'Name', width: 120 },
+        { field: 'meal_name', headerName: 'Name', width: 170 },
         { field: 'm_date', headerName: 'Date', width: 120 },
         { field: 'm_latest', headerName: 'Latest', width: 120 },
        // { field: 'm', headerName: 'Last Date', width: 120, valueFormatter: ({ value }) => value.mdate },
