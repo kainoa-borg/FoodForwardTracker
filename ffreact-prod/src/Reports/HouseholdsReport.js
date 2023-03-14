@@ -2,7 +2,7 @@ import React, { useState, useEffect} from 'react'
 import axios from 'axios'
 import ReportsPage from './ReportsPage'
 import { Box, Button, setAddFormOpen} from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid'
+import { DataGrid, GridCsvExportMenuItem } from '@mui/x-data-grid'
 import { ToolBar, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid';
 
 
@@ -54,24 +54,18 @@ export default function HouseholdReport() {
         return (<>loading</>);
     }
 
-    function CustomToolbar() {
+  
+      function CustomToolbar() {
         return (
           <GridToolbarContainer>
             <GridToolbarExport
-            filename={HouseholdReport}
-            />
-            {/* <GridPrintExportOptions
-            fileName={HouseholdReport}>
-                </GridPrintExportOptions> */}
+            csvOptions={{
+                fileName: 'Household Report',
+                delimeter: ';'
+            }}
+         />
           </GridToolbarContainer>
-        );
-    // function MyExportButton({ data, HouseholdReport}) {
-    //     return(
-    //         <CSVLink data={data} filename={HouseholdReport}>
-    //         Download CSVLink
-    //         </CSVLink>
-    //     )
-    // }
+        )
 }
 
     // The HTML structure of this component

@@ -61,7 +61,11 @@ export default function MealPlanReport() {
     function CustomToolbar() {
       return (
         <GridToolbarContainer>
-          <GridToolbarExport />
+          <GridToolbarExport
+            csvOptions={{
+                fileName: 'Meal Plan Report',
+                delimeter: ';'
+            }} />
         </GridToolbarContainer>
       );
     }
@@ -74,11 +78,8 @@ export default function MealPlanReport() {
     // The HTML structure of this component
     return (
         <div>
-          <Box sx={{marginTop: '1em', marginBottom: '1em'}}>
-            <Typography variant='h5'>Meal Plan Report</Typography>
-            <Typography variant='p'>Select for meals planned within a start and end date.</Typography>
-          </Box>
-          
+          <Typography variant='h5'>Meal Plan Report</Typography>
+          <Typography variant='p' sx={{marginBottom: '5%'}}>Select for meals planned within a start and end date.</Typography>
           <form onSubmit={handleSubmit}>
             {/* <Stack direction='row'> */}
               <FormControl>

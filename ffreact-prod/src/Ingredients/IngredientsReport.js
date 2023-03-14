@@ -85,7 +85,11 @@ export default function IngredientReport() {
     function CustomToolbar() {
         return (
           <GridToolbarContainer>
-            <GridToolbarExport />
+            <GridToolbarExport
+            csvOptions={{
+                fileName: 'Ingredients Report',
+                delimeter: ';'
+            }} />
           </GridToolbarContainer>
         );
     }

@@ -53,7 +53,11 @@ export default function PackagingReport() {
     function CustomToolbar() {
         return (
           <GridToolbarContainer>
-            <GridToolbarExport />
+            <GridToolbarExport
+            csvOptions={{
+                fileName: 'Packaging Report',
+                delimeter: ';'
+            }} />
           </GridToolbarContainer>
         );
     }

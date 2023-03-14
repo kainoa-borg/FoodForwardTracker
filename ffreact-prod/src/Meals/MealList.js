@@ -1,5 +1,4 @@
 import React, {Fragment, useState, useEffect} from 'react'
-import Moment from 'react-moment';
 import moment from 'moment';
 import axios from 'axios'
 import MealPlanForm from './MealPlanForm.js'
