@@ -26,6 +26,7 @@ import PackagingReturns from './Reports/PackagingReturns.js'
 import PurchasingReport from './Reports/PurchasingReport.js'
 import Recipe from './Recipe/RecipeList.js'
 import RecipePage from './Recipe/RecipePage.js'
+import UnderConstruction from './components/UnderConstruction.js'
 import Navbar from './Navbar.js'
 import React from 'react'
 import { useState } from 'react'
@@ -111,6 +112,7 @@ const App = () => {
             case 'userPage': setCurrPage(<UserPage handlePageClick={handlePageClick} />); break;
             case 'userList': setCurrPage(<UserList handlePageClick={handlePageClick} />); break;
             case 'entryPage': setCurrPage(<EntryPage handlePageClick={handlePageClick}/>); break;
+            case 'under-construction': setCurrPage(<UnderConstruction handlePageClick={handlePageClick}/>); break;
             default: setCurrPage(<LandingPage handlePageClick={handlePageClick} />); break;
         }
     }
@@ -118,6 +120,8 @@ const App = () => {
     const [currPage, setCurrPage] = useState(<EntryPage handlePageClick={handlePageClick} setLoginState={setLoginState} />);
 
     // useEffect(() => {setCurrPage(<EntryPage handlePageClick={handlePageClick}/>)}, [])
+    // Charcoal: #898989
+    // Ultraviolet: #5A5874
 
     const theme = createTheme({
         palette: {
@@ -126,22 +130,22 @@ const App = () => {
                 contrastText: '#fff'
             },
             darkGreen: {
-                main: '#5f5f5f',
+                main: '#636182',
                 contrastText: '#fff'
             },
             lightBlue: {
-                main: '#5f5f5f',
+                main: '#636182',
                 contrastText: '#fff'
             },
             lightOrange: {
-                main: '#5f5f5f',
+                main: '#636182',
                 contrastText: '#fff'
             },
             darkBlue: {
                 // main: '#404851',
-                main: '#5f5f5f',
+                main: '#636182',
                 contrastText: '#fff'
-            }
+            },
         }
     })
 
@@ -154,7 +158,7 @@ const App = () => {
                 minHeight: "100%",
                 width: '90%',
                 margin: 'auto',
-                marginTop: '5%',
+                marginTop: {lg: '5%', md: '6%', sm: '10%', xs: '12%'},
             }}>
                 {currPage}
             </Box>

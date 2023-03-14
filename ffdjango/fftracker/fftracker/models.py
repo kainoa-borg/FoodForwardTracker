@@ -182,6 +182,7 @@ class Households(models.Model):
     gf_flag = models.PositiveIntegerField(blank=True, null=True)
     ls_flag = models.PositiveIntegerField(blank=True, null=True)
     paused_flag = models.PositiveIntegerField(blank=True, null=True)
+    paying = models.PositiveIntegerField(blank=True, null=True)
     phone = models.CharField(max_length=10, blank=True, null=True)
     street = models.CharField(max_length=50, blank=True, null=True)
     city = models.CharField(max_length=50, blank=True, null=True)

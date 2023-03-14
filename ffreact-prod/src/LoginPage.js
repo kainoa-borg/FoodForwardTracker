@@ -161,13 +161,13 @@ const LoginPage = (props) => {
                         <Typography>
                             Don't have an account?
                         </Typography>
-                        <Button color='darkGreen'variant='outlined' size='small' onClick={() => handleCreateClick('newUserPage')}>
+                        <Button color='darkGreen'variant='contained' size='small' onClick={() => handleCreateClick('newUserPage')}>
                             Sign Up
                         </Button>
                         <Typography>
                             Forgot your password?
                         </Typography>
-                        <Button color='darkGreen' variant='outlined' size='small' onClick={() => handleResetClick('pwResetPage')}>
+                        <Button color='darkGreen' variant='contained' size='small' onClick={() => handleResetClick('pwResetPage')}>
                             Reset Password
                         </Button>
                     </Stack>            

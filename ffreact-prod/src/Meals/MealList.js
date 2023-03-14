@@ -1,4 +1,6 @@
 import React, {Fragment, useState, useEffect} from 'react'
+import Moment from 'react-moment';
+import moment from 'moment';
 import axios from 'axios'
 import MealPlanForm from './MealPlanForm.js'
 import EditableMealRow from './EditableMealRow.js'
@@ -54,17 +56,17 @@ export default function MealList() {
     const recipeFormatter = (params) => { if (params.value) {return recipeList.find((recipe) => recipe.r_num === params.value).r_name;}}
 
     const columns = [
-      {field: 'm_date', headerName: 'Next Delivery Date', width: 170, type: 'date', editable: true},
-      {field: 'meal_r_num', headerName: 'Meal Name', width: 150, type: 'singleSelect', editable: true, valueOptions: getRecipeOptions('meal'), valueFormatter: recipeFormatter},
+      {field: 'm_date', headerName: 'Next Delivery Date', width: 170, type: 'date', editable: true, valueFormatter: params => moment(params.value).format("YYYY-MM-DD")},
+      {field: 'meal_r_num', headerName: 'Meal Name', width: 250, type: 'singleSelect', editable: true, valueOptions: getRecipeOptions('meal'), valueFormatter: recipeFormatter},
       // {field: 'meal_servings', headerName: 'Meal Servings', width: 120, type: 'number', editable: true},
-      {field: 'snack_r_num', headerName: 'Snack Name', width: 150, type: 'singleSelect', editable: true, valueOptions: getRecipeOptions('snack'), valueFormatter: recipeFormatter},
+      {field: 'snack_r_num', headerName: 'Snack Name', width: 250, type: 'singleSelect', editable: true, valueOptions: getRecipeOptions('snack'), valueFormatter: recipeFormatter},
       // {field: 'snack_servings', headerName: 'Snack Servings', width: 120, type: 'number', editable: true}
     ]
 
     // The HTML structure of this component
     return (
       <Fragment>
-        <Typography variant='h5'>Meal Plans</Typography>
+        <Typography id='page-header' variant='h5'>Meal Plans</Typography>
         <Box sx={{height: '70vh'}}>
           <NewModularDatagrid
             apiEndpoint={'mealplans'}

@@ -72,21 +72,21 @@ import Dropdown from './components/Dropdown'
             sx={{ alignItems: 'left' }}
             trigger={<Button color='lightGreen' sx={{boxShadow: '0'}} variant='contained'> Reports </Button>}
             menu={[
-              <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+              <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('under-construction')}>
                     Cost Totals</Button>,
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
                     Households Report</Button>,
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('ingredients-report')}>
                     Ingredients Report</Button>,
-                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('under-construction')}>
                     Meal History</Button>,
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('meal-plan-report')}>
                     Meal Plan Report</Button>,
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('packaging-report')}>
                     Packaging Report</Button>,
-                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('under-construction')}>
                     Packaging Returns</Button>,
-                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('households-report')}>
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('under-construction')}>
                     Purchasing Report</Button>,
                 ]}/>
             <Button color='lightGreen' sx={{boxShadow:'0'}} variant="contained" onClick={() => handlePageClick('userList')}>

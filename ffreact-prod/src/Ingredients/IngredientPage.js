@@ -113,7 +113,7 @@ export default function IngredientPage() {
 
     return(
         <div class='table-div'>
-        <h3>Ingredients</h3>
+        <Typography id='page-header' variant='h5'>Ingredients</Typography>
             <Box sx={{height: '70vh'}}>
             <NewModularDatagrid 
             rows={ingredients}

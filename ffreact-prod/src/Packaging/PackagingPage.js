@@ -116,11 +116,14 @@ export default function PackagingPage() {
                 return <CellDialog buttonText={'Edit Usages'} dialogTitle={'Edit Usages'} component={<EditablePkgUsageTable packaging_usage={params.value} updateEditForm={updateCellValue}/>}/>
             }
         },
+        {
+            field: 'qty_on_hand', headerName: "Qty On Hand", width: 100, editable: false
+        }
     ]
     
     return(
         <div class='table-div'>
-        <h3>Packaging</h3>
+        <Typography id='page-header' variant='h5'>Packaging</Typography>
         <Box sx={{height: '70vh'}}>
             <NewModularDatagrid 
                 rows={packaging} 

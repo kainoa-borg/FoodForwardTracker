@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { useState, useEffect } from 'react';
 import React from 'react'
+import { Table, TableBody, TableRow, TableCell, Button, TableContainer, Paper } from "@mui/material";
 
 // Allergy List Component
 const AllergiesList = (props) => {
@@ -61,59 +62,63 @@ const AllergiesList = (props) => {
     if (isEditable) {
         return (
             <Fragment>
-                <table>  
-                    <tbody>
-                        {/* Show a row for each allergy object in allergies */}
-                        {allergies.map((allergy, thisKey) => {
-                            return (
-                                <Fragment key={thisKey}>
-                                    <tr key={thisKey}>
-                                        <td>
-                                            {allergy.a_type}
-                                        </td>
-                                        <td>
-                                            <button type='button' onClick={() => {handleDeleteAllergy(thisKey)}}>
-                                                delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </Fragment>
-                            );
-                        })}
-                        <tr>
-                            <td>
-                                <input name="a_type" type="text" onChange={handleAllergyChange} value={currAllergy.a_type}></input>
-                            </td>
-                            <td>
-                                <button type='button' onClick={handleAddAllergy}>
-                                    Add
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <TableContainer component={Paper}>
+                    <Table>  
+                        <TableBody>
+                            {/* Show a row for each allergy object in allergies */}
+                            {allergies.map((allergy, thisKey) => {
+                                return (
+                                    <Fragment key={thisKey}>
+                                        <TableRow key={thisKey}>
+                                            <TableCell>
+                                                {allergy.a_type}
+                                            </TableCell>
+                                            <TableCell>
+                                                <Button color='lightBlue' variant='contained' size='small' onClick={() => {handleDeleteAllergy(thisKey)}}>
+                                                    delete
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    </Fragment>
+                                );
+                            })}
+                            <TableRow>
+                                <TableCell>
+                                    <input name="a_type" type="text" onChange={handleAllergyChange} value={currAllergy.a_type}></input>
+                                </TableCell>
+                                <TableCell>
+                                    <Button color='lightBlue' variant='contained' size='small' onClick={handleAddAllergy}>
+                                        Add
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Fragment>
         );
     }
     else {
         return (
             <Fragment>
-                <table>
-                    <tbody>
-                        {/* Show a row for each allergy object in allergies */}
-                        {allergies.map((allergy, thisKey) => {
-                            return (
-                                <Fragment key={thisKey}>
-                                    <tr key={thisKey}>
-                                        <td>
-                                            {allergy.a_type}
-                                        </td>
-                                    </tr>
-                                </Fragment>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                <TableContainer component={Paper}>
+                    <Table>
+                        <TableBody>
+                            {/* Show a row for each allergy object in allergies */}
+                            {allergies.map((allergy, thisKey) => {
+                                return (
+                                    <Fragment key={thisKey}>
+                                        <TableRow key={thisKey}>
+                                            <TableCell>
+                                                {allergy.a_type}
+                                            </TableCell>
+                                        </TableRow>
+                                    </Fragment>
+                                );
+                            })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Fragment>
         );
     }
