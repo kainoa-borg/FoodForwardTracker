@@ -10,6 +10,7 @@ import './IngredientList.css'
 import CellDialog from '../components/CellDialog.js'
 import { Typography } from '@mui/material';
 import { useGridApiContext } from '@mui/x-data-grid';
+import moment from 'moment';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -89,9 +90,9 @@ export default function IngredientPage() {
         { field: 'unit', headerName: 'Measure', width: 100, editable: true, renderEditCell: (params) => <ModularSelect options={ingredients} searchField={'unit'} value={params.value}/> },
         { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
         { field: 'pref_isupplier_id', headerName: 'Supplier', type: 'singleSelect', valueOptions: supplierOptions, width: 170, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
-        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
+        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true, valueFormatter: params => moment(params.value).format("YYYY-MM-DD") },
         { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
-        { field: 'exp_date', headerName: 'Expiration Date', width: 140, editable: true},
+        { field: 'exp_date', headerName: 'Expiration Date', width: 140, editable: true, valueFormatter: params => moment(params.value).format("YYYY-MM-DD")},
         { field: 'ingredient_usage', headerName: 'Usages', width: 150, editable: true,
             renderCell: (params) => {
                 if (params.value && params.value.length > 0)
