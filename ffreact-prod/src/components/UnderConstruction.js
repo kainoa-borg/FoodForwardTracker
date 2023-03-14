@@ -14,11 +14,11 @@ const UnderConstruction = (props) => {
     // HTML structure of this component
     return (
         <Fragment>
-            <Typography variant='h3' sx={{textAlign: 'center', marginTop: '.5em'}}>
+            <Typography variant='h3' sx={{textAlign: 'center', marginTop: '.5em', marginBottom: '.5em'}}>
                 Under Construction
             </Typography>
             <Grid container justifyContent={'center'} sx={{width: '100%'}}>
-                <Grid item alignSelf='center' sx={{height: '85%', width: '85%'}}>
+                <Grid item alignSelf='center' sx={{height: {lg: '40%', md: '60%', sm: '85%'}, width: {lg: '40%', md: '60%', sm: '85%'}}}>
                     <img style={{objectFit: 'contain', width: '100%', height: '100%'}} src={constructionImage}/>            
                 </Grid>
             </Grid>
