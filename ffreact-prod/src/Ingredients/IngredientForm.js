@@ -162,13 +162,13 @@ const IngredientForm = (props) => {
             </Grid>
             <Grid item>
               <InputLabel htmlFor="in_date">Purchase Date: </InputLabel>
-              <Input name="in_date" type="date" value={ingredient.in_date} onChange={handleFormChange}/>
+              <Input name="in_date" type="date" data-date="" data-date-format="YYYY-MM-DD" value={ingredient.in_date} onChange={handleFormChange}/>
 
               <InputLabel htmlFor="in_qty">Purchase Amount: </InputLabel>
               <Input name="in_qty" type="number" value={ingredient.in_qty} onChange={handleFormChange}/>
 
               <InputLabel htmlFor="exp_date">Exp Date: </InputLabel>
-              <Input name="exp_date" type="date" value={ingredient.exp_date} onChange={handleFormChange}/>
+              <Input name="exp_date" type="date" data-date="" data-date-format="YYYY-MM-DD" value={ingredient.exp_date} onChange={handleFormChange}/>
             </Grid>
             <Grid item>
               <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>

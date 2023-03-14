@@ -109,7 +109,7 @@ const MealPlanForm = (props) => {
         <Typography variant='h5'>Add Planned Meal</Typography>
           <Stack>
             <InputLabel htmlFor="m_date">Next Delivery Date: </InputLabel>
-            <Input name="m_date" required type="date" maxLength='50' value={meal.m_date} onChange={handleFormChange}/>
+            <Input name="m_date" required type="date" maxLength='50' data-date="" data-date-format="YYYY-MM-DD" value={meal.m_date} onChange={handleFormChange}/>
 
             <InputLabel htmlFor="meal_r_num">Meal: </InputLabel>
             <Select name='meal_r_num' required meal={meal.meal_r_num} onChange={handleFormChange}>
