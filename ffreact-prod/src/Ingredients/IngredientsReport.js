@@ -6,7 +6,7 @@ import axios from 'axios'
 import { Box } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import { GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid';
-import { Toolbar } from '@mui/icons-material';
+import { FitScreen, Toolbar } from '@mui/icons-material';
 import ReusableTable from '../ReusableTable.js'
 // import Error from '../Error.js'
 // import DisplayMessage from '../DisplayMessage.js'
@@ -99,7 +99,7 @@ export default function IngredientReport() {
                 rows={ingredients}
                 components = {{Toolbar:CustomToolbar}}
                 getRowId={(row) => row.i_id}
-                autoHeight = {true}
+                autoHeight = {5}
             >
             </DataGrid>
         </Box>

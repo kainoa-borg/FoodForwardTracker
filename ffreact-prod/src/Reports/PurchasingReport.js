@@ -1,28 +1,32 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
 import ReportsPage from './ReportsPage';
-import { Box, Button, setAddFormOpen} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import { ToolBar, GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid';
+import { Box, Button, Input, InputLabel, Snackbar, Typography, Stack, FormControl} from '@mui/material';
+
 
 // Packaging List Component
 export default function PurchasingReport() {
     const [purchasing, setPurchasing] = useState(undefined);
+    const [dateRange, setDateRange] = useState([]);
+    const [searchingSBOpen, setSearchingSBOpen] = useState([]);
+    const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
+    const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
+    
     // const [ingredients, setIngredients] = useState(undefined);
-    const columns = []
+    
 
-    useEffect(() => {
-        getDBPackaging();
-        // getDBIngredients();
-    }, []);
-
-    const getDBPackaging = () => {
+    const getDBPackPurchaseList = () => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/pack-purchase-list/"
+            url:"http://4.236.185.213:8000/api/pack-purchase-list/",
+            params: dateRange
           }).then((response)=>{
-            const pkgRetData = response.data
-            setPurchasing(pkgRetData);
+            if (response.data.length > 0) setResultsFoundSBOpen(true);
+            else setNoResultsSBOpen(true);
+            
+            setPurchasing(response.data);
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -48,9 +52,10 @@ export default function PurchasingReport() {
           });
     }*/
 
-    // const columns = [
+    const columns = [
+      { field: ''}
       
-    // ]
+     ]
 
     if (purchasing === undefined) {
         return (<>loading</>);
@@ -62,6 +67,11 @@ export default function PurchasingReport() {
           <GridToolbarExport />
         </GridToolbarContainer>
       );
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    getDBPackPurchaseList(dateRange);
   }
 
     // The HTML structure of this component

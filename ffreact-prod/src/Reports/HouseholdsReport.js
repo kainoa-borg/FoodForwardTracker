@@ -3,7 +3,7 @@ import axios from 'axios'
 import ReportsPage from './ReportsPage'
 import { Box, Button, setAddFormOpen} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
-import { ToolBar, GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid';
+import { ToolBar, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid';
 
 
 // Household List Component
@@ -57,10 +57,22 @@ export default function HouseholdReport() {
     function CustomToolbar() {
         return (
           <GridToolbarContainer>
-            <GridToolbarExport />
+            <GridToolbarExport
+            filename={HouseholdReport}
+            />
+            {/* <GridPrintExportOptions
+            fileName={HouseholdReport}>
+                </GridPrintExportOptions> */}
           </GridToolbarContainer>
         );
-    }
+    // function MyExportButton({ data, HouseholdReport}) {
+    //     return(
+    //         <CSVLink data={data} filename={HouseholdReport}>
+    //         Download CSVLink
+    //         </CSVLink>
+    //     )
+    // }
+}
 
     // The HTML structure of this component
     return (
@@ -72,7 +84,7 @@ export default function HouseholdReport() {
                 rows={households}
                 components = {{Toolbar:CustomToolbar}}
                 getRowId={(row) => row.hh_name}
-                autoHeight = {true}
+                autoHeight = {5}
             >
             </DataGrid>
         </Box>
