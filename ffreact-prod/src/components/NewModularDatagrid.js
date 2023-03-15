@@ -28,6 +28,7 @@ export default function NewModularDatagrid(props) {
     const keyFieldName = props.keyFieldName;
     // Add entry form to be passed to FormDialog
     const AddFormComponent = props.AddFormComponent;
+    const addFormProps = props.addFormProps;
 
     const searchField = props.searchField;
     const searchLabel = props.searchLabel;
@@ -325,7 +326,7 @@ export default function NewModularDatagrid(props) {
                     </DataGrid>
                 </Box>
                 {/* Add Form Dialog */}
-                <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={AddFormComponent} addEntry={addEntry} latestKey={getLatestKey()}/>
+                <FormDialog open={addFormOpen} setOpen={setAddFormOpen} AddFormComponent={AddFormComponent} addFormProps={addFormProps} addEntry={addEntry} latestKey={getLatestKey()}/>
                 {/* Save Click 'request sent' Notice */}
                 <Snackbar
                     open={updateSBOpen}

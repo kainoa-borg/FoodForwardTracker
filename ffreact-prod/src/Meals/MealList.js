@@ -73,6 +73,7 @@ export default function MealList() {
             keyFieldName={'m_id'}
             entryName={'Planned Meal'}
             AddFormComponent={MealPlanForm}
+            addFormProps={{recipeList: recipeList}}
             // searchField={''}
 
           ></NewModularDatagrid>

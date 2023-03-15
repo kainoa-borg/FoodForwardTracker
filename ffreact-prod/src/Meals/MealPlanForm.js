@@ -10,8 +10,7 @@ import { Stack, Input, InputLabel, Select, MenuItem, Typography, Card, Button } 
 // Takes AddMeal callback function
 // Returns a form that can be used to define a new meal object in a mealList
 const MealPlanForm = (props) => {
-
-  const [recipeList, setRecipeList] = useState();
+  const [recipeList, setRecipeList] = useState(props.recipeList);
   const addEntry = props.addEntry;
   const handleClose = props.handleClose;
   
@@ -24,24 +23,6 @@ const MealPlanForm = (props) => {
       meal_servings: null,
       snack_servings: null
     }
-  }
-
-  const getDBRecipeList = () => {
-    console.log('MAKING REQUEST TO DJANGO')
-    axios({
-      method: "GET",
-      url:"http://4.236.185.213:8000/api/recipe-list/"
-    }).then((response)=>{
-      const recipeData = response.data
-      setRecipeList(recipeData);
-      console.log(recipeData);
-    }).catch((error) => {
-      if (error.response) {
-        console.log(error.response);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-        }
-    });
   }
 
   // The state of this Meal Plan Form with each attribute of Meals
@@ -82,10 +63,6 @@ const MealPlanForm = (props) => {
       updateEditForm([fieldName], [fieldValue]);
       // updateEditForm('aFlag', true);
     }
-
-    useEffect(() => {
-      getDBRecipeList();
-    })
 
     if (recipeList === undefined) {
       return <>loading...</>
