@@ -12,7 +12,6 @@ class MealPlansSerializer(ModelSerializer):
 	# meal_name = serializers.CharField(max_length=50)
 	# snack_name = serializers.CharField(max_length=50)
 	def create(self, validated_data):
-		latest_key = MealPlans.objects.latest('m_id').m_id + 1
 		queryset = Households.objects.filter(paused_flag=False)
 		meal_servings = 0
 		snack_servings = 0
@@ -21,7 +20,6 @@ class MealPlansSerializer(ModelSerializer):
 			meal_servings += household.num_adult + household.num_child_gt_6 + (household.num_child_lt_6 *.5)
 			snack_servings += household.num_adult + household.num_child_gt_6 + household.num_child_lt_6
 
-		validated_data['m_id'] = latest_key
 		validated_data['meal_servings'] = meal_servings
 		validated_data['snack_servings'] = snack_servings
 		mp = MealPlans.objects.create(**validated_data)

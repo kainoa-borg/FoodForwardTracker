@@ -81,7 +81,7 @@ const HouseholdForm = (props) => {
             <Grid container spacing={4}>
               <Grid item>
                 <InputLabel htmlFor="hh_name">Name: </InputLabel>
-                <Input name="hh_name" id="hh_name" type="text" maxLength='30' required={true} value={household.hh_name} onChange={handleFormChange}/>
+                <Input name="hh_name" id="hh_name" type="text" inputProps={{maxLength: '30'}} required={true} value={household.hh_name} onChange={handleFormChange}/>
                 
                 <InputLabel htmlFor='num_adult'>Number of Adults: </InputLabel>
                 <Input name='num_adult' id="num_adult" type="number" value={household.num_adult} onChange={handleFormChange}/>
@@ -107,22 +107,22 @@ const HouseholdForm = (props) => {
               </Grid>
               <Grid item>
                 <InputLabel htmlFor='phone'>Phone Number: </InputLabel>          
-                <Input name='phone' id='phone' type='tel' /**pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}' minLength='12'*/ maxLength='10' value={household.phone} onChange={handleFormChange}/>
+                <Input name='phone' id='phone' type='tel' inputProps={{pattern: '[0-9]{3}-[0-9]{3}-[0-9]{4}', minLength: '12', maxLength: '12'}} value={household.phone} onChange={handleFormChange}/>
                 
                 <InputLabel htmlFor='street'>Street: </InputLabel>          
-                <Input name='street' id='street' maxLength='50' value={household.street} onChange={handleFormChange}/>
+                <Input name='street' id='street' inputProps={{maxLength: '50'}} value={household.street} onChange={handleFormChange}/>
 
                 <InputLabel htmlFor='city'>City: </InputLabel>
-                <Input name='city' id='city' maxLength='50' value={household.city} onChange={handleFormChange}/>
+                <Input name='city' id='city' inputProps={{maxLength: '50'}} value={household.city} onChange={handleFormChange}/>
 
                 <InputLabel htmlFor='pcode'>Postal Code: </InputLabel>
-                <Input name='pcode' id='pcode' minLength='5' maxLength='5' value={household.pcode} onChange={handleFormChange}/>
+                <Input name='pcode' id='pcode' inputProps={{minLength:'5', maxLength:'5'}} value={household.pcode} onChange={handleFormChange}/>
 
                 <InputLabel htmlFor='state'>State: </InputLabel>
-                <Input name='state' id='state' minLength='2' maxLength='2' value={household.state} onChange={handleFormChange}/>
+                <Input name='state' id='state' inputProps={{minLength:'2', maxLength:'2'}} value={household.state} onChange={handleFormChange}/>
 
                 <InputLabel htmlFor='delivery_notes'>Delivery Notes: </InputLabel>
-                <Input name='delivery_notes' id='delivery_notes' maxLength='255' value={household.delivery_notes} onChange={handleFormChange}/>
+                <Input name='delivery_notes' id='delivery_notes' inputProps={{maxLength: '255'}} value={household.delivery_notes} onChange={handleFormChange}/>
               </Grid>
 
               <Grid item>

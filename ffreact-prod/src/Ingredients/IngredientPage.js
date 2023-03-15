@@ -120,6 +120,7 @@ export default function IngredientPage() {
             rows={ingredients}
             columns={columns}
             apiEndpoint='ingredient-inventory'
+            // apiIP='localhost'
             keyFieldName='i_id'
             entryName='Ingredient'
             searchField='ingredient_name'

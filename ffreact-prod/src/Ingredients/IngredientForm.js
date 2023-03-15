@@ -16,11 +16,9 @@ const IngredientForm = (props) => {
   const [ingredients, setIngredients] = useState();
   const addEntry = props.addEntry;
   const handleClose = props.handleClose;
-  const latestKey = props.latestKey;
 
   const clearIngredient = () => {
     return {
-      i_id: latestKey + 1,
       ingredient_name: "",
       pkg_type: "",
       storage_type: "",
@@ -151,7 +149,7 @@ const IngredientForm = (props) => {
 
               <InputLabel htmlFor="pref_isupplier">Supplier: </InputLabel>
               {/* <ModularSelect options={supplierList} noDuplicates searchField={'s_name'} onChange={handleFormChange}/> */}
-              <Select type='select' name="pref_isupplier_id" value={undefined} label={'Supplier'}>
+              <Select type='select' name="pref_isupplier_id" value={undefined} label={'Supplier'} onChange={handleFormChange}>
                 <MenuItem value={'Select A Supplier'}></MenuItem>
                 {supplierList.map((supplier, key) => {
                   return (

@@ -26,8 +26,6 @@ class PackagingUsageSerializer(ModelSerializer):
 class PackagingInvSerializer(ModelSerializer):
 	psupplier = SupplierSerializer(read_only=True)
 	pref_psupplier = SupplierSerializer(read_only=True)
-	psupplier_id = serializers.IntegerField(allow_null=True)
-	pref_psupplier_id = serializers.IntegerField(allow_null=True)
 	packaging_usage = PackagingUsageSerializer(required=False, allow_null=True, many=True)
 	class Meta():
 		model = Packaging

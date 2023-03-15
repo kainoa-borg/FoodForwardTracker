@@ -28,9 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
 		return instance
 
 	def create(self, validated_data):
-		latest_id = Users.objects.all().latest('u_id').u_id
 		user = {
-			"u_id": latest_id + 1,
 			"username": validated_data.pop('username'),
 			"password": make_password(validated_data.pop('password')),
 			"email": validated_data.pop("email"),

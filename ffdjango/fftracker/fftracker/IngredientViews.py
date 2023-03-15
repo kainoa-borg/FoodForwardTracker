@@ -26,8 +26,6 @@ class IngredientUsageSerializer(ModelSerializer):
 class IngredientInvSerializer(ModelSerializer):
 	isupplier = SupplierSerializer(read_only=True)
 	pref_isupplier = SupplierSerializer(read_only=True)
-	isupplier_id = serializers.IntegerField(allow_null=True)
-	pref_isupplier_id = serializers.IntegerField(allow_null=True)
 	ingredient_usage = IngredientUsageSerializer(required=False, allow_null=True, many=True)
 	class Meta():
 		model = Ingredients

@@ -15,11 +15,9 @@ const PackagingForm = (props) => {
   const [supplierList, setSupplierList] = useState();
   const addEntry = props.addEntry;
   const handleClose = props.handleClose;
-  const latestKey = props.latestKey;
 
   const clearPackage = () => {
     return {
-      p_id: latestKey + 1,
       package_type: "",
       unit_qty: null,
       qty_holds: null,
@@ -106,10 +104,9 @@ const PackagingForm = (props) => {
     // Takes input change event information (name, type, and value)
     // Returns None
     const handleFormChange = (event) => {
-      console.log(event.target.name, event.target.value);
       // Get the name and value of the changed field
       const fieldName = event.target.name;
-      const fieldValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
+      let fieldValue = event.target.type === 'checkbox' ? (+event.target.checked) : event.target.value;
       // Create new packaging object before setting state
       updateEditForm([fieldName], [fieldValue]);
       // updateEditForm('aFlag', true);
@@ -131,7 +128,7 @@ const PackagingForm = (props) => {
                 {/*<Input name="package_type" id="package_type" type="text" maxLength='30' required={true} value={packaging.package_type} onChange={handleFormChange}/>*/}
                 <ModularSelect value={packageItem.package_type} options={packaging} noDuplicates searchField={'package_type'} onChange={handleFormChange}/>
 
-                <InputLabel htmlFor='unit_qty'>Purchased Amount: </InputLabel>
+                <InputLabel htmlFor='unit_qty'>Unit Quantity: </InputLabel>
                 <Input name='unit_qty' id="unit_qty" type="number" value={packageItem.unit_qty} onChange={handleFormChange}/>
             </Grid>
             <Grid item>
@@ -147,7 +144,7 @@ const PackagingForm = (props) => {
               <ModularSelect value={packageItem.unit} options={packaging} noDuplicates searchField={'unit'} onChange={handleFormChange} />
 
               <InputLabel htmlFor='psupplier'>Supplier: </InputLabel>
-              <Select type='select' name="psupplier_id" value={undefined} label={'Supplier'} style={{width: `170px`}} >
+              <Select type='select' name="pref_psupplier_id" value={undefined} label={'Supplier'} style={{width: `170px`}} onChange={handleFormChange} >
                   <MenuItem value={'Select A Supplier'}></MenuItem>
                   {supplierList.map((supplier, key) => {
                     return (
@@ -161,7 +158,10 @@ const PackagingForm = (props) => {
               <Input name='returnable' id='returnable' type="checkbox" checked={packageItem.returnable} onChange={handleFormChange}/>
 
               <InputLabel htmlFor='in_date'>Purchased Date: </InputLabel>
-              <Input name='in_date' id="in_date" type="date" data-date="" data-date-format="YYYY-MM-DD" value={packageItem.in_date} onChange={handleFormChange}/>
+              <Input name='in_date' id="in_date" type="date" value={packageItem.in_date} onChange={handleFormChange}/>
+
+              <InputLabel htmlFor='in_qty'>Purchased Amt: </InputLabel>
+              <Input name='in_qty' id="in_qty" type='number' value={packageItem.in_qty} onChange={handleFormChange}/>
             </Grid>
           </Grid>
           <Button type='Submit' color='lightBlue' variant='contained'>Add Packaging</Button>

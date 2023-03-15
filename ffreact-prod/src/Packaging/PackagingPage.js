@@ -130,6 +130,7 @@ export default function PackagingPage() {
                 rows={packaging} 
                 columns={columns} 
                 apiEndpoint='packaging-inventory'
+                // apiIP='localhost'
                 keyFieldName='p_id'
                 entryName='Packaging'
                 searchField='package_type'

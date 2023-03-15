@@ -183,7 +183,7 @@ class Households(models.Model):
     ls_flag = models.PositiveIntegerField(blank=True, null=True)
     paused_flag = models.PositiveIntegerField(blank=True, null=True)
     paying = models.PositiveIntegerField(blank=True, null=True)
-    phone = models.CharField(max_length=10, blank=True, null=True)
+    phone = models.CharField(max_length=12, blank=True, null=True)
     street = models.CharField(max_length=50, blank=True, null=True)
     city = models.CharField(max_length=50, blank=True, null=True)
     pcode = models.PositiveIntegerField(blank=True, null=True)
@@ -207,7 +207,7 @@ class IngredientUsages(models.Model):
 
 
 class Ingredients(models.Model):
-    i_id = models.SmallIntegerField(primary_key=True)
+    i_id = models.AutoField(primary_key=True)
     ingredient_name = models.CharField(max_length=50)
     pkg_type = models.CharField(max_length=50)
     storage_type = models.CharField(max_length=50)
@@ -238,7 +238,7 @@ class KitPackaging(models.Model):
 
 
 class Kits(models.Model):
-    k_id = models.SmallIntegerField(primary_key=True)
+    k_id = models.AutoField(primary_key=True)
     k_date = models.DateField()
     k_hh_name = models.ForeignKey(Households, models.CASCADE, db_column='k_hh_name')
 
@@ -247,7 +247,7 @@ class Kits(models.Model):
         db_table = 'kits'
 
 class MealPacks(models.Model):
-    mp_id = models.IntegerField(primary_key=True)
+    mp_id = models.AutoField(primary_key=True)
     mp_date = models.DateField()
     mp_hh_name = models.ForeignKey(Households, models.CASCADE, db_column='mp_hh_name')
     mp_stn_name = models.ForeignKey('Stations', models.CASCADE, db_column='mp_stn_name')
@@ -258,7 +258,7 @@ class MealPacks(models.Model):
         db_table = 'meal_packs'
 
 class MealPlans(models.Model):
-    m_id = models.SmallIntegerField(primary_key=True)
+    m_id = models.AutoField(primary_key=True)
     m_date = models.DateField()
     snack_r_num = models.ForeignKey('Recipes', models.CASCADE, db_column='snack_r_num', related_name='snack', blank=True, null=True)
     snack_servings = models.SmallIntegerField(blank=True, null=True)
@@ -270,7 +270,7 @@ class MealPlans(models.Model):
         db_table = 'meal_plans'
 
 class Packaging(models.Model):
-    p_id = models.SmallIntegerField(primary_key=True)
+    p_id = models.AutoField(primary_key=True)
     package_type = models.CharField(max_length=50)
     unit_qty = models.SmallIntegerField(blank=True, null=True)
     unit_cost = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
@@ -419,7 +419,7 @@ class Supplier(models.Model):
 
 
 class Users(models.Model):
-    u_id = models.PositiveSmallIntegerField(primary_key=True)
+    u_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=260)
     admin_flag = models.PositiveIntegerField()
