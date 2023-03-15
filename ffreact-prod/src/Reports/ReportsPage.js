@@ -6,7 +6,7 @@ import Dropdown from '../components/Dropdown'
 import HouseholdsReport from './HouseholdsReport.js'
 import IngredientsReport from '../Ingredients/IngredientsReport.js'
 import PackagingReport from './PackagingReport.js'
-import PurchasingReport from './PurchasingReport.js'
+import PackagingPurchaseReport from './PackagingPurchaseReport.js'
 import PackagingReturns from './PackagingReturns.js'
 import MealPlanReport from './MealPlanReport.js'
 import MealHistory from './MealHistory.js'
@@ -56,7 +56,7 @@ const ReportsPage = (props) => {
         if (pageName === 'meal-plan-report') setCurrPage(<MealPlanReport handlePageClick={handlePageClick} />);
         if (pageName === 'packaging-report') setCurrPage(<PackagingReport handlePageClick={handlePageClick} />);
         if (pageName === 'packaging-returns') setCurrPage(<PackagingReturns handlePageClick={handlePageClick} />);
-        else if (pageName === 'purchasing-report') setCurrPage(<PurchasingReport handlePageClick={handlePageClick} />);
+        else if (pageName === 'packing-purchase-report') setCurrPage(<PackagingPurchaseReport handlePageClick={handlePageClick} />);
     }
 
     // HTML structure of this component
@@ -77,12 +77,14 @@ const ReportsPage = (props) => {
                     Meal History</button>,
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Meal Plan Report</button>,
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('household-report')}>
+                    Packaging Purchase Report</button>,
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('packaging-report')}>
                     Packaging Report</button>,
                 <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     Packaging Returns</button>,
                  <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
-                    Purchasing Report</button>,
+                    PackagePurchasing Report</button>,
                 ]}/>
             {currPage}
         </div>

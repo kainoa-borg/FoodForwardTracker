@@ -31,7 +31,8 @@ export default function HouseholdReport() {
     }
 
     const columns = [
-        { field: 'hh_name', headerName: 'Name', type: 'string', width: 120, editable: false},
+        { field: 'hh_name', headerName: 'First Name', type: 'string', width: 120, editable: false},
+        { field: 'hh_name', headerName: 'Last Name', type: 'string', width: 120, editable: false},
         { field: 'num_adult', headerName: 'Adults', type: 'number', width: 70, editable: true },
         { field: 'num_child_gt_6', headerName: '7-17',  type: 'number', width: 70, editable: true },
         { field: 'num_child_lt_6', headerName: '0-6', type: 'number', width: 70, editable: true },

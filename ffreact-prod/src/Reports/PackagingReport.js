@@ -36,6 +36,7 @@ export default function PackagingReport() {
     }
 
     const columns = [
+        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
         { field: 'package_type', headerName: 'Packaging Type', width: 150, editable: true },
         { field: 'unit', headerName: 'Unit', width: 100, editable: true },
         { field: 'qty_holds', headerName: 'Size', width: 10, editable: true },
@@ -44,6 +45,7 @@ export default function PackagingReport() {
         { field: 'pref_psupplier', headerName: 'Supplier', width: 80, valueFormatter: ({ value }) => value.s_name },
         { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
         { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
+        // { field: 'packaging_usage', headerName: 'Usages', width: 100, editable: true,
     ]
 
     if (packaging === undefined) {

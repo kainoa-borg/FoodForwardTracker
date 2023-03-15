@@ -23,7 +23,7 @@ import Packaging from './Packaging/PackagingList.js'
 import PackagingPage from './Packaging/PackagingPage.js'
 import PackagingReport from './Reports/PackagingReport.js'
 import PackagingReturns from './Reports/PackagingReturns.js'
-import PurchasingReport from './Reports/PurchasingReport.js'
+import PackagingPurchaseReport from './Reports/PackagingPurchaseReport.js'
 import Recipe from './Recipe/RecipeList.js'
 import RecipePage from './Recipe/RecipePage.js'
 import UnderConstruction from './components/UnderConstruction.js'
@@ -101,7 +101,7 @@ const App = () => {
             case 'packagingPage': setCurrPage(<PackagingPage handlePageClick={handlePageClick} />); break;
             case 'packaging-report': setCurrPage(<PackagingReport handlePageClick={handlePageClick} />); break;
             case 'packaging-returns': setCurrPage(<PackagingReturns handlePageClick={handlePageClick} />); break;
-            case 'purchasing-report': setCurrPage(<PurchasingReport handlePageClick={handlePageClick} />); break;
+            case 'packaging-purchase-report': setCurrPage(<PackagingPurchaseReport handlePageClick={handlePageClick} />); break;
             case 'stations': setCurrPage(<StationList handlePageClick={handlePageClick} />); break;
             case 'meals': setCurrPage(<MealPlan handlePageClick={handlePageClick} />); break;
             case 'meal-plan-report': setCurrPage(<MealPlanReport handlePageClick={handlePageClick} />); break;
