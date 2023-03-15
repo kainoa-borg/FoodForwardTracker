@@ -38,7 +38,7 @@ export default function HouseholdPage() {
         { field: 'city', headerName: 'City', width: 100, type: 'string', editable: true },
         { field: 'state', headerName: 'State', width: 50, type: 'string', editable: true },
         { field: 'pcode', headerName: 'Zip Code', width: 80, type: 'string', editable: true, /*valueFormatter: (value) => {return value}*/ },
-        { field: 'delivery_notes', headerName: 'Delivery Notes', width: 100, editable: true },
+        { field: 'delivery_notes', headerName: 'Delivery Notes', width: 150, editable: true },
         { field: 'veg_flag', headerName: 'Veg', width: 70, type: 'boolean', description: 'Vegetarian', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'gf_flag', headerName: 'Gluten Free', width: 70, type: 'boolean', description: 'Gluten Free', editable: true, valueParser: (value) => value ? 1 : 0},
         { field: 'hh_allergies', headerName: 'Allergies', width: 130, type: 'string', editable: true, 

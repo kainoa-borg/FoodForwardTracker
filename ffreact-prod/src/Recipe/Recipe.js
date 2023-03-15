@@ -51,7 +51,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         {
             field: 'ingredient_name',
             headerName: 'Ingredient',
-            width: 100,
+            width: 200,
             type: 'string',
             editable: true,
             renderEditCell: (params) => {
@@ -61,14 +61,14 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         {
             field: 'amt',
             headerName: 'Amount',
-            width: 80,
+            width: 100,
             type: 'number',
             editable: true,
         },
         {
             field: 'unit',
             headerName: 'Unit',
-            width: 70,
+            width: 100,
             type: 'string',
             editable: true,
         },
@@ -92,7 +92,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         {
             field: 'pkg_type',
             headerName: 'Packaging',
-            width: 200,
+            width: 250,
             editable: true,
             renderEditCell: (params) => {
                 return <ModularSelect {...params} options={packagingOptions} searchField={'package_type'}/>
@@ -101,7 +101,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         {
             field: 'ing_name',
             headerName: 'Ingredient',
-            width: 200,
+            width: 250,
             editable: true,
             renderEditCell: (params) => {
                 return <ModularSelect {...params} options={ingredientRows} searchField={'ingredient_name'}/>
@@ -113,13 +113,13 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         {
             field: 'stn_name',
             headerName: 'Station Name',
-            width: 200,
+            width: 250,
             editable: true
         },
         {
             field: 'stn_desc',
             headerName: 'Description',
-            width: 300,
+            width: 350,
             editable: true
         },
         // {
