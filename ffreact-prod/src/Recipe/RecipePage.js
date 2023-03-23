@@ -220,6 +220,7 @@ export default function RecipePage(props) {
         else {
             return [
                 // <GridActionsCellItem icon={<Edit/>} onClick={() => handleEditClick(params)} color="darkBlue"/>,
+                <GridActionsCellItem aria-describedby={confirmDeleteID} icon={<Edit/>} onClick={(event) => {handleEditRecipeClick(event, params)}} color="darkBlue"/>,
                 <GridActionsCellItem aria-describedby={confirmDeleteID} icon={<Delete/>} onClick={(event) => {handleDeleteClick(event, params)}} color="darkBlue"/>,
                 <Popover
                     id={confirmDeleteID}
@@ -245,7 +246,7 @@ export default function RecipePage(props) {
         )
     }
 
-    const handleRowClick = (params) => {
+    const handleEditRecipeClick = (event, params) => {
         getDBRecipeData(params.row.r_num);
         setRecipeEditID(params.row.r_num);
         return (
@@ -282,7 +283,7 @@ export default function RecipePage(props) {
             <Box sx={{height: '80vh'}}>
                 <DataGrid
                 components={{Toolbar: CustomToolbar}}
-                onRowClick={handleRowClick}
+                // onRowClick={handleRowClick}
                 rows={recipes}
                 columns={columns}
                 rowModesModel={rowModesModel} 

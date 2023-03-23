@@ -1,4 +1,4 @@
-import { Button, Typography, Box, Grid, Checkbox, Snackbar, FormControlLabel, TextField, InputLabel, Paper, Popover } from "@mui/material";
+import { Button, Typography, Box, Grid, Checkbox, Snackbar, FormControlLabel, TextField, InputLabel, Paper, Popover, MenuItem, Select, FormControl } from "@mui/material";
 import { HighlightOff } from "@mui/icons-material";
 import React, {useState, useEffect, useCallback, Fragment, useRef} from 'react';
 import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
@@ -383,7 +383,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     }
 
     const handleMealSnackChange = (event) => {
-        setM_S(event.target.checked ? 1 : 0);
+        setM_S(event.target.value);
     }
 
     const RecipeImage = (props) => {
@@ -449,10 +449,17 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 
                 {/* Recipe Image and Card Stack */}
                 <Stack item spacing={3}>
-                    {/* Recipe Name */}
-                    <TextField required inputProps={{ref: nameField}} label={'Recipe Name'} defaultValue={recipeData.r_name}/>
-                    <FormControlLabel control={<Checkbox checked={m_s===1 ? true : false} onChange={handleMealSnackChange}/>} label="Meal Recipe?"/>
-                    
+                        {/* <InputLabel id='recipeNameLabel'>Recipe Name</InputLabel> */}
+                        <TextField label='Recipe Name' required inputProps={{ref: nameField}} defaultValue={recipeData.r_name}/>
+                    <FormControl>
+                        <InputLabel id='mealOrSnackLabel'>Meal Or Snack?</InputLabel>
+                        <Select labelID='mealOrSnackLabel' required value={m_s} label={'Meal Or Snack'} onChange={handleMealSnackChange}>
+                            <MenuItem value={undefined} disabled>Meal/Snack</MenuItem>
+                            <MenuItem value={1}>Meal</MenuItem>
+                            <MenuItem value={0}>Snack</MenuItem>
+                        </Select>
+                    </FormControl>
+
                     {/* Recipe Image */}
                     <RecipeImage image_source={tempImagePath ? tempImagePath : imagePath}/>
                     <Button color='lightBlue' variant='contained' component='label'>
@@ -464,7 +471,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                     <RecipeCard card_source={tempCardPath ? tempCardPath : cardPath}/>
                     <Button color='lightBlue' variant='contained' component='label'>
                         Upload Recipe Card
-                        <input id='recipe_card' type='file' accept='.jpg,.pdf,.doc,.docx' onChange={(event) => {handleTempUpload(event.target.files[0], 'tempcardupload'); setCardFile(event.target.files[0])}} hidden></input>
+                        <input id='recipe_card' type='file' accept='.pdf,.doc,.docx' onChange={(event) => {handleTempUpload(event.target.files[0], 'tempcardupload'); setCardFile(event.target.files[0])}} hidden></input>
                     </Button>
                 </Stack>
 
