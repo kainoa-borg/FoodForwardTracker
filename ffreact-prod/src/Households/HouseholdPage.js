@@ -1,26 +1,25 @@
-import React, { useEffect, useState } from 'react'
-import { useGridApiContext } from '@mui/x-data-grid'
+import React from 'react'
+import { useGridApiContext, GridEditInputCell } from '@mui/x-data-grid'
 import './HouseholdList.css'
 import { Box, Typography } from '@mui/material'
+import {DataGrid} from "@mui/material";
 import AllergiesList from './AllergiesList';
 import NewModularDatagrid from '../components/NewModularDatagrid';
 import CellDialog from '../components/CellDialog.js';
 import HouseholdForm from './HouseholdForm.js';
-import ModularSelect from '../components/ModularSelect';
-import axios from 'axios';
+// import ModularSelect from '../components/ModularSelect';
+// import axios from 'axios';
 
 // Households/Clients List Component
 export default function HouseholdPage() {
     
     const AllergyListCell = (params) => {
         return <AllergiesList allergies={params.value} isEditable={false}/>
-
     }
     const AllergyListEditCell = (params) => {
         const api = useGridApiContext();
         const updateCellValue = (a, b) => {
             const newAllergies = b[0];
-            // const {id, value, field} = params;
             const {id, field} = params;
             api.current.setEditCellValue({id, field, value: newAllergies, debounceMs: 200})
         }
@@ -28,11 +27,17 @@ export default function HouseholdPage() {
     }
 
     const columns = [
-        { field: 'hh_name', headerName: 'Name', type: 'string', width: 120, editable: false},
-        { field: 'num_adult', headerName: 'Adults', type: 'number', width: 70, editable: true },
-        { field: 'num_child_gt_6', headerName: '7-17',  type: 'number', description: 'Number of children from age 7 to 17', width: 70, editable: true },
-        { field: 'num_child_lt_6', headerName: '0-6', type: 'number', description: 'Number of children from age 0 to 6', width: 70, editable: true },
-        { field: 'phone', headerName: 'Phone', width: 110, type: 'phone', editable: true },
+        { field: 'hh_name', headerName: 'Name', defaultValue:"Name", type: 'string', width: 120, editable: false},
+        { field: 'num_adult', headerName: 'Adults', type: 'number', 
+            renderEditCell: (params) => (<GridEditInputCell {...params} inputProps={{ max: 25, min: 0,}}/>),
+            width: 70, editable: true },
+        { field: 'num_child_gt_6', headerName: '7-17',  type: 'number', 
+            renderEditCell: (params) => (<GridEditInputCell {...params} inputProps={{ max: 25, min: 0,}}/>),
+            description: 'Number of children from age 7 to 17', width: 70, editable: true },
+        { field: 'num_child_lt_6', headerName: '0-6', type: 'number', 
+            renderEditCell: (params) => (<GridEditInputCell {...params} inputProps={{ max: 25, min: 0,}}/>),
+            description: 'Number of children from age 0 to 6', width: 70, editable: true },
+        { field: 'phone', headerName: 'Phone', defaultValue:'xxx-xxx-xxxx', width: 110, type: 'phone', editable: true },
         { field: 'sms_flag', headerName: 'SMS', width: 50, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'street', headerName: 'Street', width: 160, type: 'string', editable: true },
         { field: 'city', headerName: 'City', width: 100, type: 'string', editable: true },

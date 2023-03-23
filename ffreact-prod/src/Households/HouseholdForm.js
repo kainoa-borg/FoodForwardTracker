@@ -24,6 +24,7 @@ const HouseholdForm = (props) => {
       gf_flag: 0,
       ls_flag: 0,
       paused_flag: 0,
+      paying: 0,
       phone: "",
       street: "",
       city: "",
@@ -81,29 +82,32 @@ const HouseholdForm = (props) => {
             <Grid container spacing={4}>
               <Grid item>
                 <InputLabel htmlFor="hh_name">Name: </InputLabel>
-                <Input name="hh_name" id="hh_name" type="text" inputProps={{maxLength: '30'}} required={true} value={household.hh_name} onChange={handleFormChange}/>
+                <Input name="hh_name" id="hh_name" type="text" inputProps={{maxLength: '30'}} required={true} value={household.hh_name} onChange={handleFormChange} oninput="validity.valid||(value='');"/>
                 
                 <InputLabel htmlFor='num_adult'>Number of Adults: </InputLabel>
-                <Input name='num_adult' id="num_adult" type="number" value={household.num_adult} onChange={handleFormChange}/>
+                <Input name='num_adult' id="num_adult" type="number" inputProps={{min: 0}} value={household.num_adult} onChange={handleFormChange} oninput="validity.valid||(value='');"/>
                 
                 <InputLabel htmlFor='num_child_lt_6'>Number of Children 0-6: </InputLabel>
-                <Input name='num_child_lt_6' id="num_child_lt_6" type="number" value={household.num_child_lt_6} onChange={handleFormChange}/>
+                <Input name='num_child_lt_6' id="num_child_lt_6" type="number" inputProps={{min: 0}} value={household.num_child_lt_6} onChange={handleFormChange} oninput="validity.valid||(value='');"/>
                 
                 <InputLabel htmlFor='num_child_gt_6'>Number of Children 7-17: </InputLabel>
-                <Input name='num_child_gt_6' id="num_child_gt_6" type="number" value={household.num_child_gt_6} onChange={handleFormChange}/>
+                <Input name='num_child_gt_6' id="num_child_gt_6" type="number" inputProps={{min: 0}} value={household.num_child_gt_6} onChange={handleFormChange} oninput="validity.valid||(value='');"/>
               </Grid>
               <Grid item>
                 <InputLabel htmlFor='veg_flag'>Vegan/Vegetarian: </InputLabel>          
                 <Input name='veg_flag' id='veg_flag' type="checkbox" checked={household.veg_flag} onChange={handleFormChange}/>
 
                 <InputLabel htmlFor='gf_flag'>Gluten Free: </InputLabel>          
-                <Input name='gf_flag' id='gf_flag' type='checkbox' checked={household.gf_flag} onChange={handleFormChange}/>
+                <Input name='gf_flag' id='gf_flag' type='checkbox' checked={household.gf_flag} onChange={handleFormChange} />
                 
                 <InputLabel htmlFor='sms_flag'>Recieving SMS: </InputLabel>
                 <Input name='sms_flag' id='sms_flag' type='checkbox' checked={household.sms_flag} onChange={handleFormChange}/>
 
                 <InputLabel htmlFor='paused_flag'>Is Paused: </InputLabel>          
                 <Input name='paused_flag' id='paused_flag' type='checkbox' checked={household.paused_flag} onChange={handleFormChange}/>
+              
+                <InputLabel htmlFor='paying'>Is Paying: </InputLabel>          
+                <Input name='paying' id='paying' type='checkbox' checked={household.paying} onChange={handleFormChange}/>
               </Grid>
               <Grid item>
                 <InputLabel htmlFor='phone'>Phone Number: </InputLabel>          
