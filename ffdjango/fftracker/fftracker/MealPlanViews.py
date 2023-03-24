@@ -16,9 +16,9 @@ class MealPlansSerializer(ModelSerializer):
 		meal_servings = 0
 		snack_servings = 0
 
-		for household in queryset:
-			meal_servings += household.num_adult + household.num_child_gt_6 + (household.num_child_lt_6 *.5)
-			snack_servings += household.num_adult + household.num_child_gt_6 + household.num_child_lt_6
+		# for household in queryset:
+		# 	meal_servings += household.num_adult + household.num_child_gt_6 + (household.num_child_lt_6 *.5)
+		# 	snack_servings += household.num_adult + household.num_child_gt_6 + household.num_child_lt_6
 
 		validated_data['meal_servings'] = meal_servings
 		validated_data['snack_servings'] = snack_servings
