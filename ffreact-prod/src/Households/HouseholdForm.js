@@ -111,7 +111,7 @@ const HouseholdForm = (props) => {
               </Grid>
               <Grid item>
                 <InputLabel htmlFor='phone'>Phone Number: </InputLabel>          
-                <Input name='phone' id='phone' type='tel' inputProps={{pattern: '[0-9]{3}-[0-9]{3}-[0-9]{4}', minLength: '12', maxLength: '12'}} value={household.phone} onChange={handleFormChange}/>
+                <Input name='phone' id='phone' type='tel' inputProps={{pattern: '[0-9]{3}-[0-9]{3}-[0-9]{4}', placeholder: '###-###-####', minLength: '12', maxLength: '12'}} value={household.phone} onChange={handleFormChange}>###-###-####</Input>
                 
                 <InputLabel htmlFor='street'>Street: </InputLabel>          
                 <Input name='street' id='street' inputProps={{maxLength: '50'}} value={household.street} onChange={handleFormChange}/>
@@ -120,7 +120,7 @@ const HouseholdForm = (props) => {
                 <Input name='city' id='city' inputProps={{maxLength: '50'}} value={household.city} onChange={handleFormChange}/>
 
                 <InputLabel htmlFor='pcode'>Postal Code: </InputLabel>
-                <Input name='pcode' id='pcode' inputProps={{minLength:'5', maxLength:'5'}} value={household.pcode} onChange={handleFormChange}/>
+                <Input name='pcode' id='pcode' inputProps={{minLength:'5', maxLength:'5', placeholder: '#####'}} value={household.pcode} onChange={handleFormChange}/>
 
                 <InputLabel htmlFor='state'>State: </InputLabel>
                 <Input name='state' id='state' inputProps={{minLength:'2', maxLength:'2'}} value={household.state} onChange={handleFormChange}/>
