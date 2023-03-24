@@ -170,7 +170,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         // setUpdateSBOpen(true);
         axios({
             method: "POST",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint + '/',
+            url:"http:///4.236.185.213:8000/api/" + apiEndpoint + '/',
             data: formData,
             headers: {
                 'Content-Type': 'multipart/form-data'

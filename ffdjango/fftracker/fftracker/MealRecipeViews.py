@@ -80,16 +80,17 @@ class TempCardUploadView(viewsets.ViewSet):
         def hash_datetime():
             curr_time = dt.now()
             return (str(int(round(curr_time.timestamp())) % 12))
-        
         # save the temporary card uploaded for this session
         # get card file from request
-        img = Image.open(request.data['file']).convert('RGB')
+        # img = Image.open(request.data['file']).convert('RGB')
         # store card with identifier for this session
         rel_file_path = 'Images/temp_r_card_%s.pdf'%(hash_datetime())
         abs_file_path = 'var/www/html/' + rel_file_path
         if not os.path.exists('var/www/html/Images'):
             os.makedirs('var/www/html/Images')
-        img.save(abs_file_path)
+        with open(abs_file_path, 'wb') as f:
+            f.write(request.data['file'].read())
+        # img.save(abs_file_path)
         # return a link to temporary card
         return Response(rel_file_path)
     
