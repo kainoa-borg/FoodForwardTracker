@@ -4,6 +4,7 @@ import {DataGrid} from '@mui/x-data-grid'
 import { Box } from '@mui/system';
 import { wait } from '@testing-library/user-event/dist/utils';
 import './MealList.css'
+import MealPlanForm from './MealPlanForm';
 
 // mealPlan List Component
 export default function MealPlanPage() {
@@ -36,7 +37,7 @@ export default function MealPlanPage() {
         console.log('MAKING REQUEST TO DJANGO')
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/meals-list/"
+            url:"http://4.236.185.213:8000/api/mealplans/"
           }).then((response)=>{
             const mealData = response.data
             setMealPlan(mealData);
