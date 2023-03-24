@@ -180,16 +180,13 @@ class RecipeCardView(viewsets.ViewSet):
     def patch(self, request, pk):
         queryset = Recipes.objects.filter(r_num = pk)
         if len(queryset) > 0:
-            img = Image.open(request.data['file'])
-            try:
-                img.verify()
-            except:
-                print('image corrupt')
-                return Response(request)
-            img = Image.open(request.data['file']).convert('RGB')
+            # img = Image.open(request.data['file'])
+            # img = Image.open(request.data['file']).convert('RGB')
             abs_file_path = 'var/www/html/Images/r_%s_card.pdf'%(pk)
             rel_file_path = 'Images/r_%s_card.pdf'%(pk)
-            img.save(abs_file_path)
+            # img.save(abs_file_path)
+            with open(abs_file_path, 'wb') as f:
+                f.write(request.data['file'].read())
             # queryset[0].r_card_path = rel_file_path
             # queryset[0].save(update_fields=['r_card_path'])
             queryset.update(r_card_path = rel_file_path)
