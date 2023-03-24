@@ -141,15 +141,15 @@ const IngredientForm = (props) => {
 
               <InputLabel htmlFor="unit">Measure: </InputLabel>
               {/* <Input name="unit" type="text" value={ingredient.unit} onChange={handleFormChange}/> */}
-              <ModularSelect value={ingredient.unit} options={ingredients} noDuplicates searchField={'unit'} onChange={handleFormChange}/>
+              <ModularSelect value={ingredient.unit} options={ingredients} inputProps={{min: 0}} noDuplicates searchField={'unit'} onChange={handleFormChange}/>
             </Grid>
             <Grid item>
               <InputLabel htmlFor="unit_cost">Unit Cost: </InputLabel>
-              <Input name="unit_cost" type="number" step="0.01" value={ingredient.unit_cost} onChange={handleFormChange}/>
+              <Input name="unit_cost" type="number" step="0.01" value={ingredient.unit_cost} inputProps={{min: 0}} onChange={handleFormChange}/>
 
               <InputLabel htmlFor="pref_isupplier">Supplier: </InputLabel>
               {/* <ModularSelect options={supplierList} noDuplicates searchField={'s_name'} onChange={handleFormChange}/> */}
-              <Select type='select' name="pref_isupplier_id" value={undefined} label={'Supplier'} onChange={handleFormChange}>
+              <Select type='select' name="pref_isupplier_id" value={undefined} label={'Supplier'} style={{width: `170px`}} onChange={handleFormChange}>
                 <MenuItem value={'Select A Supplier'}></MenuItem>
                 {supplierList.map((supplier, key) => {
                   return (
@@ -163,7 +163,7 @@ const IngredientForm = (props) => {
               <Input name="in_date" type="date" data-date="" data-date-format="YYYY-MM-DD" value={ingredient.in_date} onChange={handleFormChange}/>
 
               <InputLabel htmlFor="in_qty">Purchase Amount: </InputLabel>
-              <Input name="in_qty" type="number" value={ingredient.in_qty} onChange={handleFormChange}/>
+              <Input name="in_qty" type="number" value={ingredient.in_qty} inputProps={{min: 0}} onChange={handleFormChange}/>
 
               <InputLabel htmlFor="exp_date">Exp Date: </InputLabel>
               <Input name="exp_date" type="date" data-date="" data-date-format="YYYY-MM-DD" value={ingredient.exp_date} onChange={handleFormChange}/>
