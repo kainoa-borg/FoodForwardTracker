@@ -27,7 +27,8 @@ export default function HouseholdPage() {
     }
 
     const columns = [
-        { field: 'hh_name', headerName: 'Name', defaultValue:"Name", type: 'string', width: 120, editable: false},
+        { field: 'hh_last_name', headerName: 'Last Name', defaultValue:"Last Name", type: 'string', width: 120, editable: true},
+        { field: 'hh_first_name', headerName: 'First Name', defaultValue: 'First Name', type: 'string', width: 120, editable: true},
         { field: 'num_adult', headerName: 'Adults', type: 'number', 
             renderEditCell: (params) => (<GridEditInputCell {...params} inputProps={{ max: 25, min: 0,}}/>),
             width: 70, editable: true },
@@ -37,7 +38,7 @@ export default function HouseholdPage() {
         { field: 'num_child_lt_6', headerName: '0-6', type: 'number', 
             renderEditCell: (params) => (<GridEditInputCell {...params} inputProps={{ max: 25, min: 0,}}/>),
             description: 'Number of children from age 0 to 6', width: 70, editable: true },
-        { field: 'phone', headerName: 'Phone', defaultValue:'xxx-xxx-xxxx', width: 110, type: 'phone', editable: true },
+        { field: 'phone', headerName: 'Phone', defaultValue:'xxx-xxx-xxxx', width: 130, type: 'phone', editable: true },
         { field: 'sms_flag', headerName: 'SMS', width: 50, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'street', headerName: 'Street', width: 160, type: 'string', editable: true },
         { field: 'city', headerName: 'City', width: 100, type: 'string', editable: true },
@@ -62,7 +63,7 @@ export default function HouseholdPage() {
     ]
     
     const columnGroupingModel = [
-        { field: 'hh_name' },
+        { field: 'hh_first_name' }, { field: 'hh_last_name'},
         {
             groupId: 'ages',
             headerName: 'Member Ages',
@@ -97,10 +98,10 @@ export default function HouseholdPage() {
                 columnGroupingModel={columnGroupingModel}
                 getRowHeight={() => 'auto'}
                 getEstimatedRowHeight={() => 300} 
-                keyFieldName={'hh_name'}
+                keyFieldName={'hh_id'}
                 apiEndpoint={'households'}
                 entryName={'Client'}
-                searchField={'hh_name'}
+                searchField={'hh_last_name'}
                 searchLabel={'Client Names'}
                 AddFormComponent={HouseholdForm}
                 experimentalFeatures={{ columnGrouping: true }}>
