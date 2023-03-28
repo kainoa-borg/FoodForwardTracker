@@ -279,7 +279,7 @@ export default function RecipePage(props) {
 
     return(
         <Fragment>
-            <Typography id='page-header' variant='h5'>Select a Recipe</Typography>
+            <Typography id='page-header' variant='h5'>Recipes</Typography>
             <Box sx={{height: '80vh'}}>
                 <DataGrid
                 components={{Toolbar: CustomToolbar}}

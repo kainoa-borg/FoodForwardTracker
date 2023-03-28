@@ -14,7 +14,8 @@ const HouseholdForm = (props) => {
   const handleClose = props.handleClose;
   const clearHousehold = () => {
     return {
-      hh_name: "",
+      hh_last_name: "",
+      hh_first_name: "",
       num_adult: undefined,
       num_child_lt_6: undefined,
       num_child_gt_6: undefined,
@@ -81,9 +82,12 @@ const HouseholdForm = (props) => {
             {/* Basic household info */}
             <Grid container spacing={4}>
               <Grid item>
-                <InputLabel htmlFor="hh_name">Name: </InputLabel>
-                <Input name="hh_name" id="hh_name" type="text" inputProps={{maxLength: '30'}} required={true} value={household.hh_name} onChange={handleFormChange} oninput="validity.valid||(value='');"/>
+                <InputLabel htmlFor="hh_last_name">Last Name: </InputLabel>
+                <Input name="hh_last_name" id="hh_last_name" type="text" inputProps={{maxLength: '30'}} required={true} value={household.hh_last_name} onChange={handleFormChange} oninput="validity.valid||(value='');"/>
                 
+                <InputLabel htmlFor="hh_first_name">First Name: </InputLabel>
+                <Input name="hh_first_name" id="hh_first_name" type="text" inputProps={{maxLength: '30'}} required={true} value={household.hh_first_name} onChange={handleFormChange} oninput="validity.valid||(value='');"/>
+
                 <InputLabel htmlFor='num_adult'>Number of Adults: </InputLabel>
                 <Input name='num_adult' id="num_adult" type="number" inputProps={{min: 0}} value={household.num_adult} onChange={handleFormChange} oninput="validity.valid||(value='');"/>
                 
