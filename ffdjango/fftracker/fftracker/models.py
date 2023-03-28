@@ -144,7 +144,7 @@ class HhAllergies(models.Model):
     hh_a_id = models.SmallAutoField(primary_key=True)
     a_type = models.CharField(max_length=30, blank=True, null=True)
     a_code = models.IntegerField(blank=True, null=True)
-    a_hh_name = models.ForeignKey('Households', models.CASCADE, related_name='hh_allergies', db_column='a_hh_name')
+    a_hh_id = models.ForeignKey('Households', models.CASCADE, related_name='hh_allergies', db_column='a_hh_id')
 
     class Meta:
         managed = False
@@ -154,7 +154,7 @@ class HhAllergies(models.Model):
 class HhKits(models.Model):
     hk_id = models.SmallIntegerField(primary_key=True)
     hk_kit = models.ForeignKey('Kits', models.CASCADE, blank=True, null=True)
-    hk_hh_name = models.ForeignKey('Households', models.CASCADE, db_column='hk_hh_name', related_name='hh_kit', blank=True, null=True)
+    hk_hh_id = models.ForeignKey('Households', models.CASCADE, db_column='hk_hh_id', related_name='hh_kit', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -164,7 +164,7 @@ class HhKits(models.Model):
 class HhMealPlans(models.Model):
     hh_m_id = models.SmallIntegerField(primary_key=True)
     meal = models.ForeignKey('MealPlans', models.CASCADE)
-    meal_hh_name = models.ForeignKey('Households', models.CASCADE, related_name='hh_meal', db_column='meal_hh_name')
+    meal_hh_id = models.ForeignKey('Households', models.CASCADE, related_name='hh_meal', db_column='meal_hh_id')
 
     class Meta:
         managed = False
@@ -172,7 +172,9 @@ class HhMealPlans(models.Model):
 
 
 class Households(models.Model):
-    hh_name = models.CharField(primary_key=True, max_length=30)
+    hh_id = models.AutoField(primary_key=True)
+    hh_first_name = models.CharField(null=False, max_length=30)
+    hh_last_name = models.CharField(null=False, max_length=30)
     num_adult = models.PositiveIntegerField(blank=True, null=True)
     num_child_lt_6 = models.PositiveIntegerField(blank=True, null=True)
     num_child_gt_6 = models.PositiveIntegerField(blank=True, null=True)
@@ -240,7 +242,7 @@ class KitPackaging(models.Model):
 class Kits(models.Model):
     k_id = models.AutoField(primary_key=True)
     k_date = models.DateField()
-    k_hh_name = models.ForeignKey(Households, models.CASCADE, db_column='k_hh_name')
+    k_hh_id = models.ForeignKey(Households, models.CASCADE, db_column='k_hh_id')
 
     class Meta:
         managed = False
@@ -249,7 +251,7 @@ class Kits(models.Model):
 class MealPacks(models.Model):
     mp_id = models.AutoField(primary_key=True)
     mp_date = models.DateField()
-    mp_hh_name = models.ForeignKey(Households, models.CASCADE, db_column='mp_hh_name')
+    mp_hh_id = models.ForeignKey(Households, models.CASCADE, db_column='mp_hh_id')
     mp_stn_name = models.ForeignKey('Stations', models.CASCADE, db_column='mp_stn_name')
     mp_kit = models.ForeignKey(Kits, models.CASCADE)
 
