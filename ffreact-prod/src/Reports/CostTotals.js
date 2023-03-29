@@ -6,70 +6,93 @@ import { Box, Button, Input, InputLabel, Snackbar, Typography, Stack, FormContro
 
 // Packaging List Component
 export default function MealPlanReport() {
-    const [mealPlans, setMealPlans] = useState([]);
+    const [costTotals, setCostTotals] = useState([]);
     const [dateRange, setDateRange] = useState([]);
     const [searchingSBOpen, setSearchingSBOpen] = useState(false);
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
     const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
-    const [ingredients, setIngredients] = useState(undefined);
-
+    const [ingredients, setIngredients] = useState([]);
+    const [suppliers, setSuppliers] = useState(undefined);
+  
     const currencyFormatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
     });
 
-    const getDBMealPlanReport = (dateRange) => {
-        setSearchingSBOpen(true);
-        axios({
-            method: "GET",
-            url:"http://4.236.185.213:8000/api/mealplanreport/",
-            params: dateRange
-          }).then((response)=>{
-            // console.log(response.data);
-            if (response.data.length > 0) setResultsFoundSBOpen(true);
-            else setNoResultsSBOpen(true);
-
-            setMealPlans(response.data);
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
+    const getCostTotalsList = (dateRange) => {
+      axios({
+          method: "GET",
+          url:"http://4.236.185.213:8000/api/costtotals/",
+          params: dateRange
+        }).then((response)=>{
+          if (response.data.length > 0) setResultsFoundSBOpen(true);
+          else setNoResultsSBOpen(true);
+          const costData = response.data
+          setCostTotals(costData);
+        }).catch((error) => {
+          if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
     }
+  
+    const getDBIngredients = (dateRange) => {
+      axios({
+          method: "GET",
+          url:"http://4.236.185.213:8000/api/ingredients",
+          params: dateRange
+        }).then((response)=>{
+          const ingData = response.data
+          setIngredients(ingData);
+        }).catch((error) => {
+          if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
+  }
 
-    const getDBIngredients = () => {
-        axios({
-            method: "GET",
-            url:"http://4.236.185.213:8000/api/ingredients-report"
-          }).then((response)=>{
-            const ingData = response.data
-            setIngredients(ingData);
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-    }
+  // Get suppliers from database
+  // Set supplier variable with supplier data
+  const getDBSuppliers = () => {
+      console.log("MAKING REQUEST TO DJANGO")
+      axios({
+          method: "GET",
+          url:"http://4.236.185.213:8000/api/suppliers"
+        }).then((response)=>{
+          setSuppliers(response.data);
+        }).catch((error) => {
+          if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
+  }
 
     const columns = [
       { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
-      { field: 'meal_name', headerName: 'Meal Name', width: 200 },
+      { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
+      { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
       { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
-      { field: 'unit', headerName: 'Measure', width: 90, editable: true },
-//        { field: 'total', headerName: 'Total', width: 90, editable: true },
+      { field: 'pref_isupplier_id', headerName: 'Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
+//      { field: 'total', headerName: 'Total', width: 90, editable: true },
       { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
-  ]
+    ]
+
+    if (ingredients === undefined) {
+      return (<>loading</>);
+    }
 
     function CustomToolbar() {
       return (
         <GridToolbarContainer>
           <GridToolbarExport
             csvOptions={{
-                fileName: 'Meal Plan Report',
+                fileName: 'Cost Totals Report',
                 delimeter: ';'
             }} />
         </GridToolbarContainer>
@@ -78,18 +101,18 @@ export default function MealPlanReport() {
 
     const handleSubmit = (event) => {
       event.preventDefault();
-      getDBMealPlanReport(dateRange);
-    }
-
-    useEffect(() => {
+      getCostTotalsList(dateRange);
       getDBIngredients();
-  }, []);
+      getDBSuppliers();
+    }
 
     // The HTML structure of this component
     return (
         <div>
           <Typography variant='h5'>Cost Total Report</Typography>
           <Typography variant='p' sx={{marginBottom: '5%'}}>Select date range to calculate the total costs from start date to end date.</Typography>
+          <Typography variant='p' sx={{marginBottom: '5%'}}>Only completed purchases are included, future totals do not project estimated costs.</Typography>
+          
           <form onSubmit={handleSubmit}>
             {/* <Stack direction='row'> */}
               <FormControl>

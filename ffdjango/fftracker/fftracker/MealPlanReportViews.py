@@ -32,7 +32,6 @@ def get_latest_items(queryset):
                 queryset = [x for x in queryset if x.meal_r_num != latest_similar_item.meal_r_num]
                 new_queryset.append(latest_similar_item)
             i += 1
-
         return new_queryset
 
 class MealPlanReportSerializer(ModelSerializer):
