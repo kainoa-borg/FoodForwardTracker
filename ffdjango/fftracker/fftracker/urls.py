@@ -22,8 +22,10 @@ from rest_framework import routers
 from .MealRecipeViews import *
 from .AccountCreationViews import AccountCreateView
 from .CalculationsView import CalculationsView
+from .CostTotalView import CostTotalView
 from .HouseholdViews import HouseholdsView, HouseholdsWithAllergies
 from .IngredientViews import IngredientInvView
+from .IngPurchaseViews import IPLView
 from .MenuView import MenuView
 from .MealPlanViews import MealPlansView
 from .MealPlanReportViews import MealPlanReportView
@@ -42,15 +44,18 @@ from .UserView import UserView
 #admin.site.register(Packaging)
 
 router = routers.DefaultRouter()
+router.register(r'calculations', CalculationsView, basename='calculations')
+router.register(r'cost-totals', CostTotalView, basename='cost-totals')
 router.register(r'create-account', AccountCreateView, basename='create-account')
 router.register(r'households', HouseholdsWithAllergies, basename='households')
 router.register(r'households-report', HouseholdsView, basename='households-report')
 router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient-inventory')
 router.register(r'ingredients-report', IngredientInvView, basename='ingredients-report')
+router.register(r'ing-purchase-report', IPLView, basename='ing-purchase-report')
 router.register(r'packaging', PackagingInvView, basename='packaging')
 router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
 router.register(r'packaging-report', PackagingInvView, basename='packaging-report')
-router.register(r'pack-purchase-list', PPLView, basename='pack-purchase-list')
+router.register(r'pack-purchase-report', PPLView, basename='pack-purchase-report')
 router.register(r'users', UserView, basename='users')
 router.register(r'user-auth', UserAuth, basename='user-auth')
 router.register(r'menu', MenuView, basename='menu')
@@ -60,17 +65,17 @@ router.register(r'mealplanreport', MealPlanReportView, basename='mealplanreport'
 router.register(r'mealrecipes', RecipeView, basename='mealrecipes')
 router.register(r'mealrecipe-image', RecipeImageView, basename='mealrecipe-image')
 router.register(r'mealrecipe-card', RecipeCardView, basename='mealrecipe-card')
-router.register(r'tempimageupload', TempImageUploadView, basename='tempimageupload')
-router.register(r'tempcardupload', TempCardUploadView, basename='tempcardupload')
 router.register(r'mealrecipe-ingredients', RecipeIngredientsView, basename='mealrecipe-ingredients')
 router.register(r'mealrecipe-packaging', RecipePackagingView, basename='mealrecipe-packaging')
 router.register(r'mealrecipe-diets', RecipeDietsView, basename='mealrecipe-diets')
 router.register(r'mealrecipe-instructions', RecipeInstructionsView, basename='mealrecipe-instructions')
+router.register(r'recipe-list', RecipeListView, basename='recipe-list')
+router.register(r'serving-calculations', ServingCalculationViews, basename='serving-calculations')
 router.register(r'stations', StationsView, basename='stations')
 router.register(r'suppliers', SupplierView, basename='suppliers')
-router.register(r'recipe-list', RecipeListView, basename='recipe-list')
-router.register(r'calculations', CalculationsView, basename='calculations')
-router.register(r'serving-calculations', ServingCalculationViews, basename='serving-calculations')
+router.register(r'tempimageupload', TempImageUploadView, basename='tempimageupload')
+router.register(r'tempcardupload', TempCardUploadView, basename='tempcardupload')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -80,6 +85,7 @@ urlpatterns = [
     path('api/get-households', HouseholdsView.as_view({'get': 'list', 'post': 'create'})),
     path('api/get-households/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve'})),
     path('api/get-ingredient', IngredientInvView.as_view({'get': 'list', 'get': 'retrieve'})),
+    path('api/get-ing-purchase-report', IPLView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-packaging', PackagingInvView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-pack-purchase-list', PPLView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-users', UserView.as_view({'get': 'retrieve'})),

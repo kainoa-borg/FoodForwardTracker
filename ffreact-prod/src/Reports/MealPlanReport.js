@@ -11,7 +11,6 @@ export default function MealPlanReport() {
     const [searchingSBOpen, setSearchingSBOpen] = useState(false);
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
     const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
-    // const [ingredients, setIngredients] = useState(undefined);
 
     const getDBMealPlanReport = (dateRange) => {
         setSearchingSBOpen(true);
@@ -33,22 +32,6 @@ export default function MealPlanReport() {
               }
           });
     }
-
-    /*const getDBIngredients = () => {
-        axios({
-            method: "GET",
-            url:"http://4.236.185.213:8000/api/ingredients-report"
-          }).then((response)=>{
-            const ingData = response.data
-            setIngredients(ingData);
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-    }*/
 
     const columns = [
       { field: 'meal_name', headerName: 'Meal Name', width: 200 },
