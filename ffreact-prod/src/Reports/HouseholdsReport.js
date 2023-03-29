@@ -78,7 +78,7 @@ export default function HouseholdReport() {
                 columns={columns}
                 rows={households}
                 components = {{Toolbar:CustomToolbar}}
-                getRowId={(row) => row.hh_name}
+                getRowId={(row) => row.hh_id}
                 autoHeight = {5}
             >
             </DataGrid>
