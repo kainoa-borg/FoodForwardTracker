@@ -1,6 +1,5 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
-import ReusableTable from '../ReusableTable.js'
 import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 import { Box, Button, Input, InputLabel, Snackbar, Typography, Stack, FormControl} from '@mui/material';
 
@@ -11,7 +10,6 @@ export default function MealPlanReport() {
     const [searchingSBOpen, setSearchingSBOpen] = useState(false);
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
     const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
-    // const [ingredients, setIngredients] = useState(undefined);
 
     const getDBMealPlanReport = (dateRange) => {
         setSearchingSBOpen(true);
@@ -34,28 +32,11 @@ export default function MealPlanReport() {
           });
     }
 
-    /*const getDBIngredients = () => {
-        axios({
-            method: "GET",
-            url:"http://4.236.185.213:8000/api/ingredients-report"
-          }).then((response)=>{
-            const ingData = response.data
-            setIngredients(ingData);
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-    }*/
-
     const columns = [
       { field: 'meal_name', headerName: 'Meal Name', width: 200 },
       // { field: 'snack_name', headerName: 'Snack Name', width: 120 },
       { field: 'm_date', headerName: 'Date Last Prepared', width: 150 },
       //fields = ('m_id', 'm_date', 'meal_r_num', 'snack_r_num', 'meal_servings', 'snack_servings')
-
     ]
 
     function CustomToolbar() {

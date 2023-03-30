@@ -9,7 +9,8 @@ import HouseholdPage from './Households/HouseholdPage.js'
 import HouseholdsReport from './Reports/HouseholdsReport.js'
 import Ingredients from './Ingredients/IngredientList.js'
 import IngredientPage from './Ingredients/IngredientPage.js'
-import IngredientsReport from './Ingredients/IngredientsReport.js'
+import IngredientsReport from './Reports/IngredientsReport.js'
+import IngPurchaseReport from './Reports/IngPurchaseReport.js'
 import StationList from './Stations/StationList.js'
 import ReportsPage from "./Reports/ReportsPage.js"
 import UserPage from "./User/UserPage.js"
@@ -96,12 +97,13 @@ const App = () => {
             case 'ingredients': setCurrPage(<Ingredients handlePageClick={handlePageClick} />); break;
             case 'ingredientPage': setCurrPage(<IngredientPage handlePageClick={handlePageClick} />); break;
             case 'ingredients-report': setCurrPage(<IngredientsReport handlePageClick={handlePageClick} />); break;
+            case 'ing-purchase-report': setCurrPage(<IngPurchaseReport handlePageClick={handlePageClick} />); break;
             case 'inventoryPage': setCurrPage(<InventoryPage handlePageClick={handlePageClick} />); break;
             case 'packaging': setCurrPage(<Packaging handlePageClick={handlePageClick} />); break;
             case 'packagingPage': setCurrPage(<PackagingPage handlePageClick={handlePageClick} />); break;
             case 'packaging-report': setCurrPage(<PackagingReport handlePageClick={handlePageClick} />); break;
             case 'packaging-returns': setCurrPage(<PackagingReturns handlePageClick={handlePageClick} />); break;
-            case 'packaging-purchase-report': setCurrPage(<PackagingPurchaseReport handlePageClick={handlePageClick} />); break;
+            case 'pack-purchase-report': setCurrPage(<PackagingPurchaseReport handlePageClick={handlePageClick} />); break;
             case 'stations': setCurrPage(<StationList handlePageClick={handlePageClick} />); break;
             case 'meals': setCurrPage(<MealPlan handlePageClick={handlePageClick} />); break;
             case 'meal-plan-report': setCurrPage(<MealPlanReport handlePageClick={handlePageClick} />); break;

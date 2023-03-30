@@ -4,7 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 import Dropdown from '../components/Dropdown'
 
 import HouseholdsReport from './HouseholdsReport.js'
-import IngredientsReport from '../Ingredients/IngredientsReport.js'
+import IngredientsReport from './IngredientsReport.js'
 import PackagingReport from './PackagingReport.js'
 import PackagingPurchaseReport from './PackagingPurchaseReport.js'
 import PackagingReturns from './PackagingReturns.js'
