@@ -84,12 +84,10 @@ import Dropdown from './components/Dropdown'
                     Meal History</Button>,
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('meal-plan-report')}>
                     Meal Plan Report</Button>,
-                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('pack-purchase-report')}>
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('under-construction')}>
                     Package Purchasing</Button>,
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('under-construction')}>
                     Packaging Returns</Button>,
-                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('under-construction')}>
-                    Purchasing Report</Button>,
                 ]}/>
             <Button color='lightGreen' sx={{boxShadow:'0'}} variant="contained" onClick={() => handlePageClick('userList')}>
                 Administration
