@@ -9,7 +9,7 @@ import PackagingReport from './PackagingReport.js'
 import PackagingPurchaseReport from './PackagingPurchaseReport.js'
 import PackagingReturns from './PackagingReturns.js'
 import MealPlanReport from './MealPlanReport.js'
-import MealHistory from './MealHistory.js'
+import MealHistory from './MealHistoryReport.js'
 import CostTotals from './CostTotals.js'
 
 const theme = createTheme({

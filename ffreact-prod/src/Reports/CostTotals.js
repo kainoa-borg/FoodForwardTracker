@@ -24,7 +24,7 @@ export default function costTotals() {
       setSearchingSBOpen(true);
       axios({
           method: "GET",
-          url:"http://4.236.185.213:8000/api/costtotals/",
+          url:"http://localhost:8000/api/costtotals/",
           params: dateRange
         }).then((response)=>{
           if (response.data.length > 0) setResultsFoundSBOpen(true);
@@ -38,6 +38,21 @@ export default function costTotals() {
             console.log(error.response.headers);
             }
         });
+    }
+
+    const getDBSuppliers = () => {
+      axios({
+        method: "GET",
+        url:"http://4.236.185.213:8000/api/suppliers/",
+      }).then((response)=>{
+        setSuppliers(response.data);
+      }).catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          }
+      });
     }
 
     const columns = [
@@ -67,6 +82,10 @@ export default function costTotals() {
       event.preventDefault();
       getCostTotalsList(dateRange);
     }
+
+    useEffect(() => {
+      getDBSuppliers();
+    }, [])
 
     // The HTML structure of this component
     return (
