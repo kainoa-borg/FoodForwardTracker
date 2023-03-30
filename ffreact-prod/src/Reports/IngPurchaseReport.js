@@ -1,6 +1,5 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
-import ReportsPage from './ReportsPage';
 import { DataGrid } from '@mui/x-data-grid'
 import { ToolBar, GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid';
 import { Box, Button, Input, InputLabel, Snackbar, Typography, Stack, FormControl} from '@mui/material';
@@ -102,7 +101,8 @@ export default function PurchasingReport() {
 
     const columns = [
         { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
-        { field: 'meal_name', headerName: 'Meal Name', width: 200 },
+        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
+        { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
         { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
         { field: 'pref_isupplier_id', headerName: 'Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
         { field: 'unit', headerName: 'Measure', width: 90, editable: true },
