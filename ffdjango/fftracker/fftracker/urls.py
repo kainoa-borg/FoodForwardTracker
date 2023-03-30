@@ -45,7 +45,7 @@ from .UserView import UserView
 
 router = routers.DefaultRouter()
 router.register(r'calculations', CalculationsView, basename='calculations')
-router.register(r'cost-totals', CostTotalView, basename='cost-totals')
+router.register(r'costtotals', CostTotalView, basename='costtotals')
 router.register(r'create-account', AccountCreateView, basename='create-account')
 router.register(r'households', HouseholdsWithAllergies, basename='households')
 router.register(r'households-report', HouseholdsView, basename='households-report')
