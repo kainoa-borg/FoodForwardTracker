@@ -69,8 +69,6 @@ export default function MealPlanPage() {
 
     const handleRowClick = (params) => {
         getDBMealPlan(params.row.m_id);
-        wait(300);
-        console.log(mealPlan);
     }
 
     if (mealPlan === undefined) {

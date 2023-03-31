@@ -8,14 +8,14 @@ from rest_framework import status
 from .models import MealPlans, Recipes, Households
 import json
 
-def get_latest_items(queryset):
+def get_latest_items(queryset, fieldName):
         new_queryset = []
         i = 0
         while i < len(queryset):
             print(len(queryset))
             # find similar items
-            similar_items = [n for n in queryset if n.meal_r_num == queryset[i].meal_r_num]
-            print('%a, %a'%(queryset[i].meal_r_num, len(similar_items)))
+            similar_items = [n for n in queryset if getattr(n, fieldName) == getattr(queryset[i], fieldName)]
+            print('%a, %a'%(getattr(queryset[i],fieldName), len(similar_items)))
             # if this is not a duplicate
             if len(similar_items) <= 1:
                 # put it in the queryset
@@ -29,7 +29,7 @@ def get_latest_items(queryset):
                     if n.m_date > latest_similar_item.m_date:
                         # put it in the queryset
                         latest_similar_item = n
-                queryset = [x for x in queryset if x.meal_r_num != latest_similar_item.meal_r_num]
+                queryset = [x for x in queryset if getattr(x, fieldName) != getattr(latest_similar_item, fieldName)]
                 new_queryset.append(latest_similar_item)
             i += 1
         return new_queryset
@@ -50,7 +50,31 @@ class MealPlanReportView(viewsets.ViewSet):
     def list(self, request):
         startDate = request.query_params.get('startDate')
         endDate = request.query_params.get('endDate')
-        queryset = MealPlans.objects.filter(m_date__range=[startDate, endDate]).order_by('-m_date')
-        new_queryset = get_latest_items(queryset)
+        queryset = MealPlans.objects.filter(m_date__range=[startDate, endDate]).order_by('m_date')
+        # new_queryset = get_latest_items(queryset)
+        serializer = MealPlanReportSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+class MealHistoryReportView(viewsets.ViewSet):
+    def list(self, request):
+        startDate = request.query_params.get('startDate')
+        endDate = request.query_params.get('endDate')
+        if (startDate and endDate):
+            queryset = MealPlans.objects.filter(m_date__range=[startDate, endDate]).order_by('m_date')
+        else:
+            queryset = MealPlans.objects.all().order_by('m_date')
+        meal_queryset = get_latest_items(queryset, 'meal_r_num')
+        serializer = MealPlanReportSerializer(meal_queryset, many=True)
+        return Response(serializer.data)
+    
+class SnackHistoryReportView(viewsets.ViewSet):
+    def list(self, request):
+        startDate = request.query_params.get('startDate')
+        endDate = request.query_params.get('endDate')
+        if (startDate and endDate):
+            queryset = MealPlans.objects.filter(m_date__range=[startDate, endDate]).order_by('m_date')
+        else:
+            queryset = MealPlans.objects.all().order_by('m_date')
+        new_queryset = get_latest_items(queryset, 'snack_r_num')
         serializer = MealPlanReportSerializer(new_queryset, many=True)
         return Response(serializer.data)

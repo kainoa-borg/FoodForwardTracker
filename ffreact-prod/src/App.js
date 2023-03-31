@@ -18,7 +18,7 @@ import UserList from "./User/UserList.js"
 import NewUserPage from "./User/NewUserPage.js"
 import MealPlan from './Meals/MealList.js'
 import MealPlanReport from './Reports/MealPlanReport.js'
-import MealHistory from './Reports/MealHistory.js'
+import MealHistoryReport from './Reports/MealHistoryReport.js'
 import CostTotals from './Reports/CostTotals.js'
 import Packaging from './Packaging/PackagingList.js'
 import PackagingPage from './Packaging/PackagingPage.js'
@@ -107,7 +107,7 @@ const App = () => {
             case 'stations': setCurrPage(<StationList handlePageClick={handlePageClick} />); break;
             case 'meals': setCurrPage(<MealPlan handlePageClick={handlePageClick} />); break;
             case 'meal-plan-report': setCurrPage(<MealPlanReport handlePageClick={handlePageClick} />); break;
-            case 'meal-history': setCurrPage(<MealHistory handlePageClick={handlePageClick} />); break;
+            case 'meal-history-report': setCurrPage(<MealHistoryReport handlePageClick={handlePageClick} />); break;
             case 'recipes': setCurrPage(<Recipe handlePageClick={handlePageClick} />); break;
             case 'recipePage': setCurrPage(<RecipePage handlePageClick={handlePageClick} setCurrPage={setCurrPage} />); break;
             case 'reports': setCurrPage(<ReportsPage handlePageClick={handlePageClick} />); break;
