@@ -1,6 +1,7 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
-import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarContainer, GridToolbarExport, GridFooter, GridFooterContainer } from '@mui/x-data-grid';
+import TableFooter from "@mui/material/TableFooter";
 import { Box, Button, Input, InputLabel, Snackbar, Typography, Stack, FormControl} from '@mui/material';
 
 // Packaging List Component
@@ -14,11 +15,16 @@ export default function costTotals() {
     const [searchingSBOpen, setSearchingSBOpen] = useState(false);
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
     const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
-
+    
     const currencyFormatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
     });
+
+    useEffect(() => {
+      getDBIngredients();
+      getDBSuppliers();
+  }, []);
 
     const getCostTotalsList = (dateRange) => {
       setSearchingSBOpen(true);
@@ -29,7 +35,6 @@ export default function costTotals() {
         }).then((response)=>{
           if (response.data.length > 0) setResultsFoundSBOpen(true);
           else setNoResultsSBOpen(true);
-          
           setCostTotals(response.data);
         }).catch((error) => {
           if (error.response) {
@@ -40,30 +45,52 @@ export default function costTotals() {
         });
     }
 
-    const getDBSuppliers = () => {
+    const getDBIngredients = () => {
       axios({
-        method: "GET",
-        url:"http://4.236.185.213:8000/api/suppliers/",
-      }).then((response)=>{
-        setSuppliers(response.data);
-      }).catch((error) => {
-        if (error.response) {
-          console.log(error.response);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-          }
-      });
+          method: "GET",
+          url:"http://4.236.185.213:8000/api/ingredients-report"
+        }).then((response)=>{
+          const ingData = response.data
+          setIngredients(ingData);
+        }).catch((error) => {
+          if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
     }
 
-    const columns = [
+    // Get suppliers from database
+    // Set supplier variable with supplier data
+    const getDBSuppliers = () => {
+      console.log("MAKING REQUEST TO DJANGO")
+      axios({
+          method: "GET",
+          url:"http://4.236.185.213:8000/api/suppliers"
+        }).then((response)=>{
+          setSuppliers(response.data);
+        }).catch((error) => {
+          if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
+    }
+
+    function getTotals(params) {
+      return params.row.unit_cost * params.row.in_qty;
+    }
+
+    const columns = [ 
       { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
       { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
       { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
       { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
       { field: 'pref_isupplier_id', headerName: 'Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
       { field: 'unit', headerName: 'Measure', width: 90, editable: true },
-//      { field: 'total', headerName: 'Total', width: 90, editable: true },
-      { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
+      { field: 'Subtotal', headerName: 'Subtotal', type: 'float', width: 150, groupable: false, valueGetter: getTotals, valueFormatter: ({ value }) => currencyFormatter.format(value),}
     ] 
 
     function CustomToolbar() {
@@ -75,6 +102,17 @@ export default function costTotals() {
                 delimeter: ';'
             }} />
         </GridToolbarContainer>
+      );
+    }
+
+    function CustomFooter(total) {
+      return (
+        <GridFooterContainer>
+          Total Cost: {total}
+          <GridFooter sx={{
+            border: 'none', // To delete double border.
+            }} />
+        </GridFooterContainer>
       );
     }
 
@@ -90,9 +128,10 @@ export default function costTotals() {
     // The HTML structure of this component
     return (
         <div>
+          <br />
           <Typography variant='h5'>Cost Total Report</Typography>
-          <Typography variant='p' sx={{marginBottom: '5%'}}>Select date range to calculate the total costs from start date to end date.</Typography><br />
-          <Typography variant='p' sx={{marginBottom: '5%'}}>Only completed purchases are included, future totals will not predict costs.</Typography>
+          <Typography variant='p' sx={{marginBottom: '5%'}}>Select date range to calculate the total costs.</Typography><br />
+          <Typography variant='p' sx={{marginBottom: '5%'}}>Only completed ingredient and packaging entries are included.</Typography><br /><br />
           
           <form onSubmit={handleSubmit}>
             {/* <Stack direction='row'> */}
@@ -116,6 +155,7 @@ export default function costTotals() {
               getRowId={(row) => row ? row.i_id : 0}
               autoHeight={true}
               components={{Toolbar: CustomToolbar}}
+              initialState={{aggregation: {model: {gross: 'sum',},},}}
             >
             </DataGrid>
           </Box>
