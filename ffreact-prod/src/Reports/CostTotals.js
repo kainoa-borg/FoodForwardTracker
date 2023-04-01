@@ -30,7 +30,7 @@ export default function costTotals() {
       setSearchingSBOpen(true);
       axios({
           method: "GET",
-          url:"http://localhost:8000/api/costtotals/",
+          url:"http://4.236.185.213:8000/api/costtotals/",
           params: dateRange
         }).then((response)=>{
           if (response.data.length > 0) setResultsFoundSBOpen(true);
@@ -155,7 +155,7 @@ export default function costTotals() {
               getRowId={(row) => row ? row.i_id : 0}
               autoHeight={true}
               components={{Toolbar: CustomToolbar}}
-              initialState={{aggregation: {model: {gross: 'sum',},},}}
+              //initialState={{aggregation: {model: {gross: 'sum',},},}}
             >
             </DataGrid>
           </Box>
