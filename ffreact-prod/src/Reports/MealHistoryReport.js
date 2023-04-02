@@ -1,27 +1,32 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
 import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
-import { Box, Button, Input, InputLabel, Snackbar, Typography, Stack, FormControl} from '@mui/material';
+import { Box, Button, Input, InputLabel, Snackbar, Typography, Stack, FormControl, Checkbox} from '@mui/material';
 
 // Packaging List Component
-export default function MealPlanReport() {
+export default function MealHistoryReport() {
     const [mealPlans, setMealPlans] = useState([]);
     const [dateRange, setDateRange] = useState([]);
     const [searchingSBOpen, setSearchingSBOpen] = useState(false);
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
     const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
+    const [isSnack, setIsSnack] = useState(false);
 
-    const getDBMealPlanReport = (dateRange) => {
+    const getDBMealHistoryReport = (dateRange) => {
+        console.log(isSnack);
+        let apiEndpoint = 'mealhistoryreport';
+        if (isSnack) {
+          apiEndpoint = 'snackhistoryreport';
+        }
         setSearchingSBOpen(true);
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/mealplanreport/",
+            url:"http://4.236.185.213:8000/api/"+ apiEndpoint +"/",
             params: dateRange
           }).then((response)=>{
             // console.log(response.data);
             if (response.data.length > 0) setResultsFoundSBOpen(true);
             else setNoResultsSBOpen(true);
-
             setMealPlans(response.data);
           }).catch((error) => {
             if (error.response) {
@@ -33,8 +38,8 @@ export default function MealPlanReport() {
     }
 
     const columns = [
-      { field: 'meal_name', headerName: 'Meal Name', width: 200 },
-      { field: 'snack_name', headerName: 'Snack Name', width: 120 },
+      { field: isSnack ? 'snack_name' : 'meal_name', headerName: 'Meal Name', width: 200 },
+      // { field: 'snack_name', headerName: 'Snack Name', width: 120 },
       { field: 'm_date', headerName: 'Delivery Date', width: 150 },
       //fields = ('m_id', 'm_date', 'meal_r_num', 'snack_r_num', 'meal_servings', 'snack_servings')
     ]
@@ -44,7 +49,7 @@ export default function MealPlanReport() {
         <GridToolbarContainer>
           <GridToolbarExport
             csvOptions={{
-                fileName: 'Meal Plan Report',
+                fileName: 'Meal History Report',
                 delimeter: ';'
             }} />
         </GridToolbarContainer>
@@ -53,14 +58,22 @@ export default function MealPlanReport() {
 
     const handleSubmit = (event) => {
       event.preventDefault();
-      getDBMealPlanReport(dateRange);
+      getDBMealHistoryReport(dateRange);
     }
+
+    useEffect(() => {
+      getDBMealHistoryReport();
+    }, []);
+
+    useEffect(() => {
+      getDBMealHistoryReport();
+    }, [isSnack])
 
     // The HTML structure of this component
     return (
         <div>
-          <Typography variant='h5'>Meal Plan Report</Typography>
-          <Typography variant='p' sx={{marginBottom: '5%'}}>Show planned meals between a start and end date</Typography>
+          <Typography variant='h5'>Meal History Report</Typography>
+          <Typography variant='p' sx={{marginBottom: '5%'}}>Filter meal history with a date range</Typography>
           <form onSubmit={handleSubmit}>
             {/* <Stack direction='row'> */}
               <FormControl>
