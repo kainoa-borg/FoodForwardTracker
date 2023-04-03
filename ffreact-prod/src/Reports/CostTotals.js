@@ -1,8 +1,10 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
-import { DataGrid, GridToolbarContainer, GridToolbarExport, GridFooter, GridFooterContainer } from '@mui/x-data-grid';
+import { DataGrid, GridCellParams, GridToolbarContainer, GridToolbarExport, GridFooter, GridFooterContainer, GridColDef } from '@mui/x-data-grid';
 import TableFooter from "@mui/material/TableFooter";
 import { Box, Button, Input, InputLabel, Snackbar, Typography, Stack, FormControl} from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+//var totalSum = 0.00
 
 // Packaging List Component
 export default function costTotals() {
@@ -15,7 +17,17 @@ export default function costTotals() {
     const [searchingSBOpen, setSearchingSBOpen] = useState(false);
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
     const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
+
+    var [totalSum, setTotalSum] = useState();
+    var [rowTotal, setRowTotal] = useState();
+    var [tempSum, setTempSum] = useState();
+   // var total = () => { return costTotals.reduce((prevValue, currentValue) => prevValue + (currentValue.unit_cost * currentValue.in_qty), 0)};
     
+    //const total3 = () => { return Object.values(costTotals).reduce((total, value) => total + value.total, 0)}
+    const totalUnitCost = costTotals.map((item) => item.unit_cost).reduce((a, b) => Number(a) + Number(b), 0);
+    const totalInQty = costTotals.map((item) => item.in_qty).reduce((a, b) => Number(a) + Number(b), 0);
+    const totalTotal = costTotals.map((item) => (item.in_qty*item.unit_cost)).reduce((a, b) => Number(a) + Number(b), 0);
+
     const currencyFormatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -24,7 +36,10 @@ export default function costTotals() {
     useEffect(() => {
       getDBIngredients();
       getDBSuppliers();
-  }, []);
+   }, []);
+
+  //const clearTotalSum2 = () => {return {totalSum2: 0.00}}
+  //const [totalSum2, setTotalSum2] = useState(clearTotalSum2());
 
     const getCostTotalsList = (dateRange) => {
       setSearchingSBOpen(true);
@@ -79,19 +94,36 @@ export default function costTotals() {
         });
     }
 
-    function getTotals(params) {
-      return params.row.unit_cost * params.row.in_qty;
+    const getTotals = (row, costTotals) => {
+      if (row.i_id ==='TOTAL'){
+        //setTempSum(totalSum)
+        //setTotalSum(0)
+        //const total = testTotalCost(costTotals)
+        //total = costTotals.reduce((prevValue, currentValue) => prevValue + currentValue.total, 0)
+        return (row.unit_cost * row.in_qty)
+      }
+      else{ 
+        //setTotalSum(totalSum + (row.unit_cost * row.in_qty));
+        return (row.unit_cost * row.in_qty)
+      }
     }
 
     const columns = [ 
-      { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
+      { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true, colSpan: ({ row }) => {
+        if (row.i_id === 'TOTAL') { return 5;} },},
       { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
       { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
       { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
       { field: 'pref_isupplier_id', headerName: 'Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
       { field: 'unit', headerName: 'Measure', width: 90, editable: true },
-      { field: 'Subtotal', headerName: 'Subtotal', type: 'float', width: 150, groupable: false, valueGetter: getTotals, valueFormatter: ({ value }) => currencyFormatter.format(value),}
+      { field: 'total', headerName: 'Total', width: 150, groupable: false, valueGetter: ({row}) => (row.unit_cost * row.in_qty), valueFormatter: ({ value }) => currencyFormatter.format(value)},
+      //valueGetter: ({ row }) => {if (row.id === 'TOTAL') {return row.total;} return params.row.unit_cost * params.row.in_qty}
     ] 
+
+   /* const rows = [
+      ...costTotals,
+      { i_id: 'TOTAL', ingredient_name: 'Total', total: '' },
+    ];*/
 
     function CustomToolbar() {
       return (
@@ -105,22 +137,11 @@ export default function costTotals() {
       );
     }
 
-    function CustomFooter(total) {
-      return (
-        <GridFooterContainer>
-          Total Cost: {total}
-          <GridFooter sx={{
-            border: 'none', // To delete double border.
-            }} />
-        </GridFooterContainer>
-      );
-    }
-
     const handleSubmit = (event) => {
       event.preventDefault();
       getCostTotalsList(dateRange);
     }
-
+    
     useEffect(() => {
       getDBSuppliers();
     }, [])
@@ -155,9 +176,9 @@ export default function costTotals() {
               getRowId={(row) => row ? row.i_id : 0}
               autoHeight={true}
               components={{Toolbar: CustomToolbar}}
-              //initialState={{aggregation: {model: {gross: 'sum',},},}}
             >
             </DataGrid>
+            <div> Total: {currencyFormatter.format(totalTotal)} </div>
           </Box>
           <Snackbar
             open={searchingSBOpen}
