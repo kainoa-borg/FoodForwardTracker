@@ -61,7 +61,7 @@ class PPLView(viewsets.ViewSet):
 	def list(self, request):
 		# keys = ('m_id', 'm_date', 'snack_r_num', 'meal_r_num', 'num_servings', 'meal_name', 'snack_name')
 		# query = "SELECT mp.*, (SELECT r_name FROM recipes WHERE mp.meal_r_num = r_num) AS meal_name, (SELECT r_name FROM recipes WHERE mp.snack_r_num = r_num) AS snack_name FROM meal_plans mp"
-		queryset = MealPlans.objects.prefetch_related(Prefetch('packaging_usages', queryset=PackagingUsages.objects.all())).all().all()
+		queryset = Packaging.objects.prefetch_related(Prefetch('packaging_usages', queryset=PackagingUsages.objects.all())).all().all()
 		print(queryset[0].__dict__['_prefetched_objects_cache']['packaging_usages'].__dict__)
 		serializer = PPLSerializer(queryset, many=True)
 		return Response(serializer.data)
@@ -72,7 +72,7 @@ class PPLView(viewsets.ViewSet):
 		serializer = PPLSerializer(queryset)
 		return Response(serializer.data)
 	def update(self, request, pk):
-		update_obj = MealPlans.objects.get(pk)
+		update_obj = Packaging.objects.get(pk)
 		serializer = PPLSerializer(update_obj, data=request.data)
 		if serializer.is_valid():
 			obj = serializer.save()
