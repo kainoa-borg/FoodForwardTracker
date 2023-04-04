@@ -36,13 +36,13 @@ def get_latest_items(queryset):
 
 	return new_queryset
 
-class PackagingUsages(ModelSerializer):
+class PackagingUsagesSerializer(ModelSerializer):
 	used_qty = serializers.IntegerField()
 	class Meta():
 		model = PackagingUsages
 		fields = ('used_date', 'used_qty')
 
-class RecipePackaging(ModelSerializer):
+class RecipePackagingSerializer(ModelSerializer):
 	pkg_type = serializers.CharField(max_length=45)
 	class Meta():
 		model = RecipePackaging
@@ -51,8 +51,8 @@ class RecipePackaging(ModelSerializer):
 class PPLSerializer(ModelSerializer):
 	meal_name = serializers.CharField(max_length=200)
 	snack_name = serializers.CharField(max_length=200)
-	recipe_packaging = RecipePackaging()
-	packaging_usages = PackagingUsages()
+	recipe_packaging = RecipePackagingSerializer()
+	packaging_usages = PackagingUsagesSerializer()
 	class Meta():
 		model = MealPlans
 		fields = ('m_id', 'm_date', 'meal_name', 'snack_name', 'snack_r_num', 'meal_r_num')
