@@ -56,7 +56,7 @@ const ReportsPage = (props) => {
         if (pageName === 'meal-plan-report') setCurrPage(<MealPlanReport handlePageClick={handlePageClick} />);
         if (pageName === 'packaging-report') setCurrPage(<PackagingReport handlePageClick={handlePageClick} />);
         if (pageName === 'packaging-returns') setCurrPage(<PackagingReturns handlePageClick={handlePageClick} />);
-        else if (pageName === 'packing-purchase-report') setCurrPage(<PackagingPurchaseReport handlePageClick={handlePageClick} />);
+        else if (pageName === 'pack-purchase-report') setCurrPage(<PackagingPurchaseReport handlePageClick={handlePageClick} />);
     }
 
     // HTML structure of this component

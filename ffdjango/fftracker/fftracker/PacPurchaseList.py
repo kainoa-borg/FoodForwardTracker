@@ -7,6 +7,31 @@ from rest_framework import serializers
 from rest_framework import status
 from .models import MealPlans, Recipes, PackagingUsages, Packaging, Households
 
+def get_latest_items(queryset):
+	new_queryset = []
+	i = 0
+	while i < len(queryset):
+		print(len(queryset))
+
+		similar_items = [n for n in queryset if n.meal_name == queryset[i].meal_name]
+		print('%a, %a'%(queryset[i].meal_name, len(similar_items)))
+
+		if len(similar_items) <= 1:
+			new_queryset.append(queryset[i])
+
+		elif len(similar_items) > 1:
+			print('in this section')
+
+			latest_similar_item = similar_items[0]
+			for n in similar_items:
+				if n.m_date > latest_similar_item.m_date:
+					latest_similar_item = n
+			queryset - [x for x in queryset if x.meal_name != latest_similar_item.meal_name]
+			new_queryset.append(latest_similar_item)
+		i += 1
+
+	return new_queryset
+
 class PPLSerializer(ModelSerializer):
 	meal_name = serializers.CharField(max_length=200)
 	snack_name = serializers.CharField(max_length=200)

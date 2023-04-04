@@ -31,7 +31,7 @@ from .MealPlanViews import MealPlansView
 from .MealPlanReportViews import MealPlanReportView, MealHistoryReportView, SnackHistoryReportView
 from .MealView import MealView
 from .PackagingViews import PackagingInvView
-from .PacPurchaseList import PPLView
+from .PacPurchaseViews import PPLView
 from .RecipeListViews import RecipeListView
 from .ServingCalculationViews import ServingCalculationViews
 from .StationViews import StationsView
@@ -89,7 +89,7 @@ urlpatterns = [
     path('api/get-ingredient', IngredientInvView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-ing-purchase-report', IPLView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-packaging', PackagingInvView.as_view({'get': 'list', 'get': 'retrieve'})),
-    path('api/get-pack-purchase-list', PPLView.as_view({'get': 'list', 'get': 'retrieve'})),
+    path('api/get-pack-purchase-report', PPLView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-users', UserView.as_view({'get': 'retrieve'})),
     path('api/get-menu', MenuView.as_view({'get': 'retrieve'})),
     path('api/get-meals', MealView.as_view({'get': 'list', 'get': 'retrieve'})),
