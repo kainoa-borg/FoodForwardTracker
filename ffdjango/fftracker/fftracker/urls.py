@@ -22,7 +22,7 @@ from rest_framework import routers
 from .MealRecipeViews import *
 from .AccountCreationViews import AccountCreateView
 from .CalculationsView import CalculationsView
-from .CostTotalView import CostTotalView
+from .CostTotalView import IngCostTotalView, PackCostTotalView
 from .HouseholdViews import HouseholdsView, HouseholdsWithAllergies
 from .IngredientViews import IngredientInvView
 from .IngPurchaseViews import IPLView
@@ -45,7 +45,8 @@ from .UserView import UserView
 
 router = routers.DefaultRouter()
 router.register(r'calculations', CalculationsView, basename='calculations')
-router.register(r'costtotals', CostTotalView, basename='costtotals')
+router.register(r'ing-costtotals', IngCostTotalView, basename='ing-costtotals')
+router.register(r'pack-costtotals', PackCostTotalView, basename='pack-costtotals')
 router.register(r'create-account', AccountCreateView, basename='create-account')
 router.register(r'households', HouseholdsWithAllergies, basename='households')
 router.register(r'households-report', HouseholdsView, basename='households-report')
