@@ -28,7 +28,7 @@ export default function costTotals() {
         setSearchingSBOpen(true);
         axios({
           method: "GET",
-          url:"http://localhost:8000/api/ing-costtotals/",
+          url:"http://4.236.185.213:8000/api/ing-costtotals/",
           params: dateRange
         }).then((response)=>{
           if (response.data.length > 0) setResultsFoundSBOpen(true);
@@ -46,7 +46,7 @@ export default function costTotals() {
         setSearchingSBOpen(true);
         axios({
           method: "GET",
-          url:"http://localhost:8000/api/pack-costtotals/",
+          url:"http://4.236.185.213:8000/api/pack-costtotals/",
           params: dateRange
         }).then((response)=>{
           if (response.data.length > 0) setResultsFoundSBOpen(true);
