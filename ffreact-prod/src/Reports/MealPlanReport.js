@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
-import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 import { Box, Button, Input, InputLabel, Snackbar, Typography, Stack, FormControl} from '@mui/material';
 
 // Packaging List Component
@@ -15,7 +15,7 @@ export default function MealPlanReport() {
         setSearchingSBOpen(true);
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/mealplanreport/",
+            url:"http://localhost:8000/api/mealplanreport/",
             params: dateRange
           }).then((response)=>{
             // console.log(response.data);
@@ -32,10 +32,31 @@ export default function MealPlanReport() {
           });
     }
 
+    const handleCalculateClick = (pk) => {
+      axios({
+        method: "GET",
+        url:"http://localhost:8000/api/mealplanreport/" + pk + '/',
+      }).then((response)=>{
+        console.log(response.data);
+        getDBMealPlanReport(dateRange);
+      }).catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          }
+      });
+    }
+
     const columns = [
       { field: 'meal_name', headerName: 'Meal Name', width: 200 },
       { field: 'snack_name', headerName: 'Snack Name', width: 120 },
       { field: 'm_date', headerName: 'Delivery Date', width: 150 },
+      { field: 'meal_servings', headerName: 'Meal Servings', width: 200},
+      { field: 'snack_servings', headerName: 'Snack Servings', width: 200},
+      { field: 'actions', headerName: 'Actions', width: 200,
+        renderCell: (params) => <Button onClick={(event) => {console.log(params); handleCalculateClick(params.row.m_id)}}>Calculate Servings</Button>
+      }
       //fields = ('m_id', 'm_date', 'meal_r_num', 'snack_r_num', 'meal_servings', 'snack_servings')
     ]
 
