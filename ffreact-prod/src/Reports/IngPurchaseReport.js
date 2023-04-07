@@ -135,11 +135,12 @@ export default function PurchasingReport() {
     // The HTML structure of this component
     return (
         <div>
+          <br />
           <Typography variant='h5'>Ingredient Purchasing Report</Typography>
-          <Typography variant='p' sx={{marginBottom: '5%'}}>Select for meals planned within a start and end date.</Typography>
+          <Typography variant='p' sx={{marginBottom: '5%'}}>Select for meals planned within a start and end date.</Typography><br /><br />
           <form onSubmit={handleSubmit}>
             {/* <Stack direction='row'> */}
-              <FormControl>
+              <FormControl sx={{ mr: 3 }}>
                 <Typography htmlFor="startDate">Start Date: </Typography>
                 <Input id="startDate" variant='outlined' type='date' value={dateRange.startDate} onChange={(event) => {setDateRange({...dateRange, startDate: event.target.value})}}/>
               </FormControl>
@@ -148,7 +149,7 @@ export default function PurchasingReport() {
                 <Input id="endDate" variant='outlined' type='date' value={dateRange.endDate} onChange={(event) => {setDateRange({...dateRange, endDate: event.target.value})}}/>  
               </FormControl>  
             {/* </Stack> */}
-            <FormControl>
+            <FormControl sx={{ ml: 5 }}>
               <Button variant='contained' type='submit'>Submit</Button>
             </FormControl>
           </form>

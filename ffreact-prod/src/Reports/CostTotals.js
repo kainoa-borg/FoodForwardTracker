@@ -1,51 +1,34 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
-import { DataGrid, GridCellParams, GridToolbarContainer, GridToolbarExport, GridFooter, GridFooterContainer, GridColDef } from '@mui/x-data-grid';
-import TableFooter from "@mui/material/TableFooter";
-import { Box, Button, Input, InputLabel, Snackbar, Typography, Stack, FormControl} from '@mui/material';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
+import { Box, Button, Input, Radio, RadioGroup, Snackbar, Typography, FormControl, FormControlLabel} from '@mui/material';
 //var totalSum = 0.00
 
 // Packaging List Component
 export default function costTotals() {
     const [costTotals, setCostTotals] = useState([]);
-    const [ingredients, setIngredients] = useState(undefined);
     const [suppliers, setSuppliers] = useState(undefined);
-    const [ingPurchasing, setIngPurchasing] = useState(undefined);
-    const [mealPlans, setMealPlans] = useState([]);
     const [dateRange, setDateRange] = useState([]);
     const [searchingSBOpen, setSearchingSBOpen] = useState(false);
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
     const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
-
-    var [totalSum, setTotalSum] = useState();
-    var [rowTotal, setRowTotal] = useState();
-    var [tempSum, setTempSum] = useState();
-   // var total = () => { return costTotals.reduce((prevValue, currentValue) => prevValue + (currentValue.unit_cost * currentValue.in_qty), 0)};
-    
-    //const total3 = () => { return Object.values(costTotals).reduce((total, value) => total + value.total, 0)}
-    const totalUnitCost = costTotals.map((item) => item.unit_cost).reduce((a, b) => Number(a) + Number(b), 0);
-    const totalInQty = costTotals.map((item) => item.in_qty).reduce((a, b) => Number(a) + Number(b), 0);
+    const [value, setValue] = useState('Ingredients');
     const totalTotal = costTotals.map((item) => (item.in_qty*item.unit_cost)).reduce((a, b) => Number(a) + Number(b), 0);
+    const handleRadioChange = (event) => {setValue(event.target.value);};
 
     const currencyFormatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
     });
 
-    useEffect(() => {
-      getDBIngredients();
-      getDBSuppliers();
-   }, []);
-
-  //const clearTotalSum2 = () => {return {totalSum2: 0.00}}
-  //const [totalSum2, setTotalSum2] = useState(clearTotalSum2());
-
-    const getCostTotalsList = (dateRange) => {
-      setSearchingSBOpen(true);
-      axios({
+    // Get Cost Total information from database tables
+    // Set Cost Total variables with response data
+    const getCostTotalsList = (dateRange, value) => {
+      if (value == 'Ingredients'){
+        setSearchingSBOpen(true);
+        axios({
           method: "GET",
-          url:"http://localhost:8000/api/costtotals/",
+          url:"http://4.236.185.213:8000/api/ing-costtotals/",
           params: dateRange
         }).then((response)=>{
           if (response.data.length > 0) setResultsFoundSBOpen(true);
@@ -58,15 +41,17 @@ export default function costTotals() {
             console.log(error.response.headers);
             }
         });
-    }
-
-    const getDBIngredients = () => {
-      axios({
+      }
+      if (value == 'Packaging') {
+        setSearchingSBOpen(true);
+        axios({
           method: "GET",
-          url:"http://4.236.185.213:8000/api/ingredients-report"
+          url:"http://4.236.185.213:8000/api/pack-costtotals/",
+          params: dateRange
         }).then((response)=>{
-          const ingData = response.data
-          setIngredients(ingData);
+          if (response.data.length > 0) setResultsFoundSBOpen(true);
+          else setNoResultsSBOpen(true);
+          setCostTotals(response.data);
         }).catch((error) => {
           if (error.response) {
             console.log(error.response);
@@ -74,7 +59,8 @@ export default function costTotals() {
             console.log(error.response.headers);
             }
         });
-    }
+      }
+    }  
 
     // Get suppliers from database
     // Set supplier variable with supplier data
@@ -94,37 +80,29 @@ export default function costTotals() {
         });
     }
 
-    const getTotals = (row, costTotals) => {
-      if (row.i_id ==='TOTAL'){
-        //setTempSum(totalSum)
-        //setTotalSum(0)
-        //const total = testTotalCost(costTotals)
-        //total = costTotals.reduce((prevValue, currentValue) => prevValue + currentValue.total, 0)
-        return (row.unit_cost * row.in_qty)
-      }
-      else{ 
-        //setTotalSum(totalSum + (row.unit_cost * row.in_qty));
-        return (row.unit_cost * row.in_qty)
-      }
-    }
-
-    const columns = [ 
-      { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true, colSpan: ({ row }) => {
-        if (row.i_id === 'TOTAL') { return 5;} },},
+    // Defines columns to be displayed on Cost Totals Report page
+    const ingColumns = [ 
+      { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
       { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
       { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
       { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
       { field: 'pref_isupplier_id', headerName: 'Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
       { field: 'unit', headerName: 'Measure', width: 90, editable: true },
       { field: 'total', headerName: 'Total', width: 150, groupable: false, valueGetter: ({row}) => (row.unit_cost * row.in_qty), valueFormatter: ({ value }) => currencyFormatter.format(value)},
-      //valueGetter: ({ row }) => {if (row.id === 'TOTAL') {return row.total;} return params.row.unit_cost * params.row.in_qty}
+    ] 
+    
+    // Defines columns to be displayed on Cost Totals Report page
+    const packColumns = [ 
+      { field: 'package_type', headerName: 'Packaging', width: 120, editable: true },
+      { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
+      { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
+      { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
+      { field: 'pref_psupplier_id', headerName: 'Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
+      { field: 'unit', headerName: 'Measure', width: 90, editable: true },
+      { field: 'total', headerName: 'Total', width: 150, groupable: false, valueGetter: ({row}) => (row.unit_cost * row.in_qty), valueFormatter: ({ value }) => currencyFormatter.format(value)},
     ] 
 
-   /* const rows = [
-      ...costTotals,
-      { i_id: 'TOTAL', ingredient_name: 'Total', total: '' },
-    ];*/
-
+    // Defines the file name the DataGrd Export function will use 
     function CustomToolbar() {
       return (
         <GridToolbarContainer>
@@ -137,16 +115,19 @@ export default function costTotals() {
       );
     }
 
+    // Actions to be taken upon a click of the Submit button
     const handleSubmit = (event) => {
       event.preventDefault();
-      getCostTotalsList(dateRange);
+      getCostTotalsList(dateRange, value);
     }
     
+    // Required to get Supplier names 
     useEffect(() => {
       getDBSuppliers();
     }, [])
 
     // The HTML structure of this component
+    if(value === 'Ingredients'){
     return (
         <div>
           <br />
@@ -156,7 +137,7 @@ export default function costTotals() {
           
           <form onSubmit={handleSubmit}>
             {/* <Stack direction='row'> */}
-              <FormControl>
+              <FormControl sx={{ mr: 2 }} >
                 <Typography htmlFor="startDate">Start Date: </Typography>
                 <Input id="startDate" variant='outlined' type='date' value={dateRange.startDate} onChange={(event) => {setDateRange({...dateRange, startDate: event.target.value})}}/>
               </FormControl>
@@ -164,21 +145,30 @@ export default function costTotals() {
                 <Typography htmlFor="endDate">End Date: </Typography>
                 <Input id="endDate" variant='outlined' type='date' value={dateRange.endDate} onChange={(event) => {setDateRange({...dateRange, endDate: event.target.value})}}/>  
               </FormControl>  
+              <FormControl sx={{ ml: 2 }}>
+                <Typography htmlFor="endDate">Select List: </Typography>
+                <RadioGroup row id="select" defaultValue="Ingredients" name="radio-buttons-group" value={value} onChange={handleRadioChange}>
+                  <FormControlLabel value="Ingredients" control={<Radio />} label="Ingredients" />
+                  <FormControlLabel value="Packaging" control={<Radio />} label="Packaging" />
+                </RadioGroup>
+              </FormControl>
             {/* </Stack> */}
-            <FormControl>
+            <FormControl sx={{ ml: 3 }} >
               <Button variant='contained' type='submit'>Submit</Button>
             </FormControl>
+
           </form>
           <Box sx={{height: '70vh'}}>
             <DataGrid
-              columns={columns}
+              columns={ingColumns}
               rows={costTotals}
               getRowId={(row) => row ? row.i_id : 0}
               autoHeight={true}
               components={{Toolbar: CustomToolbar}}
             >
             </DataGrid>
-            <div> Total: {currencyFormatter.format(totalTotal)} </div>
+            <br />
+            <Typography variant='p' sx={{ ml: 2 }}> Total: {currencyFormatter.format(totalTotal)} </Typography>
           </Box>
           <Snackbar
             open={searchingSBOpen}
@@ -200,4 +190,68 @@ export default function costTotals() {
           />
         </div>
     )
+    }
+    else{
+    return (
+      <div>
+        <br />
+        <Typography variant='h5'>Cost Total Report</Typography>
+        <Typography variant='p' sx={{marginBottom: '5%'}}>Select date range to calculate the total costs.</Typography><br />
+        <Typography variant='p' sx={{marginBottom: '5%'}}>Only completed ingredient and packaging entries are included.</Typography><br /><br />
+        
+        <form onSubmit={handleSubmit}>
+          {/* <Stack direction='row'> */}
+            <FormControl sx={{ mr: 2 }} >
+              <Typography htmlFor="startDate">Start Date: </Typography>
+              <Input id="startDate" variant='outlined' type='date' value={dateRange.startDate} onChange={(event) => {setDateRange({...dateRange, startDate: event.target.value})}}/>
+            </FormControl>
+            <FormControl>
+              <Typography htmlFor="endDate">End Date: </Typography>
+              <Input id="endDate" variant='outlined' type='date' value={dateRange.endDate} onChange={(event) => {setDateRange({...dateRange, endDate: event.target.value})}}/>  
+            </FormControl>  
+            <FormControl sx={{ ml: 2 }}>
+              <Typography htmlFor="endDate">Select List: {value}</Typography>
+              <RadioGroup row defaultValue="Ingredients" name="radio-buttons-group" value={value} onChange={handleRadioChange}>
+                <FormControlLabel value="Ingredients" control={<Radio />} label="Ingredients" />
+                <FormControlLabel value="Packaging" control={<Radio />} label="Packaging" />
+              </RadioGroup>
+            </FormControl>
+          {/* </Stack> */}
+          <FormControl sx={{ ml: 3 }} >
+            <Button variant='contained' type='submit'>Submit</Button>
+          </FormControl>
+
+        </form>
+        <Box sx={{height: '70vh'}}>
+          <DataGrid
+            columns={packColumns}
+            rows={costTotals}
+            getRowId={(row) => row ? row.p_id : 0}
+            autoHeight={true}
+            components={{Toolbar: CustomToolbar}}
+          >
+          </DataGrid>
+          <div> Total: {currencyFormatter.format(totalTotal)} </div>
+        </Box>
+        <Snackbar
+          open={searchingSBOpen}
+          autoHideDuration={3000}
+          onClose={() => setSearchingSBOpen(false)}
+          message="Searching..."
+        />
+        <Snackbar
+          open={resultsFoundSBOpen}
+          autoHideDuration={3000}
+          onClose={() => setResultsFoundSBOpen(false)}
+          message="Search Complete!"
+        />
+        <Snackbar
+          open={noResultsSBOpen}
+          autoHideDuration={3000}
+          onClose={() => setNoResultsSBOpen(false)}
+          message="No Results Found."
+        />
+      </div>
+    )
+  }
 }
