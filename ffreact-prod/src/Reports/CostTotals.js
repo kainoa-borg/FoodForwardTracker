@@ -85,10 +85,10 @@ export default function costTotals() {
       { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
       { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
       { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
-      { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
+      { field: 'unit_cost', headerName: 'Unit Cost', align: 'right', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
       { field: 'pref_isupplier_id', headerName: 'Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
       { field: 'unit', headerName: 'Measure', width: 90, editable: true },
-      { field: 'total', headerName: 'Total', width: 150, groupable: false, valueGetter: ({row}) => (row.unit_cost * row.in_qty), valueFormatter: ({ value }) => currencyFormatter.format(value)},
+      { field: 'total', headerName: 'Total', align: 'right', width: 100, groupable: false, valueGetter: ({row}) => (row.unit_cost * row.in_qty), valueFormatter: ({ value }) => currencyFormatter.format(value)},
     ] 
     
     // Defines columns to be displayed on Cost Totals Report page
@@ -96,10 +96,10 @@ export default function costTotals() {
       { field: 'package_type', headerName: 'Packaging', width: 120, editable: true },
       { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
       { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
-      { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
+      { field: 'unit_cost', headerName: 'Unit Cost', align: 'right', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
       { field: 'pref_psupplier_id', headerName: 'Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
       { field: 'unit', headerName: 'Measure', width: 90, editable: true },
-      { field: 'total', headerName: 'Total', width: 150, groupable: false, valueGetter: ({row}) => (row.unit_cost * row.in_qty), valueFormatter: ({ value }) => currencyFormatter.format(value)},
+      { field: 'total', headerName: 'Total', align: 'right', width: 100, groupable: false, valueGetter: ({row}) => (row.unit_cost * row.in_qty), valueFormatter: ({ value }) => currencyFormatter.format(value)},
     ] 
 
     // Defines the file name the DataGrd Export function will use 
@@ -210,7 +210,7 @@ export default function costTotals() {
               <Input id="endDate" variant='outlined' type='date' value={dateRange.endDate} onChange={(event) => {setDateRange({...dateRange, endDate: event.target.value})}}/>  
             </FormControl>  
             <FormControl sx={{ ml: 2 }}>
-              <Typography htmlFor="endDate">Select List: {value}</Typography>
+              <Typography htmlFor="endDate">Select List: </Typography>
               <RadioGroup row defaultValue="Ingredients" name="radio-buttons-group" value={value} onChange={handleRadioChange}>
                 <FormControlLabel value="Ingredients" control={<Radio />} label="Ingredients" />
                 <FormControlLabel value="Packaging" control={<Radio />} label="Packaging" />
