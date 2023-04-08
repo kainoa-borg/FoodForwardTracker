@@ -66,7 +66,7 @@ export default function IngredientReport() {
         { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
         { field: 'storage_type', headerName: 'Category', width: 150, editable: true },
         { field: 'pkg_type', headerName: 'Package Type', width: 120, editable: true },
-        { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
+        { field: 'unit_cost', headerName: 'Unit Cost', align: 'right', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
         { field: 'pref_isupplier_id', headerName: 'Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
         { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
         { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },

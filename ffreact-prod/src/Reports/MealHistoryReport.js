@@ -6,14 +6,13 @@ import { Box, Button, Input, InputLabel, Snackbar, Typography, Stack, FormContro
 // Packaging List Component
 export default function MealHistoryReport() {
     const [mealPlans, setMealPlans] = useState([]);
+    const [snackPlans, setSnackPlans] = useState([]);
     const [dateRange, setDateRange] = useState([]);
     const [searchingSBOpen, setSearchingSBOpen] = useState(false);
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
     const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
-    const [isSnack, setIsSnack] = useState(false);
 
-    const getDBMealHistoryReport = (dateRange) => {
-        console.log(isSnack);
+    const getDBMealHistoryReport = (dateRange=[], isSnack=false) => {
         let apiEndpoint = 'mealhistoryreport';
         if (isSnack) {
           apiEndpoint = 'snackhistoryreport';
@@ -21,13 +20,18 @@ export default function MealHistoryReport() {
         setSearchingSBOpen(true);
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/"+ apiEndpoint +"/",
+            url:"http://localhost:8000/api/"+ apiEndpoint +"/",
             params: dateRange
           }).then((response)=>{
             // console.log(response.data);
             if (response.data.length > 0) setResultsFoundSBOpen(true);
             else setNoResultsSBOpen(true);
-            setMealPlans(response.data);
+            if (isSnack) {
+              setSnackPlans(response.data);
+            }
+            else {
+              setMealPlans(response.data);
+            }
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -37,11 +41,17 @@ export default function MealHistoryReport() {
           });
     }
 
-    const columns = [
-      { field: isSnack ? 'snack_name' : 'meal_name', headerName: 'Meal Name', width: 200 },
+    const mealColumns = [
+      { field: 'meal_name', headerName: 'Meal Name', width: 200 },
       // { field: 'snack_name', headerName: 'Snack Name', width: 120 },
-      { field: 'm_date', headerName: 'Delivery Date', width: 150 },
+      { field: 'm_date', headerName: 'Last Delivery Date', width: 150 },
       //fields = ('m_id', 'm_date', 'meal_r_num', 'snack_r_num', 'meal_servings', 'snack_servings')
+    ]
+    const snackColumns = [
+      // { field: 'meal_name', headerName: 'Meal Name', width: 200 },
+      { field: 'snack_name', headerName: 'Snack Name', width: 200 },
+      { field: 'm_date', headerName: 'Last Delivery Date', width: 150 },
+      // fields = ('m_id', 'm_date', 'meal_r_num', 'snack_r_num', 'meal_servings', 'snack_servings')
     ]
 
     function CustomToolbar() {
@@ -58,22 +68,24 @@ export default function MealHistoryReport() {
 
     const handleSubmit = (event) => {
       event.preventDefault();
-      getDBMealHistoryReport(dateRange);
+      setMealPlans(getDBMealHistoryReport(dateRange, false));
+      setSnackPlans(getDBMealHistoryReport(dateRange, true));
     }
 
     useEffect(() => {
-      getDBMealHistoryReport();
+      setMealPlans(getDBMealHistoryReport(dateRange, false));
+      setSnackPlans(getDBMealHistoryReport(dateRange, true));
     }, []);
 
-    useEffect(() => {
-      getDBMealHistoryReport();
-    }, [isSnack])
+    if (!mealPlans || !snackPlans) {
+      return <>loading...</>
+    }
 
     // The HTML structure of this component
     return (
         <div>
-          <Typography variant='h5'>Meal History Report</Typography>
-          <Typography variant='p' sx={{marginBottom: '5%'}}>Filter meal history with a date range</Typography>
+          <Typography variant='h5'>Meal/Snack History Report</Typography>
+          <Typography variant='p' sx={{marginBottom: '5%'}}>Filter Meal/Snack history with a date range</Typography>
           <form onSubmit={handleSubmit}>
             {/* <Stack direction='row'> */}
               <FormControl>
@@ -89,15 +101,37 @@ export default function MealHistoryReport() {
               <Button variant='contained' type='submit'>Submit</Button>
             </FormControl>
           </form>
-          <Box sx={{height: '70vh'}}>
-            <DataGrid
-              columns={columns}
-              rows={mealPlans}
-              getRowId={(row) => row ? row.m_id : 0}
-              autoHeight={true}
-              components={{Toolbar: CustomToolbar}}
-            >
-            </DataGrid>
+          <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Box sx={{height: '70vh', width: '40vw'}}>
+              <DataGrid
+                columns={mealColumns}
+                rows={mealPlans}
+                getRowId={(row) => row ? row.m_id : 0}
+                autoHeight={true}
+                components={{Toolbar: CustomToolbar}}
+                initialState={{
+                  sorting: {
+                    sortModel: [{ field: 'm_date', sort: 'desc' }],
+                  },
+                }}
+              >
+              </DataGrid>
+            </Box>
+            <Box sx={{height: '70vh', width: '40vw'}}>
+              <DataGrid
+                columns={snackColumns}
+                rows={snackPlans}
+                getRowId={(row) => row ? row.m_id : 0}
+                autoHeight={true}
+                components={{Toolbar: CustomToolbar}}
+                initialState={{
+                  sorting: {
+                    sortModel: [{ field: 'm_date', sort: 'desc' }],
+                  },
+                }}
+              >
+              </DataGrid>
+            </Box>
           </Box>
           <Snackbar
             open={searchingSBOpen}

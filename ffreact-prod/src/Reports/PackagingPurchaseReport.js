@@ -32,7 +32,7 @@ export default function PurchasingReport() {
     const getDBPackPurchaseList = () => {
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/pack-purchase-report/",
+            url:"http://4.236.185.213:8000/api/pack-purchase-report/",
             params: dateRange
           }).then((response)=>{
             if (response.data.length > 0) setResultsFoundSBOpen(true);
@@ -105,7 +105,7 @@ export default function PurchasingReport() {
       { field: 'meal_name', headerName: 'Meal Name', width: 200 },
       { field: 'snack_name', headerName: 'Snack Name', width: 120 },
       { field: 'package_type', headerName: 'Packaging Type', width: 150, editable: true },
-      { field: 'unit_cost', headerName: 'Unit Cost', width: 90, valueFormatter: ({ value }) => currencyFormatter.format(value), editable: true },
+      { field: 'unit_cost', headerName: 'Unit Cost', align: 'right', width: 90, valueFormatter: ({ value }) => currencyFormatter.format(value), editable: true },
 
      ]
 
