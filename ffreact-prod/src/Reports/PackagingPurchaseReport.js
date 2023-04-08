@@ -32,7 +32,7 @@ export default function PurchasingReport() {
     const getDBPackPurchaseList = () => {
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/pack-purchase-report/",
+            url:"http://4.236.185.213:8000/api/pack-purchase-report/",
             params: dateRange
           }).then((response)=>{
             if (response.data.length > 0) setResultsFoundSBOpen(true);

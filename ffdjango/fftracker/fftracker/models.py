@@ -229,8 +229,8 @@ class Ingredients(models.Model):
 
 
 class KitPackaging(models.Model):
-    kp_ip = models.IntegerField(primary_key=True)
-    pkg_type = models.CharField(max_length=50)
+    kp_id = models.IntegerField(primary_key=True)
+    kp_p_id = models.CharField(max_length=50)
     qty = models.SmallIntegerField()
     kp_kit = models.ForeignKey('Kits', models.CASCADE)
 
