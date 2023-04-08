@@ -1,16 +1,14 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
-import { DataGrid } from '@mui/x-data-grid'
-import { ToolBar, GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid';
-import { Box, Button, Input, InputLabel, Snackbar, Typography, Stack, FormControl} from '@mui/material';
+import { DataGrid, GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid'
+import { Box, Button, Input, Snackbar, Typography, Stack, FormControl} from '@mui/material';
 
 
 // Ingredients Purchasing List Component
 export default function PurchasingReport() {
     const [ingredients, setIngredients] = useState(undefined);
     const [suppliers, setSuppliers] = useState(undefined);
-    const [ingPurchasing, setIngPurchasing] = useState(undefined);
-    const [mealPlans, setMealPlans] = useState([]);
+    const [ingPurchasing, setIngPurchasing] = useState([]);
     const [dateRange, setDateRange] = useState([]);
     const [searchingSBOpen, setSearchingSBOpen] = useState(false);
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
@@ -26,23 +24,24 @@ export default function PurchasingReport() {
         getDBSuppliers();
     }, []);
 
-    const getDBIngPurchaseList = () => {
-        axios({
-            method: "GET",
-            url:"http://4.236.185.213:8000/api/ing-purchase-report/",
-            params: dateRange
-          }).then((response)=>{
-            if (response.data.length > 0) setResultsFoundSBOpen(true);
-            else setNoResultsSBOpen(true);
-            
-            setIngPurchasing(response.data);
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
+    const getDBIngPurchaseList = (dateRange) => {
+      setSearchingSBOpen(true);
+      axios({
+          method: "GET",
+          url:"http://localhost:8000/api/ing-purchase-report/",
+          params: dateRange
+        }).then((response)=>{
+          // console.log(response.data);
+          if (response.data.length > 0) setResultsFoundSBOpen(true);
+          else setNoResultsSBOpen(true);
+          setIngPurchasing(response.data);
+        }).catch((error) => {
+          if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
     }
 
     const getDBIngredients = () => {
@@ -79,40 +78,17 @@ export default function PurchasingReport() {
           });
     }
 
-    const getDBMealPlanReport = (dateRange) => {
-        setSearchingSBOpen(true);
-        axios({
-            method: "GET",
-            url:"http://4.236.185.213:8000/api/mealplanreport/",
-            params: dateRange
-          }).then((response)=>{
-            // console.log(response.data);
-            if (response.data.length > 0) setResultsFoundSBOpen(true);
-            else setNoResultsSBOpen(true);
-            setMealPlans(response.data);
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error.response);
-              console.log(error.response.status);
-              console.log(error.response.headers);
-              }
-          });
-    }
-
     const columns = [
         { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
-        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
-        { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
-        { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
-        { field: 'pref_isupplier_id', headerName: 'Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
+        { field: 'm_date', headerName: 'Date Prepared', width: 150 },
+        { field: 'meal_name', headerName: 'Meal Name', width: 200 },
+        { field: 'snack_name', headerName: 'Snack Name', width: 120 },
         { field: 'unit', headerName: 'Measure', width: 90, editable: true },
-//        { field: 'total', headerName: 'Total', width: 90, editable: true },
+        { field: 'total_need', headerName: 'Total Required', width: 140, type: 'number', /*valueGetter: ({row}) => (row.unit_cost * row.in_qty),*/ valueFormatter: ({ value }) => currencyFormatter.format(value)},
         { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
+        { field: 'to_purchase', headerName: 'To Purchase', width: 140, type: 'number', editable: false},
+        { field: 'pref_isupplier_id', headerName: 'Preferered Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
     ]
-
-    if (ingredients === undefined) {
-        return (<>loading</>);
-    }
 
     function CustomToolbar() {
       return (
@@ -129,7 +105,7 @@ export default function PurchasingReport() {
   const handleSubmit = (event) => {
     event.preventDefault();
     getDBIngPurchaseList(dateRange);
-    getDBMealPlanReport(dateRange);
+    //getDBMealPlanReport(dateRange);
   }
 
     // The HTML structure of this component
@@ -137,7 +113,7 @@ export default function PurchasingReport() {
         <div>
           <br />
           <Typography variant='h5'>Ingredient Purchasing Report</Typography>
-          <Typography variant='p' sx={{marginBottom: '5%'}}>Select for meals planned within a start and end date.</Typography><br /><br />
+          <Typography variant='p' sx={{marginBottom: '5%'}}>Select a date rage. The ingredients required to make all meals and snacks within that time will be calculated below.</Typography><br /><br />
           <form onSubmit={handleSubmit}>
             {/* <Stack direction='row'> */}
               <FormControl sx={{ mr: 3 }}>
@@ -157,9 +133,9 @@ export default function PurchasingReport() {
         {/* Show a row for each ingredient in ingredients.*/}
         <DataGrid
           columns={columns}
-          rows={ingredients}
+          rows={ingPurchasing}
           components = {{Toolbar:CustomToolbar}}
-          getRowId={(row) => row.i_id}
+          getRowId={(row) => row.m_id}
           autoHeight = {true}
         >
         </DataGrid>
