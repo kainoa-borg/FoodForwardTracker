@@ -113,6 +113,15 @@ export default function PurchasingReport() {
         return (<>loading</>);
     }
 
+    // const rows = [
+    //   { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
+    //   { field: 'm_date', headerName: 'Date Last Prepared', width: 150 },
+    //   { field: 'meal_name', headerName: 'Meal Name', width: 200 },
+    //   { field: 'snack_name', headerName: 'Snack Name', width: 120 },
+    //   { field: 'package_type', headerName: 'Packaging Type', width: 150, editable: true },
+    //   { field: 'unit_cost', headerName: 'Unit Cost', width: 90, valueFormatter: ({ value }) => currencyFormatter.format(value), editable: true },
+    // ]
+
     function CustomToolbar() {
       return (
         <GridToolbarContainer>
