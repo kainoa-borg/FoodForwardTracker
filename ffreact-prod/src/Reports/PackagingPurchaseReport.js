@@ -109,10 +109,6 @@ export default function PurchasingReport() {
 
      ]
 
-    if (packaging === undefined) {
-        return (<>loading</>);
-    }
-
     // const rows = [
     //   { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
     //   { field: 'm_date', headerName: 'Date Last Prepared', width: 150 },
