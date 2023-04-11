@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
 import { DataGrid, GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid'
-import { Box, Button, Input, Snackbar, Typography, Stack, FormControl} from '@mui/material';
+import { Box, Button, Input, Radio, RadioGroup, Snackbar, Typography, Stack, FormControl, FormControlLabel} from '@mui/material';
 
 
 // Ingredients Purchasing List Component
@@ -13,22 +13,25 @@ export default function PurchasingReport() {
     const [searchingSBOpen, setSearchingSBOpen] = useState(false);
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
     const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
-    
+    const [value, setValue] = useState('Meals');
+    const handleRadioChange = (event) => {setValue(event.target.value);};
+
     const currencyFormatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
     });
 
-    useEffect(() => {
+  /*  useEffect(() => {
         getDBIngredients();
         getDBSuppliers();
-    }, []);
+    }, []); */
 
-    const getDBIngPurchaseList = (dateRange) => {
-      setSearchingSBOpen(true);
-      axios({
+    const getDBIngPurchaseList = (dateRange, value) => {
+      if (value == 'Meals'){
+        setSearchingSBOpen(true);
+        axios({
           method: "GET",
-          url:"http://localhost:8000/api/ing-purchase-report/",
+          url:"http://localhost:8000/api/meals-purchase-report/",
           params: dateRange
         }).then((response)=>{
           // console.log(response.data);
@@ -42,9 +45,29 @@ export default function PurchasingReport() {
             console.log(error.response.headers);
             }
         });
+      }
+      if (value == 'Snacks'){
+        setSearchingSBOpen(true);
+        axios({
+          method: "GET",
+          url:"http://localhost:8000/api/snacks-purchase-report/",
+          params: dateRange
+        }).then((response)=>{
+          // console.log(response.data);
+          if (response.data.length > 0) setResultsFoundSBOpen(true);
+          else setNoResultsSBOpen(true);
+          setIngPurchasing(response.data);
+        }).catch((error) => {
+          if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
+      }
     }
 
-    const getDBIngredients = () => {
+  /*  const getDBIngredients = () => {
         axios({
             method: "GET",
             url:"http://4.236.185.213:8000/api/ingredients-report"
@@ -58,11 +81,11 @@ export default function PurchasingReport() {
               console.log(error.response.headers);
               }
           });
-    }
+    } */
 
     // Get suppliers from database
     // Set supplier variable with supplier data
-    const getDBSuppliers = () => {
+  /*  const getDBSuppliers = () => {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
@@ -76,15 +99,14 @@ export default function PurchasingReport() {
               console.log(error.response.headers);
               }
           });
-    }
+    } */
 
     const columns = [
         { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
         { field: 'm_date', headerName: 'Date Prepared', width: 150 },
-        { field: 'meal_name', headerName: 'Meal Name', width: 200 },
-        { field: 'snack_name', headerName: 'Snack Name', width: 120 },
+        { field: 'name', headerName: 'Meal Name', width: 120 },
         { field: 'unit', headerName: 'Measure', width: 90, editable: true },
-        { field: 'total_need', headerName: 'Total Required', width: 140, type: 'number', /*valueGetter: ({row}) => (row.unit_cost * row.in_qty),*/ valueFormatter: ({ value }) => currencyFormatter.format(value)},
+        { field: 'total_need', headerName: 'Total Required', width: 140, type: 'number', /*valueGetter: ({row}) => (row.unit_cost * row.in_qty),*/ },
         { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
         { field: 'to_purchase', headerName: 'To Purchase', width: 140, type: 'number', editable: false},
         { field: 'pref_isupplier_id', headerName: 'Preferered Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
@@ -104,7 +126,7 @@ export default function PurchasingReport() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    getDBIngPurchaseList(dateRange);
+    getDBIngPurchaseList(dateRange, value);
     //getDBMealPlanReport(dateRange);
   }
 
@@ -124,6 +146,13 @@ export default function PurchasingReport() {
                 <Typography htmlFor="endDate">End Date: </Typography>
                 <Input id="endDate" variant='outlined' type='date' value={dateRange.endDate} onChange={(event) => {setDateRange({...dateRange, endDate: event.target.value})}}/>  
               </FormControl>  
+              <FormControl sx={{ ml: 2 }}>
+                <Typography htmlFor="endDate">Select: </Typography>
+                <RadioGroup row id="select" defaultValue="Meals" name="radio-buttons-group" value={value} onChange={handleRadioChange}>
+                  <FormControlLabel value="Meals" control={<Radio />} label="Meals" />
+                  <FormControlLabel value="Snacks" control={<Radio />} label="Snacks" />
+                </RadioGroup>
+              </FormControl>
             {/* </Stack> */}
             <FormControl sx={{ ml: 5 }}>
               <Button variant='contained' type='submit'>Submit</Button>
