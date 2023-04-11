@@ -55,6 +55,10 @@ export default function NewModularDatagrid(props) {
     const [updateSBOpen, setUpdateSBOpen] = useState(false);
     // Boolean 'request success' message state
     const [updateDoneSBOpen, setUpdateDoneSBOpen] = useState(false);
+    // Boolean error popup state
+    const [errorSBOpen, setErrorSBOpen] = useState(false);
+    // Error message state
+    const [errorMessage, setErrorMessage] = useState();
     
     // Struct of row modes (view/edit)
     const [rowModesModel, setRowModesModel] = useState({});
@@ -139,6 +143,7 @@ export default function NewModularDatagrid(props) {
             setUpdateDoneSBOpen(true);
             }).catch((error) => {
             if (error.response) {
+                handleErrorMessage("Save Failed!", error)
                 console.log(error.response);
                 console.log(error.response.status);
                 console.log(error.response.headers);
@@ -158,6 +163,7 @@ export default function NewModularDatagrid(props) {
         setTableData(response.data);
         }).catch((error) => {
         if (error.response) {
+            handleErrorMessage("Couldn't get data.", error)
             console.log(error.response);
             console.log(error.response.status);
             console.log(error.response.headers);
@@ -170,6 +176,29 @@ export default function NewModularDatagrid(props) {
     useEffect(() => {
         getDBData();
     }, []);
+
+    const handleErrorMessage = (message, error) => {
+        if (error.response.status === 400) {
+            setErrorMessage(message + ' ' + 'Please check inputs and try again.');
+        }
+        else if (error.response.status === 500) {
+            setErrorMessage(message + ' ' + 'System error. Please try again or contact support');
+        }
+        else {
+            setErrorMessage(message + ' ' + error.response.status + ' ' + error.response.statusText);
+        }
+    }
+    useEffect(() => {
+        if (errorMessage)
+            setErrorSBOpen(true);
+    }, [errorMessage])
+
+    useEffect(() => {
+        if (errorSBOpen === false) {
+            getDBData();
+            setErrorMessage();
+        }
+    }, [errorSBOpen])
 
     // Wait until table data is loaded to render datagrid
     if (tableData === undefined) {
@@ -340,6 +369,12 @@ export default function NewModularDatagrid(props) {
                     autoHideDuration={3000}
                     onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
                     message="Changes saved!"
+                />
+                <Snackbar
+                    open={errorSBOpen}
+                    autoHideDuration={3000}
+                    onClose={(event, reason) => handleSBClose(event, reason, setErrorSBOpen)}
+                    message={errorMessage}
                 />
             </Box>
         </Fragment>
