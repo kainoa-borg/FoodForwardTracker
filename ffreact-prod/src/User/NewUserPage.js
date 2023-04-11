@@ -102,7 +102,7 @@ const NewUserPage = (props) => {
                         value = {user.email} 
                         onChange = {createNewUser}
                         />
-                        <Button color='lightGreen' variant='contained' type='Submit' onClick={sendCreateRequest}>
+                        <Button color='lightGreen' variant='contained' type='Submit' onClick={handleCreateUser}>
                             Submit
                         </Button>
                     </Stack>            

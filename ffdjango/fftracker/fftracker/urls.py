@@ -22,16 +22,16 @@ from rest_framework import routers
 from .MealRecipeViews import *
 from .AccountCreationViews import AccountCreateView
 from .CalculationsView import CalculationsView
-from .CostTotalView import CostTotalView
+from .CostTotalView import IngCostTotalView, PackCostTotalView
 from .HouseholdViews import HouseholdsView, HouseholdsWithAllergies
 from .IngredientViews import IngredientInvView
-from .IngPurchaseViews import IPLView
+from .IngPurchaseViews import IPMealView, IPSnacksView
 from .MenuView import MenuView
 from .MealPlanViews import MealPlansView
 from .MealPlanReportViews import MealPlanReportView, MealHistoryReportView, SnackHistoryReportView
 from .MealView import MealView
 from .PackagingViews import PackagingInvView
-from .PacPurchaseList import PPLView
+from .PacPurchaseViews import PPLView
 from .RecipeListViews import RecipeListView
 from .ServingCalculationViews import ServingCalculationViews
 from .StationViews import StationsView
@@ -45,13 +45,15 @@ from .UserView import UserView
 
 router = routers.DefaultRouter()
 router.register(r'calculations', CalculationsView, basename='calculations')
-router.register(r'costtotals', CostTotalView, basename='costtotals')
+router.register(r'ing-costtotals', IngCostTotalView, basename='ing-costtotals')
+router.register(r'pack-costtotals', PackCostTotalView, basename='pack-costtotals')
 router.register(r'create-account', AccountCreateView, basename='create-account')
 router.register(r'households', HouseholdsWithAllergies, basename='households')
 router.register(r'households-report', HouseholdsView, basename='households-report')
 router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient-inventory')
 router.register(r'ingredients-report', IngredientInvView, basename='ingredients-report')
-router.register(r'ing-purchase-report', IPLView, basename='ing-purchase-report')
+router.register(r'meals-purchase-report', IPMealView, basename='meals-purchase-report')
+router.register(r'snacks-purchase-report', IPSnacksView, basename='snacks-purchase-report')
 router.register(r'packaging', PackagingInvView, basename='packaging')
 router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
 router.register(r'packaging-report', PackagingInvView, basename='packaging-report')
@@ -83,13 +85,15 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api/create-account', AccountCreateView.as_view({'get': 'retrieve'})),
+    path('api/get-ing-costtotals', IngCostTotalView.as_view({'get': 'list', 'get': 'retrieve'})),
+    path('api/get-pack-costtotals', PackCostTotalView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/update-household/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve', 'patch': 'update'})),
     path('api/get-households', HouseholdsView.as_view({'get': 'list', 'post': 'create'})),
     path('api/get-households/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve'})),
     path('api/get-ingredient', IngredientInvView.as_view({'get': 'list', 'get': 'retrieve'})),
-    path('api/get-ing-purchase-report', IPLView.as_view({'get': 'list', 'get': 'retrieve'})),
+    path('api/get-meals-purchase-report', IPMealView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-packaging', PackagingInvView.as_view({'get': 'list', 'get': 'retrieve'})),
-    path('api/get-pack-purchase-list', PPLView.as_view({'get': 'list', 'get': 'retrieve'})),
+    path('api/get-pack-purchase-report', PPLView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-users', UserView.as_view({'get': 'retrieve'})),
     path('api/get-menu', MenuView.as_view({'get': 'retrieve'})),
     path('api/get-meals', MealView.as_view({'get': 'list', 'get': 'retrieve'})),

@@ -3,7 +3,7 @@ import axios from 'axios'
 // import IngredientForm from './IngredientForm.js'
 // import IngredientRow from './IngredientRow.js'
 // import EditableIngredientRow from './EditableIngredientRow'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import { GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid';
 import { FitScreen, Toolbar } from '@mui/icons-material';
@@ -66,7 +66,7 @@ export default function IngredientReport() {
         { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
         { field: 'storage_type', headerName: 'Category', width: 150, editable: true },
         { field: 'pkg_type', headerName: 'Package Type', width: 120, editable: true },
-        { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
+        { field: 'unit_cost', headerName: 'Unit Cost', align: 'right', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
         { field: 'pref_isupplier_id', headerName: 'Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
         { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
         { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
@@ -97,7 +97,9 @@ export default function IngredientReport() {
 
     // The HTML structure of this component
     return (
+      
         <Box sx={{height: '80%'}}>
+          <Typography variant='h5'>Ingredients Report</Typography>
             {/* Show a row for each ingredient in ingredientts.*/}
             <DataGrid
                 columns={columns}

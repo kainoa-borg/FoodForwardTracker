@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
 import ReportsPage from './ReportsPage.js'
-import { Box, Button, setAddFormOpen} from '@mui/material'
+import { Box, Button, setAddFormOpen, Typography} from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import { ToolBar, GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid';
 
@@ -67,6 +67,7 @@ export default function PackagingReport() {
     // The HTML structure of this component
     return (
         <Box sx={{height: '75%'}}>
+            <Typography variant='h5'>Packaging Report</Typography>
             {/* Show a row for each ingredient in packaging.*/}
             <DataGrid
                 columns={columns}

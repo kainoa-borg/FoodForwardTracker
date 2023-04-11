@@ -25,7 +25,6 @@ export default function IngredientPage() {
     // Struct of option definitions for Supplier dropdown
     const [supplierOptions, setSupplierOptions] = useState();
 
-
     // Get suppliers from database
     // Set supplier variable with supplier data
     const getDBSuppliers = () => {
@@ -89,7 +88,7 @@ export default function IngredientPage() {
         { field: 'pkg_type', headerName: 'Package Type', width: 120, editable: true, renderEditCell: (params) => <ModularSelect {...params} options={ingredients} searchField={'pkg_type'} value={params.value}/> },
         { field: 'unit', headerName: 'Measure', width: 100, editable: true, renderEditCell: (params) => <ModularSelect options={ingredients} searchField={'unit'} value={params.value}/>,
             renderEditCell: (params) => (<GridEditInputCell {...params} inputProps={{ min: 0,}}/>) },
-        { field: 'unit_cost', headerName: 'Unit Cost', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value),
+        { field: 'unit_cost', headerName: 'Unit Cost', align: 'right', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value),
             renderEditCell: (params) => (<GridEditInputCell {...params} inputProps={{ min: 0,}}/>)},
         { field: 'pref_isupplier_id', headerName: 'Supplier', type: 'singleSelect', valueOptions: supplierOptions, width: 170, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
         { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true, valueFormatter: params => moment(params.value).format('MM/DD/YYYY'), valueParser: value => moment(value).format("YYYY-MM-DD") },
