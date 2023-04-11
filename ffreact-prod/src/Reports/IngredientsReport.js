@@ -3,7 +3,7 @@ import axios from 'axios'
 // import IngredientForm from './IngredientForm.js'
 // import IngredientRow from './IngredientRow.js'
 // import EditableIngredientRow from './EditableIngredientRow'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import { GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid';
 import { FitScreen, Toolbar } from '@mui/icons-material';
@@ -97,7 +97,9 @@ export default function IngredientReport() {
 
     // The HTML structure of this component
     return (
+      
         <Box sx={{height: '80%'}}>
+          <Typography variant='h5'>Ingredients Report</Typography>
             {/* Show a row for each ingredient in ingredientts.*/}
             <DataGrid
                 columns={columns}

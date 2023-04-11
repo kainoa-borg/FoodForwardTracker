@@ -5,6 +5,7 @@ import ReusableTable from '../ReusableTable.js'
 // Packaging List Component
 export default function PackagingReturns() {
     const [packaging, setPackaging] = useState(undefined);
+    
 
     useEffect(() => {
         getDBPackaging();
