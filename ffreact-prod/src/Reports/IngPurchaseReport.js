@@ -21,17 +21,16 @@ export default function PurchasingReport() {
         currency: 'USD',
     });
 
-  /*  useEffect(() => {
-        getDBIngredients();
+    useEffect(() => {
+        //getDBIngredients();
         getDBSuppliers();
-    }, []); */
+    }, []); 
 
     const getDBIngPurchaseList = (dateRange, value) => {
-      if (value == 'Meals'){
         setSearchingSBOpen(true);
         axios({
           method: "GET",
-          url:"http://localhost:8000/api/meals-purchase-report/",
+          url:"http://localhost:8000/api/ing-purchase-report/",
           params: dateRange
         }).then((response)=>{
           // console.log(response.data);
@@ -46,17 +45,16 @@ export default function PurchasingReport() {
             }
         });
       }
-      if (value == 'Snacks'){
-        setSearchingSBOpen(true);
-        axios({
+
+        // Get suppliers from database
+    // Set supplier variable with supplier data
+    const getDBSuppliers = () => {
+      console.log("MAKING REQUEST TO DJANGO")
+      axios({
           method: "GET",
-          url:"http://localhost:8000/api/snacks-purchase-report/",
-          params: dateRange
+          url:"http://4.236.185.213:8000/api/suppliers"
         }).then((response)=>{
-          // console.log(response.data);
-          if (response.data.length > 0) setResultsFoundSBOpen(true);
-          else setNoResultsSBOpen(true);
-          setIngPurchasing(response.data);
+          setSuppliers(response.data);
         }).catch((error) => {
           if (error.response) {
             console.log(error.response);
@@ -64,7 +62,6 @@ export default function PurchasingReport() {
             console.log(error.response.headers);
             }
         });
-      }
     }
 
   /*  const getDBIngredients = () => {
@@ -104,12 +101,12 @@ export default function PurchasingReport() {
     const columns = [
         { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
         { field: 'm_date', headerName: 'Date Prepared', width: 150 },
-        { field: 'name', headerName: 'Meal Name', width: 120 },
+        { field: 'ms_name', headerName: 'Meal Name', width: 120 },
         { field: 'unit', headerName: 'Measure', width: 90, editable: true },
-        { field: 'total_need', headerName: 'Total Required', width: 140, type: 'number', /*valueGetter: ({row}) => (row.unit_cost * row.in_qty),*/ },
+        { field: 'total_required', headerName: 'Total Required', width: 140, type: 'number', /*valueGetter: ({row}) => (row.unit_cost * row.in_qty),*/ },
         { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
         { field: 'to_purchase', headerName: 'To Purchase', width: 140, type: 'number', editable: false},
-        { field: 'pref_isupplier_id', headerName: 'Preferered Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
+      //  { field: 'pref_isupplier_id', headerName: 'Preferered Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
     ]
 
     function CustomToolbar() {
@@ -164,7 +161,7 @@ export default function PurchasingReport() {
           columns={columns}
           rows={ingPurchasing}
           components = {{Toolbar:CustomToolbar}}
-          getRowId={(row) => row.m_id}
+          getRowId={(row) => row.id}
           autoHeight = {true}
         >
         </DataGrid>
