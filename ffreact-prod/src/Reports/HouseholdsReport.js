@@ -75,7 +75,7 @@ export default function HouseholdReport() {
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <Box sx={{height: '35%'}}>
             {/* Show a row for each ingredient in packaging.*/}
-            <Typography variant='h5'>Household Report</Typography>
+            <Typography variant='h5'>Clients Report</Typography>
             <DataGrid
                 columns={columns}
                 rows={households}

@@ -141,6 +141,10 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     const [updateSBOpen, setUpdateSBOpen] = useState(false);
     // Boolean 'request success' message state
     const [updateDoneSBOpen, setUpdateDoneSBOpen] = useState(false);
+    // Boolean error popup state
+    const [errorSBOpen, setErrorSBOpen] = useState(false);
+    // Error message
+    const [errorMessage, setErrorMessage] = useState();
 
     const [imageFile, setImageFile] = useState();
     const [cardFile, setCardFile] = useState();
@@ -153,10 +157,6 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
 
     const [deleteImage, setDeleteImage] = useState(false);
     const [deleteCard, setDeleteCard] = useState(false);
-
-    const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteImageAnchor: null, confirmDeleteCardAnchor: null});
-    const [confirmDeleteImageOpen, setConfirmDeleteImageOpen] = useState(false);
-    const [confirmDeleteCardOpen, setConfirmDeleteCardOpen] = useState(false);
 
     const handleCloseClick = () => {
         // Return to recipe list when close is clicked
@@ -313,6 +313,15 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         setOpen(false);
     }
 
+    const handleErrorMessage = (error) => {
+        setErrorMessage('Save failed! ' + error.response.statusText);
+    }
+    useEffect(() => {
+        console.log(errorMessage);
+        if (errorMessage)
+            setErrorSBOpen(true);
+    }, [errorMessage])
+
     const handleSaveClick = () => {
         // console.log(recipeData);
         const r_data = {...recipeData, r_name: nameField.current.value, r_ingredients: ingredientRows, r_packaging: packagingRows, r_stations: stationRows, m_s: m_s}
@@ -347,6 +356,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 // getDBRecipeData(recipeData.r_num);
             }).catch((error) => {
             if (error.response) {
+                handleErrorMessage(error);
                 console.log(error.response);
                 console.log(error.response.status);
                 console.log(error.response.headers);
@@ -370,6 +380,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 // getDBRecipeData(recipeData.r_num);
             }).catch((error) => {
             if (error.response) {
+                handleErrorMessage(error);
                 console.log(error.response);
                 console.log(error.response.status);
                 console.log(error.response.headers);
@@ -543,6 +554,12 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 autoHideDuration={3000}
                 onClose={(event, reason) => handleSBClose(event, reason, setUpdateDoneSBOpen)}
                 message="Changes saved!"
+            />
+            <Snackbar
+                open={errorSBOpen}
+                autoHideDuration={3000}
+                onClose={(event, reason) => handleSBClose(event, reason, setErrorSBOpen)}
+                message={errorMessage}
             />
             </form>
             </Box>
