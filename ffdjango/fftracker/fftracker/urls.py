@@ -25,7 +25,7 @@ from .CalculationsView import CalculationsView
 from .CostTotalView import IngCostTotalView, PackCostTotalView
 from .HouseholdViews import HouseholdsView, HouseholdsWithAllergies
 from .IngredientViews import IngredientInvView
-from .IngPurchaseViews import IPMealView, IPSnacksView
+from .IngPurchaseViews import IPLView #MealView, IPSnacksView
 from .MenuView import MenuView
 from .MealPlanViews import MealPlansView
 from .MealPlanReportViews import MealPlanReportView, MealHistoryReportView, SnackHistoryReportView
@@ -52,8 +52,8 @@ router.register(r'households', HouseholdsWithAllergies, basename='households')
 router.register(r'households-report', HouseholdsView, basename='households-report')
 router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient-inventory')
 router.register(r'ingredients-report', IngredientInvView, basename='ingredients-report')
-router.register(r'meals-purchase-report', IPMealView, basename='meals-purchase-report')
-router.register(r'snacks-purchase-report', IPSnacksView, basename='snacks-purchase-report')
+router.register(r'ing-purchase-report', IPLView, basename='ing-purchase-report')
+#router.register(r'snacks-purchase-report', IPSnacksView, basename='snacks-purchase-report')
 router.register(r'packaging', PackagingInvView, basename='packaging')
 router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
 router.register(r'packaging-report', PackagingInvView, basename='packaging-report')
@@ -91,7 +91,7 @@ urlpatterns = [
     path('api/get-households', HouseholdsView.as_view({'get': 'list', 'post': 'create'})),
     path('api/get-households/<str:pk>/', HouseholdsView.as_view({'get': 'retrieve'})),
     path('api/get-ingredient', IngredientInvView.as_view({'get': 'list', 'get': 'retrieve'})),
-    path('api/get-meals-purchase-report', IPMealView.as_view({'get': 'list', 'get': 'retrieve'})),
+    path('api/get-ing-purchase-report', IPLView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-packaging', PackagingInvView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-pack-purchase-report', PPLView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/get-users', UserView.as_view({'get': 'retrieve'})),
