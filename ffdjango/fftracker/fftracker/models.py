@@ -162,7 +162,7 @@ class HhKits(models.Model):
 
 
 class HhMealPlans(models.Model):
-    hh_m_id = models.SmallIntegerField(primary_key=True)
+    hh_m_id = models.SmallAutoField(primary_key=True)
     meal = models.ForeignKey('MealPlans', models.CASCADE)
     meal_hh_id = models.ForeignKey('Households', models.CASCADE, related_name='hh_meal', db_column='meal_hh_id')
 
