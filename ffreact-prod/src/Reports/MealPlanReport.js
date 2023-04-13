@@ -10,12 +10,16 @@ export default function MealPlanReport() {
     const [searchingSBOpen, setSearchingSBOpen] = useState(false);
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
     const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
+    const [calcErrorMsg, setCalcErrorMsg] = useState();
+    const [calcSBOpen, setCalcSBOpen] = useState(false);
+    const [calcSuccessSBOpen, setCalcSuccessSBOpen] = useState(false);
+    const [calcErrorSBOpen, setCalcErrorSBOpen] = useState(false);
 
     const getDBMealPlanReport = (dateRange) => {
         setSearchingSBOpen(true);
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/mealplanreport/",
+            url:"http://4.236.185.213:8000/api/mealplanreport/",
             params: dateRange
           }).then((response)=>{
             // console.log(response.data);
@@ -33,14 +37,17 @@ export default function MealPlanReport() {
     }
 
     const handleCalculateClick = (pk) => {
+      setCalcSBOpen(true);
       axios({
         method: "GET",
-        url:"http://localhost:8000/api/mealplanreport/" + pk + '/',
+        url:"http://4.236.185.213:8000/api/mealplanreport/" + pk + '/',
       }).then((response)=>{
         console.log(response.data);
         getDBMealPlanReport(dateRange);
+        setCalcSuccessSBOpen(true);
       }).catch((error) => {
         if (error.response) {
+          setCalcErrorMsg(error.response.data);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
@@ -76,6 +83,13 @@ export default function MealPlanReport() {
       event.preventDefault();
       getDBMealPlanReport(dateRange);
     }
+
+    useEffect(() => {
+      if (calcErrorMsg != undefined) {
+        console.log(calcErrorMsg);
+        setCalcErrorSBOpen(true);
+      }
+    }, [calcErrorMsg])
 
     // The HTML structure of this component
     return (
@@ -118,6 +132,24 @@ export default function MealPlanReport() {
             autoHideDuration={3000}
             onClose={() => setResultsFoundSBOpen(false)}
             message="Search Complete!"
+          />
+          <Snackbar
+            open={calcSBOpen}
+            autoHideDuration={3000}
+            onClose={() => setCalcSBOpen(false)}
+            message="Making meal prep calculations..."
+          />
+          <Snackbar
+            open={calcSuccessSBOpen}
+            autoHideDuration={3000}
+            onClose={() => setCalcSuccessSBOpen(false)}
+            message="Meal prep calculations complete!"
+          />
+          <Snackbar
+            open={calcErrorSBOpen}
+            autoHideDuration={3000}
+            onClose={() => {setCalcErrorMsg(); setCalcErrorSBOpen(false)}}
+            message={calcErrorMsg}
           />
           <Snackbar
             open={noResultsSBOpen}
