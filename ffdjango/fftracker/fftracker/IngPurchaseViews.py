@@ -52,7 +52,7 @@ class SnackSerializer(ModelSerializer):
 class IPLSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     m_date = serializers.CharField()
-    ms_name = serializers.CharField()
+    name = serializers.CharField()
     ingredient_name = serializers.CharField()
     unit = serializers.CharField()
     amt = serializers.IntegerField()
@@ -75,11 +75,12 @@ class IPLView(ViewSet):
         count = 0
         id = 0
         m_date = ''
+        r_num = 0
         m_r_num = 0
         s_r_num = 0
         meal_servings = 0
         snack_servings = 0
-        ms_name = ''
+        name = ''
         meal_name = ''
         snack_name = ''
         ingredient_name = ''
@@ -101,6 +102,8 @@ class IPLView(ViewSet):
         recipeset = Recipes.objects.all()
         for meals in MealsQueryset:
             m_r_num = meals.meal_r_num
+            meal_name = meals.meal_r_num.r_name
+            snack_name = meals.snack_r_num.r_name
             s_r_num = meals.snack_r_num
             m_date = meals.m_date
             meal_servings = meals.meal_servings
@@ -109,14 +112,11 @@ class IPLView(ViewSet):
             snackRecipeIngs = RecipeIngredients.objects.filter(ri_recipe_num=s_r_num)
                  
             for meal in mealRecipeIngs:
+                name = meal_name
                 ingredient_name = meal.ingredient_name
                 amt = meal.amt
                 unit = meal.unit
                 total_required = amt * meal_servings
-                #mealIngs = Ingredients.objects.filter(ingredient_name=ingredient_name)
-                for recipe in recipeset:
-                    if m_r_num == recipe.r_num:
-                        ms_name = recipe.r_name
                 for ingredient in IngQueryset:
                     if unit == ingredient.unit:
                         qty_on_hand = ingredient.qty_on_hand
@@ -129,7 +129,7 @@ class IPLView(ViewSet):
                             to_purchase = 0
                         queryset.append({'id': count,
                                          'm_date': m_date,
-                                         'ms_name': ms_name,
+                                         'name': name,
                                          'ingredient_name': ingredient_name,
                                          'unit': unit,
                                          'amt': amt,
@@ -143,13 +143,10 @@ class IPLView(ViewSet):
             
             for snack in snackRecipeIngs:
                 ingredient_name = snack.ingredient_name
+                name = snack_name
                 amt = snack.amt
                 unit = snack.unit
                 total_required = amt * snack_servings
-                #mealIngs = Ingredients.objects.filter(ingredient_name=ingredient_name)
-                for recipe in recipeset:
-                    if s_r_num == recipe.r_num:
-                        ms_name = recipe.r_name
                 for ingredient in IngQueryset:
                     if unit == ingredient.unit:
                         qty_on_hand = ingredient.qty_on_hand
@@ -162,7 +159,7 @@ class IPLView(ViewSet):
                             to_purchase = 0
                         queryset.append({'id': count,
                                          'm_date': m_date,
-                                         'ms_name': ms_name,
+                                         'name': name,
                                          'ingredient_name': ingredient_name,
                                          'unit': unit,
                                          'amt': amt,
