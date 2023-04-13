@@ -101,6 +101,7 @@ export default function PurchasingReport() {
 
     const columns = [
       { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
+      { field: 'qty_needed', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
       { field: 'm_date', headerName: 'Date Last Prepared', width: 150 },
       { field: 'meal_name', headerName: 'Meal Name', width: 200 },
       { field: 'snack_name', headerName: 'Snack Name', width: 120 },

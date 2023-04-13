@@ -182,6 +182,10 @@ class PPLView(viewsets.ViewSet):
 						to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
 					else:
 						to_purchase = 0
+					if (int(total_required or 0) - int(qty_needed or 0)) > 0:
+						to_purchase = int(total_required or 0) - int(qty_needed or 0)
+					else:
+						to_purchase = 0
 					queryset.append({'m_date:': m_date, 
 							'ms_name': ms_name,
 		    				'meal_name': meal_name, 
@@ -220,6 +224,11 @@ class PPLView(viewsets.ViewSet):
 				to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
 			else:
 				to_purchase = 0
+			if(int(total_required or 0) - int(qty_needed or 0)) > 0:
+				to_purchase = int(total_required or 0) - int(qty_needed or 0)
+			else:
+				to_purchase = 0
+				
 			queryset.append({'m_date:': m_date, 
 		    				'meal_name': meal_name, 
 							'snack_name': snack_name, 
