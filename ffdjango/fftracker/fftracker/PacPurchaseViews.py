@@ -59,7 +59,7 @@ class MealPlansSerializer(ModelSerializer):
 		model = MealPlans
 		fields = ('m_id', 'm_date', 'meal_name', 'snack_name', 'snack_r_num', 'meal_r_num')
 
-class PPLSerializer(ModelSerializer):
+class PPLSerializer(serializers.Serializer):
 	meal_plans = MealPlansSerializer()
 	packaging_usage = PackagingUsageSerializer()
 	recipe_packaging = RecipePackagingSerializer()
@@ -120,28 +120,64 @@ class PPLSerializer(ModelSerializer):
 #from datetime import date, timedelta
 class PPLView(viewsets.ViewSet):
 	def list(self, request):
+
+		m_date = 0
+		m_r_num = 0
+		meal_servings = 0
+		snack_servings = 0
+		meal_name = ''
+		snack_name = ''
+		pkg_type = ''
+		qty_on_hand = 0
+		qty_needed = 0
+		to_purchase = 0
+		unit = ''
+		total_required = 0
+		pkg_type_totals = 0
+
+		queryset = []
 		startDate = request.query_params.get('startDate')
 		endDate = request.query_params.get('endDate')
-
-		meal_plans = MealPlans.objects.filter(m_date__range=(startDate, endDate))
+		MealsQueryset = MealPlans.objects.filter(m_date__range=(startDate, endDate)).order_by('-m_date')
+		PkgQueryset = Packaging.objects.all()
 		pkg_type_totals = defaultdict(lambda: {"total_qty_on_hand": 0, "qty_needed": 0, "total_cost": 0})
-		for meal_plan in meal_plans:
+		for meals in MealsQueryset:
     # calculate servings needed for meal and snack
-			meal_servings = meal_plan.meal.rp_pkg.servings_per_recipe * meal_plan.meal_servings
+			# meal_servings = meal_plan.meal.rp_pkg.servings_per_recipe * meal_plan.meal_servings
+			meal_servings = meals.meal_servings
+			snack_servings = meals.snack_servings
+			meal_name = meals.meal_name
+			snack_name = meals.snack_name
+			m_date = meals.m_date
 		# snack_servings = meal_plan.snack.rp_pkg.servings_per_recipe * meal_plan.snack_servings
     # process meal packaging
 			meal_rp_pkg = meal_plan.meal.rp_pkg
-			meal_pkg_type = Packaging.objects.filter(package_type=meal_rp_pkg.pkg_type).order_by("-qty_on_hand")
-		for packaging in meal_pkg_type:
-			qty_on_hand = packaging.qty_on_hand
-			if qty_on_hand >= meal_servings:
-				qty_needed = qty_on_hand - meal_servings
-				cost = qty_needed * packaging.unit_cost
-				pkg_type_totals[meal_rp_pkg.pkg_type]["total_qty_on_hand"] += qty_on_hand
-				pkg_type_totals[meal_rp_pkg.pkg_type]["qty_needed"] += qty_needed
-				pkg_type_totals[meal_rp_pkg.pkg_type]["total_cost"] += cost
-				break
-			return Response(serializers.data)
+			pkg_type = Packaging.objects.filter(package_type=meal_rp_pkg.pkg_type).order_by("-qty_on_hand")
+			for packaging in PkgQueryset:
+				qty_on_hand = packaging.qty_on_hand
+				pkg_type = meals.pkg_type
+				if (int(total_required or 0) - int(qty_on_hand or 0)) > 0:
+					to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
+				else:
+					to_purchase = 0
+			queryset.append({'m_date:': m_date, 
+		    				'meal_name': meal_name, 
+							'snack_name': snack_name, 
+							'pkg_type': pkg_type, 
+							'qty_on_hand': qty_on_hand, 
+							'total_required': total_required, 
+							'to_purchase': to_purchase})
+
+			count += 1
+
+			# if qty_on_hand >= meal_servings:
+			# 	qty_needed = qty_on_hand - meal_servings
+			# 	cost = qty_needed * packaging.unit_cost
+			# 	pkg_type_totals[meal_rp_pkg.pkg_type]["total_qty_on_hand"] += qty_on_hand
+			# 	pkg_type_totals[meal_rp_pkg.pkg_type]["qty_needed"] += qty_needed
+			# 	pkg_type_totals[meal_rp_pkg.pkg_type]["total_cost"] += cost
+			# 	break
+			
 	#process snack packaging
 
 	# startDate = request.query_params.get('startDate')
@@ -156,12 +192,26 @@ class PPLView(viewsets.ViewSet):
 			qty_on_hand = packaging.qty_on_hand
 		if qty_on_hand >= snack_servings:
 			qty_needed = qty_on_hand - snack_servings
-			cost = qty_needed * packaging.unit_cost
-			pkg_type_totals[snack_rp_pkg.pkg_type]["qty_on_hand"] += qty_on_hand
-			pkg_type_totals[snack_rp_pkg.pkg_type]["qty_needed"] += qty_needed
-			pkg_type_totals[snack_rp_pkg.pkg_type]["total_cost"] += cost
-			
-		serializer = PPLSerializer({'snack_servings': snack_servings})
+			if (int(total_required or 0) - int(qty_on_hand or 0)) > 0:
+				to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
+			else:
+				to_purchase = 0
+			queryset.append({'m_date:': m_date, 
+		    				'meal_name': meal_name, 
+							'snack_name': snack_name, 
+							'pkg_type': pkg_type, 
+							'qty_on_hand': qty_on_hand, 
+							'total_required': total_required, 
+							'to_purchase': to_purchase})
+
+			count += 1
+			# cost = qty_needed * packaging.unit_cost
+			# pkg_type_totals[snack_rp_pkg.pkg_type]["qty_on_hand"] += qty_on_hand
+			# pkg_type_totals[snack_rp_pkg.pkg_type]["qty_needed"] += qty_needed
+			# pkg_type_totals[snack_rp_pkg.pkg_type]["total_cost"] += cost
+
+		serializer = PPLSerializer(queryset, many=True)
+		print (serializer)
 		return Response(serializer.data)
     # process snack packaging
 	# startDate = request.query_params.get('startDate')

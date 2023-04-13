@@ -11,12 +11,13 @@ from django.db.models import Prefetch
 import os
 
 class PackagingReturnSerializer(ModelSerializer):
-	packaging = PackagingInvSerializer(read_only=True)
-	in_qty = PackagingInvSerializer(read_only=True)
-    # package_type = PackagingInvSerializer(read_only=True)
-class Meta():
+    packaging = PackagingInvSerializer(read_only=True)
+    in_qty = PackagingInvSerializer(read_only=True)
+    packaging_type = PackagingInvSerializer(read_only=True)
+    
+    class Meta():
         model = Packaging
-        fields = ('in_qty', 'in_date', 'qty_on_hand', 'package_type', 'packaging')
+        fields = ('in_qty', 'in_date', 'qty_on_hand', 'package_type', 'packaging', 'packaging_type')
 
 class PackagingReturnView(viewsets.ViewSet):
     def list(self, request):
