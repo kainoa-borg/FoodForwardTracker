@@ -25,7 +25,7 @@ from .CalculationsView import CalculationsView
 from .CostTotalView import IngCostTotalView, PackCostTotalView
 from .HouseholdViews import HouseholdsView, HouseholdsWithAllergies
 from .IngredientViews import IngredientInvView
-from .IngPurchaseViews import IPLView
+from .IngPurchaseViews import IPLView #MealView, IPSnacksView
 from .MenuView import MenuView
 from .MealPlanViews import MealPlansView
 from .MealPlanReportViews import MealPlanReportView, MealHistoryReportView, SnackHistoryReportView
@@ -53,6 +53,7 @@ router.register(r'households-report', HouseholdsView, basename='households-repor
 router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient-inventory')
 router.register(r'ingredients-report', IngredientInvView, basename='ingredients-report')
 router.register(r'ing-purchase-report', IPLView, basename='ing-purchase-report')
+#router.register(r'snacks-purchase-report', IPSnacksView, basename='snacks-purchase-report')
 router.register(r'packaging', PackagingInvView, basename='packaging')
 router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
 router.register(r'packaging-report', PackagingInvView, basename='packaging-report')

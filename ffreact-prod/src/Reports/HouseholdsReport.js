@@ -1,9 +1,10 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
 import ReportsPage from './ReportsPage'
-import { Box, Button, setAddFormOpen} from '@mui/material'
+import { Box, Button, Typography, setAddFormOpen} from '@mui/material'
 import { DataGrid, GridCsvExportMenuItem } from '@mui/x-data-grid'
 import { ToolBar, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid';
+import { truncate } from 'lodash'
 
 
 // Household List Component
@@ -74,12 +75,13 @@ export default function HouseholdReport() {
         /* Fragment is an invisible tag that can be used to encapsulate multiple JSX elements without changing the HTML structure of the page */
         <Box sx={{height: '35%'}}>
             {/* Show a row for each ingredient in packaging.*/}
+            <Typography variant='h5'>Clients Report</Typography>
             <DataGrid
                 columns={columns}
                 rows={households}
                 components = {{Toolbar:CustomToolbar}}
                 getRowId={(row) => row.hh_id}
-                autoHeight = {5}
+                autoHeight = {true}
             >
             </DataGrid>
         </Box>
