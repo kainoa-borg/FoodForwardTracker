@@ -60,6 +60,7 @@ class MealPlansSerializer(ModelSerializer):
 		fields = ('m_id', 'm_date', 'meal_name', 'snack_name', 'snack_r_num', 'meal_r_num')
 
 class PPLSerializer(serializers.Serializer):
+	id = serializers.IntegerField(read_only=True)
 	meal_plans = MealPlansSerializer()
 	packaging_usage = PackagingUsageSerializer()
 	recipe_packaging = RecipePackagingSerializer()
@@ -125,7 +126,7 @@ class PPLSerializer(serializers.Serializer):
 #from datetime import date, timedelta
 class PPLView(viewsets.ViewSet):
 	def list(self, request):
-
+		id = 0
 		m_date = 0
 		ms_name = ''
 		m_r_num = 0

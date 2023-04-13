@@ -82,7 +82,7 @@ export default function PackagingReturns() {
       // The HTML structure of this component
       return (
         <div>
-            <Typography variant='h5'>Package Return Report</Typography>
+            <Typography variant='h5'>Packaging Return Report</Typography>
             <Typography variant='p' sx={{marginBottom: '5%'}}>Select for package return planned within a start and end date.</Typography>
             <form onSubmit={handleSubmit}>
               {/* <Stack direction='row'> */}

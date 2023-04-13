@@ -163,10 +163,10 @@ export default function PurchasingReport() {
       {/* Show a row for each ingredient in packaging.*/}
       <DataGrid
           columns={columns}
-          rows={packaging}
+          rows={packPurchasing}
           // row={mealPlans}
           components = {{Toolbar:CustomToolbar}}
-          getRowId={(row) => row.p_id}
+          getRowId={(row) => row.ppl_id}
           // getRowsId={(row) => row.m_id}
           autoHeight = {true}
       >
