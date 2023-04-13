@@ -101,7 +101,7 @@ export default function PurchasingReport() {
     const columns = [
         { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
         { field: 'm_date', headerName: 'Date Prepared', width: 150 },
-        { field: 'ms_name', headerName: 'Meal Name', width: 120 },
+        { field: 'name', headerName: 'Meal Name', width: 120 },
         { field: 'unit', headerName: 'Measure', width: 90, editable: true },
         { field: 'total_required', headerName: 'Total Required', width: 140, type: 'number', /*valueGetter: ({row}) => (row.unit_cost * row.in_qty),*/ },
         { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
