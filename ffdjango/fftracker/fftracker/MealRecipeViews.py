@@ -63,7 +63,7 @@ class RecipePackagingSerializer(ModelSerializer):
     class Meta():
         model = RecipePackaging
         # depth = 1
-        fields = ('rp_id', 'pkg_type', 'ing_name', 'amt', 'rp_pkg')
+        fields = ('rp_id', 'pkg_type', 'pkg_contents', 'ing_name', 'amt', 'rp_pkg')
         read_only_fields = ['rp_id', 'rp_pkg', 'amt']
 
 
