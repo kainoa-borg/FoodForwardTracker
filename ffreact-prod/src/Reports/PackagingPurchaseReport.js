@@ -8,11 +8,11 @@ import { Box, Button, Input, InputLabel, Snackbar, Typography, Stack, FormContro
 
 // Packaging List Component
 export default function PurchasingReport() {
-    const [packaging, setPackaging] = useState([])
-    const [packPurchasing, setPackPurchasing] = useState([]);
+    const [packaging, setPackaging] = useState([undefined])
+    const [PPL, setPPL] = useState([]);
     const [dateRange, setDateRange] = useState([]);
-    const [mealPlans, setMealPlans] = useState([]);
-    const [searchingSBOpen, setSearchingSBOpen] = useState([]);
+    const [mealPlans, setMealPlans] = useState([undefined]);
+    const [searchingSBOpen, setSearchingSBOpen] = useState([false]);
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
     const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
     
@@ -33,13 +33,13 @@ export default function PurchasingReport() {
     const getDBPackPurchaseList = (dateRange, value) => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/pack-purchase-report/",
+            url:"http://localhost:8000/api/pack-purchase-report/",
             params: dateRange
           }).then((response)=>{
             if (response.data.length > 0) setResultsFoundSBOpen(true);
             else setNoResultsSBOpen(true);
             
-            setPackPurchasing(response.data);
+            setPPL(response.data);
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -164,7 +164,7 @@ export default function PurchasingReport() {
       {/* Show a row for each ingredient in packaging.*/}
       <DataGrid
           columns={columns}
-          rows={packPurchasing}
+          rows={PPL}
           // row={mealPlans}
           components = {{Toolbar:CustomToolbar}}
           getRowId={(row) => row.id}
