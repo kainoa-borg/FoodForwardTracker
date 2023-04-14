@@ -49,6 +49,11 @@ class RecipePackagingSerializer(ModelSerializer):
 		model = RecipePackaging
 		fields = ('pkg_type', 'rp_pkg')
 
+class PackPurchasingSerializer(ModelSerializer):
+	class Meta():
+		model = Packaging
+		fields = ('package_type', 'qty_on_hand', 'qty_needed')
+
 class MealPlansSerializer(ModelSerializer):
 	meal_name = serializers.CharField(source='meal_r_num.r_name')
 	snack_name = serializers.CharField(source='snack_r_num.r_name')
@@ -57,7 +62,7 @@ class MealPlansSerializer(ModelSerializer):
 	m_date = serializers.DateField()
 	class Meta():
 		model = MealPlans
-		fields = ('m_id', 'm_date', 'meal_name', 'snack_name', 'snack_r_num', 'meal_r_num')
+		fields = ('m_id', 'm_date', 'meal_name', 'snack_name', 'snack_r_num', 'meal_r_num', 'meal_servings', 'snack_servings')
 
 class PPLSerializer(serializers.Serializer):
 	id = serializers.IntegerField(read_only=True)
@@ -131,6 +136,7 @@ class PPLView(viewsets.ViewSet):
 		ms_name = ''
 		m_r_num = 0
 		s_r_num = 0
+		name = ''
 		meal_servings = 0
 		snack_servings = 0
 		meal_name = ''
@@ -156,81 +162,83 @@ class PPLView(viewsets.ViewSet):
 			m_r_num = meals.meal_r_num
 			s_r_num = meals.snack_r_num
 			meal_servings = meals.meal_servings
-			snack_servings = meals.snack_servings
-			meal_name = meals.meal_name
-			snack_name = meals.snack_name
+			meal_name = meals.meal_r_num.r_name
+			snack_name = meals.snack_r_num.r_name
 			m_date = meals.m_date
-			mealRecipePkg = RecipePackaging.objects.filter(rp_pkg=m_r_num)
-			snackRecipePkg = RecipePackaging.objects.filer(rp_pkg=s_r_num)
-		# snack_servings = meal_plan.snack.rp_pkg.servings_per_recipe * meal
-		# s_plan.snack_servings
+			mealRecipePkg = RecipePackaging.objects.filter(rp_recipe_num=m_r_num)
+			snackRecipePkg = RecipePackaging.objects.filter(rp_recipe_num=s_r_num)
+			qty_needed += meal_servings
     # process meal packaging
 			for meal in mealRecipePkg:
+				name = meal_name
+				PkgQueryset = Packaging.objects.get(p_id=meal.rp_pkg)
 				amt = meal.amt
 				unit = meal.unit
-				total_required = amt * meal_servings
-			meal_rp_pkg = MealPlans.meal_r_num.rp_pkg
-			# pkg_type = Packaging.objects.filter(package_type=meal_rp_pkg.pkg_type).order_by("-qty_on_hand")
+				total_required = amt * qty_needed
+				meal.rp_pkg = MealPlans.meal_r_num.rp_pkg
+				packaging.package_type = RecipePackaging.pkg_type * qty_on_hand
 			for recipe in recipeset:
-				if m_r_num == recipe.r_num:
-					ms_name = recipe.r_name
+					if m_r_num == recipe.r_num:
+						ms_name = recipe.r_name
 			for packaging in PkgQueryset:
 				if unit == packaging.unit:
 					qty_needed = qty_on_hand - meal_servings
 					qty_on_hand = packaging.qty_on_hand
 					pkg_type = meals.pkg_type
-					if (int(total_required or 0) - int(qty_on_hand or 0)) > 0:
+					if (int(total_required or 0) - int(qty_needed or 0)) > 0:
 						to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
 					else:
 						to_purchase = 0
 					if (int(total_required or 0) - int(qty_needed or 0)) > 0:
-						to_purchase = int(total_required or 0) - int(qty_needed or 0)
+						to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
 					else:
 						to_purchase = 0
 					queryset.append({'m_date:': m_date, 
-							'ms_name': ms_name,
-		    				'meal_name': meal_name, 
-							'snack_name': snack_name, 
-							'pkg_type': pkg_type, 
-							'qty_on_hand': qty_on_hand, 
-							'qty_needed': qty_needed,
-							'total_required': total_required, 
-							'to_purchase': to_purchase})
-
+		      						'name': name,
+									'ms_name': ms_name,
+		    						'meal_name': meal_name, 
+									'snack_name': snack_name, 
+									'pkg_type': pkg_type, 
+									'qty_on_hand': qty_on_hand, 
+									'qty_needed': qty_needed,
+									'total_required': total_required, 
+									'to_purchase': to_purchase})
 					count += 1
 
-			# if qty_on_hand >= meal_servings:
-			# 	qty_needed = qty_on_hand - meal_servings
 			cost = qty_needed * packaging.unit_cost
-			pkg_type_totals[meal_rp_pkg.pkg_type]["total_qty_on_hand"] += qty_on_hand
-			pkg_type_totals[meal_rp_pkg.pkg_type]["qty_needed"] += qty_needed
-			pkg_type_totals[meal_rp_pkg.pkg_type]["total_cost"] += cost
-			# 	break
-			
+			pkg_type_totals[meal.rp_pkg.pkg_type]["total_qty_on_hand"] += qty_on_hand
+			pkg_type_totals[meal.rp_pkg.pkg_type]["qty_needed"] += qty_needed
+			pkg_type_totals[meal.rp_pkg.pkg_type]["total_cost"] += cost
+	
 		#process snack packaging
-
-	# startDate = request.query_params.get('startDate')
-	# endDate = request.query_params.get('endDate')
-		meal_plans = MealPlans.objects.filter(m_date__range=())
-		pkg_type_totals = defaultdict(lambda: {"total_qty_on_hand": 0, "qty_needed": 0, "total_cost": 0})
-		for meal_plan in meal_plans:
-			snack_servings = meal_plan.snack.rp_pkg.servings_per_recipe * meal_plan.snack_servings
-			snack_rp_pkg = MealPlans.snack_r_num.rp_pkg
-			snack_packaging_options = Packaging.objects.filter(package_type=snack_rp_pkg.pkg_type).order_by("-qty_on_hand")
-		for packaging in snack_packaging_options:
-			qty_on_hand = packaging.qty_on_hand
+		for snack in snackRecipePkg:
+				name = snack_name
+				amt = snack.amt
+				unit = snack.unit
+				total_required = amt * snack_servings
+				snack_rp_pkg = MealPlans.snack_r_num.rp_pkg
+				packaging._package_type = RecipePackaging.pkg_type * qty_on_hand
+		for recipe in recipeset:
+			if s_r_num == recipe.r_num:
+				ms_name = recipe.r_name
+		for packaging in PkgQueryset:
+				if unit == packaging.unit:
+					qty_needed = qty_on_hand - snack_servings
+					qty_on_hand = packaging.qty_on_hand
+					pkg_type = snack.pkg_type
 		if qty_on_hand >= snack_servings:
 			qty_needed = qty_on_hand - snack_servings
-			if (int(total_required or 0) - int(qty_on_hand or 0)) > 0:
+			if (int(total_required or 0) - int(qty_needed or 0)) > 0:
 				to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
 			else:
 				to_purchase = 0
 			if(int(total_required or 0) - int(qty_needed or 0)) > 0:
-				to_purchase = int(total_required or 0) - int(qty_needed or 0)
+				to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
 			else:
 				to_purchase = 0
 				
 			queryset.append({'m_date:': m_date, 
+		    				'name': name,
 		    				'meal_name': meal_name, 
 							'snack_name': snack_name, 
 							'pkg_type': pkg_type, 
