@@ -364,7 +364,8 @@ class RecipeInstructions(models.Model):
 class RecipePackaging(models.Model):
     rp_id = models.IntegerField(primary_key=True)
     amt = models.SmallIntegerField(blank=True, null=True)
-    pkg_type = models.CharField(max_length=45, blank=True, null=True)
+    pkg_type = models.CharField(max_length=45)
+    pkg_contents = models.CharField(max_length=255)
     ing_name = models.CharField(max_length=45, blank=True, null=True)
     rp_pkg = models.ForeignKey(Packaging, models.CASCADE, blank=True, null=True)
     rp_recipe_num = models.ForeignKey('Recipes', models.CASCADE, related_name='r_packaging', db_column='rp_recipe_num', blank=True, null=True)

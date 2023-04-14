@@ -51,17 +51,17 @@ class SnackSerializer(ModelSerializer):
 
 class IPLSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    m_date = serializers.CharField()
-    name = serializers.CharField()
-    ingredient_name = serializers.CharField()
-    unit = serializers.CharField()
-    amt = serializers.IntegerField()
-    pkg_type = serializers.CharField()
-    storage_type = serializers.CharField()
-    qty_on_hand = serializers.IntegerField()
-    total_required = serializers.IntegerField()
-    pref_isupplier_id = serializers.CharField()
-    to_purchase = serializers.IntegerField()
+    m_date = serializers.CharField(allow_blank=True)
+    name = serializers.CharField(allow_blank=True)
+    ingredient_name = serializers.CharField(allow_blank=True)
+    unit = serializers.CharField(allow_blank=True)
+    amt = serializers.IntegerField(default='', required=False)
+    pkg_type = serializers.CharField(allow_blank=True)
+    storage_type = serializers.CharField(allow_blank=True)
+    qty_on_hand = serializers.IntegerField(default='', required=False)
+    total_required = serializers.IntegerField(default='', required=False)
+    pref_isupplier_id = serializers.CharField(allow_blank=True)
+    to_purchase = serializers.IntegerField(default='', required=False)
 
     # pref_isupplier_id = serializers.IntegerField()
     # m_r_num = serializers.IntegerField(blank=True, null=True)
@@ -95,30 +95,36 @@ class IPLView(ViewSet):
         to_purchase = 0
 
         queryset = []
+        #queryset.clear()
         startDate = request.query_params.get('startDate')
         endDate = request.query_params.get('endDate')
         MealsQueryset = MealPlans.objects.filter(m_date__range=[startDate, endDate]).order_by('-m_date')
         IngQueryset = Ingredients.objects.all()
         recipeset = Recipes.objects.all()
+
+        # Get every meal and snack for the date range
         for meals in MealsQueryset:
             m_r_num = meals.meal_r_num
+            s_r_num = meals.snack_r_num
             meal_name = meals.meal_r_num.r_name
             snack_name = meals.snack_r_num.r_name
-            s_r_num = meals.snack_r_num
             m_date = meals.m_date
             meal_servings = meals.meal_servings
             snack_servings = meals.snack_servings
             mealRecipeIngs = RecipeIngredients.objects.filter(ri_recipe_num=m_r_num)
             snackRecipeIngs = RecipeIngredients.objects.filter(ri_recipe_num=s_r_num)
-                 
+
+            # For each meal in the list...                       
             for meal in mealRecipeIngs:
                 name = meal_name
                 ingredient_name = meal.ingredient_name
                 amt = meal.amt
                 unit = meal.unit
                 total_required = amt * meal_servings
+
+                # get all ingredients for that meal
                 for ingredient in IngQueryset:
-                    if unit == ingredient.unit:
+                    if ingredient_name == ingredient.ingredient_name:
                         qty_on_hand = ingredient.qty_on_hand
                         pref_isupplier_id = ingredient.pref_isupplier
                         pkg_type = ingredient.pkg_type
@@ -141,6 +147,7 @@ class IPLView(ViewSet):
                                          'pref_isupplier_id': pref_isupplier_id})
                         count += 1
             
+            # for each snack in that date range
             for snack in snackRecipeIngs:
                 ingredient_name = snack.ingredient_name
                 name = snack_name
@@ -148,7 +155,7 @@ class IPLView(ViewSet):
                 unit = snack.unit
                 total_required = amt * snack_servings
                 for ingredient in IngQueryset:
-                    if unit == ingredient.unit:
+                    if ((ingredient_name == ingredient.ingredient_name)): #(unit == ingredient.unit) & 
                         qty_on_hand = ingredient.qty_on_hand
                         pref_isupplier_id = ingredient.pref_isupplier
                         pkg_type = ingredient.pkg_type

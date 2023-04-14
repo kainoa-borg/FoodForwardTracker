@@ -99,13 +99,11 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             }
         },
         {
-            field: 'ing_name',
-            headerName: 'Ingredient',
-            width: 250,
+            field: 'pkg_contents',
+            headerName: 'Contents',
+            width: 400,
             editable: true,
-            renderEditCell: (params) => {
-                return <ModularSelect {...params} options={ingredientRows} searchField={'ingredient_name'}/>
-            }
+            type: 'string'
         }
     ]
 
