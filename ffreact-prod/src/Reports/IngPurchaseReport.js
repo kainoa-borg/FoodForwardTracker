@@ -28,7 +28,7 @@ export default function PurchasingReport() {
         setSearchingSBOpen(true);
         axios({
           method: "GET",
-          url:"http://localhost:8000/api/ing-purchase-report/",
+          url:"http://4.236.185.213:8000/api/ing-purchase-report/",
           params: dateRange
         }).then((response)=>{
           // console.log(response.data);
