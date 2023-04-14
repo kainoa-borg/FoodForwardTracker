@@ -13,8 +13,6 @@ export default function PurchasingReport() {
     const [searchingSBOpen, setSearchingSBOpen] = useState(false);
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
     const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
-    const [value, setValue] = useState('Meals');
-    const handleRadioChange = (event) => {setValue(event.target.value);};
 
     const currencyFormatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -26,7 +24,7 @@ export default function PurchasingReport() {
         getDBSuppliers();
     }, []); 
 
-    const getDBIngPurchaseList = (dateRange, value) => {
+    const getDBIngPurchaseList = (dateRange) => {
         setSearchingSBOpen(true);
         axios({
           method: "GET",
@@ -123,7 +121,7 @@ export default function PurchasingReport() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    getDBIngPurchaseList(dateRange, value);
+    getDBIngPurchaseList(dateRange);
     //getDBMealPlanReport(dateRange);
   }
 
@@ -143,13 +141,6 @@ export default function PurchasingReport() {
                 <Typography htmlFor="endDate">End Date: </Typography>
                 <Input id="endDate" variant='outlined' type='date' value={dateRange.endDate} onChange={(event) => {setDateRange({...dateRange, endDate: event.target.value})}}/>  
               </FormControl>  
-              <FormControl sx={{ ml: 2 }}>
-                <Typography htmlFor="endDate">Select: </Typography>
-                <RadioGroup row id="select" defaultValue="Meals" name="radio-buttons-group" value={value} onChange={handleRadioChange}>
-                  <FormControlLabel value="Meals" control={<Radio />} label="Meals" />
-                  <FormControlLabel value="Snacks" control={<Radio />} label="Snacks" />
-                </RadioGroup>
-              </FormControl>
             {/* </Stack> */}
             <FormControl sx={{ ml: 5 }}>
               <Button variant='contained' type='submit'>Submit</Button>
