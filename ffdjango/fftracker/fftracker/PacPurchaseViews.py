@@ -252,9 +252,9 @@ class PPLView(viewsets.ViewSet):
 			count += 1
 
 			cost = qty_needed * packaging.unit_cost
-			pkg_type_totals[snack_rp_pkg.pkg_type]["qty_on_hand"] += qty_on_hand
-			pkg_type_totals[snack_rp_pkg.pkg_type]["qty_needed"] += qty_needed
-			pkg_type_totals[snack_rp_pkg.pkg_type]["total_cost"] += cost
+			pkg_type_totals[snack.rp_pkg.pkg_type]["qty_on_hand"] += qty_on_hand
+			pkg_type_totals[snack.rp_pkg.pkg_type]["qty_needed"] += qty_needed
+			pkg_type_totals[snack.rp_pkg.pkg_type]["total_cost"] += cost
 
 		serializer = PPLSerializer(queryset, many=True)
 		print (serializer)
