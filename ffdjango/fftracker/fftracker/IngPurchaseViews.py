@@ -114,38 +114,38 @@ class IPLView(ViewSet):
             mealRecipeIngs = RecipeIngredients.objects.filter(ri_recipe_num=m_r_num)
             snackRecipeIngs = RecipeIngredients.objects.filter(ri_recipe_num=s_r_num)
 
-            # # For each meal in the list...                       
-            # for meal in mealRecipeIngs:
-            #     name = meal_name
-            #     ingredient_name = meal.ingredient_name
-            #     amt = meal.amt
-            #     unit = meal.unit
-            #     total_required = amt * meal_servings
+            # For each meal in the list...                       
+            for meal in mealRecipeIngs:
+                name = meal_name
+                ingredient_name = meal.ingredient_name
+                amt = meal.amt
+                unit = meal.unit
+                total_required = amt * meal_servings
 
-            #     # get all ingredients for that meal
-            #     for ingredient in IngQueryset:
-            #         if unit == ingredient.unit:
-            #             qty_on_hand = ingredient.qty_on_hand
-            #             pref_isupplier_id = ingredient.pref_isupplier
-            #             pkg_type = ingredient.pkg_type
-            #             storage_type = ingredient.storage_type
-            #             if (int(total_required or 0) - int(qty_on_hand or 0)) > 0:
-            #                 to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
-            #             else: 
-            #                 to_purchase = 0
-            #             queryset.append({'id': count,
-            #                              'm_date': m_date,
-            #                              'name': name,
-            #                              'ingredient_name': ingredient_name,
-            #                              'unit': unit,
-            #                              'amt': amt,
-            #                              'pkg_type': pkg_type,
-            #                              'storage_type': storage_type,
-            #                              'qty_on_hand': qty_on_hand,
-            #                              'total_required': total_required,
-            #                              'to_purchase': to_purchase,
-            #                              'pref_isupplier_id': pref_isupplier_id})
-            #             count += 1
+                # get all ingredients for that meal
+                for ingredient in IngQueryset:
+                    if ingredient_name == ingredient.ingredient_name:
+                        qty_on_hand = ingredient.qty_on_hand
+                        pref_isupplier_id = ingredient.pref_isupplier
+                        pkg_type = ingredient.pkg_type
+                        storage_type = ingredient.storage_type
+                        if (int(total_required or 0) - int(qty_on_hand or 0)) > 0:
+                            to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
+                        else: 
+                            to_purchase = 0
+                        queryset.append({'id': count,
+                                         'm_date': m_date,
+                                         'name': name,
+                                         'ingredient_name': ingredient_name,
+                                         'unit': unit,
+                                         'amt': amt,
+                                         'pkg_type': pkg_type,
+                                         'storage_type': storage_type,
+                                         'qty_on_hand': qty_on_hand,
+                                         'total_required': total_required,
+                                         'to_purchase': to_purchase,
+                                         'pref_isupplier_id': pref_isupplier_id})
+                        count += 1
             
             # for each snack in that date range
             for snack in snackRecipeIngs:
