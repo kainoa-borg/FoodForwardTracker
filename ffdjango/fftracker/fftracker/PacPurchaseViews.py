@@ -165,6 +165,7 @@ class PPLView(viewsets.ViewSet):
 			meal_name = meals.meal_r_num.r_name
 			snack_name = meals.snack_r_num.r_name
 			m_date = meals.m_date
+			snack_servings = meals.snack_servings
 			mealRecipePkg = RecipePackaging.objects.filter(rp_recipe_num=m_r_num)
 			snackRecipePkg = RecipePackaging.objects.filter(rp_recipe_num=s_r_num)
 			qty_needed += meal_servings
@@ -193,7 +194,8 @@ class PPLView(viewsets.ViewSet):
 						to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
 					else:
 						to_purchase = 0
-					queryset.append({'m_date:': m_date, 
+					queryset.append({'id': count,
+									'm_date:': m_date, 
 		      						'name': name,
 									'ms_name': ms_name,
 		    						'meal_name': meal_name, 
@@ -237,7 +239,8 @@ class PPLView(viewsets.ViewSet):
 			else:
 				to_purchase = 0
 				
-			queryset.append({'m_date:': m_date, 
+			queryset.append({'id': count,
+							'm_date:': m_date, 
 		    				'name': name,
 		    				'meal_name': meal_name, 
 							'snack_name': snack_name, 
@@ -246,8 +249,8 @@ class PPLView(viewsets.ViewSet):
 							'qty_needed': qty_needed,
 							'total_required': total_required, 
 							'to_purchase': to_purchase})
-
 			count += 1
+
 			cost = qty_needed * packaging.unit_cost
 			pkg_type_totals[snack_rp_pkg.pkg_type]["qty_on_hand"] += qty_on_hand
 			pkg_type_totals[snack_rp_pkg.pkg_type]["qty_needed"] += qty_needed
