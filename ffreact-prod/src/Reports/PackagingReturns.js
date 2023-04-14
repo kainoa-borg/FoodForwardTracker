@@ -22,7 +22,7 @@ export default function PackagingReturns() {
         setSearchingSBOpen(true);
         axios({
             method: "GET",
-            url:"http://localhost:8000/api/packaging-return-report/",
+            url:"http://4.236.185.213:8000/api/packaging-return-report/",
             params: dateRange
           }).then((response)=>{
             // console.log(response.data);
