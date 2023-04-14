@@ -227,18 +227,18 @@ class Ingredients(models.Model):
         managed = False
         db_table = 'ingredients'
 
-class IPLMealPlans(models.Model):
-    m_id = models.AutoField(primary_key=True)
-    m_date = models.DateField()
-    snack_r_num = models.ForeignKey('Recipes', models.CASCADE, db_column='snack_r_num', related_name='snack_r_num', blank=True, null=True)
-    snack_servings = models.SmallIntegerField(blank=True, null=True)
-    meal_r_num = models.ForeignKey('Recipes', models.CASCADE, db_column='meal_r_num', related_name='meal_r_num', blank=True, null=True)
-    meal_servings = models.SmallIntegerField(blank=True, null=True)
-    recipe_ing = models.ForeignKey('RecipeIngredients', models.CASCADE, db_column='ri_recipe_num', related_name='recipe_ing', blank=True, null=True)
+# class IPLMealPlans(models.Model):
+#     m_id = models.AutoField(primary_key=True)
+#     m_date = models.DateField()
+#     snack_r_num = models.ForeignKey('Recipes', models.CASCADE, db_column='snack_r_num', related_name='snack_r_num', blank=True, null=True)
+#     snack_servings = models.SmallIntegerField(blank=True, null=True)
+#     meal_r_num = models.ForeignKey('Recipes', models.CASCADE, db_column='meal_r_num', related_name='meal_r_num', blank=True, null=True)
+#     meal_servings = models.SmallIntegerField(blank=True, null=True)
+#     recipe_ing = models.ForeignKey('RecipeIngredients', models.CASCADE, db_column='ri_recipe_num', related_name='recipe_ing', blank=True, null=True)
 
-    class Meta:
-        managed = False
-        db_table = 'meal_plans'
+#     class Meta:
+#         managed = False
+#         db_table = 'meal_plans'
 
 class KitPackaging(models.Model):
     kp_id = models.IntegerField(primary_key=True)

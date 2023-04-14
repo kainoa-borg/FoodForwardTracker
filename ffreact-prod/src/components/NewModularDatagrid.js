@@ -156,11 +156,13 @@ export default function NewModularDatagrid(props) {
     // Get table data from database
     // Set tableData state variable with ingredient data
     const getDBData = () => {
+        console.log('REFRESHING')
         axios({
             method: "GET",
             url:"http://"+apiIP+":8000/api/" + apiEndpoint
         }).then((response)=>{
-        setTableData(response.data);
+            console.log(response.data);
+            setTableData(response.data);
         }).catch((error) => {
         if (error.response) {
             handleErrorMessage("Couldn't get data.", error)

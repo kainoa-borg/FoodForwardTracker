@@ -71,6 +71,9 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             width: 100,
             type: 'string',
             editable: true,
+            renderEditCell: (params) => {
+                return <ModularSelect {...params} noDuplicates options={ingredientOptions} searchField={'unit'}/>
+            }
         },
         // {
         //     field: 'prep',
@@ -312,6 +315,17 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     }
 
     const handleErrorMessage = (error) => {
+        // if (error.response.data) {
+        //     console.log(error.response.data)
+        //     let error_field = ''
+        //     let error_text = ''
+        //     let error_keys = Object.keys(error.response.data);
+        //     error_keys.forEach((error_key) => {
+        //         error_field = error_key
+        //         error_text = error.response.data[error_key]
+        //     })
+        //     setErrorMessage('Save Failed!' + error_field + ' ' + error_text);
+        // }
         setErrorMessage('Save failed! ' + error.response.statusText);
     }
     useEffect(() => {
@@ -351,7 +365,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 }
                 // console.log('post success!')
                 setUpdateDoneSBOpen(true);
-                // getDBRecipeData(recipeData.r_num);
+                getDBRecipeData(recipeData.r_num);
             }).catch((error) => {
             if (error.response) {
                 handleErrorMessage(error);
@@ -375,7 +389,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             }).then((response)=>{
                 // console.log('patch success!')
                 setUpdateDoneSBOpen(true);
-                // getDBRecipeData(recipeData.r_num);
+                getDBRecipeData(recipeData.r_num);
             }).catch((error) => {
             if (error.response) {
                 handleErrorMessage(error);

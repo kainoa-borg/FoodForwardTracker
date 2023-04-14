@@ -7,7 +7,7 @@ from rest_framework import serializers
 from rest_framework.generics import ListAPIView
 from rest_framework import status
 from django.db.models import Prefetch
-from .models import Ingredients, IPLMealPlans, MealPlans, Recipes, RecipeIngredients
+from .models import Ingredients, MealPlans, Recipes, RecipeIngredients
 from .SupplierViews import SupplierSerializer
 
 class RecipeSerializer(ModelSerializer):
@@ -28,16 +28,16 @@ class IngPurchaseSerializer(ModelSerializer):
 		fields = ('i_id', 'ingredient_name', 'pkg_type', 'storage_type', 'in_date', 'in_qty', 'qty_on_hand', 'unit', 'exp_date', 'unit_cost', 'flat_fee', 'isupplier_id', 'pref_isupplier_id', 'isupplier', 'pref_isupplier')
 
 
-class MealSerializer(ModelSerializer):
-    recipe_ingredients = RecipeIDSerializer(many=True)
-    servings = serializers.CharField(source='meal_servings')
-    name = serializers.CharField(source='meal_r_num.r_name')
-    r_num = serializers.CharField(source='meal_r_num')
-    name = serializers.CharField(source='meal_r_num.r_name')
-    class Meta():
-        model = IPLMealPlans
-        depth = 1
-        fields = ('m_id', 'm_date', 'name', 'r_num', 'servings', 'recipe_ingredients', 'ri_recipe_num')
+# class MealSerializer(ModelSerializer):
+#     recipe_ingredients = RecipeIDSerializer(many=True)
+#     servings = serializers.CharField(source='meal_servings')
+#     name = serializers.CharField(source='meal_r_num.r_name')
+#     r_num = serializers.CharField(source='meal_r_num')
+#     name = serializers.CharField(source='meal_r_num.r_name')
+#     class Meta():
+#         model = IPLMealPlans
+#         depth = 1
+#         fields = ('m_id', 'm_date', 'name', 'r_num', 'servings', 'recipe_ingredients', 'ri_recipe_num')
 
 class SnackSerializer(ModelSerializer):
     # recipe_ingredients = RecipeIDSerializer(many=True)

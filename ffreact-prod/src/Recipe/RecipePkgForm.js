@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import React from 'react'
-import { Grid, Typography, Card, Input, InputLabel, Button} from '@mui/material';
+import { Grid, Typography, Card, Input, InputLabel, Button, TextField} from '@mui/material';
 import ModularSelect from '../components/ModularSelect.js'
 
 // Kainoa Borges
@@ -19,7 +19,7 @@ const RecipePkgForm = (props) => {
     // The state of this Ingredient Form with each attribute of Ingredient
     const [pkg, setPkg] = useState({
         pkg_type: '',
-        ing_name: '',
+        pkg_contents: '',
     });
 
     // Handle form submission (prevent refresh, pass ingredient to addIngredient, and clear form state)
@@ -65,9 +65,9 @@ const RecipePkgForm = (props) => {
                 <Grid item>
                     <InputLabel>Package Type: </InputLabel>
                     {/* <Input name="pkg_type" type="text" maxLength='30' value={packaging.pkg_type} onChange={handleFormChange}/> */}
-                    <ModularSelect fieldName={'pkg_type'} value={pkg.pkg_type} options={packaging} searchField={'package_type'} onChange={handleFormChange}/>
-                    <InputLabel>Ingredient Contents:</InputLabel>
-                    <ModularSelect fieldName={'ing_name'} value={pkg.ing_name} options={ingRows} searchField={'ingredient_name'} onChange={handleFormChange}/>
+                    <ModularSelect name='pkg_type' fieldName={'pkg_type'} value={pkg.pkg_type} options={packaging} searchField={'package_type'} onChange={handleFormChange}/>
+                    <InputLabel>Package Contents:</InputLabel>
+                    <TextField inputProps={{maxLength: '255'}} name='pkg_contents' value={packaging.pkg_contents} onChange={handleFormChange}></TextField>
                 </Grid>
                 <Grid item>
                     <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>
