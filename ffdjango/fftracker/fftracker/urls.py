@@ -32,6 +32,7 @@ from .MealPlanReportViews import MealPlanReportView, MealHistoryReportView, Snac
 from .MealView import MealView
 from .PackagingViews import PackagingInvView
 from .PacPurchaseViews import PPLView
+from .PackagingReturnViews import PackagingReturnView
 from .RecipeListViews import RecipeListView
 from .ServingCalculationViews import ServingCalculationViews
 from .StationViews import StationsView
@@ -58,6 +59,7 @@ router.register(r'packaging', PackagingInvView, basename='packaging')
 router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
 router.register(r'packaging-report', PackagingInvView, basename='packaging-report')
 router.register(r'pack-purchase-report', PPLView, basename='pack-purchase-report')
+router.register(r'packaging-return-report', PackagingReturnView, basename='packaging-return-report')
 router.register(r'users', UserView, basename='users')
 router.register(r'user-auth', UserAuth, basename='user-auth')
 router.register(r'menu', MenuView, basename='menu')

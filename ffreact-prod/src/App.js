@@ -102,7 +102,7 @@ const App = () => {
             case 'packaging': setCurrPage(<Packaging handlePageClick={handlePageClick} />); break;
             case 'packagingPage': setCurrPage(<PackagingPage handlePageClick={handlePageClick} />); break;
             case 'packaging-report': setCurrPage(<PackagingReport handlePageClick={handlePageClick} />); break;
-            case 'packaging-returns': setCurrPage(<PackagingReturns handlePageClick={handlePageClick} />); break;
+            case 'packaging-return-report': setCurrPage(<PackagingReturns handlePageClick={handlePageClick} />); break;
             case 'pack-purchase-report': setCurrPage(<PackagingPurchaseReport handlePageClick={handlePageClick} />); break;
             case 'stations': setCurrPage(<StationList handlePageClick={handlePageClick} />); break;
             case 'meals': setCurrPage(<MealPlan handlePageClick={handlePageClick} />); break;

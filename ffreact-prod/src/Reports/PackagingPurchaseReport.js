@@ -16,6 +16,7 @@ export default function PurchasingReport() {
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
     const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
     
+    
     // const [ingredients, setIngredients] = useState(undefined);
 
     const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -29,7 +30,7 @@ export default function PurchasingReport() {
   }, []);
     
 
-    const getDBPackPurchaseList = () => {
+    const getDBPackPurchaseList = (dateRange, value) => {
         axios({
             method: "GET",
             url:"http://4.236.185.213:8000/api/pack-purchase-report/",
@@ -101,6 +102,7 @@ export default function PurchasingReport() {
 
     const columns = [
       { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
+      { field: 'qty_needed', headerName: 'Qty Needed', width: 140, type: 'number', editable: false},
       { field: 'm_date', headerName: 'Date Last Prepared', width: 150 },
       { field: 'meal_name', headerName: 'Meal Name', width: 200 },
       { field: 'snack_name', headerName: 'Snack Name', width: 120 },
@@ -162,10 +164,10 @@ export default function PurchasingReport() {
       {/* Show a row for each ingredient in packaging.*/}
       <DataGrid
           columns={columns}
-          rows={packaging}
+          rows={packPurchasing}
           // row={mealPlans}
           components = {{Toolbar:CustomToolbar}}
-          getRowId={(row) => row.p_id}
+          getRowId={(row) => row.id}
           // getRowsId={(row) => row.m_id}
           autoHeight = {true}
       >
