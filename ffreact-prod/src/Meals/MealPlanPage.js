@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import {DataGrid} from '@mui/x-data-grid'
 import { Box } from '@mui/system';
-import { wait } from '@testing-library/user-event/dist/utils';
 import './MealList.css'
-import MealPlanForm from './MealPlanForm';
 
 // mealPlan List Component
 export default function MealPlanPage() {

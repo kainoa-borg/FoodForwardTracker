@@ -1,6 +1,6 @@
 import {useState} from 'react'
 import React from 'react'
-import { Grid, Typography, Card, Input, InputLabel, Button, TextField} from '@mui/material';
+import { Grid, Typography, Card, InputLabel, Button, TextField} from '@mui/material';
 import ModularSelect from '../components/ModularSelect.js'
 
 // Kainoa Borges
@@ -14,7 +14,7 @@ const RecipePkgForm = (props) => {
     const addEntry = props.addEntry;
     const handleClose = props.handleClose;
     const packaging = props.packaging;
-    const ingRows = props.ingRows;
+    // const ingRows = props.ingRows;
     
     // The state of this Ingredient Form with each attribute of Ingredient
     const [pkg, setPkg] = useState({

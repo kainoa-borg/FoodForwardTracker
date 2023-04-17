@@ -1,22 +1,18 @@
-import { Button, Typography, Box, Grid, Checkbox, Snackbar, FormControlLabel, TextField, InputLabel, Paper, Popover, MenuItem, Select, FormControl } from "@mui/material";
+import { Button, Typography, Box, Grid, Snackbar, Stack, TextField, 
+    InputLabel, Paper, MenuItem, Select, FormControl } from "@mui/material";
 import { HighlightOff } from "@mui/icons-material";
-import React, {useState, useEffect, useCallback, Fragment, useRef} from 'react';
-import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
-import { Stack } from "@mui/material";
-import axios from 'axios'
-// import FormData from 'axios'
-import RecipePage from './RecipePage.js'
+import React, {useState, useEffect, Fragment, useRef} from 'react';
+import { useGridApiContext } from "@mui/x-data-grid";
+import axios from 'axios';
+import RecipePage from './RecipePage.js';
 import ModularRecipeDatagrid from "../components/ModularRecipeDatagrid.js";
-import RecipeIngForm from "./RecipeIngForm.js"
-import RecipePkgForm from "./RecipePkgForm.js"
-import RecipeInstForm from './RecipeInstForm.js'
-import RecipeIngList from "./RecipeIngList.js"
-
-import food_placeholder from '../Images/food_placeholder.jpg'
-
-import DataGridDialog from '../components/DatagridDialog.js'
-import { number } from "yup";
+import RecipeIngForm from "./RecipeIngForm.js";
+import RecipePkgForm from "./RecipePkgForm.js";
+import RecipeInstForm from './RecipeInstForm.js';
+import RecipeIngList from "./RecipeIngList.js";
+import DataGridDialog from '../components/DatagridDialog.js';
 import ModularSelect from "../components/ModularSelect.js";
+// import food_placeholder from '../Images/food_placeholder.jpg'
 
 export default function Recipe({recipeData, setRecipeData, ingredientOptions, packagingOptions, setCurrPage, getDBRecipeData, isAdding}) {
     // If recipeData prop is passed, use that, otherwise use empty recipeData
