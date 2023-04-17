@@ -1,12 +1,9 @@
 import React, { Fragment, useState } from 'react'
-import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
+import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarContainer} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import { Button, Popover, Snackbar, Typography } from '@mui/material';
-
 import FormDialog from './FormDialog';
-import SearchToolBar from './SearchToolBar'
-
 
 // Modularized Datagrid with prompts/notifications
 // Takes:
@@ -21,7 +18,7 @@ export default function ModularRecipeDatagrid(props) {
     const keyFieldName = props.keyFieldName;
     const setRows = props.setRows;
     const entryName = props.entryName;
-    const searchField = props.searchField;
+    // const searchField = props.searchField;
     const columns = [...props.columns, 
         { field: 'actions', type: 'actions', headerName: 'Actions', width: 100,
             getActions: (params) => modularActions(params, rowModesModel, setRowModesModel, setUpdateSBOpen)
@@ -44,7 +41,7 @@ export default function ModularRecipeDatagrid(props) {
     const [rowModesModel, setRowModesModel] = useState({});
 
     // Struct of filterModel items (How to filter datagrid)
-    const [filterModel, setFilterModel] = useState();
+    // const [filterModel, setFilterModel] = useState();
 
     // const dataGridApiRef = useGridApiRef();
 

@@ -1,12 +1,11 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
 import { DataGrid, GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid'
-import { Box, Button, Input, Radio, RadioGroup, Snackbar, Typography, Stack, FormControl, FormControlLabel} from '@mui/material';
+import { Box, Button, Input, Snackbar, Typography, FormControl } from '@mui/material';
 
 
 // Ingredients Purchasing List Component
 export default function PurchasingReport() {
-    const [ingredients, setIngredients] = useState(undefined);
     const [suppliers, setSuppliers] = useState(undefined);
     const [ingPurchasing, setIngPurchasing] = useState([]);
     const [dateRange, setDateRange] = useState([]);

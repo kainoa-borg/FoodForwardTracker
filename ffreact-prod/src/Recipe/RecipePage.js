@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import axios from 'axios'
-import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
+import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarContainer} from '@mui/x-data-grid' //GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport,
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import Recipe from './Recipe.js'
-import { Button, Popover, Snackbar, Stack, TextField, Typography } from '@mui/material';
+import { Button, Popover, Snackbar, Typography } from '@mui/material';
 
 export default function RecipePage(props) {
 
@@ -162,9 +162,9 @@ export default function RecipePage(props) {
         if (rowModesModel[params.id]) isInEditMode = rowModesModel[params.id].mode === GridRowModes.Edit;
 
         // Set this row to edit mode
-        const handleEditClick = (params) => {
-            setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.Edit}});
-        }
+        // const handleEditClick = (params) => {
+        //     setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.Edit}});
+        // }
 
         // Set this row to view mode
         // Open 'request sent' snackbar
@@ -240,7 +240,7 @@ export default function RecipePage(props) {
         }
     }
 
-    if (recipes === undefined || ingredients === undefined || packaging == undefined) {
+    if (recipes === undefined || ingredients === undefined || packaging === undefined) {
         return (
             <>loading...</>
         )

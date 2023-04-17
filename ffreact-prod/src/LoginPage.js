@@ -30,9 +30,9 @@ const LoginPage = (props) => {
         var time = now.getTime();
         var expireTime = time + 1000*36000;
         now.setTime(expireTime);
-        document.cookie = 'username='+username+';'+'expires='+expireTime+';'
-        document.cookie = 'isAuthenticated='+isAuthenticated+';'+'expires='+expireTime+';'
-        document.cookie = 'isAdmin='+isAdmin+';'+'expires='+expireTime+';'
+        document.cookie = 'username='+username+';expires='+expireTime+';'
+        document.cookie = 'isAuthenticated='+isAuthenticated+';expires='+expireTime+';'
+        document.cookie = 'isAdmin='+isAdmin+';expires='+expireTime+';'
     }
 
     const sendLoginRequest = () => {
