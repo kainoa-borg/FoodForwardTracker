@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import axios from 'axios'
-import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
+import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarContainer} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/material';
-import { Button, Popover, Snackbar, Stack, TextField, Typography } from '@mui/material';
+import { Button, Popover, Snackbar, Stack, Typography } from '@mui/material';
 
 import FormDialog from './FormDialog.js'
 import SearchToolBar from './SearchToolBar.js'
@@ -181,10 +181,10 @@ export default function NewModularDatagrid(props) {
 
     const handleErrorMessage = (message, error) => {
         if (error.response.status === 400) {
-            setErrorMessage(message + ' ' + 'Please check inputs and try again.');
+            setErrorMessage(message + ' Please check inputs and try again.');
         }
         else if (error.response.status === 500) {
-            setErrorMessage(message + ' ' + 'System error. Please try again or contact support');
+            setErrorMessage(message + ' System error. Please try again or contact support');
         }
         else {
             setErrorMessage(message + ' ' + error.response.status + ' ' + error.response.statusText);

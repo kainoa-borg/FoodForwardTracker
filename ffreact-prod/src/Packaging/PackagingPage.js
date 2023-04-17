@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { Box } from '@mui/system';
-import { Snackbar, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import PackagingForm from './PackagingForm.js'
 import NewModularDatagrid from '../components/NewModularDatagrid.js';
 import ModularSelect from '../components/ModularSelect.js'
@@ -21,17 +21,14 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 export default function PackagingPage() {
     const [packaging, setPackaging] = useState(undefined);
     const [suppliers, setSuppliers] = useState(undefined);
-    
-    const [updateSBOpen, setUpdateSBOpen] = useState(false);
-    const [updateDoneSBOpen, setUpdateDoneSBOpen] = useState(false);
     const [supplierOptions, setSupplierOptions] = useState();
 
-    const handleSBClose = (event, reason, setOpen) => {
-        if (reason === 'clickaway') {
-            setOpen(false);
-        }
-        setOpen(false);
-    }
+    // const handleSBClose = (event, reason, setOpen) => {
+    //     if (reason === 'clickaway') {
+    //         setOpen(false);
+    //     }
+    //     setOpen(false);
+    // }
 
     // Get suppliers from database
     // Set supplier variable with supplier data

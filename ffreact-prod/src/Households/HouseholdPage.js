@@ -2,7 +2,6 @@ import React from 'react'
 import { useGridApiContext, GridEditInputCell } from '@mui/x-data-grid'
 import './HouseholdList.css'
 import { Box, Typography } from '@mui/material'
-import {DataGrid} from "@mui/material";
 import AllergiesList from './AllergiesList';
 import NewModularDatagrid from '../components/NewModularDatagrid';
 import CellDialog from '../components/CellDialog.js';

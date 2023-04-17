@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useMemo, useRef, Fragment} from 'react'
-import debounce, { update } from 'lodash'
-import {TextField, Input} from '@mui/material'
+import React, { useState, useEffect } from 'react'
+import {TextField } from '@mui/material'
 import { Box } from '@mui/material';
 
 const SearchToolBar = ({setFilterModel, searchField, searchLabel, filterField, filterOperator}) => {
@@ -35,9 +34,9 @@ const SearchToolBar = ({setFilterModel, searchField, searchLabel, filterField, f
     const handleSearchChange = (event) => {
         setSearchValue(event.target.value);
     }
-    const handleFilterChange = (event) => {
-        setFilterValue(event.target.value);
-    }
+    // const handleFilterChange = (event) => {
+    //     setFilterValue(event.target.value);
+    // }
 
     return (
         <Box>
