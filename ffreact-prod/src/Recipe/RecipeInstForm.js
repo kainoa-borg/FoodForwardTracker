@@ -57,9 +57,11 @@ const RecipeInstForm = (props) => {
         {/* Basic instruction info */}
         <Card sx={{marginTop: '1em', padding: '1em'}}>
             <Typography variant='h5'>Add Instruction</Typography>
+            <Typography component='h6' variant='h6'>Required * </Typography>
+
             <Grid container direction='row' spacing={4}>
             <Grid item>
-                <InputLabel>Station Name: </InputLabel>
+                <InputLabel>Station Name*: </InputLabel>
                 <Input name='stn_name' type="text" value={instruction.stn_name} onChange={handleFormChange}/>
 
                 <InputLabel>Station Description: </InputLabel>

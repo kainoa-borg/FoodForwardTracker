@@ -61,12 +61,14 @@ const RecipePkgForm = (props) => {
             {/* Basic packaging info */}
             <Card sx={{marginTop: '1em', padding: '1em'}}>
                 <Typography variant='h5'>Add Package</Typography>
+                <Typography component='h6' variant='h6'>Required * </Typography>
+
                 <Grid container direction='row' spacing={4}>
                 <Grid item>
-                    <InputLabel>Package Type: </InputLabel>
+                    <InputLabel>Package Type*: </InputLabel>
                     {/* <Input name="pkg_type" type="text" maxLength='30' value={packaging.pkg_type} onChange={handleFormChange}/> */}
                     <ModularSelect name='pkg_type' fieldName={'pkg_type'} value={pkg.pkg_type} options={packaging} searchField={'package_type'} onChange={handleFormChange}/>
-                    <InputLabel>Package Contents:</InputLabel>
+                    <InputLabel>Package Contents*:</InputLabel>
                     <TextField inputProps={{maxLength: '255'}} name='pkg_contents' value={packaging.pkg_contents} onChange={handleFormChange}></TextField>
                 </Grid>
                 <Grid item>

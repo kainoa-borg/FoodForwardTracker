@@ -78,14 +78,15 @@ const HouseholdForm = (props) => {
     return (
       <Card sx={{marginTop: '1em', padding: '1em'}}>
         <Typography component='h5' variant='h5'>Add a Client: </Typography>
+        <Typography component='h6' variant='h6'>Required * </Typography>
         <form onSubmit={handleSubmit}>
             {/* Basic household info */}
             <Grid container spacing={4}>
               <Grid item>
-                <InputLabel htmlFor="hh_last_name">Last Name: </InputLabel>
+                <InputLabel htmlFor="hh_last_name">Last Name*: </InputLabel>
                 <Input name="hh_last_name" id="hh_last_name" type="text" inputProps={{maxLength: '30'}} required={true} value={household.hh_last_name} onChange={handleFormChange} oninput="validity.valid||(value='');"/>
                 
-                <InputLabel htmlFor="hh_first_name">First Name: </InputLabel>
+                <InputLabel htmlFor="hh_first_name">First Name*: </InputLabel>
                 <Input name="hh_first_name" id="hh_first_name" type="text" inputProps={{maxLength: '30'}} required={true} value={household.hh_first_name} onChange={handleFormChange} oninput="validity.valid||(value='');"/>
 
                 <InputLabel htmlFor='num_adult'>Number of Adults: </InputLabel>
@@ -114,16 +115,16 @@ const HouseholdForm = (props) => {
                 <Input name='paying' id='paying' type='checkbox' checked={household.paying} onChange={handleFormChange}/>
               </Grid>
               <Grid item>
-                <InputLabel htmlFor='phone'>Phone Number: </InputLabel>          
+                <InputLabel htmlFor='phone'>Phone Number*: </InputLabel>          
                 <Input name='phone' id='phone' type='tel' inputProps={{pattern: '[0-9]{3}-[0-9]{3}-[0-9]{4}', placeholder: '###-###-####', minLength: '12', maxLength: '12'}} value={household.phone} onChange={handleFormChange}>###-###-####</Input>
                 
-                <InputLabel htmlFor='street'>Street: </InputLabel>          
+                <InputLabel htmlFor='street'>Street*: </InputLabel>          
                 <Input name='street' id='street' inputProps={{maxLength: '50'}} value={household.street} onChange={handleFormChange}/>
 
-                <InputLabel htmlFor='city'>City: </InputLabel>
+                <InputLabel htmlFor='city'>City*: </InputLabel>
                 <Input name='city' id='city' inputProps={{maxLength: '50'}} value={household.city} onChange={handleFormChange}/>
 
-                <InputLabel htmlFor='pcode'>Postal Code: </InputLabel>
+                <InputLabel htmlFor='pcode'>Postal Code*: </InputLabel>
                 <Input name='pcode' id='pcode' inputProps={{minLength:'5', maxLength:'5', placeholder: '#####'}} value={household.pcode} onChange={handleFormChange}/>
 
                 <InputLabel htmlFor='state'>State: </InputLabel>

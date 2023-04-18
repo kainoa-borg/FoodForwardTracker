@@ -61,18 +61,20 @@ const RecipeIngForm = (props) => {
         {/* Basic ingredient info */}
         <Card sx={{marginTop: '1em', padding: '1em'}}>
             <Typography variant='h5'>Add Ingredient</Typography>
+            <Typography component='h6' variant='h6'>Required * </Typography>
+
             <Grid container direction='row' spacing={4}>
             <Grid item>
-                <InputLabel>Ingredient Name: </InputLabel>
+                <InputLabel>Ingredient Name*: </InputLabel>
                 {/* <Input name="ingredient_name" type="text" maxLength='30' value={ingredient.ingredient_name} onChange={handleFormChange}/> */}
                 <ModularSelect value={ingredient.ingredient_name} noDuplicates options={ingredients} searchField={'ingredient_name'} onChange={handleFormChange}/>
 
-                <InputLabel>Amount: </InputLabel>
+                <InputLabel>Amount*: </InputLabel>
                 <Input name='amt' type="text" value={ingredient.amt} onChange={handleFormChange}/>
                 {/* <ModularSelect value={ingredient.storage_type} options={ingredients} searchField={'storage_type'} onChange={handleFormChange}/> */}
 
 
-                <InputLabel>Unit: </InputLabel>
+                <InputLabel>Unit*: </InputLabel>
                 {/* <Input name='unit' type="text" value={ingredient.unit} onChange={handleFormChange}/> */}
                 <ModularSelect value={ingredient.unit} options={ingredients} searchField={'unit'} onChange={handleFormChange}/>                
             </Grid>
