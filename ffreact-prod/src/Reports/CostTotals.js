@@ -24,7 +24,7 @@ export default function costTotals() {
     // Get Cost Total information from database tables
     // Set Cost Total variables with response data
     const getCostTotalsList = (dateRange, value) => {
-      if (value == 'Ingredients'){
+      if (value === 'Ingredients'){
         setSearchingSBOpen(true);
         axios({
           method: "GET",
@@ -42,7 +42,7 @@ export default function costTotals() {
             }
         });
       }
-      if (value == 'Packaging') {
+      if (value === 'Packaging') {
         setSearchingSBOpen(true);
         axios({
           method: "GET",

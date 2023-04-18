@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import axios from 'axios'
-import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
+import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarContainer} from '@mui/x-data-grid'
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/material';
-import { Button, Popover, Snackbar, Stack, TextField, Typography } from '@mui/material';
+import { Button, Popover, Snackbar, Stack, Typography } from '@mui/material';
 
 import FormDialog from './FormDialog.js'
 import SearchToolBar from './SearchToolBar.js'
@@ -84,12 +84,13 @@ export default function NewModularDatagrid(props) {
 
     // Generalized Add Row
     const addEntry = (formData) => {
-        console.log(formData);
+        // console.log(formData);
         // If a form doesn't take the latest key, it should be added for the datagrid
         // console.log(formData);
         if (!formData[keyFieldName])
             formData[keyFieldName] = getLatestKey() + 1;
         // console.log(formData);
+        let addStatus = false;
         axios({
             method: 'POST',
             url:"http://"+apiIP+":8000/api/" + apiEndpoint + '/',
@@ -98,6 +99,7 @@ export default function NewModularDatagrid(props) {
             getDBData();
             // Open saving changes success notification
             setUpdateDoneSBOpen(true);
+            setAddFormOpen(false);
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -156,11 +158,13 @@ export default function NewModularDatagrid(props) {
     // Get table data from database
     // Set tableData state variable with ingredient data
     const getDBData = () => {
+        // console.log('REFRESHING')
         axios({
             method: "GET",
             url:"http://"+apiIP+":8000/api/" + apiEndpoint
         }).then((response)=>{
-        setTableData(response.data);
+            // console.log(response.data);
+            setTableData(response.data);
         }).catch((error) => {
         if (error.response) {
             handleErrorMessage("Couldn't get data.", error)
@@ -179,10 +183,10 @@ export default function NewModularDatagrid(props) {
 
     const handleErrorMessage = (message, error) => {
         if (error.response.status === 400) {
-            setErrorMessage(message + ' ' + 'Please check inputs and try again.');
+            setErrorMessage(message + ' Please check inputs and try again.');
         }
         else if (error.response.status === 500) {
-            setErrorMessage(message + ' ' + 'System error. Please try again or contact support');
+            setErrorMessage(message + ' System error. Please try again or contact support');
         }
         else {
             setErrorMessage(message + ' ' + error.response.status + ' ' + error.response.statusText);

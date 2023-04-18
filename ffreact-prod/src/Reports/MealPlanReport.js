@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
-import { DataGrid, GridActionsCellItem, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
-import { Box, Button, Input, InputLabel, Snackbar, Typography, Stack, FormControl} from '@mui/material';
+import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
+import { Box, Button, Input, Snackbar, Typography, FormControl} from '@mui/material';
 
 // Packaging List Component
 export default function MealPlanReport() {
@@ -85,7 +85,7 @@ export default function MealPlanReport() {
     }
 
     useEffect(() => {
-      if (calcErrorMsg != undefined) {
+      if (calcErrorMsg !== undefined) {
         console.log(calcErrorMsg);
         setCalcErrorSBOpen(true);
       }

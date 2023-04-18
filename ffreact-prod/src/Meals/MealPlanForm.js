@@ -1,6 +1,5 @@
-import {useState, useEffect} from 'react'
+import {useState } from 'react'
 import React from 'react'
-import axios from 'axios'
 import { Stack, Input, InputLabel, Select, MenuItem, Typography, Card, Button } from '@mui/material';
 // import ReusableForm from '../ReusableForm.js'
 
@@ -84,11 +83,13 @@ const MealPlanForm = (props) => {
       <form onSubmit={handleSubmit}>
         <Card sx={{marginTop: '1em', padding: '1em'}}>
         <Typography variant='h5'>Add Planned Meal</Typography>
+        <Typography component='h6' variant='h6'>Required * </Typography>
+
           <Stack>
-            <InputLabel htmlFor="m_date">Next Delivery Date: </InputLabel>
+            <InputLabel htmlFor="m_date">Next Delivery Date*: </InputLabel>
             <Input name="m_date" required type="date" maxLength='50' data-date="" data-date-format="YYYY-MM-DD" value={meal.m_date} onChange={handleFormChange}/>
 
-            <InputLabel htmlFor="meal_r_num">Meal: </InputLabel>
+            <InputLabel htmlFor="meal_r_num">Meal*: </InputLabel>
             <Select name='meal_r_num' required meal={meal.meal_r_num} onChange={handleFormChange}>
               {getRecipeOptions('meal')}
             </Select>

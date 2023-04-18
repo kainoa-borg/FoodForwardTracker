@@ -6,7 +6,7 @@ import { Grid, Typography, Stack, Box} from '@mui/material'
 import TextField from '@mui/material/TextField'
 import { Card } from '@mui/material'
 
-import ffLogo from './Images/ff_logo.jpg'
+import ffLogo from '../Images/ff_logo.jpg'
 
 // Login Page Component
 // Takes handlePageClick callback function to enable page switching when login is completed
@@ -30,9 +30,9 @@ const LoginPage = (props) => {
         var time = now.getTime();
         var expireTime = time + 1000*36000;
         now.setTime(expireTime);
-        document.cookie = 'username='+username+';'+'expires='+expireTime+';'
-        document.cookie = 'isAuthenticated='+isAuthenticated+';'+'expires='+expireTime+';'
-        document.cookie = 'isAdmin='+isAdmin+';'+'expires='+expireTime+';'
+        document.cookie = 'username='+username+';expires='+expireTime+';'
+        document.cookie = 'isAuthenticated='+isAuthenticated+';expires='+expireTime+';'
+        document.cookie = 'isAdmin='+isAdmin+';expires='+expireTime+';'
     }
 
     const sendLoginRequest = () => {

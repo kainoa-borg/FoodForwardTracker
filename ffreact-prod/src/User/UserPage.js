@@ -1,15 +1,13 @@
 import React from 'react'
 import axios from 'axios'
 import { useState, useEffect} from 'react'
-import { Typography, Stack, Input, InputLabel, Button, Box, Card, Grid, TextField} from "@mui/material"
+import { Typography, Button, Box, Card, Grid } from "@mui/material"
 import Error from '../Error.js'
 import ffLogo from '../Images/ff_logo.jpg'
 
 const UserPage = (props) => {
     const handlePageClick = props.handlePageClick;
     const cookies = document.cookie.split(';');
-    const [editUser, setEdituser] = useState(null);
-    const [errorComponent, setErrorComponent] = useState(null);
     const [loadingComponent, setLoadingComponent] = useState(null);
     const [user, setUser] = useState(
         {
@@ -25,12 +23,12 @@ const UserPage = (props) => {
         getUserInfo();
     }, []);
 
-    const handleResetChange = (event) => {
-        const fieldName = event.target.name;
-        const fieldValue = event.target.value;
-        const thisUser = {...user};
-        thisUser[fieldName] = fieldValue;   
-    }
+    // const handleResetChange = (event) => {
+    //     const fieldName = event.target.name;
+    //     const fieldValue = event.target.value;
+    //     const thisUser = {...user};
+    //     thisUser[fieldName] = fieldValue;   
+    // }
 
     const getUserInfo = () => {
         console.log("MAKING REQUEST TO DJANGO")

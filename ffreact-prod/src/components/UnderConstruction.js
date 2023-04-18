@@ -1,7 +1,6 @@
 import React from 'react'
 import { Fragment } from 'react'
-import { Typography, Card, Grid, CardContent, CardActionArea, Button } from '@mui/material'
-import { Stack } from '@mui/material'
+import { Typography, Grid } from '@mui/material'
 import constructionImage from '../Images/construction.png'
 
 // construction image source https://www.reshot.com/free-vector-illustrations/item/construction-workers-DC8L5WUP23/
@@ -9,7 +8,7 @@ import constructionImage from '../Images/construction.png'
 // image license user terms https://www.reshot.com/terms/
 
 const UnderConstruction = (props) => {
-    const handlePageClick = props.handlePageClick;
+    // const handlePageClick = props.handlePageClick;
 
     // HTML structure of this component
     return (
@@ -19,7 +18,7 @@ const UnderConstruction = (props) => {
             </Typography>
             <Grid container justifyContent={'center'} sx={{width: '100%'}}>
                 <Grid item alignSelf='center' sx={{height: {lg: '40%', md: '60%', sm: '85%'}, width: {lg: '40%', md: '60%', sm: '85%'}}}>
-                    <img style={{objectFit: 'contain', width: '100%', height: '100%'}} src={constructionImage}/>            
+                    <img style={{objectFit: 'contain', width: '100%', height: '100%'}} src={constructionImage} alt="Under Construction"/>            
                 </Grid>
             </Grid>
             <Typography variant='h6' sx={{textAlign: 'center'}}>This page is currently under construction!</Typography>

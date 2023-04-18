@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import React from 'react'
 import { Button, Grid, Input, Typography } from '@mui/material'
 import { InputLabel } from '@mui/material'
@@ -37,7 +37,6 @@ const UserForm = (props) => {
     }
 
     const updateEditForm = (names, values) => {
-      console.log(names, values);
         const newUser = { ...user };
       for (let i = 0; i < names.length; i++) {
           newUser[names[i]] = values[i];
@@ -62,27 +61,29 @@ const UserForm = (props) => {
     return (
       <Card sx={{marginTop: '1em', padding: '1em'}}>
         <Typography component='h5' variant='h5'>Add a User: </Typography>
+        <Typography component='h6' variant='h6'>Required * </Typography>
+
         <form onSubmit={handleSubmit}>
           {/* Basic User info */}
           <Grid container spacing={4}>
               <Grid item>
-                <InputLabel htmlFor='username'>Username: </InputLabel>
-                <Input name='username' id='username' type='text' value={user.username} onChange={handleFormChange}/>
+                <InputLabel htmlFor='username'>Username*: </InputLabel>
+                <Input name='username' id='username' type='text' inputProps={{maxLength:50}} required value={user.username} onChange={handleFormChange}/>
               </Grid>
               <Grid item>
-                <InputLabel htmlFor='password'>Password: </InputLabel>
-                <Input name='password' id='password' type='password' value={user.password} onChange={handleFormChange}/>
+                <InputLabel htmlFor='password'>Password*: </InputLabel>
+                <Input name='password' id='password' type='password' required value={user.password} onChange={handleFormChange}/>
               </Grid>
               <Grid item>
-                <InputLabel htmlFor='email'>Email: </InputLabel>
-                <Input name='email' id='email' type='email' value={user.email} onChange={handleFormChange}/>
+                <InputLabel htmlFor='email'>Email*: </InputLabel>
+                <Input name='email' id='email' type='email' inputProps={{maxLength:45}} required value={user.email} onChange={handleFormChange}/>
               </Grid>
               <Grid item>
                 <InputLabel htmlFor='admin_flag'>Is Admin.: </InputLabel>
                 <Input name='admin_flag' id='admin_flag' type='checkbox' value={user.admin_flag} onChange={handleFormChange}/>
               </Grid>
             </Grid>
-            <Button type='Submit' color='lightBlue' variant='contained' onClick={handleClose}>Add User</Button>
+            <Button type='Submit' color='lightBlue' variant='contained'>Add User</Button>
           </form>
       </Card>
     );

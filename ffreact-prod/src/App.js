@@ -1,7 +1,7 @@
 import CostTotals from './Reports/CostTotals.js'
-import EntryPage from './EntryPage.js'
-import LoginPage from './LoginPage.js'
-import LandingPage from './LandingPage.js'
+import EntryPage from './components/EntryPage.js'
+import LoginPage from './components/LoginPage.js'
+import LandingPage from './components/LandingPage.js'
 import MealsPage from './Meals/MealsPage.js'
 import InventoryPage from './InventoryPage.js'
 import HouseholdForm from './Households/HouseholdForm.js'
@@ -24,12 +24,13 @@ import PackagingPage from './Packaging/PackagingPage.js'
 import PackagingReport from './Reports/PackagingReport.js'
 import PackagingReturns from './Reports/PackagingReturns.js'
 import PackagingPurchaseReport from './Reports/PackagingPurchaseReport.js'
-import PwResetPage from './PwResetPage.js'
+import PwResetPage from './components/PwResetPage.js'
 import Recipe from './Recipe/RecipeList.js'
 import RecipePage from './Recipe/RecipePage.js'
 import UnderConstruction from './components/UnderConstruction.js'
-import Navbar from './Navbar.js'
+import Navbar from './components/Navbar.js'
 import React from 'react'
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Box } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
@@ -46,6 +47,15 @@ const style = {
 };
 
 const App = () => {
+    return (
+        <BrowserRouter>
+            <AppComponent/>
+        </BrowserRouter>
+    )
+}
+
+const AppComponent = () => {
+    const navigate = useNavigate();
     const [loginState, setLoginState] = useState({
         username: "",
         isAuthenticated: false,
@@ -85,35 +95,33 @@ const App = () => {
     const handlePageClick = (pageName) => {
         console.log(pageName)
         switch(pageName) {
-            case 'cost-totals': setCurrPage(<CostTotals handlePageClick={handlePageClick} />); break;
-            case 'loginPage': setCurrPage(<LoginPage loginState={loginState} setLoginState={setLoginState} handlePageClick={handlePageClick} />); break;
-            case 'newUserPage': setCurrPage(<NewUserPage handlePageClick={handlePageClick} />); break;
-            case 'pwResetPage': setCurrPage(<PwResetPage handlePageClick={handlePageClick} />); break;
-            case 'landingPage': setCurrPage(<LandingPage handlePageClick={handlePageClick} />); break;
+            case 'cost-totals': navigate('cost-totals-report'); break;
+            case 'loginPage': navigate('/login'); break;
+            case 'newUserPage': navigate('/sign-up'); break;
+            case 'pwResetPage': navigate('/reset-password'); break;
+            case 'landingPage': navigate('/home'); break;
             case 'mealsPage': setCurrPage(<MealsPage handlePageClick={handlePageClick} />); break;
-            case 'households': setCurrPage(<HouseholdPage handlePageClick={handlePageClick} />); break;
+            case 'households': navigate('/clients'); break;
             case 'householdForm': setCurrPage(<HouseholdForm />); break;
-            case 'households-report': setCurrPage(<HouseholdsReport handlePageClick={handlePageClick} />); break;
-            case 'ingredients': setCurrPage(<Ingredients handlePageClick={handlePageClick} />); break;
-            case 'ingredientPage': setCurrPage(<IngredientPage handlePageClick={handlePageClick} />); break;
-            case 'ingredients-report': setCurrPage(<IngredientsReport handlePageClick={handlePageClick} />); break;
-            case 'ing-purchase-report': setCurrPage(<IngPurchaseReport handlePageClick={handlePageClick} />); break;
+            case 'households-report': navigate('clients-report'); break;
+            case 'ingredientPage': navigate('/ingredients'); break;
+            case 'ingredients-report': navigate('ingredients-report'); break;
+            case 'ing-purchase-report': navigate('ingredient-purchasing-report'); break;
             case 'inventoryPage': setCurrPage(<InventoryPage handlePageClick={handlePageClick} />); break;
-            case 'packaging': setCurrPage(<Packaging handlePageClick={handlePageClick} />); break;
-            case 'packagingPage': setCurrPage(<PackagingPage handlePageClick={handlePageClick} />); break;
-            case 'packaging-report': setCurrPage(<PackagingReport handlePageClick={handlePageClick} />); break;
-            case 'packaging-return-report': setCurrPage(<PackagingReturns handlePageClick={handlePageClick} />); break;
-            case 'pack-purchase-report': setCurrPage(<PackagingPurchaseReport handlePageClick={handlePageClick} />); break;
+            case 'packagingPage': navigate('/packaging'); break;
+            case 'packaging-report': navigate('/packaging-report'); break;
+            case 'packaging-return-report': navigate('package-return-report'); break;
+            case 'pack-purchase-report': navigate('package-purchasing-report'); break;
             case 'stations': setCurrPage(<StationList handlePageClick={handlePageClick} />); break;
-            case 'meals': setCurrPage(<MealPlan handlePageClick={handlePageClick} />); break;
-            case 'meal-plan-report': setCurrPage(<MealPlanReport handlePageClick={handlePageClick} />); break;
-            case 'meal-history-report': setCurrPage(<MealHistoryReport handlePageClick={handlePageClick} />); break;
+            case 'meals': navigate('/mealplans'); break;
+            case 'meal-plan-report': navigate('/meal-plan-report'); break;
+            case 'meal-history-report': navigate('/meal-history-report'); break;
             case 'recipes': setCurrPage(<Recipe handlePageClick={handlePageClick} />); break;
-            case 'recipePage': setCurrPage(<RecipePage handlePageClick={handlePageClick} setCurrPage={setCurrPage} />); break;
+            case 'recipePage': navigate('/recipes'); break;
             case 'reports': setCurrPage(<ReportsPage handlePageClick={handlePageClick} />); break;
             case 'userPage': setCurrPage(<UserPage handlePageClick={handlePageClick} />); break;
-            case 'userList': setCurrPage(<UserList handlePageClick={handlePageClick} />); break;
-            case 'entryPage': setCurrPage(<EntryPage handlePageClick={handlePageClick}/>); break;
+            case 'userList': navigate('/admin'); break;
+            case 'entryPage': navigate('/'); break;
             case 'under-construction': setCurrPage(<UnderConstruction handlePageClick={handlePageClick}/>); break;
             default: setCurrPage(<LandingPage handlePageClick={handlePageClick} />); break;
         }
@@ -162,7 +170,30 @@ const App = () => {
                 margin: 'auto',
                 marginTop: {lg: '5%', md: '6%', sm: '10%', xs: '12%'},
             }}>
-                {currPage}
+                <Routes>
+                    <Route exact path='/' element={<EntryPage setLoginState={setLoginState} handlePageClick={handlePageClick}/>}/>
+                    <Route path='/home' element={<LandingPage handlePageLCick={handlePageClick} />}/>
+                    <Route path='/login' element={<LoginPage loginState={loginState} setLoginState={setLoginState} handlePageClick={handlePageClick} />}/>
+                    <Route path='/sign-up' element={<NewUserPage handlePageClick={handlePageClick} />}/>
+                    <Route path='/reset-password' element={<PwResetPage handlePageClick={handlePageClick} />}/>
+                    <Route path='/clients' element={<HouseholdPage handlePageClick={handlePageClick} />}/>
+                    <Route path='/ingredients' element={<IngredientPage handlePageClick={handlePageClick} />}/>
+                    <Route path='/packaging' element={<PackagingPage handlePageClick={handlePageClick} />}/>
+                    <Route path='/mealplans' element={<MealPlan handlePageClick={handlePageClick} />}/>
+                    <Route path='/recipes/*' element={<RecipePage handlePageClick={handlePageClick} setCurrPage={setCurrPage} />}/>
+                    <Route path='/cost-totals-report' element={<CostTotals handlePageClick={handlePageClick} />}/>
+                    <Route path='/clients-report' element={<HouseholdsReport handlePageClick={handlePageClick} />}/>
+                    <Route path='/ingredients-report' element={<IngredientsReport handlePageClick={handlePageClick} />}/>
+                    <Route path='/ingredient-purchasing-report' element={<IngPurchaseReport handlePageClick={handlePageClick} />}/>
+                    <Route path='meal-plan-report' element={<MealPlanReport handlePageClick={handlePageClick} />}/>
+                    <Route path='/meal-history-report' element={<MealHistoryReport handlePageClick={handlePageClick} />}/>
+                    <Route path='/packaging-report' element={<PackagingReport handlePageClick={handlePageClick} />}/>
+                    <Route path='/package-purchasing-report' element={<PackagingPurchaseReport handlePageClick={handlePageClick} />}/>
+                    <Route path='/package-returns-report' element={<PackagingReturns handlePageClick={handlePageClick} />}/>
+                    <Route path='/under-construction' element={<UnderConstruction handlePageClick={handlePageClick}/>}/>
+                    <Route path='/admin' element={<UserList handlePageClick={handlePageClick} />}/>
+                    <Route path='/user-page' element={<UserPage handlePageClick={handlePageClick} />}/>
+                </Routes>
             </Box>
         </div>
         </ThemeProvider>

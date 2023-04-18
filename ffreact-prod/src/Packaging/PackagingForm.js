@@ -109,7 +109,7 @@ const PackagingForm = (props) => {
       let fieldValue = event.target.type === 'checkbox' ? (+event.target.checked) : event.target.value;
       // Create new packaging object before setting state
       updateEditForm([fieldName], [fieldValue]);
-      // updateEditForm('aFlag', true);
+      handleClose();
     }
 
     if (!packaging || !supplierList) {
@@ -122,24 +122,25 @@ const PackagingForm = (props) => {
           {/* Packaging info fields */}
           <Card sx={{marginTop: '1em', padding: '1em'}}>
             <Typography component='h5' variant='h5'>Add Packaging: </Typography>
+            <Typography component='h6' variant='h6'>Required * </Typography>
             <Grid container direction='row' spacing={4}>
               <Grid item>
-                <InputLabel htmlFor="package_type">Package Type: </InputLabel>
+                <InputLabel htmlFor="package_type">Package Type*: </InputLabel>
                 {/*<Input name="package_type" id="package_type" type="text" maxLength='30' required={true} value={packaging.package_type} onChange={handleFormChange}/>*/}
                 <ModularSelect value={packageItem.package_type} options={packaging} noDuplicates searchField={'package_type'} onChange={handleFormChange}/>
 
-                <InputLabel htmlFor='unit_qty'>Unit Quantity: </InputLabel>
+                <InputLabel htmlFor='unit_qty'>Unit Quantity*: </InputLabel>
                 <Input name='unit_qty' id="unit_qty" type="number" inputProps={{min: 0}} value={packageItem.unit_qty} onChange={handleFormChange}/>
             </Grid>
             <Grid item>
-              <InputLabel htmlFor='qty_holds'>Size: </InputLabel>
+              <InputLabel htmlFor='qty_holds'>Size*: </InputLabel>
               <Input name='qty_holds' id="qty_holds" type="number" inputProps={{min: 0}} value={packageItem.qty_holds} onChange={handleFormChange}/>
                 
-              <InputLabel htmlFor='unit_cost'>Unit Cost: </InputLabel>
+              <InputLabel htmlFor='unit_cost'>Unit Cost*: </InputLabel>
               <Input name='unit_cost' id="unit_cost" type="number" inputProps={{min: 0}} value={packageItem.unit_cost} onChange={handleFormChange}/>
             </Grid>
             <Grid item>
-              <InputLabel htmlFor='unit'>Unit: </InputLabel>
+              <InputLabel htmlFor='unit'>Unit*: </InputLabel>
               {/*<Input name='unit' id="unit" type="text" value={packaging.unit} onChange={handleFormChange}/>*/}
               <ModularSelect inputProps={{min: 0}} value={packageItem.unit} options={packaging} noDuplicates searchField={'unit'} onChange={handleFormChange} />
 

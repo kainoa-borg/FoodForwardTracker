@@ -1,27 +1,25 @@
-import { Button, Typography, Box, Grid, Checkbox, Snackbar, FormControlLabel, TextField, InputLabel, Paper, Popover, MenuItem, Select, FormControl } from "@mui/material";
+import { Button, Typography, Box, Grid, Snackbar, Stack, TextField, 
+    InputLabel, Paper, MenuItem, Select, FormControl } from "@mui/material";
 import { HighlightOff } from "@mui/icons-material";
-import React, {useState, useEffect, useCallback, Fragment, useRef} from 'react';
-import { DataGrid, useGridApiContext } from "@mui/x-data-grid";
-import { Stack } from "@mui/material";
-import axios from 'axios'
-// import FormData from 'axios'
-import RecipePage from './RecipePage.js'
+import React, {useState, useEffect, Fragment, useRef} from 'react';
+import { useGridApiContext } from "@mui/x-data-grid";
+import axios from 'axios';
+import RecipePage from './RecipePage.js';
 import ModularRecipeDatagrid from "../components/ModularRecipeDatagrid.js";
-import RecipeIngForm from "./RecipeIngForm.js"
-import RecipePkgForm from "./RecipePkgForm.js"
-import RecipeInstForm from './RecipeInstForm.js'
-import RecipeIngList from "./RecipeIngList.js"
-
-import food_placeholder from '../Images/food_placeholder.jpg'
-
-import DataGridDialog from '../components/DatagridDialog.js'
-import { number } from "yup";
+import RecipeIngForm from "./RecipeIngForm.js";
+import RecipePkgForm from "./RecipePkgForm.js";
+import RecipeInstForm from './RecipeInstForm.js';
+import RecipeIngList from "./RecipeIngList.js";
+import DataGridDialog from '../components/DatagridDialog.js';
 import ModularSelect from "../components/ModularSelect.js";
+import { useNavigate } from "react-router-dom";
+// import food_placeholder from '../Images/food_placeholder.jpg'
 
 export default function Recipe({recipeData, setRecipeData, ingredientOptions, packagingOptions, setCurrPage, getDBRecipeData, isAdding}) {
     // If recipeData prop is passed, use that, otherwise use empty recipeData
     // const [recipeName, setRecipeName] = useState(recipeData.r_name);
     const nameField = useRef();
+    const navigate = useNavigate();
 
     const IngredientNameEditCell = (params) => {
         const api = useGridApiContext();
@@ -71,6 +69,9 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             width: 100,
             type: 'string',
             editable: true,
+            renderEditCell: (params) => {
+                return <ModularSelect {...params} noDuplicates options={ingredientOptions} searchField={'unit'}/>
+            }
         },
         // {
         //     field: 'prep',
@@ -159,7 +160,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     const handleCloseClick = () => {
         // Return to recipe list when close is clicked
         handleClearTempFiles();
-        setCurrPage(<RecipePage setCurrPage={setCurrPage}></RecipePage>)
+        setCurrPage(<RecipePage/>)
     }
 
     const handleTempUpload = (file, apiEndpoint) => {
@@ -312,6 +313,17 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     }
 
     const handleErrorMessage = (error) => {
+        // if (error.response.data) {
+        //     console.log(error.response.data)
+        //     let error_field = ''
+        //     let error_text = ''
+        //     let error_keys = Object.keys(error.response.data);
+        //     error_keys.forEach((error_key) => {
+        //         error_field = error_key
+        //         error_text = error.response.data[error_key]
+        //     })
+        //     setErrorMessage('Save Failed!' + error_field + ' ' + error_text);
+        // }
         setErrorMessage('Save failed! ' + error.response.statusText);
     }
     useEffect(() => {
@@ -351,7 +363,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 }
                 // console.log('post success!')
                 setUpdateDoneSBOpen(true);
-                // getDBRecipeData(recipeData.r_num);
+                setCurrPage(<RecipePage/>);
             }).catch((error) => {
             if (error.response) {
                 handleErrorMessage(error);
@@ -375,7 +387,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             }).then((response)=>{
                 // console.log('patch success!')
                 setUpdateDoneSBOpen(true);
-                // getDBRecipeData(recipeData.r_num);
+                setCurrPage(<RecipePage/>);
             }).catch((error) => {
             if (error.response) {
                 handleErrorMessage(error);

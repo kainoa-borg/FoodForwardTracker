@@ -1,12 +1,28 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import axios from 'axios'
-import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid'
+import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarContainer} from '@mui/x-data-grid' //GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport,
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import Recipe from './Recipe.js'
-import { Button, Popover, Snackbar, Stack, TextField, Typography } from '@mui/material';
+import { Button, Popover, Snackbar, Typography } from '@mui/material';
+import { Outlet, Routes, Route, useNavigate } from 'react-router-dom';
 
 export default function RecipePage(props) {
+    const [currPage, setCurrPage] = useState();
+
+    useEffect(() => {
+        setCurrPage(<RecipePageComponent {...props} setCurrPage={setCurrPage}/>)
+    }, [])
+
+    return (
+        <div>
+            {currPage}
+        </div>
+    )
+}
+
+function RecipePageComponent(props) {
+    const navigate = useNavigate();
 
     const [addRecipeData, setAddRecipeData] = useState({
         "r_num": "",
@@ -83,7 +99,7 @@ export default function RecipePage(props) {
             url:"http://4.236.185.213:8000/api/mealrecipes/" + pk + '/'
         }).then((response)=>{
         // setRecipeData(response.data);
-        setCurrPage(<Recipe 
+        setCurrPage(<Recipe
             recipeData={response.data} 
             setRecipeData={setRecipeData} 
             getDBRecipeData={getDBRecipeData} 
@@ -106,7 +122,7 @@ export default function RecipePage(props) {
 
         axios({
             method: "DELETE",
-            url:"http://4.236.185.213:8000/api/mealrecipes/"+params.id+'/',
+            url:"http://localhost:8000/api/mealrecipes/"+params.id+'/',
         }).then((response)=>{
             getDBRecipes();
             // Open saving changes success notification
@@ -162,9 +178,9 @@ export default function RecipePage(props) {
         if (rowModesModel[params.id]) isInEditMode = rowModesModel[params.id].mode === GridRowModes.Edit;
 
         // Set this row to edit mode
-        const handleEditClick = (params) => {
-            setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.Edit}});
-        }
+        // const handleEditClick = (params) => {
+        //     setRowModesModel({...rowModesModel, [params.id]: {mode: GridRowModes.Edit}});
+        // }
 
         // Set this row to view mode
         // Open 'request sent' snackbar
@@ -240,12 +256,28 @@ export default function RecipePage(props) {
         }
     }
 
-    if (recipes === undefined || ingredients === undefined || packaging == undefined) {
+    // Navigate when either addRecipeElement or recipeDetailElement is defined
+    useEffect(() => {
+        handleNavigate();
+    }, [props.recipeDetailElement, props.addRecipeElement])
+    
+    const handleNavigate = () => {
+        if (props.addRecipeElement) {
+            navigate('add-recipe');
+        }
+        if (props.recipeDetailElement) {
+            navigate('edit-recipe');
+        }
+    }
+
+    // Only load the recipe list if necessary data has been fetched
+    if (recipes === undefined || ingredients === undefined || packaging === undefined) {
         return (
             <>loading...</>
         )
     }
 
+    // Get recipe details for this recipe, stop rendering the recipe list
     const handleEditRecipeClick = (event, params) => {
         getDBRecipeData(params.row.r_num);
         setRecipeEditID(params.row.r_num);

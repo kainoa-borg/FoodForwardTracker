@@ -2,7 +2,7 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { useGridApiContext } from '@mui/x-data-grid';
-import { createTheme, FilledInput, FormControl, Input, InputAdornment, InputLabel, ThemeProvider } from '@mui/material';
+import { Input, InputAdornment } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 const filter = createFilterOptions();
