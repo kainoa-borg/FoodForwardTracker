@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import {useState} from 'react'
 import { Typography, Stack, Button, Box, Card, Grid, TextField} from "@mui/material"
-import ffLogo from './Images/ff_logo.jpg'
+import ffLogo from '../Images/ff_logo.jpg'
 
 // PW Reset Page Component
 // Takes handlePageClick callback function to enable page switching when reset request is complete

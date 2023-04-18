@@ -12,12 +12,14 @@ import RecipeInstForm from './RecipeInstForm.js';
 import RecipeIngList from "./RecipeIngList.js";
 import DataGridDialog from '../components/DatagridDialog.js';
 import ModularSelect from "../components/ModularSelect.js";
+import { useNavigate } from "react-router-dom";
 // import food_placeholder from '../Images/food_placeholder.jpg'
 
 export default function Recipe({recipeData, setRecipeData, ingredientOptions, packagingOptions, setCurrPage, getDBRecipeData, isAdding}) {
     // If recipeData prop is passed, use that, otherwise use empty recipeData
     // const [recipeName, setRecipeName] = useState(recipeData.r_name);
     const nameField = useRef();
+    const navigate = useNavigate();
 
     const IngredientNameEditCell = (params) => {
         const api = useGridApiContext();
@@ -158,7 +160,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     const handleCloseClick = () => {
         // Return to recipe list when close is clicked
         handleClearTempFiles();
-        setCurrPage(<RecipePage setCurrPage={setCurrPage}></RecipePage>)
+        setCurrPage(<RecipePage/>)
     }
 
     const handleTempUpload = (file, apiEndpoint) => {
@@ -361,7 +363,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 }
                 // console.log('post success!')
                 setUpdateDoneSBOpen(true);
-                getDBRecipeData(recipeData.r_num);
+                setCurrPage(<RecipePage/>);
             }).catch((error) => {
             if (error.response) {
                 handleErrorMessage(error);
@@ -385,7 +387,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             }).then((response)=>{
                 // console.log('patch success!')
                 setUpdateDoneSBOpen(true);
-                getDBRecipeData(recipeData.r_num);
+                setCurrPage(<RecipePage/>);
             }).catch((error) => {
             if (error.response) {
                 handleErrorMessage(error);

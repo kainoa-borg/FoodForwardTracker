@@ -2,8 +2,8 @@ import * as React from 'react'
 import { useEffect } from 'react'
 import Button from '@mui/material/Button'
 import { Grid, Typography, Box} from '@mui/material'
-import ffLogo from './Images/ff_logo.jpg'
-import entryImage from './Images/food_placeholder.jpg'
+import ffLogo from '../Images/ff_logo.jpg'
+import entryImage from '../Images/food_placeholder.jpg'
 
 // Login Page Component
 // Takes handlePageClick callback function to enable page switching when login is completed
