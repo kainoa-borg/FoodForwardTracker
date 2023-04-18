@@ -125,21 +125,22 @@ const IngredientForm = (props) => {
         {/* Basic ingredient info */}
         <Card sx={{marginTop: '1em', padding: '1em'}}>
           <Typography variant='h5'>Add Ingredient</Typography>
+          <Typography component='h6' variant='h6'>Required * </Typography>
           <Grid container direction='row' spacing={4}>
             <Grid item>
-              <InputLabel htmlFor="ingredient_name">Ingredient Name: </InputLabel>
+              <InputLabel htmlFor="ingredient_name">Ingredient Name*: </InputLabel>
               {/* <Input name="ingredient_name" type="text" maxLength='30' value={ingredient.ingredient_name} onChange={handleFormChange}/> */}
               <ModularSelect value={ingredient.ingredient_name} options={ingredients} noDuplicates searchField={'ingredient_name'} onChange={handleFormChange}/>
 
-              <InputLabel htmlFor='storage_type'>Category: </InputLabel>
+              <InputLabel htmlFor='storage_type'>Category*: </InputLabel>
               {/* <Input name='storage_type' type="text" value={ingredient.storage_type} onChange={handleFormChange}/> */}
               <ModularSelect value={ingredient.storage_type} options={ingredients} noDuplicates searchField={'storage_type'} onChange={handleFormChange} />
 
-              <InputLabel htmlFor='pkg_type'>Package Type: </InputLabel>
+              <InputLabel htmlFor='pkg_type'>Package Type*: </InputLabel>
               {/* <Input name='pkg_type' type="text" value={ingredient.pkg_type} onChange={handleFormChange}/> */}
               <ModularSelect value={ingredient.pkg_type} options={ingredients} noDuplicates searchField={'pkg_type'} onChange={handleFormChange}/>
 
-              <InputLabel htmlFor="unit">Measure: </InputLabel>
+              <InputLabel htmlFor="unit">Measure*: </InputLabel>
               {/* <Input name="unit" type="text" value={ingredient.unit} onChange={handleFormChange}/> */}
               <ModularSelect value={ingredient.unit} options={ingredients} inputProps={{min: 0}} noDuplicates searchField={'unit'} onChange={handleFormChange}/>
             </Grid>

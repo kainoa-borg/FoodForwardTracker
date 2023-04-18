@@ -61,19 +61,21 @@ const UserForm = (props) => {
     return (
       <Card sx={{marginTop: '1em', padding: '1em'}}>
         <Typography component='h5' variant='h5'>Add a User: </Typography>
+        <Typography component='h6' variant='h6'>Required * </Typography>
+
         <form onSubmit={handleSubmit}>
           {/* Basic User info */}
           <Grid container spacing={4}>
               <Grid item>
-                <InputLabel htmlFor='username'>Username: </InputLabel>
+                <InputLabel htmlFor='username'>Username*: </InputLabel>
                 <Input name='username' id='username' type='text' inputProps={{maxLength:50}} required value={user.username} onChange={handleFormChange}/>
               </Grid>
               <Grid item>
-                <InputLabel htmlFor='password'>Password: </InputLabel>
+                <InputLabel htmlFor='password'>Password*: </InputLabel>
                 <Input name='password' id='password' type='password' required value={user.password} onChange={handleFormChange}/>
               </Grid>
               <Grid item>
-                <InputLabel htmlFor='email'>Email: </InputLabel>
+                <InputLabel htmlFor='email'>Email*: </InputLabel>
                 <Input name='email' id='email' type='email' inputProps={{maxLength:45}} required value={user.email} onChange={handleFormChange}/>
               </Grid>
               <Grid item>
