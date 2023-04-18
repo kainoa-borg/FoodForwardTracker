@@ -50,6 +50,7 @@ const HouseholdForm = (props) => {
       addEntry(household);
       // Clear the form state
       setHousehold(clearHousehold());
+      handleClose();
     }
 
     const updateEditForm = (names, values) => {

@@ -109,7 +109,7 @@ const PackagingForm = (props) => {
       let fieldValue = event.target.type === 'checkbox' ? (+event.target.checked) : event.target.value;
       // Create new packaging object before setting state
       updateEditForm([fieldName], [fieldValue]);
-      // updateEditForm('aFlag', true);
+      handleClose();
     }
 
     if (!packaging || !supplierList) {
