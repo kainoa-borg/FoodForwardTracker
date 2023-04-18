@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AppBar, Button, Typography, Toolbar, Tabs, Grid} from "@mui/material"
-import Dropdown from './components/Dropdown'
+import Dropdown from './Dropdown'
 
 // const PAGES = ["Landing Page", "Clients", "Households", "Inventory", "Meals", "Reports", "Administration"]
 // console.log(PAGES)

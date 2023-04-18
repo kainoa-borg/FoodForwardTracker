@@ -7,7 +7,7 @@ import RestaurantIcon from '@mui/icons-material/Restaurant';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import Dropdown from './components/Dropdown';
+import Dropdown from './Dropdown';
 
 const cardStyle = {
     height: '100%',

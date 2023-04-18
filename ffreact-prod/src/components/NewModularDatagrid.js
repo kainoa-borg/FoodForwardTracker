@@ -84,12 +84,13 @@ export default function NewModularDatagrid(props) {
 
     // Generalized Add Row
     const addEntry = (formData) => {
-        console.log(formData);
+        // console.log(formData);
         // If a form doesn't take the latest key, it should be added for the datagrid
         // console.log(formData);
         if (!formData[keyFieldName])
             formData[keyFieldName] = getLatestKey() + 1;
         // console.log(formData);
+        let addStatus = false;
         axios({
             method: 'POST',
             url:"http://"+apiIP+":8000/api/" + apiEndpoint + '/',
@@ -98,6 +99,7 @@ export default function NewModularDatagrid(props) {
             getDBData();
             // Open saving changes success notification
             setUpdateDoneSBOpen(true);
+            setAddFormOpen(false);
           }).catch((error) => {
             if (error.response) {
               console.log(error.response);
@@ -156,12 +158,12 @@ export default function NewModularDatagrid(props) {
     // Get table data from database
     // Set tableData state variable with ingredient data
     const getDBData = () => {
-        console.log('REFRESHING')
+        // console.log('REFRESHING')
         axios({
             method: "GET",
             url:"http://"+apiIP+":8000/api/" + apiEndpoint
         }).then((response)=>{
-            console.log(response.data);
+            // console.log(response.data);
             setTableData(response.data);
         }).catch((error) => {
         if (error.response) {
