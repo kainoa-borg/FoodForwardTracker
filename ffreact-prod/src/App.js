@@ -30,7 +30,7 @@ import RecipePage from './Recipe/RecipePage.js'
 import UnderConstruction from './components/UnderConstruction.js'
 import Navbar from './components/Navbar.js'
 import React from 'react'
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Box } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
@@ -44,6 +44,14 @@ const style = {
     // border: '1px solid black',
     display: 'flex',
     justifyContent: 'space-between',
+};
+
+const ProtectedRoute = ({ isAdmin, children }) => {
+    if (!isAdmin) {
+      return <Navigate to="/home" replace />;
+    }
+  
+    return children;
 };
 
 const App = () => {
@@ -185,13 +193,17 @@ const AppComponent = () => {
                     <Route path='/clients-report' element={<HouseholdsReport handlePageClick={handlePageClick} />}/>
                     <Route path='/ingredients-report' element={<IngredientsReport handlePageClick={handlePageClick} />}/>
                     <Route path='/ingredient-purchasing-report' element={<IngPurchaseReport handlePageClick={handlePageClick} />}/>
-                    <Route path='meal-plan-report' element={<MealPlanReport handlePageClick={handlePageClick} />}/>
+                    <Route path='/meal-plan-report' element={<MealPlanReport handlePageClick={handlePageClick} />}/>
                     <Route path='/meal-history-report' element={<MealHistoryReport handlePageClick={handlePageClick} />}/>
                     <Route path='/packaging-report' element={<PackagingReport handlePageClick={handlePageClick} />}/>
                     <Route path='/package-purchasing-report' element={<PackagingPurchaseReport handlePageClick={handlePageClick} />}/>
                     <Route path='/package-returns-report' element={<PackagingReturns handlePageClick={handlePageClick} />}/>
                     <Route path='/under-construction' element={<UnderConstruction handlePageClick={handlePageClick}/>}/>
-                    <Route path='/admin' element={<UserList handlePageClick={handlePageClick} />}/>
+                    <Route path='/admin' element={
+                        <ProtectedRoute isAdmin={!!loginState && loginState.isAdmin}>
+                            <UserList handlePageClick={handlePageClick}/>
+                        </ProtectedRoute>}>
+                    </Route>
                     <Route path='/user-page' element={<UserPage handlePageClick={handlePageClick} />}/>
                 </Routes>
             </Box>
