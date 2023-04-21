@@ -160,7 +160,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     const handleCloseClick = () => {
         // Return to recipe list when close is clicked
         handleClearTempFiles();
-        setCurrPage(<RecipePage/>)
+        setCurrPage(<RecipePage/>);
     }
 
     const handleTempUpload = (file, apiEndpoint) => {
@@ -363,7 +363,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 }
                 // console.log('post success!')
                 setUpdateDoneSBOpen(true);
-                setCurrPage(<RecipePage/>);
+                setCurrPage(<RecipePage updateDone={true}/>);
             }).catch((error) => {
             if (error.response) {
                 handleErrorMessage(error);
@@ -387,7 +387,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             }).then((response)=>{
                 // console.log('patch success!')
                 setUpdateDoneSBOpen(true);
-                setCurrPage(<RecipePage/>);
+                setCurrPage(<RecipePage updateDone={true}/>);
             }).catch((error) => {
             if (error.response) {
                 handleErrorMessage(error);

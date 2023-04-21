@@ -136,10 +136,6 @@ function RecipePageComponent(props) {
         });
     }
 
-    useEffect(() => {
-        getDBRecipes();
-    }, [])
-
     // Boolean 'request made' message state
     const [updateSBOpen, setUpdateSBOpen] = useState(false);
     // Boolean 'request success' message state
@@ -156,6 +152,15 @@ function RecipePageComponent(props) {
         setOpen(false);
     }
 
+    useEffect(() => {
+        if (props.updateDone) {
+            setUpdateDoneSBOpen(true);
+        }
+    }, [props.updateDone])
+
+    useEffect(() => {
+        getDBRecipes();
+    }, [])
 
     const columns = [
         {
