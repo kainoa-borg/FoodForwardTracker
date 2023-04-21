@@ -180,7 +180,7 @@ const AppComponent = () => {
             }}>
                 <Routes>
                     <Route exact path='/' element={<EntryPage setLoginState={setLoginState} handlePageClick={handlePageClick}/>}/>
-                    <Route path='/home' element={<LandingPage handlePageLCick={handlePageClick} />}/>
+                    <Route path='/home' element={<LandingPage handlePageClick={handlePageClick} />}/>
                     <Route path='/login' element={<LoginPage loginState={loginState} setLoginState={setLoginState} handlePageClick={handlePageClick} />}/>
                     <Route path='/sign-up' element={<NewUserPage handlePageClick={handlePageClick} />}/>
                     <Route path='/reset-password' element={<PwResetPage handlePageClick={handlePageClick} />}/>
