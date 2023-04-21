@@ -21,7 +21,8 @@ const LandingPage = (props) => {
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.isAdmin === false) {
+        const isAdmin = urlParams.get('isAdmin');
+        if (urlParams && isAdmin) {
             setAdminErrorSBOpen(true);
         }
     }, [])
