@@ -93,7 +93,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         {
             field: 'pkg_type',
             headerName: 'Packaging',
-            width: 250,
+            width: 200,
             editable: true,
             renderEditCell: (params) => {
                 return <ModularSelect {...params} options={packagingOptions} searchField={'package_type'}/>
@@ -102,7 +102,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         {
             field: 'pkg_contents',
             headerName: 'Contents',
-            width: 400,
+            width: 250,
             editable: true,
             type: 'string'
         }
@@ -182,6 +182,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             // console.log(apiEndpoint, 'temp upload success')
         }).catch((error) => {
         if (error.response) {
+            handleErrorMessage(error);
             console.log(error.response);
             console.log(error.response.status);
             console.log(error.response.headers);
@@ -200,6 +201,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 // console.log(imgOrCard, 'delete recipe image success!')
             }).catch((error) => {
             if (error.response) {
+                handleErrorMessage(error);
                 console.log(error.response);
                 console.log(error.response.status);
                 console.log(error.response.headers);
@@ -218,6 +220,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 // console.log(imgOrCard, 'temp image delete success!')
             }).catch((error) => {
             if (error.response) {
+                handleErrorMessage(error);
                 console.log(error.response);
                 console.log(error.response.status);
                 console.log(error.response.headers);
@@ -254,6 +257,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 // console.log(imgOrCard, 'temp image delete success!')
             }).catch((error) => {
             if (error.response) {
+                handleErrorMessage(error);
                 console.log(error.response);
                 console.log(error.response.status);
                 console.log(error.response.headers);
@@ -297,6 +301,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             // getDBRecipeData(recipeData.r_num);
         }).catch((error) => {
         if (error.response) {
+            handleErrorMessage(error);
             console.log(error.response);
             console.log(error.response.status);
             console.log(error.response.headers);
@@ -313,18 +318,34 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     }
 
     const handleErrorMessage = (error) => {
+        // // Format an error response using the backend response data
         // if (error.response.data) {
         //     console.log(error.response.data)
+        //     let error_source = ''
         //     let error_field = ''
         //     let error_text = ''
         //     let error_keys = Object.keys(error.response.data);
         //     error_keys.forEach((error_key) => {
-        //         error_field = error_key
-        //         error_text = error.response.data[error_key]
-        //     })
-        //     setErrorMessage('Save Failed!' + error_field + ' ' + error_text);
+        //         error_source = error_key;
+        //         let error_key_obj = error.response.data[error_key][0];
+        //         let error_key_obj_keys = Object.keys(error_key_obj);
+        //         error_key_obj_keys.forEach((err_key) => {
+        //             error_field = err_key;
+        //             error_text = error.response.data[error_key][0][err_key];
+        //         });
+        //     });
+        //     setErrorMessage('Save Failed!' + ' ' + error_source + ' ' + error_field + ': ' + error_text);
         // }
-        setErrorMessage('Save failed! ' + error.response.statusText);
+        // else {
+        //     setErrorMessage('Save failed! ' + error.response.statusText);
+        // }
+        if (error.response.status === 400) {
+            setErrorMessage('Save failed! ' + 'Please check data and try again!');
+            
+        }
+        else {
+            setErrorMessage('Save failed! ' + error.response.statusText);
+        }
     }
     useEffect(() => {
         console.log(errorMessage);
@@ -471,7 +492,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 {/* Recipe Image and Card Stack */}
                 <Stack item spacing={3}>
                         {/* <InputLabel id='recipeNameLabel'>Recipe Name</InputLabel> */}
-                        <TextField label='Recipe Name' required inputProps={{ref: nameField}} defaultValue={recipeData.r_name}/>
+                        <TextField label='Recipe Name' required inputProps={{ref: nameField, maxLength: 200}} defaultValue={recipeData.r_name}/>
                     <FormControl>
                         <InputLabel id='mealOrSnackLabel'>Meal Or Snack?</InputLabel>
                         <Select labelID='mealOrSnackLabel' required value={m_s} label={'Meal Or Snack'} onChange={handleMealSnackChange}>
@@ -505,8 +526,8 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                         <Box sx={{height: '50vh', width: {md: '45vw', sm: '80vw'}}}>
                             <ModularRecipeDatagrid 
                                 rows={ingredientRows} 
-                                setRows={setIngredientRows}
                                 columns={ingredientsColumns}
+                                setRows={setIngredientRows}
                                 addFormComponent={RecipeIngForm}
                                 addFormProps={{ingredients: ingredientOptions}}
                                 keyFieldName={'ri_id'}
