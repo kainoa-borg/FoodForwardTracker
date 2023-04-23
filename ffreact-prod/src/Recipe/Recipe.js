@@ -341,7 +341,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         // }
         if (error.response.status === 400) {
             setErrorMessage('Save failed! ' + 'Please check data and try again!');
-            
+            console.log('error handled');
         }
         else {
             setErrorMessage('Save failed! ' + error.response.statusText);
@@ -356,7 +356,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     const handleSaveClick = () => {
         // console.log(recipeData);
         const r_data = {...recipeData, r_name: nameField.current.value, r_ingredients: ingredientRows, r_packaging: packagingRows, r_stations: stationRows, m_s: m_s}
-        // console.log(JSON.stringify(r_data));
+        console.log(JSON.stringify(r_data));
         setUpdateSBOpen(true);
 
         // console.log('deleteImage: ', deleteImage, 'deleteCard: ', deleteCard)
@@ -589,7 +589,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             <Snackbar
                 open={errorSBOpen}
                 autoHideDuration={3000}
-                onClose={(event, reason) => handleSBClose(event, reason, setErrorSBOpen)}
+                onClose={(event, reason) => {handleSBClose(event, reason, setErrorSBOpen); setErrorMessage()}}
                 message={errorMessage}
             />
             </form>
