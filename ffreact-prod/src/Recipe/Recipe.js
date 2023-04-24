@@ -340,11 +340,11 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
         //     setErrorMessage('Save failed! ' + error.response.statusText);
         // }
         if (error.response.status === 400) {
-            setErrorMessage('Save failed! ' + 'Please check data and try again!');
+            setErrorMessage('Save failed! ' + 'Please check inputs and try again!');
             console.log('error handled');
         }
         else {
-            setErrorMessage('Save failed! ' + error.response.statusText);
+            setErrorMessage('Save failed! ' + 'System error. Please try again or contact support');
         }
     }
     useEffect(() => {
