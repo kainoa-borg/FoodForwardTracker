@@ -145,7 +145,7 @@ class RecipeImageView(viewsets.ViewSet):
         except:
             print('image corrupt')
             return Response(request)
-        img = Image.open(request.data['file'])
+        img = Image.open(request.data['file']).convert('RGB')
         abs_file_path = 'var/www/html/Images/r_%s_image.jpg'%(pk)
         rel_file_path = 'Images/r_%s_image.jpg'%(pk)
         img.save(abs_file_path)

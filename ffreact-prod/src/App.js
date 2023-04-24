@@ -30,7 +30,7 @@ import RecipePage from './Recipe/RecipePage.js'
 import UnderConstruction from './components/UnderConstruction.js'
 import Navbar from './components/Navbar.js'
 import React from 'react'
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, createSearchParams } from 'react-router-dom'
 import { useState } from 'react'
 import { Box } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
@@ -44,14 +44,6 @@ const style = {
     // border: '1px solid black',
     display: 'flex',
     justifyContent: 'space-between',
-};
-
-const ProtectedRoute = ({ isAdmin, children }) => {
-    if (!isAdmin) {
-      return <Navigate to="/home" replace />;
-    }
-  
-    return children;
 };
 
 const App = () => {
@@ -141,6 +133,15 @@ const AppComponent = () => {
     // Charcoal: #898989
     // Ultraviolet: #5A5874
 
+    const ProtectedRoute = ({ isAdmin, children }) => {
+        const params = {isAdmin: isAdmin};
+        if (!isAdmin) {
+          return navigate({pathname: "/home", search: `?${createSearchParams(params)}`});
+        }
+      
+        return children;
+    };
+
     const theme = createTheme({
         palette: {
             lightGreen: {
@@ -180,7 +181,7 @@ const AppComponent = () => {
             }}>
                 <Routes>
                     <Route exact path='/' element={<EntryPage setLoginState={setLoginState} handlePageClick={handlePageClick}/>}/>
-                    <Route path='/home' element={<LandingPage handlePageLCick={handlePageClick} />}/>
+                    <Route path='/home' element={<LandingPage handlePageClick={handlePageClick} />}/>
                     <Route path='/login' element={<LoginPage loginState={loginState} setLoginState={setLoginState} handlePageClick={handlePageClick} />}/>
                     <Route path='/sign-up' element={<NewUserPage handlePageClick={handlePageClick} />}/>
                     <Route path='/reset-password' element={<PwResetPage handlePageClick={handlePageClick} />}/>

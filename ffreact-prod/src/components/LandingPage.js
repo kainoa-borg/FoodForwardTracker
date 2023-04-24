@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Fragment } from 'react'
-import { Typography, Card, Grid, CardContent, CardActionArea, Button } from '@mui/material'
+import { Typography, Card, Grid, CardContent, CardActionArea, Button, Snackbar } from '@mui/material'
 import { Stack } from '@mui/material'
 import HouseIcon from '@mui/icons-material/House';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
@@ -16,6 +16,16 @@ const cardStyle = {
 
 const LandingPage = (props) => {
     const handlePageClick = props.handlePageClick;
+
+    const [adminErrorSBOpen, setAdminErrorSBOpen] = useState();
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const isAdmin = urlParams.get('isAdmin');
+        if (urlParams && isAdmin) {
+            setAdminErrorSBOpen(true);
+        }
+    }, [])
 
     // HTML structure of this component
     return (
@@ -138,7 +148,7 @@ const LandingPage = (props) => {
                     <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('ingredients-report')}>
                         Ingredients Report</Button>,
                     <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('ing-purchase-report')}>
-                    Ingredients Purchase Report</Button>,   
+                        Ingredients Purchase Report</Button>,   
                     <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('meal-history-report')}>
                         Meal History</Button>,
                     <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('meal-plan-report')}>
@@ -170,6 +180,12 @@ const LandingPage = (props) => {
                     </CardActionArea>
                 </Card>    
             </Grid>
+            <Snackbar
+                open={adminErrorSBOpen}
+                autoHideDuration={3000}
+                onClose={() => {setAdminErrorSBOpen(false)}}
+                message={'Please log in to an Admin account to access this page.'}
+            />
         </Grid>
         </Fragment>
     );
