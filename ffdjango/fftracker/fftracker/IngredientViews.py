@@ -54,6 +54,7 @@ class IngredientInvSerializer(ModelSerializer):
 	def update(self, ing_instance, validated_data):
 		# raise serializers.ValidationError("IM HERE")
 		ing_usage = validated_data.pop('ingredient_usage')
+		print(ing_instance)
 		# ing_instance = Ingredients.objects.create(**validated_data)
 		used = 0
 		# ing_usages = IngredientUsages.objects.filter(used_ing = ing_instance)
@@ -74,7 +75,7 @@ class IngredientInvSerializer(ModelSerializer):
 				else:
 					latest_id = 0
 				usage['i_usage_id'] = latest_id
-				usage['used_ing_id'] = validated_data.get('i_id')
+				usage['used_ing_id'] = getattr(ing_instance, 'i_id')
 				# raise serializers.ValidationError(usage)
 				IngredientUsages.objects.create(**usage)
 		in_qty = validated_data['in_qty']

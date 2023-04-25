@@ -57,6 +57,7 @@ class PackagingInvSerializer(ModelSerializer):
 	def update(self, pkg_instance, validated_data):
 		# raise serializers.ValidationError("IM HERE")
 		pkg_usage = validated_data.pop('packaging_usage')
+		print(pkg_instance)
 		# ing_instance = Ingredients.objects.create(**validated_data)
 		used = 0
 		# pkg_usages = PackagingUsages.objects.filter(used_ing = pkg_instance)
@@ -78,7 +79,7 @@ class PackagingInvSerializer(ModelSerializer):
 				else:
 					latest_id = 0
 				usage['p_usage_id'] = latest_id
-				usage['used_pkg_id'] = validated_data.get('p_id')
+				usage['used_pkg_id'] = getattr(pkg_instance, 'p_id')
 				# raise serializers.ValidationError(usage)
 				PackagingUsages.objects.create(**usage)
 		in_qty = validated_data['in_qty']
