@@ -75,7 +75,7 @@ class PackagingInvSerializer(ModelSerializer):
 			for usage in pkg_usage:
 				used += int(usage['used_qty'])
 				if (PackagingUsages.objects.count() > 0):
-					latest_id = PackagingUsages.objects.latest('p_usage_id').p_usage_id +1
+					latest_id = PackagingUsages.objects.latest('p_usage_id').p_usage_id + 1
 				else:
 					latest_id = 0
 				usage['p_usage_id'] = latest_id

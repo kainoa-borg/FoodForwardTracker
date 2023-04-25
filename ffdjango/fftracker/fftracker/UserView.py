@@ -18,8 +18,12 @@ class UserSerializer(serializers.ModelSerializer):
 		print(password)
 		if username:
 			instance.username = username
-		if password:
+		print('checking password')
+		if password and check_password(password, instance.password):
+			print('new password')
 			instance.password = make_password(password)
+		else:
+			print('same password')
 		if email:
 			instance.email = email
 		if admin_flag:
