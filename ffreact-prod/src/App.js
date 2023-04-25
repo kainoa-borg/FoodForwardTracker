@@ -133,15 +133,6 @@ const AppComponent = () => {
     // Charcoal: #898989
     // Ultraviolet: #5A5874
 
-    const ProtectedRoute = ({ isAdmin, children }) => {
-        const params = {isAdmin: isAdmin};
-        if (!isAdmin) {
-          return navigate({pathname: "/home", search: `?${createSearchParams(params)}`});
-        }
-      
-        return children;
-    };
-
     const theme = createTheme({
         palette: {
             lightGreen: {
@@ -167,6 +158,16 @@ const AppComponent = () => {
             },
         }
     })
+
+    // Protected Route component that navigates back to landing page when not admin
+    const ProtectedRoute = ({ isAdmin, children }) => {
+        const params = {isAdmin: isAdmin};
+        if (!isAdmin) {
+          return navigate({pathname: "/home", search: `?${createSearchParams(params)}`});
+        }
+      
+        return children;
+    };
 
     return (
         <ThemeProvider theme={theme}>

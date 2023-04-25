@@ -8,6 +8,7 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import Dropdown from './Dropdown';
+import { useSearchParams } from 'react-router-dom';
 
 const cardStyle = {
     height: '100%',
@@ -18,9 +19,9 @@ const LandingPage = (props) => {
     const handlePageClick = props.handlePageClick;
 
     const [adminErrorSBOpen, setAdminErrorSBOpen] = useState();
+    const [urlParams] = useSearchParams();
 
     useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
         const isAdmin = urlParams.get('isAdmin');
         if (urlParams && isAdmin) {
             setAdminErrorSBOpen(true);
