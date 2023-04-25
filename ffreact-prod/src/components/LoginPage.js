@@ -41,19 +41,19 @@ const LoginPage = (props) => {
             url:"http://4.236.185.213:8000/api/user-auth/",
             data: user
           }).then((response)=>{
-            console.log(response.data);
-            if (response.data === 200) {
+            if (response.data['code'] === 200) {
                 // Log in success
                 setLoginState({
                     username: user.username,
                     isAuthenticated: true,
-                    isAdmin: true
+                    // response.data = authedUser.admin_flag (T/F)
+                    isAdmin: response.data['isAdmin']
                 });
                 // Set the cookie login data
-                setLoginCookie(user.username, 'true', 'true');
+                setLoginCookie(user.username, 'true', response.data ? 'true' : 'false');
                 handlePageClick('landingPage');
             }
-            else if (response.data === 500) {
+            else if (response.data['code'] === 500) {
                 // User not found
                 console.log('user not found');
                 setErrorState('usernameError');
@@ -63,7 +63,7 @@ const LoginPage = (props) => {
                     isAdmin: false
                 })
             }
-            else if (response.data === 400) {
+            else if (response.data['code'] === 400) {
                 // Password incorrect
                 console.log('password incorrect');
                 setErrorState('pwError');
