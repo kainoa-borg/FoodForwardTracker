@@ -96,13 +96,13 @@ export default function PurchasingReport() {
     } */
 
     const columns = [
-        { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
-        { field: 'm_date', headerName: 'Date Prepared', width: 150 },
-        { field: 'name', headerName: 'Meal Name', width: 120 },
-        { field: 'unit', headerName: 'Measure', width: 90, editable: true },
-        { field: 'total_required', headerName: 'Total Required', width: 140, type: 'number', /*valueGetter: ({row}) => (row.unit_cost * row.in_qty),*/ },
-        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
-        { field: 'to_purchase', headerName: 'To Purchase', width: 140, type: 'number', editable: false},
+        { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true, flex: 1 },
+        { field: 'm_date', headerName: 'Date Prepared', width: 150, flex: 1 },
+        { field: 'name', headerName: 'Meal Name', width: 120, flex: 1 },
+        { field: 'unit', headerName: 'Measure', width: 90, editable: true, flex: 1 },
+        { field: 'total_required', headerName: 'Total Required', width: 140, type: 'number', flex: 1 /*valueGetter: ({row}) => (row.unit_cost * row.in_qty),*/ },
+        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false, flex: 1},
+        { field: 'to_purchase', headerName: 'To Purchase', width: 140, type: 'number', editable: false, flex: 1},
       //  { field: 'pref_isupplier_id', headerName: 'Preferered Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
     ]
 
@@ -153,6 +153,15 @@ export default function PurchasingReport() {
           components = {{Toolbar:CustomToolbar}}
           getRowId={(row) => row.id}
           autoHeight = {true}
+          sx={{
+            '@media print': {
+              '.MuiDataGrid-main': {
+              width:'fit-content',
+              overflow: 'visible'
+            },
+            marginBottom: 100,
+          },
+        }}
         >
         </DataGrid>
         </Box>

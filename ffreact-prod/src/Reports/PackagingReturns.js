@@ -54,10 +54,10 @@ export default function PackagingReturns() {
     }
 
     const columns = [
-        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
-        { field: 'package_type', headerName: 'Packaging Type', width: 150, editable: true },
-        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
-        { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
+        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false, flex: 1},
+        { field: 'package_type', headerName: 'Packaging Type', width: 150, editable: true, flex: 1 },
+        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true, flex: 1 },
+        { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true, flex: 1 },
        ]
 
     function CustomToolbar() {
@@ -109,6 +109,15 @@ export default function PackagingReturns() {
             getRowId={(row) => row.p_id}
             // getRowsId={(row) => row.m_id}
             autoHeight = {true}
+            sx={{
+              '@media print': {
+                '.MuiDataGrid-main': {
+                width:'fit-content',
+                overflow: 'visible'
+              },
+              marginBottom: 100,
+            },
+          }}
         >
         </DataGrid>
         </Box>

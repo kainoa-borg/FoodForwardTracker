@@ -42,15 +42,15 @@ export default function MealHistoryReport() {
     }
 
     const mealColumns = [
-      { field: 'meal_name', headerName: 'Meal Name', width: 200 },
+      { field: 'meal_name', headerName: 'Meal Name', width: 200, flex: 1 },
       // { field: 'snack_name', headerName: 'Snack Name', width: 120 },
-      { field: 'm_date', headerName: 'Last Delivery Date', width: 150 },
+      { field: 'm_date', headerName: 'Last Delivery Date', width: 150, flex: 1 },
       //fields = ('m_id', 'm_date', 'meal_r_num', 'snack_r_num', 'meal_servings', 'snack_servings')
     ]
     const snackColumns = [
       // { field: 'meal_name', headerName: 'Meal Name', width: 200 },
-      { field: 'snack_name', headerName: 'Snack Name', width: 200 },
-      { field: 'm_date', headerName: 'Last Delivery Date', width: 150 },
+      { field: 'snack_name', headerName: 'Snack Name', width: 200, flex: 1 },
+      { field: 'm_date', headerName: 'Last Delivery Date', width: 150, flex: 1 },
       // fields = ('m_id', 'm_date', 'meal_r_num', 'snack_r_num', 'meal_servings', 'snack_servings')
     ]
 
@@ -113,7 +113,17 @@ export default function MealHistoryReport() {
                   sorting: {
                     sortModel: [{ field: 'm_date', sort: 'desc' }],
                   },
+                  
                 }}
+                sx={{
+                  '@media print': {
+                    '.MuiDataGrid-main': {
+                    width:'fit-content',
+                    overflow: 'visible'
+                  },
+                  marginBottom: 100,
+                },
+              }}
               >
               </DataGrid>
             </Box>
@@ -129,6 +139,15 @@ export default function MealHistoryReport() {
                     sortModel: [{ field: 'm_date', sort: 'desc' }],
                   },
                 }}
+                sx={{
+                  '@media print': {
+                    '.MuiDataGrid-main': {
+                    width:'fit-content',
+                    overflow: 'visible'
+                  },
+                  marginBottom: 100,
+                },
+              }}
               >
               </DataGrid>
             </Box>

@@ -100,13 +100,13 @@ export default function PurchasingReport() {
   }
 
     const columns = [
-      { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
-      { field: 'qty_needed', headerName: 'Qty Needed', width: 140, type: 'number', editable: false},
-      { field: 'm_date', headerName: 'Date Last Prepared', width: 150 },
-      { field: 'meal_name', headerName: 'Meal Name', width: 200 },
-      { field: 'snack_name', headerName: 'Snack Name', width: 120 },
-      { field: 'package_type', headerName: 'Packaging Type', width: 150, editable: true },
-      { field: 'unit_cost', headerName: 'Unit Cost', align: 'right', width: 90, valueFormatter: ({ value }) => currencyFormatter.format(value), editable: true },
+      { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false, flex: 1},
+      { field: 'qty_needed', headerName: 'Qty Needed', width: 140, type: 'number', editable: false, flex: 1},
+      { field: 'm_date', headerName: 'Date Last Prepared', width: 150, flex: 1 },
+      { field: 'meal_name', headerName: 'Meal Name', width: 200, flex: 1 },
+      { field: 'snack_name', headerName: 'Snack Name', width: 120, flex: 1 },
+      { field: 'package_type', headerName: 'Packaging Type', width: 150, editable: true, flex: 1 },
+      { field: 'unit_cost', headerName: 'Unit Cost', align: 'right', width: 90, flex: 1, valueFormatter: ({ value }) => currencyFormatter.format(value), editable: true },
 
      ]
 
@@ -169,6 +169,15 @@ export default function PurchasingReport() {
           getRowId={(row) => row.id}
           // getRowsId={(row) => row.m_id}
           autoHeight = {true}
+          sx={{
+            '@media print': {
+              '.MuiDataGrid-main': {
+              width:'fit-content',
+              overflow: 'visible'
+            },
+            marginBottom: 100,
+          },
+        }}
       >
       </DataGrid>
       </Box>

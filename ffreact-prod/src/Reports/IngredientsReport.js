@@ -5,7 +5,8 @@ import axios from 'axios'
 // import EditableIngredientRow from './EditableIngredientRow'
 import { Box, Typography } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
-import { GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridToolbarExport, GridToolbarContainer, } from '@mui/x-data-grid';
+
 // import Error from '../Error.js'
 // import DisplayMessage from '../DisplayMessage.js'
 const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -60,19 +61,19 @@ export default function IngredientReport() {
 
 
     const columns = [
-        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
-        { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
-        { field: 'storage_type', headerName: 'Category', width: 150, editable: true },
-        { field: 'pkg_type', headerName: 'Package Type', width: 120, editable: true },
+        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false, flex: 1},
+        { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true, flex: 1},
+        { field: 'storage_type', headerName: 'Category', width: 150, editable: true, flex: 1},
+        { field: 'pkg_type', headerName: 'Package Type', width: 120, editable: true, flex: 1},
         { field: 'unit_cost', headerName: 'Unit Cost', align: 'right', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value) },
-        { field: 'pref_isupplier_id', headerName: 'Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
-        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
-        { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
-        { field: 'exp_date', headerName: 'Expiration Date', width: 140, editable: true},
-        { field: 'ingredient_usage', headerName: 'Date Used', width: 100, type: 'date', editable: true, valueFormatter: (params) => {if (params.value) {
+        { field: 'pref_isupplier_id', headerName: 'Supplier', width: 180, editable: true, flex: 1, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
+        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true, flex: 1},
+        { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true, flex: 1},
+        { field: 'exp_date', headerName: 'Expiration Date', width: 140, editable: true, flex: 1},
+        { field: 'ingredient_usage', headerName: 'Date Used', width: 100, type: 'date', editable: true, flex: 1, valueFormatter: (params) => {if (params.value) {
             if (params.value.length > 0) return params.value[params.value.length - 1].used_date}}},
-        { field: 'unit', headerName: 'Measure', width: 90, editable: true },
-        { field: 'ingredient_usage2', headerName: 'Units Used', width: 100, type: 'number', editable: true, valueFormatter: (params) => {if (params.value) {
+        { field: 'unit', headerName: 'Measure', width: 90, editable: true, flex: 1},
+        { field: 'ingredient_usage2', headerName: 'Units Used', width: 100, type: 'number', editable: true, flex: 1, valueFormatter: (params) => {if (params.value) {
             if (params.value.length > 0) return params.value[params.value.length - 1].used_qty}}},
         
     ]
@@ -87,16 +88,34 @@ export default function IngredientReport() {
             <GridToolbarExport
             csvOptions={{
                 fileName: 'Ingredients Report',
-                delimeter: ';'
-            }} />
+                delimeter: ';',
+            
+            
+            }}
+            printOptions={{
+              hideFooter: true,
+              hideToolbar: true,
+              pageStyle: '65%'
+              
+              
+            }}
+            // pdfExportOptions={{
+            //   scale: 1
+            // }}
+            />
+            
+          
+            
+            
           </GridToolbarContainer>
         );
     }
+    // 3A929
 
     // The HTML structure of this component
     return (
       
-        <Box sx={{height: '80%'}}>
+        <Box sx={{height: '70%'}}>
           <Typography variant='h5'>Ingredients Report</Typography>
             {/* Show a row for each ingredient in ingredientts.*/}
             <DataGrid
@@ -104,7 +123,17 @@ export default function IngredientReport() {
                 rows={ingredients}
                 components = {{Toolbar:CustomToolbar}}
                 getRowId={(row) => row.i_id}
-                autoHeight = {5}
+                autoHeight={true}
+                pageStyle={65}
+                sx={{
+                  '@media print': {
+                    '.MuiDataGrid-main': {
+                    width:'fit-content',
+                    overflow: 'visible'
+                  },
+                  marginBottom: 100,
+                },
+              }}
             >
             </DataGrid>
         </Box>

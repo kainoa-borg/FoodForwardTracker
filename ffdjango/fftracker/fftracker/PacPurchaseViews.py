@@ -5,7 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from rest_framework import status
-from .models import MealPlans, RecipePackaging, PackagingUsages, Packaging
+from .models import MealPlans, RecipePackaging, PackagingUsages, Packaging, Recipes
 from django.db.models import Prefetch
 from collections import defaultdict
 import os
@@ -35,6 +35,11 @@ import os
 # 				new_queryset.append(latest_similar_item)
 # 			i += 1
 # 		return new_queryset
+
+class RecipeSerializer(ModelSerializer):
+	class Meta():
+		model = Recipes
+		fields = ('r_num')
 
 class PackagingUsageSerializer(ModelSerializer):
 	used_qty = serializers.IntegerField()
@@ -69,14 +74,14 @@ class MealPlansSerializer(ModelSerializer):
 
 class PPLSerializer(serializers.Serializer):
 	id = serializers.IntegerField(read_only=True)
-	name = serializers.CharField()
-	m_date = serializers.CharField()
-	amt = serializers.IntegerField()
-	pkg_type = serializers.CharField()
-	qty_on_hand = serializers.IntegerField()
-	qty_needed = serializers.IntegerField()
-	total_required = serializers.IntegerField()	
-	to_purchase = serializers.IntegerField()
+	name = serializers.CharField(allow_blank=True)
+	m_date = serializers.CharField(allow_blank=True)
+	amt = serializers.IntegerField(default='', required=False)
+	pkg_type = serializers.CharField(allow_blank=True)
+	qty_on_hand = serializers.IntegerField(default='', required=False)
+	qty_needed = serializers.IntegerField(default='', required=False)
+	total_required = serializers.IntegerField(default='', required=False)	
+	to_purchase = serializers.IntegerField(default='', required=False)
 
 	
 # class PPLView(viewsets.ViewSet):
@@ -155,43 +160,41 @@ class PPLView(viewsets.ViewSet):
 		startDate = request.query_params.get('startDate')
 		endDate = request.query_params.get('endDate')
 		MealsQueryset = MealPlans.objects.filter(m_date__range=(startDate, endDate)).order_by('-m_date')
-		recipeset = RecipePackaging.objects.all()
+		recipeset = Recipes.objects.all()
+		pkgQueryset = Packaging.objects.all()
 		pkg_type_totals = defaultdict(lambda: {"total_qty_on_hand": 0, "qty_needed": 0, "total_cost": 0})
 		for meals in MealsQueryset:
     # calculate servings needed for meal and snack
 			# meal_servings = meal_plan.meal.rp_pkg.servings_per_recipe * meal_plan.meal_servings
 			m_r_num = meals.meal_r_num
 			s_r_num = meals.snack_r_num
-			meal_servings = meals.qty_on_hand
+			meal_servings = meals.meal_servings
 			meal_name = meals.meal_r_num.r_name
 			snack_name = meals.snack_r_num.r_name
 			m_date = meals.m_date
-			snack_servings = meals.qty_on_hand
+			snack_servings = meals.snack_servings
 			mealRecipePkg = RecipePackaging.objects.filter(rp_recipe_num=m_r_num)
 			snackRecipePkg = RecipePackaging.objects.filter(rp_recipe_num=s_r_num)
-			pkgQueryset = Packaging.objects.filter(package_type=meal.pkg_type)
-			qty_needed += meal_servings
+			# pkgQueryset = Packaging.objects.all()
+			# qty_needed += meal_servings
     # process meal packaging
 			for meal in mealRecipePkg:
 				name = meal_name
-				packaging = RecipePackaging.objects.filter(rp_pkg=meal_servings).order_by('qty_on_hand')
-				recipeset = RecipePackaging.objects.get(p_id=meal.rp_pkg)
-				total_required = amt * qty_needed
+				packaging = RecipePackaging.objects.filter(rp_pkg=meal_servings).order_by('pkg_type')
+				# recipeset = RecipePackaging.objects.get(p_id=meal.rp_pkg)
+				total_required = amt * meal_servings
 				meal.rp_pkg = MealPlans.meal_r_num.rp_pkg
 				# packaging.package_type = RecipePackaging.pkg_type * qty_on_hand
 			# for recipe in recipeset:
 			# 		if m_r_num == recipe.r_num:
 			# 			ms_name = recipe.r_name
 				for packaging in pkgQueryset:
+					if meal_name == meal.meal_name:
 						qty_needed = qty_on_hand - meal_servings
 						cost = qty_needed * unit_cost
 						qty_on_hand = packaging.qty_on_hand
 						pkg_type = meals.pkg_type
-						if (int(total_required or 0) - int(qty_needed or 0)) > 0:
-							to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
-						else:
-							to_purchase = 0
-						if (int(total_required or 0) - int(qty_needed or 0)) > 0:
+						if (int(total_required or 0) - int(qty_on_hand or 0)) > 0:
 							to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
 						else:
 							to_purchase = 0
@@ -216,18 +219,14 @@ class PPLView(viewsets.ViewSet):
 			for snack in snackRecipePkg:
 				name = snack_name
 				total_required = amt * snack_servings
-				recipeset = RecipePackaging.objects.get(p_id=snack.rp_pkg)
+				# recipeset = RecipePackaging.objects.get(p_id=snack.rp_pkg)
 				snack.rp_pkg = MealPlans.snack_r_num.rp_pkg
 				packaging._package_type = RecipePackaging.pkg_type * qty_on_hand
 				for packaging in pkgQueryset:
 						qty_needed = qty_on_hand - snack_servings
 						qty_on_hand = packaging.qty_on_hand
 						pkg_type = snack.pkg_type
-						if (int(total_required or 0) - int(qty_needed or 0)) > 0:
-							to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
-						else:
-							to_purchase = 0
-						if(int(total_required or 0) - int(qty_needed or 0)) > 0:
+						if (int(total_required or 0) - int(qty_on_hand or 0)) > 0:
 							to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
 						else:
 							to_purchase = 0

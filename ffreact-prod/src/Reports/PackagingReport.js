@@ -33,15 +33,15 @@ export default function PackagingReport() {
     }
 
     const columns = [
-        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
-        { field: 'package_type', headerName: 'Packaging Type', width: 150, editable: true },
-        { field: 'unit', headerName: 'Unit', width: 100, editable: true },
-        { field: 'qty_holds', headerName: 'Size', width: 10, editable: true },
-        { field: 'returnable', headerName: 'Returnable', width: 90, type: 'boolean', editable: true },
-        { field: 'unit_cost', headerName: 'Unit Cost', width: 90, valueFormatter: ({ value }) => currencyFormatter.format(value), editable: true },
-        { field: 'pref_psupplier', headerName: 'Supplier', width: 80, valueFormatter: ({ value }) => value.s_name },
-        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true },
-        { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true },
+        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false, flex: 1},
+        { field: 'package_type', headerName: 'Packaging Type', width: 150, editable: true, flex: 1 },
+        { field: 'unit', headerName: 'Unit', width: 100, editable: true, flex: 1 },
+        { field: 'qty_holds', headerName: 'Size', width: 10, editable: true, flex: 1 },
+        { field: 'returnable', headerName: 'Returnable', width: 90, type: 'boolean', editable: true, flex: 1 },
+        { field: 'unit_cost', headerName: 'Unit Cost', width: 90, flex: 1, valueFormatter: ({ value }) => currencyFormatter.format(value), editable: true },
+        { field: 'pref_psupplier', headerName: 'Supplier', width: 80, flex: 1, valueFormatter: ({ value }) => value.s_name },
+        { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true, flex: 1 },
+        { field: 'in_qty', headerName: 'Purchased Amount', width: 140, editable: true, flex: 1 },
         // { field: 'packaging_usage', headerName: 'Usages', width: 100, editable: true,
     ]
 
@@ -56,7 +56,13 @@ export default function PackagingReport() {
             csvOptions={{
                 fileName: 'Packaging Report',
                 delimeter: ';'
-            }} />
+            }} 
+            printOptions={{
+                printOptions: 'fit-contents',
+                hideFooter: true,
+                hideToolbar: true,
+            }}
+            />
           </GridToolbarContainer>
         );
     }
@@ -72,6 +78,15 @@ export default function PackagingReport() {
                 components = {{Toolbar:CustomToolbar}}
                 getRowId={(row) => row.p_id}
                 autoHeight = {true}
+                sx={{
+                    '@media print': {
+                      '.MuiDataGrid-main': {
+                      width:'fit-content',
+                      overflow: 'visible'
+                    },
+                    marginBottom: 100,
+                  },
+                }}
             >
             </DataGrid>
         </Box>

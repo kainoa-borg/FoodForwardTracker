@@ -56,12 +56,12 @@ export default function MealPlanReport() {
     }
 
     const columns = [
-      { field: 'meal_name', headerName: 'Meal Name', width: 200 },
-      { field: 'snack_name', headerName: 'Snack Name', width: 120 },
-      { field: 'm_date', headerName: 'Delivery Date', width: 150 },
-      { field: 'meal_servings', headerName: 'Meal Servings', width: 200},
-      { field: 'snack_servings', headerName: 'Snack Servings', width: 200},
-      { field: 'actions', headerName: 'Actions', width: 200,
+      { field: 'meal_name', headerName: 'Meal Name', width: 200, flex: 1 },
+      { field: 'snack_name', headerName: 'Snack Name', width: 120, flex: 1 },
+      { field: 'm_date', headerName: 'Delivery Date', width: 150, flex: 1 },
+      { field: 'meal_servings', headerName: 'Meal Servings', width: 200, flex: 1},
+      { field: 'snack_servings', headerName: 'Snack Servings', width: 200, flex: 1},
+      { field: 'actions', headerName: 'Actions', width: 200, flex: 1,
         renderCell: (params) => <Button onClick={(event) => {console.log(params); handleCalculateClick(params.row.m_id)}}>Calculate Servings</Button>
       }
       //fields = ('m_id', 'm_date', 'meal_r_num', 'snack_r_num', 'meal_servings', 'snack_servings')
@@ -118,6 +118,15 @@ export default function MealPlanReport() {
               getRowId={(row) => row ? row.m_id : 0}
               autoHeight={true}
               components={{Toolbar: CustomToolbar}}
+              sx={{
+                '@media print': {
+                  '.MuiDataGrid-main': {
+                  width:'fit-content',
+                  overflow: 'visible'
+                },
+                marginBottom: 100,
+              },
+            }}
             >
             </DataGrid>
           </Box>
