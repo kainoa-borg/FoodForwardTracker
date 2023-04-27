@@ -122,7 +122,7 @@ function RecipePageComponent(props) {
 
         axios({
             method: "DELETE",
-            url:"http://localhost:8000/api/mealrecipes/"+params.id+'/',
+            url:"http://4.236.185.213:8000/api/mealrecipes/"+params.id+'/',
         }).then((response)=>{
             getDBRecipes();
             // Open saving changes success notification

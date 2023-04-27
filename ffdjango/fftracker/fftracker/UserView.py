@@ -18,8 +18,12 @@ class UserSerializer(serializers.ModelSerializer):
 		print(password)
 		if username:
 			instance.username = username
-		if password:
+		print('checking password')
+		if password and check_password(password, instance.password):
+			print('new password')
 			instance.password = make_password(password)
+		else:
+			print('same password')
 		if email:
 			instance.email = email
 		if admin_flag:
@@ -57,22 +61,24 @@ class UserAuth(viewsets.ViewSet):
 		queryset = Users.objects.all().filter(username=request.data['username'])
 		# return Response(len(queryset))
 		authedPass = False
+		isAdmin = None
 		if len(queryset) > 1:
 			for user in queryset:
 				if check_password(request.data['password'], user.password):
 					authedPass = True
+					isAdmin = user.admin_flag
 		elif len(queryset) > 0:
 			if check_password(request.data['password'], queryset[0].password):
 				authedPass = True
 		else:
 			# user not found
-			return Response(500)
+			return Response({'isAdmin': False, 'code': 500})
 
 		serializer = UserSerializer(queryset)
 
 		if authedPass:
 			# user authed
-			return Response(200)
+			return Response({'isAdmin': isAdmin, 'code': 200})
 		else:
 			# user coudn't be authed
-			return Response(400)
+			return Response({'isAdmin': False, 'code': 400})

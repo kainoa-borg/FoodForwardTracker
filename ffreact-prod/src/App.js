@@ -30,7 +30,7 @@ import RecipePage from './Recipe/RecipePage.js'
 import UnderConstruction from './components/UnderConstruction.js'
 import Navbar from './components/Navbar.js'
 import React from 'react'
-import { BrowserRouter, Routes, Route, Navigate, useNavigate, createSearchParams } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate, createSearchParams, HashRouter } from 'react-router-dom'
 import { useState } from 'react'
 import { Box } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
@@ -48,9 +48,9 @@ const style = {
 
 const App = () => {
     return (
-        <BrowserRouter>
+        <HashRouter>
             <AppComponent/>
-        </BrowserRouter>
+        </HashRouter>
     )
 }
 
@@ -133,15 +133,6 @@ const AppComponent = () => {
     // Charcoal: #898989
     // Ultraviolet: #5A5874
 
-    const ProtectedRoute = ({ isAdmin, children }) => {
-        const params = {isAdmin: isAdmin};
-        if (!isAdmin) {
-          return navigate({pathname: "/home", search: `?${createSearchParams(params)}`});
-        }
-      
-        return children;
-    };
-
     const theme = createTheme({
         palette: {
             lightGreen: {
@@ -167,6 +158,16 @@ const AppComponent = () => {
             },
         }
     })
+
+    // Protected Route component that navigates back to landing page when not admin
+    const ProtectedRoute = ({ isAdmin, children }) => {
+        const params = {isAdmin: isAdmin};
+        if (!isAdmin) {
+          return navigate({pathname: "/home", search: `?${createSearchParams(params)}`});
+        }
+      
+        return children;
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -198,7 +199,7 @@ const AppComponent = () => {
                     <Route path='/meal-history-report' element={<MealHistoryReport handlePageClick={handlePageClick} />}/>
                     <Route path='/packaging-report' element={<PackagingReport handlePageClick={handlePageClick} />}/>
                     <Route path='/package-purchasing-report' element={<PackagingPurchaseReport handlePageClick={handlePageClick} />}/>
-                    <Route path='/package-returns-report' element={<PackagingReturns handlePageClick={handlePageClick} />}/>
+                    <Route path='/package-return-report' element={<PackagingReturns handlePageClick={handlePageClick} />}/>
                     <Route path='/under-construction' element={<UnderConstruction handlePageClick={handlePageClick}/>}/>
                     <Route path='/admin' element={
                         <ProtectedRoute isAdmin={!!loginState && loginState.isAdmin}>
