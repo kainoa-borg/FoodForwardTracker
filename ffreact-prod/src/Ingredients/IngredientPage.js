@@ -6,12 +6,12 @@ import IngUsageTable from './IngUsageTable.js'
 import EditableIngUsageTable from './EditableIngUsageTable.js';
 import NewModularDatagrid from '../components/NewModularDatagrid.js';
 import ModularSelect from '../components/ModularSelect.js'
-import './IngredientList.css'
 import CellDialog from '../components/CellDialog.js'
 import { Typography } from '@mui/material';
 import { useGridApiContext, GridEditInputCell } from '@mui/x-data-grid';
 import moment from 'moment';
 
+// Formats data into $0.00 format
 const currencyFormatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -19,7 +19,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 
 // Ingredients List Component
 export default function IngredientPage() {
-    
+    // Structs
     const [ingredients, setIngredients] = useState([]);
     const [suppliers, setSuppliers] = useState(undefined);
     // Struct of option definitions for Supplier dropdown
@@ -71,7 +71,7 @@ export default function IngredientPage() {
         if (suppliers)
             setSupplierOptions(suppliers.map((supplier) => {return {value: supplier.s_id, label: supplier.s_name}}));
     }, [suppliers])
-
+    // Set dropdown effect
     useEffect(() => {
         // console.log('SUPPLIER OPTIONS ===> ' + supplierOptions);
     }, [supplierOptions])
@@ -82,6 +82,7 @@ export default function IngredientPage() {
         )
     }
     
+    // Columns and formatting to be sent to DataGrid 
     const columns = [
         { field: 'ingredient_name', headerName: 'Ingredient', width: 140, editable: true, renderEditCell: (params) => <ModularSelect {...params} options={ingredients} searchField={'ingredient_name'} value={params.value} required/> },
         { field: 'storage_type', headerName: 'Category', width: 100, editable: true, renderEditCell: (params) => <ModularSelect {...params} options={ingredients} searchField={'storage_type'} value={params.value}/> },
@@ -115,6 +116,7 @@ export default function IngredientPage() {
             renderEditCell: (params) => (<GridEditInputCell {...params} inputProps={{ max: 25, min: 0,}}/>), editable: false}
     ]
 
+    // Page view; calls NewModularDataGrid
     return(
         <div class='table-div'>
         <Typography id='page-header' variant='h5'>Ingredients</Typography>
