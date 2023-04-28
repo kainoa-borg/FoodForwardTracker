@@ -7,16 +7,17 @@ import ModularSelect from '../components/ModularSelect.js';
 // Kainoa Borges
 // Angela McNeese
 
-
 // Ingredient Form component
 // Takes AddIngredient callback function
 // Returns a form that can be used to define a new ingredient object in a IngredientList
 const IngredientForm = (props) => {
+  // Structs
   const [supplierList, setSupplierList] = useState();
   const [ingredients, setIngredients] = useState();
   const addEntry = props.addEntry;
   const handleClose = props.handleClose;
 
+  // Clear Ingredient Form data between uses.
   const clearIngredient = () => {
     return {
       ingredient_name: "",
@@ -34,6 +35,8 @@ const IngredientForm = (props) => {
       pref_isupplier_id: null
   }
   }
+  // The state of this Ingredient Form with each attribute of Ingredient
+   const [ingredient, setIngredient] = useState(clearIngredient());
 
   // Get Ingredient data from database
   // Set Ingredient variable with ingredient data
@@ -76,9 +79,6 @@ const IngredientForm = (props) => {
     getDBIngredients();
   }, []);
 
-  // The state of this Ingredient Form with each attribute of Ingredient
-  const [ingredient, setIngredient] = useState(clearIngredient());
-
   // Handle form submission (prevent refresh, pass ingredient to addIngredient, and clear form state)
   // Takes submit event information (form submission)
   // Returns none
@@ -93,6 +93,7 @@ const IngredientForm = (props) => {
     setIngredient(clearIngredient());
   }
 
+  // Updates field values before the new data is sent to be saved in the database
   const updateEditForm = (names, values) => {
     const newIngredient = {...ingredient};
     for (let i = 0; i < names.length; i++) {
@@ -120,6 +121,7 @@ const IngredientForm = (props) => {
   }
 
   // HTML structure of this component
+  // Returns the popup view of the Add Ingredient Form
   return (
     <form onSubmit={handleSubmit}>
         {/* Basic ingredient info */}

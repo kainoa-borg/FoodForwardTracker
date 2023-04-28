@@ -5,7 +5,6 @@ import EditableIngredientRow from './EditableIngredientRow.js'
 import IngredientRow from './IngredientRow.js'
 import Error from '../Error.js'
 import DisplayMessage from '../DisplayMessage.js'
-import './IngredientList.css'
 
 // Ingredient List Component
 export default function IngredientList() {

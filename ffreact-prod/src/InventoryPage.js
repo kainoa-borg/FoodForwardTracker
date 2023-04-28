@@ -4,7 +4,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
 import Packaging from './Packaging/PackagingList.js'
 import PackagingPage from './Packaging/PackagingPage.js'
-import Ingredients from './Ingredients/IngredientList.js'
+//import Ingredients from './Ingredients/IngredientList.js'
 import IngredientPage from './Ingredients/IngredientPage.js'
 import Dropdown from './components/Dropdown'
 
@@ -46,10 +46,10 @@ const InventoryPage = (props) => {
     const handlePageClick = (pageName) => {
         console.log(pageName)
         switch(pageName) {
-            case 'ingredients': setCurrPage(<Ingredients handlePageClick={handlePageClick} />); break;
-            case 'packaging': setCurrPage(<Packaging handlePageClick={handlePageClick} />); break;
-            case 'packagingPage': setCurrPage(<PackagingPage></PackagingPage>); break;
-            case 'ingredientPage': setCurrPage(<IngredientPage></IngredientPage>); break;
+            //case 'ingredients': setCurrPage(<Ingredients handlePageClick={handlePageClick} />); break;
+            //case 'packaging': setCurrPage(<Packaging handlePageClick={handlePageClick} />); break;
+            case 'packagingPage': setCurrPage(<PackagingPage handlePageClick={handlePageClick} />); break;
+            case 'ingredientPage': setCurrPage(<IngredientPage handlePageClick={handlePageClick} />); break;
             default : break;
         }
     } 

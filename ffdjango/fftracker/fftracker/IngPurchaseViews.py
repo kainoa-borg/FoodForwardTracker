@@ -73,9 +73,7 @@ class IPLSerializer(serializers.Serializer):
 class IPLView(ViewSet): 
      def list(self, request):
         count = 0
-        id = 0
         m_date = ''
-        r_num = 0
         m_r_num = 0
         s_r_num = 0
         meal_servings = 0
@@ -91,7 +89,6 @@ class IPLView(ViewSet):
         qty_on_hand = 0
         total_required = 0
         pref_isupplier_id = 0        
-        pref_isupplier = ''
         to_purchase = 0
 
         queryset = []
@@ -100,7 +97,6 @@ class IPLView(ViewSet):
         endDate = request.query_params.get('endDate')
         MealsQueryset = MealPlans.objects.filter(m_date__range=[startDate, endDate]).order_by('-m_date')
         IngQueryset = Ingredients.objects.all()
-        recipeset = Recipes.objects.all()
 
         # Get every meal and snack for the date range
         for meals in MealsQueryset:
