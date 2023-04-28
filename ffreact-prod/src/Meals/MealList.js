@@ -42,6 +42,10 @@ export default function MealList() {
     }
 
     // Format recipes into valueOptions
+    // Takes:
+    //  m_or_s: string value denoting whether to find meals or snacks
+    // Returns:
+    //  MUI Datagrid singleSelect valueOptions compatible list of recipe r_nums and r_names 
     const getRecipeOptions = (m_or_s) => {
       let rOptions = recipeList.map((recipe) => {
         if (m_or_s === 'meal' && recipe.m_s === 1)
@@ -75,7 +79,6 @@ export default function MealList() {
             AddFormComponent={MealPlanForm}
             addFormProps={{recipeList: recipeList}}
             // searchField={''}
-
           ></NewModularDatagrid>
         </Box>
       </Fragment>
