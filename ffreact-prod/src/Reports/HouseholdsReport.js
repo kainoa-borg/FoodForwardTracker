@@ -78,6 +78,15 @@ export default function HouseholdReport() {
                 components = {{Toolbar:CustomToolbar}}
                 getRowId={(row) => row.hh_id}
                 autoHeight = {true}
+                sx={{
+                  '@media print': {
+                    '.MuiDataGrid-main': {
+                    width:'fit-content',
+                    overflow: 'visible'
+                  },
+                  marginBottom: 100,
+                },
+              }}
             >
             </DataGrid>
         </Box>

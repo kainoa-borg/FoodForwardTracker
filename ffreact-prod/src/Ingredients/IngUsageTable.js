@@ -1,6 +1,7 @@
 import { Paper, Table, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import React from 'react'
 
+// returns data from the ingredients_usage table
 const IngUsageTable = (props) => {
     const ing_usages = props.ingredient_usages
     if (ing_usages) {
