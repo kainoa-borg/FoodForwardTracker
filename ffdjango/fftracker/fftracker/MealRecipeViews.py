@@ -229,8 +229,8 @@ class RecipesSerializer(ModelSerializer):
         read_only_fields = ('r_num', 'r_img_path', 'r_card_path')
 
     def create(self, validated_data):
-        latest_key = Recipes.objects.latest('r_num').r_num
-        validated_data['r_num'] = latest_key + 1
+        latest_key = Recipes.objects.latest('r_num').r_num if (Recipes.objects.count() > 0) else 0
+        validated_data['r_num'] = latest_key
         ings = validated_data.pop('r_ingredients')
         pkgs = validated_data.pop('r_packaging')
         diets = validated_data.pop('r_diets')
@@ -244,28 +244,28 @@ class RecipesSerializer(ModelSerializer):
         recipe_instance = Recipes.objects.create(**validated_data)
 
         for ing in ings:
-            latest_key = RecipeIngredients.objects.latest('ri_id').ri_id
-            ing['ri_id'] = latest_key + 1
+            latest_key = RecipeIngredients.objects.latest('ri_id').ri_id if (RecipeIngredients.objects.count() > 0) else 0 
+            ing['ri_id'] = latest_key
             ing['ri_recipe_num'] = recipe_instance
             RecipeIngredients(**ing).save()
         for pkg in pkgs:
-            latest_key = RecipePackaging.objects.latest('rp_id').rp_id
-            pkg['rp_id'] = latest_key + 1
+            latest_key = RecipePackaging.objects.latest('rp_id').rp_id if (RecipePackaging.objects.count() > 0) else 0
+            pkg['rp_id'] = latest_key
             pkg['rp_recipe_num'] = recipe_instance
             RecipePackaging(**pkg).save()
         for diet in diets:
-            latest_key = RecipeDiets.objects.latest('rd_id').rd_id
-            diet['rd_id'] = latest_key + 1
+            latest_key = RecipeDiets.objects.latest('rd_id').rd_id if (RecipeDiets.objects.count() > 0) else 0
+            diet['rd_id'] = latest_key
             diet['rd_recipe_num'] = recipe_instance
             RecipeDiets(**diet).save()
         for station in stations:
-            latest_key = Stations.objects.latest('stn_num').stn_num
-            station['stn_num'] = latest_key + 1
+            latest_key = Stations.objects.latest('stn_num').stn_num if (Stations.objects.count() > 0) else 0
+            station['stn_num'] = latest_key
             station['stn_recipe_num'] = recipe_instance
             Stations(**station).save()
         for allergy in allergies:
-            latest_key = RecipeAllergies.objects.latest('ra_id').ra_id
-            allergy['ra_id'] = latest_key + 1
+            latest_key = RecipeAllergies.objects.latest('ra_id').ra_id if (RecipeAllergies.objects.count > 0) else 0
+            allergy['ra_id'] = latest_key
             allergy['ra_recipe_num'] = recipe_instance
             RecipeAllergies(**allergy).save()
 
