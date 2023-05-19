@@ -94,7 +94,7 @@ const MealPlanForm = (props) => {
               {getRecipeOptions('meal')}
             </Select>
             
-            <InputLabel htmlFor='snack_r_num'>Snack: </InputLabel>
+            <InputLabel htmlFor='snack_r_num'>Snack*: </InputLabel>
             <Select name='snack_r_num' required value={meal.snack_r_num} onChange={handleFormChange}>
               {getRecipeOptions('snack')}
             </Select>
