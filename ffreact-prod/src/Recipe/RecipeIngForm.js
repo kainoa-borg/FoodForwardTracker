@@ -67,16 +67,15 @@ const RecipeIngForm = (props) => {
             <Grid item>
                 <InputLabel>Ingredient Name*: </InputLabel>
                 {/* <Input name="ingredient_name" type="text" maxLength='30' value={ingredient.ingredient_name} onChange={handleFormChange}/> */}
-                <ModularSelect value={ingredient.ingredient_name} noDuplicates options={ingredients} searchField={'ingredient_name'} onChange={handleFormChange}/>
+                <ModularSelect value={ingredient.ingredient_name} required noDuplicates options={ingredients} searchField={'ingredient_name'} onChange={handleFormChange}/>
 
                 <InputLabel>Amount*: </InputLabel>
-                <Input name='amt' type="text" value={ingredient.amt} onChange={handleFormChange}/>
+                <Input name='amt' type="text" value={ingredient.amt} inputProps={{required:true}} onChange={handleFormChange}/>
                 {/* <ModularSelect value={ingredient.storage_type} options={ingredients} searchField={'storage_type'} onChange={handleFormChange}/> */}
-
 
                 <InputLabel>Unit*: </InputLabel>
                 {/* <Input name='unit' type="text" value={ingredient.unit} onChange={handleFormChange}/> */}
-                <ModularSelect value={ingredient.unit} options={ingredients} searchField={'unit'} onChange={handleFormChange}/>                
+                <ModularSelect value={ingredient.unit} required noDuplicates options={ingredients} searchField={'unit'} onChange={handleFormChange}/>                
             </Grid>
             <Grid item>
                 <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>
