@@ -126,25 +126,25 @@ const PackagingForm = (props) => {
               <Grid item>
                 <InputLabel htmlFor="package_type">Package Type*: </InputLabel>
                 {/*<Input name="package_type" id="package_type" type="text" maxLength='30' required={true} value={packaging.package_type} onChange={handleFormChange}/>*/}
-                <ModularSelect value={packageItem.package_type} options={packaging} noDuplicates searchField={'package_type'} onChange={handleFormChange}/>
+                <ModularSelect value={packageItem.package_type} options={packaging} required noDuplicates searchField={'package_type'} onChange={handleFormChange}/>
 
                 <InputLabel htmlFor='unit_qty'>Unit Quantity*: </InputLabel>
-                <Input name='unit_qty' id="unit_qty" type="number" inputProps={{min: 0}} value={packageItem.unit_qty} onChange={handleFormChange}/>
+                <Input name='unit_qty' id="unit_qty" type="number" inputProps={{min: 0, required: true}} value={packageItem.unit_qty} onChange={handleFormChange}/>
             </Grid>
             <Grid item>
               <InputLabel htmlFor='qty_holds'>Size*: </InputLabel>
-              <Input name='qty_holds' id="qty_holds" type="number" inputProps={{min: 0}} value={packageItem.qty_holds} onChange={handleFormChange}/>
+              <Input name='qty_holds' id="qty_holds" type="number" inputProps={{min: 0, required: true}} value={packageItem.qty_holds} onChange={handleFormChange}/>
                 
               <InputLabel htmlFor='unit_cost'>Unit Cost*: </InputLabel>
-              <Input name='unit_cost' id="unit_cost" type="number" inputProps={{min: 0}} value={packageItem.unit_cost} onChange={handleFormChange}/>
+              <Input name='unit_cost' id="unit_cost" type="number" inputProps={{min: 0, required: true}} value={packageItem.unit_cost} onChange={handleFormChange}/>
             </Grid>
             <Grid item>
               <InputLabel htmlFor='unit'>Unit*: </InputLabel>
               {/*<Input name='unit' id="unit" type="text" value={packaging.unit} onChange={handleFormChange}/>*/}
-              <ModularSelect inputProps={{min: 0}} value={packageItem.unit} options={packaging} noDuplicates searchField={'unit'} onChange={handleFormChange} />
+              <ModularSelect inputProps={{min: 0}} value={packageItem.unit} options={packaging} required noDuplicates searchField={'unit'} onChange={handleFormChange} />
 
-              <InputLabel htmlFor='psupplier'>Supplier: </InputLabel>
-              <Select type='select' name="pref_psupplier_id" value={undefined} label={'Supplier'} style={{width: `170px`}} onChange={handleFormChange} >
+              <InputLabel htmlFor='psupplier'>Supplier*: </InputLabel>
+              <Select type='select' name="pref_psupplier_id" value={undefined} inputProps={{required: true}} label={'Supplier'} style={{width: `170px`}} onChange={handleFormChange} >
                   <MenuItem value={'Select A Supplier'}></MenuItem>
                   {supplierList.map((supplier, key) => {
                     return (
@@ -157,11 +157,11 @@ const PackagingForm = (props) => {
               <InputLabel htmlFor='returnable'>Returnable: </InputLabel>          
               <Input name='returnable' id='returnable' type="checkbox" checked={packageItem.returnable} onChange={handleFormChange}/>
 
-              <InputLabel htmlFor='in_date'>Purchased Date: </InputLabel>
-              <Input name='in_date' id="in_date" type="date" value={packageItem.in_date} onChange={handleFormChange}/>
+              <InputLabel htmlFor='in_date'>Purchased Date*: </InputLabel>
+              <Input name='in_date' id="in_date" type="date" value={packageItem.in_date} inputProps={{required: true}} onChange={handleFormChange}/>
 
-              <InputLabel htmlFor='in_qty'>Purchased Amt: </InputLabel>
-              <Input name='in_qty' id="in_qty" type='number' inputProps={{min: 0}} value={packageItem.in_qty} onChange={handleFormChange}/>
+              <InputLabel htmlFor='in_qty'>Purchased Amt*: </InputLabel>
+              <Input name='in_qty' id="in_qty" type='number' value={packageItem.in_qty} inputProps={{min: 0, required: true}} onChange={handleFormChange}/>
             </Grid>
           </Grid>
           <Button type='Submit' color='lightBlue' variant='contained'>Add Packaging</Button>

@@ -132,27 +132,27 @@ const IngredientForm = (props) => {
             <Grid item>
               <InputLabel htmlFor="ingredient_name">Ingredient Name*: </InputLabel>
               {/* <Input name="ingredient_name" type="text" maxLength='30' value={ingredient.ingredient_name} onChange={handleFormChange}/> */}
-              <ModularSelect value={ingredient.ingredient_name} options={ingredients} noDuplicates searchField={'ingredient_name'} onChange={handleFormChange}/>
+              <ModularSelect value={ingredient.ingredient_name} options={ingredients} required noDuplicates searchField={'ingredient_name'} onChange={handleFormChange}/>
 
               <InputLabel htmlFor='storage_type'>Category*: </InputLabel>
               {/* <Input name='storage_type' type="text" value={ingredient.storage_type} onChange={handleFormChange}/> */}
-              <ModularSelect value={ingredient.storage_type} options={ingredients} noDuplicates searchField={'storage_type'} onChange={handleFormChange} />
+              <ModularSelect value={ingredient.storage_type} options={ingredients} required noDuplicates searchField={'storage_type'} onChange={handleFormChange} />
 
               <InputLabel htmlFor='pkg_type'>Package Type*: </InputLabel>
               {/* <Input name='pkg_type' type="text" value={ingredient.pkg_type} onChange={handleFormChange}/> */}
-              <ModularSelect value={ingredient.pkg_type} options={ingredients} noDuplicates searchField={'pkg_type'} onChange={handleFormChange}/>
+              <ModularSelect value={ingredient.pkg_type} options={ingredients} required noDuplicates searchField={'pkg_type'} onChange={handleFormChange}/>
 
               <InputLabel htmlFor="unit">Measure*: </InputLabel>
               {/* <Input name="unit" type="text" value={ingredient.unit} onChange={handleFormChange}/> */}
-              <ModularSelect value={ingredient.unit} options={ingredients} inputProps={{min: 0}} noDuplicates searchField={'unit'} onChange={handleFormChange}/>
+              <ModularSelect value={ingredient.unit} options={ingredients} required inputProps={{min: 0}} noDuplicates searchField={'unit'} onChange={handleFormChange}/>
             </Grid>
             <Grid item>
-              <InputLabel htmlFor="unit_cost">Unit Cost: </InputLabel>
-              <Input name="unit_cost" type="number" step="0.01" value={ingredient.unit_cost} inputProps={{min: 0}} onChange={handleFormChange}/>
+              <InputLabel htmlFor="unit_cost">Unit Cost*: </InputLabel>
+              <Input name="unit_cost" type="number" step="0.01" value={ingredient.unit_cost} inputProps={{min: 0, required: true}} onChange={handleFormChange}/>
 
-              <InputLabel htmlFor="pref_isupplier">Supplier: </InputLabel>
+              <InputLabel htmlFor="pref_isupplier">Supplier*: </InputLabel>
               {/* <ModularSelect options={supplierList} noDuplicates searchField={'s_name'} onChange={handleFormChange}/> */}
-              <Select type='select' name="pref_isupplier_id" value={undefined} label={'Supplier'} style={{width: `170px`}} onChange={handleFormChange}>
+              <Select type='select' name="pref_isupplier_id" value={undefined} label={'Supplier'} inputProps={{required: true}} style={{width: `170px`}} onChange={handleFormChange}>
                 <MenuItem value={'Select A Supplier'}></MenuItem>
                 {supplierList.map((supplier, key) => {
                   return (
@@ -162,14 +162,14 @@ const IngredientForm = (props) => {
               </Select>
             </Grid>
             <Grid item>
-              <InputLabel htmlFor="in_date">Purchase Date: </InputLabel>
-              <Input name="in_date" type="date" data-date="" data-date-format="YYYY-MM-DD" value={ingredient.in_date} onChange={handleFormChange}/>
+              <InputLabel htmlFor="in_date">Purchase Date*: </InputLabel>
+              <Input name="in_date" type="date" data-date="" data-date-format="YYYY-MM-DD" value={ingredient.in_date} inputProps={{required: true}} onChange={handleFormChange}/>
 
-              <InputLabel htmlFor="in_qty">Purchase Amount: </InputLabel>
-              <Input name="in_qty" type="number" value={ingredient.in_qty} inputProps={{min: 0}} onChange={handleFormChange}/>
+              <InputLabel htmlFor="in_qty">Purchase Amount*: </InputLabel>
+              <Input name="in_qty" type="number" value={ingredient.in_qty} inputProps={{min: 0, required: true}} onChange={handleFormChange}/>
 
-              <InputLabel htmlFor="exp_date">Exp Date: </InputLabel>
-              <Input name="exp_date" type="date" data-date="" data-date-format="YYYY-MM-DD" value={ingredient.exp_date} onChange={handleFormChange}/>
+              <InputLabel htmlFor="exp_date">Exp Date*: </InputLabel>
+              <Input name="exp_date" type="date" data-date="" data-date-format="YYYY-MM-DD" inputProps={{required: true}} value={ingredient.exp_date} onChange={handleFormChange}/>
             </Grid>
             <Grid item>
               <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>
