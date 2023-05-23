@@ -37,18 +37,9 @@ class IngredientInvSerializer(ModelSerializer):
 		# raise serializers.ValidationError("IM HERE")
 		ing_usage = validated_data.pop('ingredient_usage')
 		ing_instance = Ingredients.objects.create(**validated_data)
-		used = 0
-		if ing_usage:
-			# IngredientUsages.objects.all().filter(used_ing = instance).delete()
-			for usage in ing_usage:
-				used += int(usage['used_qty'])
-				latest_id = IngredientUsages.objects.latest('i_usage_id').i_usage_id +1
-				usage['i_usage_id'] = latest_id
-				usage['used_ing_id'] = validated_data.get('i_id')
-				# raise serializers.ValidationError(usage)
-				IngredientUsages.objects.create(**usage)
 		in_qty = getattr(ing_instance, 'in_qty')
-		setattr(ing_instance, 'qty_on_hand', in_qty - used)
+		setattr(ing_instance, 'qty_on_hand', in_qty)
+		ing_instance.save()
 		return ing_instance
 		
 	def update(self, ing_instance, validated_data):
