@@ -165,6 +165,7 @@ class HhMealPlans(models.Model):
     hh_m_id = models.SmallAutoField(primary_key=True)
     meal = models.ForeignKey('MealPlans', models.CASCADE)
     meal_hh_id = models.ForeignKey('Households', models.CASCADE, related_name='hh_meal', db_column='meal_hh_id')
+    hh_s_c = models.OneToOneField('ServingCalculations', models.CASCADE, db_column='hh_s_c_id')
 
     class Meta:
         managed = False
@@ -255,6 +256,7 @@ class Kits(models.Model):
     k_id = models.AutoField(primary_key=True)
     k_date = models.DateField()
     k_hh_id = models.ForeignKey(Households, models.CASCADE, db_column='k_hh_id')
+    k_s_c = models.OneToOneField('ServingCalculations', models.CASCADE, db_column='k_s_c_id')
 
     class Meta:
         managed = False
@@ -309,6 +311,7 @@ class PackagingUsages(models.Model):
     used_date = models.DateField()
     used_qty = models.SmallIntegerField()
     used_pkg = models.ForeignKey(Packaging, models.CASCADE, related_name='packaging_usage')
+    used_s_c = models.ForeignKey('ServingCalculations', models.CASCADE, db_column="used_s_c_id")
 
     class Meta:
         managed = False
@@ -387,6 +390,15 @@ class Recipes(models.Model):
     class Meta:
         managed = False
         db_table = 'recipes'
+
+
+class ServingCalculations(models.Model):
+    calc_meal_plan = models.OneToOneField(MealPlans, models.CASCADE, db_column='calc_meal_plan_id', primary_key=True)
+    calc_date = models.DateField()
+
+    class Meta:
+        managed = False
+        db_table = 'serving_calculations'
 
 
 class StationIngredients(models.Model):

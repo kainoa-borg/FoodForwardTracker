@@ -2,11 +2,12 @@ import React, { useState, useEffect} from 'react'
 import axios from 'axios'
 import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 import { Box, Button, Input, Snackbar, Typography, FormControl} from '@mui/material';
+// import moment from "moment";
 
 // Packaging List Component
 export default function MealPlanReport() {
     const [mealPlans, setMealPlans] = useState([]);
-    const [dateRange, setDateRange] = useState([]);
+    const [dateRange, setDateRange] = useState({});
     const [searchingSBOpen, setSearchingSBOpen] = useState(false);
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
     const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
@@ -14,6 +15,8 @@ export default function MealPlanReport() {
     const [calcSBOpen, setCalcSBOpen] = useState(false);
     const [calcSuccessSBOpen, setCalcSuccessSBOpen] = useState(false);
     const [calcErrorSBOpen, setCalcErrorSBOpen] = useState(false);
+
+    console.log("RERENDERING");
 
     const getDBMealPlanReport = (dateRange) => {
         setSearchingSBOpen(true);
@@ -47,7 +50,13 @@ export default function MealPlanReport() {
         setCalcSuccessSBOpen(true);
       }).catch((error) => {
         if (error.response) {
-          setCalcErrorMsg(error.response.data);
+          if (error.response.data.errorText) {
+            setCalcErrorMsg(error.response.data.errorText);
+          }
+          else {
+            setCalcErrorMsg(error.response.statusText);
+          }
+          getDBMealPlanReport(dateRange);
           console.log(error.response);
           console.log(error.response.status);
           console.log(error.response.headers);
@@ -91,6 +100,10 @@ export default function MealPlanReport() {
       }
     }, [calcErrorMsg])
 
+    const handleDateRangeChange = (event) => {
+      setDateRange({...dateRange, [event.target.name]: event.target.value})
+    }
+
     // The HTML structure of this component
     return (
         <div>
@@ -100,11 +113,11 @@ export default function MealPlanReport() {
             {/* <Stack direction='row'> */}
               <FormControl>
                 <Typography htmlFor="startDate">Start Date: </Typography>
-                <Input id="startDate" variant='outlined' type='date' value={dateRange.startDate} onChange={(event) => {setDateRange({...dateRange, startDate: event.target.value})}}/>
+                <Input id="startDate" name="startDate" variant='outlined' type='date' value={dateRange.startDate} onChange={handleDateRangeChange}/>
               </FormControl>
               <FormControl>
                 <Typography htmlFor="endDate">End Date: </Typography>
-                <Input id="endDate" variant='outlined' type='date' value={dateRange.endDate} onChange={(event) => {setDateRange({...dateRange, endDate: event.target.value})}}/>  
+                <Input id="endDate" name="endDate" variant='outlined' type='date' value={dateRange.endDate} onChange={handleDateRangeChange}/>  
               </FormControl>  
             {/* </Stack> */}
             <FormControl>
