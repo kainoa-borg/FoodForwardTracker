@@ -51,7 +51,8 @@ class PackagingInvSerializer(ModelSerializer):
 				# raise serializers.ValidationError(usage)
 				PackagingUsages.objects.create(**usage)
 		in_qty = getattr(pkg_instance, 'in_qty')
-		setattr(pkg_instance, 'qty_on_hand', in_qty - used)
+		setattr(pkg_instance, 'qty_on_hand', in_qty)
+		pkg_instance.save()
 		return pkg_instance
 		
 	def update(self, pkg_instance, validated_data):
