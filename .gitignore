@@ -1,0 +1,38 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+#Recipe Images
+/Images/*
+
+#Debug Images
+/ffdjango/fftracker/var/www/html/Images/*
+
+#pycache
+.pyc
+.cpython
+__pycache__/
+
+# dependencies
+ffreact-prod/node_modules
+/node_modules
+node_modules
+/.pnp
+/pycache
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+ffreact-prod/build/*
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
