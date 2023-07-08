@@ -373,7 +373,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
         if (isAdding) {
             axios({
                 method: "POST",
-                url:"http://localhost:8000/api/mealrecipes/",
+                url:"http://4.236.185.213:8000/api/mealrecipes/",
                 data: r_data,
             }).then((response)=>{
                 if (imageFile) {
