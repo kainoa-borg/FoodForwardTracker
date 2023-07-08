@@ -186,11 +186,11 @@ const AppComponent = () => {
                     <Route path='/login' element={<LoginPage loginState={loginState} setLoginState={setLoginState} handlePageClick={handlePageClick} />}/>
                     <Route path='/sign-up' element={<NewUserPage handlePageClick={handlePageClick} />}/>
                     <Route path='/reset-password' element={<PwResetPage handlePageClick={handlePageClick} />}/>
-                    <Route path='/clients' element={<HouseholdPage handlePageClick={handlePageClick} />}/>
-                    <Route path='/ingredients' element={<IngredientPage handlePageClick={handlePageClick} />}/>
-                    <Route path='/packaging' element={<PackagingPage handlePageClick={handlePageClick} />}/>
-                    <Route path='/mealplans' element={<MealPlan handlePageClick={handlePageClick} />}/>
-                    <Route path='/recipes/*' element={<RecipePage handlePageClick={handlePageClick} setCurrPage={setCurrPage} />}/>
+                    <Route path='/clients' element={<HouseholdPage loginState={loginState} handlePageClick={handlePageClick} />}/>
+                    <Route path='/ingredients' element={<IngredientPage loginState={loginState} handlePageClick={handlePageClick} />}/>
+                    <Route path='/packaging' element={<PackagingPage loginState={loginState} handlePageClick={handlePageClick} />}/>
+                    <Route path='/mealplans' element={<MealPlan loginState={loginState} handlePageClick={handlePageClick} />}/>
+                    <Route path='/recipes/*' element={<RecipePage loginState={loginState} handlePageClick={handlePageClick} setCurrPage={setCurrPage} />}/>
                     <Route path='/cost-totals-report' element={<CostTotals handlePageClick={handlePageClick} />}/>
                     <Route path='/clients-report' element={<HouseholdsReport handlePageClick={handlePageClick} />}/>
                     <Route path='/ingredients-report' element={<IngredientsReport handlePageClick={handlePageClick} />}/>
@@ -202,8 +202,8 @@ const AppComponent = () => {
                     <Route path='/package-return-report' element={<PackagingReturns handlePageClick={handlePageClick} />}/>
                     <Route path='/under-construction' element={<UnderConstruction handlePageClick={handlePageClick}/>}/>
                     <Route path='/admin' element={
-                        <ProtectedRoute isAdmin={!!loginState && loginState.isAdmin}>
-                            <UserList handlePageClick={handlePageClick}/>
+                        <ProtectedRoute isAdmin={loginState && loginState.isAdmin}>
+                            <UserList loginState={loginState} handlePageClick={handlePageClick}/>
                         </ProtectedRoute>}>
                     </Route>
                     <Route path='/user-page' element={<UserPage handlePageClick={handlePageClick} />}/>

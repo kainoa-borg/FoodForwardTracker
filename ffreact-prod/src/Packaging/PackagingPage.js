@@ -18,10 +18,12 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 });
 
 // Packaging List Component
-export default function PackagingPage() {
+export default function PackagingPage(props) {
     const [packaging, setPackaging] = useState(undefined);
     const [suppliers, setSuppliers] = useState(undefined);
     const [supplierOptions, setSupplierOptions] = useState();
+
+    const loginState = props.loginState.isAuthenticated ? props.loginState : {isAuthenticated: false};
 
     // const handleSBClose = (event, reason, setOpen) => {
     //     if (reason === 'clickaway') {
@@ -125,6 +127,7 @@ export default function PackagingPage() {
         <Typography id='page-header' variant='h5'>Packaging</Typography>
         <Box sx={{height: '70vh'}}>
             <NewModularDatagrid 
+                loginState={loginState}
                 rows={packaging} 
                 columns={columns} 
                 apiEndpoint='packaging-inventory'

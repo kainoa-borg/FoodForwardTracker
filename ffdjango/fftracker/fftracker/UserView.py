@@ -38,6 +38,19 @@ class UserSerializer(serializers.ModelSerializer):
 			"email": validated_data.pop("email"),
 			"admin_flag": validated_data.pop('admin_flag')
 		}
+		# Look for other accounts with this username
+		if (Users.objects.all().filter(username = user.username)):
+			return Response({
+				"errorReason": "username",
+				"errorText": "This username is already associated with an account"
+			})
+		# Look for other accounts with this email
+		if (Users.objects.all().filter(email=user.email)):
+			return Response({
+				"errorReason": "email",
+				"errorText":"This email is already associated with an account."
+			}, 400)
+		
 		user_inst = Users.objects.create(**user)
 		return user_inst
 
@@ -48,18 +61,13 @@ class UserView(viewsets.ModelViewSet):
 
 class UserAuth(viewsets.ViewSet):
 	def list(self, request):
-		# queryset = Users.objects.all()
-		# for user in queryset:
-		# 	user.password = make_password(user.password)
-		# 	user.save()
 		queryset = Users.objects.all()
 		serializer = UserSerializer(queryset, many=True)
 		return Response(serializer.data)
 
 	def create(self, request):
-		# return Response(request.data)
+		# Find users with this username
 		queryset = Users.objects.all().filter(username=request.data['username'])
-		# return Response(len(queryset))
 		authedPass = False
 		isAdmin = None
 		if len(queryset) > 1:

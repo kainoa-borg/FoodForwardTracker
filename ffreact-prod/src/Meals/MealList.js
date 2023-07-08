@@ -12,8 +12,9 @@ import {Box, Typography} from '@mui/material'
 import NewModularDatagrid from '../components/NewModularDatagrid.js'
 
 // Meal List Component
-export default function MealList() {
+export default function MealList(props) {
     const [recipeList, setRecipeList] = useState(undefined);
+    const loginState = props.loginState.isAuthenticated ? props.loginState : {isAuthenticated: false};
 
     const getDBRecipeList = () => {
         console.log('MAKING REQUEST TO DJANGO')
@@ -72,6 +73,7 @@ export default function MealList() {
         <Typography id='page-header' variant='h5'>Meal Plans</Typography>
         <Box sx={{height: '70vh'}}>
           <NewModularDatagrid
+            loginState={loginState}
             apiEndpoint={'mealplans'}
             columns={columns}
             keyFieldName={'m_id'}

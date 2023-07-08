@@ -4,7 +4,8 @@ import NewModularDatagrid from '../components/NewModularDatagrid.js'
 import UserForm from './UserForm.js'
 
 // User List Component
-export default function UserList() {
+export default function UserList(props) {
+    const loginState = props.loginState.isAuthenticated ? props.loginState : {isAuthenticated: false};
  
     const columns = [
         { field: 'username', headerName: 'User Name', type: 'string', width: 200, editable: true },
@@ -19,7 +20,8 @@ export default function UserList() {
         <div class='table-div'>
         <Typography id='page-header' variant='h5'>Administration</Typography>
         <Box sx={{height: '70vh'}}>
-            <NewModularDatagrid 
+            <NewModularDatagrid
+              loginState={loginState} 
               columns={columns} 
               getRowHeight={() => 'auto'} 
               getEstimatedRowHeight={() => 300} 

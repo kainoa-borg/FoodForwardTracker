@@ -15,7 +15,7 @@ import ModularSelect from "../components/ModularSelect.js";
 import { useNavigate } from "react-router-dom";
 // import food_placeholder from '../Images/food_placeholder.jpg'
 
-export default function Recipe({recipeData, setRecipeData, ingredientOptions, packagingOptions, setCurrPage, getDBRecipeData, isAdding}) {
+export default function Recipe({ loginState, recipeData, setRecipeData, ingredientOptions, packagingOptions, setCurrPage, getDBRecipeData, isAdding}) {
     // If recipeData prop is passed, use that, otherwise use empty recipeData
     // const [recipeName, setRecipeName] = useState(recipeData.r_name);
     const nameField = useRef();
@@ -160,7 +160,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
     const handleCloseClick = () => {
         // Return to recipe list when close is clicked
         handleClearTempFiles();
-        setCurrPage(<RecipePage/>);
+        setCurrPage(<RecipePage loginState={loginState}/>);
     }
 
     const handleTempUpload = (file, apiEndpoint) => {
@@ -384,7 +384,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
                 }
                 // console.log('post success!')
                 setUpdateDoneSBOpen(true);
-                setCurrPage(<RecipePage updateDone={true}/>);
+                setCurrPage(<RecipePage loginState={loginState} updateDone={true}/>);
             }).catch((error) => {
             if (error.response) {
                 handleErrorMessage(error);
@@ -408,7 +408,7 @@ export default function Recipe({recipeData, setRecipeData, ingredientOptions, pa
             }).then((response)=>{
                 // console.log('patch success!')
                 setUpdateDoneSBOpen(true);
-                setCurrPage(<RecipePage updateDone={true}/>);
+                setCurrPage(<RecipePage loginState={loginState} updateDone={true}/>);
             }).catch((error) => {
             if (error.response) {
                 handleErrorMessage(error);

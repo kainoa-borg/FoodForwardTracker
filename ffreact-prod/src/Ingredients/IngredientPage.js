@@ -10,6 +10,7 @@ import CellDialog from '../components/CellDialog.js'
 import { Typography } from '@mui/material';
 import { useGridApiContext, GridEditInputCell } from '@mui/x-data-grid';
 import moment from 'moment';
+import { PropaneSharp } from '@mui/icons-material';
 
 // Formats data into $0.00 format
 const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -18,7 +19,9 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 });
 
 // Ingredients List Component
-export default function IngredientPage() {
+export default function IngredientPage(props) {
+    const loginState = props.loginState.isAuthenticated ? props.loginState : {isAuthenticated: false};
+
     // Structs
     const [ingredients, setIngredients] = useState([]);
     const [suppliers, setSuppliers] = useState(undefined);
@@ -122,6 +125,7 @@ export default function IngredientPage() {
         <Typography id='page-header' variant='h5'>Ingredients</Typography>
             <Box sx={{height: '70vh'}}>
             <NewModularDatagrid 
+            loginState={loginState}
             rows={ingredients}
             columns={columns}
             apiEndpoint='ingredient-inventory'

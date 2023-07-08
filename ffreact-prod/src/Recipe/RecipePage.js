@@ -10,9 +10,12 @@ import { Outlet, Routes, Route, useNavigate } from 'react-router-dom';
 export default function RecipePage(props) {
     const [currPage, setCurrPage] = useState();
 
+    const loginState = props.loginState.isAuthenticated ? props.loginState : {isAuthenticated: false};
+    const handlePageClick = props.handlePageClick;        
+
     useEffect(() => {
-        setCurrPage(<RecipePageComponent {...props} setCurrPage={setCurrPage}/>)
-    }, [])
+        setCurrPage(<RecipePageComponent loginState={loginState} handlePageClick={handlePageClick} setCurrPage={setCurrPage}/>)
+    }, [loginState])
 
     return (
         <div>
@@ -23,6 +26,9 @@ export default function RecipePage(props) {
 
 function RecipePageComponent(props) {
     const navigate = useNavigate();
+
+    const loginState = props.loginState;
+
 
     const [addRecipeData, setAddRecipeData] = useState({
         "r_num": "",
@@ -100,6 +106,7 @@ function RecipePageComponent(props) {
         }).then((response)=>{
         // setRecipeData(response.data);
         setCurrPage(<Recipe
+            loginState={loginState}
             recipeData={response.data} 
             setRecipeData={setRecipeData} 
             getDBRecipeData={getDBRecipeData} 
@@ -169,9 +176,12 @@ function RecipePageComponent(props) {
         {
             field: 'm_s', headerName: 'Meal/Snack', width: 150, editable: false, valueFormatter: (params) => {return params.value===1 ? 'Meal' : 'Snack'}
         },
+        loginState.isAuthenticated ?
         { field: 'actions', type: 'actions', headerName: 'Actions', width: 100,
             getActions: (params) => modularActions(params, rowModesModel, setRowModesModel, setUpdateSBOpen)
         }
+        :
+        {}
     ]
 
     const modularActions = (params, rowModesModel, setRowModesModel, setUpdateSBOpen) => {
@@ -295,13 +305,15 @@ function RecipePageComponent(props) {
     function CustomToolbar() {
         return (
           <GridToolbarContainer>
+            { loginState.isAuthenticated ?
             <Button 
                 color='lightBlue' 
                 variant='contained' 
                 onClick={() => {
                     setCurrPage(
                     <Recipe 
-                        isAdding 
+                        isAdding
+                        loginState={loginState} 
                         recipeData={addRecipeData} 
                         setRecipeData={setAddRecipeData} 
                         setCurrPage={setCurrPage} 
@@ -310,6 +322,9 @@ function RecipePageComponent(props) {
                     </Recipe>)}}
                 >Add Recipe
             </Button>
+            :
+            <></>
+            }
           </GridToolbarContainer>
         );
     }

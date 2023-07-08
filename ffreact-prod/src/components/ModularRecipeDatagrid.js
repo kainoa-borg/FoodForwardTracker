@@ -19,7 +19,7 @@ export default function ModularRecipeDatagrid(props) {
     const setRows = props.setRows;
     const entryName = props.entryName;
     // const searchField = props.searchField;
-    const columns = [...props.columns, 
+    const columns = [...props.columns,
         { field: 'actions', type: 'actions', headerName: 'Actions', width: 100,
             getActions: (params) => modularActions(params, rowModesModel, setRowModesModel, setUpdateSBOpen)
         }                     

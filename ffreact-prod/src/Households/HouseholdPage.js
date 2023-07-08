@@ -10,7 +10,8 @@ import HouseholdForm from './HouseholdForm.js';
 // import axios from 'axios';
 
 // Households/Clients List Component
-export default function HouseholdPage() {
+export default function HouseholdPage(props) {
+    const loginState = props.loginState.isAuthenticated ? props.loginState : {isAuthenticated: false};
     
     const AllergyListCell = (params) => {
         return <AllergiesList allergies={params.value} isEditable={false}/>
@@ -92,7 +93,8 @@ export default function HouseholdPage() {
         <div class='table-div'>
         <Typography id='page-header' variant='h5'>Clients</Typography>
         <Box sx={{height: '70vh'}}>
-            <NewModularDatagrid 
+            <NewModularDatagrid
+                loginState={loginState}
                 columns={columns}
                 columnGroupingModel={columnGroupingModel}
                 getRowHeight={() => 'auto'}

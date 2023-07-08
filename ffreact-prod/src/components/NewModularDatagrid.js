@@ -32,18 +32,17 @@ export default function NewModularDatagrid(props) {
 
     const searchField = props.searchField;
     const searchLabel = props.searchLabel;
-    // const filterType = props.filterType;
-    // const filterField = props.filterField;
-    // const filterOperator = props.filterOperator;
+    const loginState = props.loginState;
 
     // Entry Name
     const entryName = props.entryName;
 
     // Append passed columns with default actions
-    const columns = [...props.columns, 
+    const columns = [...props.columns, loginState.isAuthenticated ?
         { field: 'actions', type: 'actions', headerName: 'Actions', width: 100,
             getActions: (params) => modularActions(params, rowModesModel, setRowModesModel, setUpdateSBOpen)
-        }                     
+        } :
+        {}
     ];
 
     const columnGroupingModel = props.columnGroupingModel;
@@ -311,7 +310,13 @@ export default function NewModularDatagrid(props) {
         const e_name = entryName ? entryName : 'Entry'
         return (
           <GridToolbarContainer>
-            <Button color='lightBlue' variant='contained' onClick={() => {setAddFormOpen(true)}}>Add {e_name}</Button>
+            {
+                loginState.isAuthenticated 
+                ?
+                <Button color='lightBlue' variant='contained' onClick={() => {setAddFormOpen(true)}}>Add {e_name}</Button>
+                :
+                <></>
+            }
             {/* <GridToolbarExport color='lightBlue'/> */}
           </GridToolbarContainer>
         );
@@ -332,7 +337,7 @@ export default function NewModularDatagrid(props) {
             <Box sx={{display: 'flex', height: '100%'}}>
                 <Box sx={{flexGrow: 1}}>
                     <DataGrid
-                    components={{ Toolbar: CustomToolbar }}
+                    components={{ Toolbar: CustomToolbar}}
                     rows={tableData}
                     columns={columns}
                     // autoHeight={true}
