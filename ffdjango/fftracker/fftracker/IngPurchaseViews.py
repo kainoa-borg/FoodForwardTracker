@@ -7,8 +7,9 @@ from rest_framework import serializers
 from rest_framework.generics import ListAPIView
 from rest_framework import status
 from django.db.models import Prefetch
-from .models import Ingredients, MealPlans, Recipes, RecipeIngredients
+from .models import Ingredients, MealPlans, Recipes, RecipeIngredients, Households
 from .SupplierViews import SupplierSerializer
+from decimal import *
 
 class RecipeSerializer(ModelSerializer):
      class Meta():
@@ -55,12 +56,8 @@ class IPLSerializer(serializers.Serializer):
     name = serializers.CharField(allow_blank=True)
     ingredient_name = serializers.CharField(allow_blank=True)
     unit = serializers.CharField(allow_blank=True)
-    amt = serializers.IntegerField(default='', required=False)
-    pkg_type = serializers.CharField(allow_blank=True)
-    storage_type = serializers.CharField(allow_blank=True)
     qty_on_hand = serializers.IntegerField(default='', required=False)
     total_required = serializers.IntegerField(default='', required=False)
-    pref_isupplier_id = serializers.CharField(allow_blank=True)
     to_purchase = serializers.IntegerField(default='', required=False)
 
     # pref_isupplier_id = serializers.IntegerField()
@@ -70,7 +67,38 @@ class IPLSerializer(serializers.Serializer):
     # s_servings = serializers.IntegerField()
     
 
-class IPLView(ViewSet): 
+class IPLView(ViewSet):
+     def calc_ing_purchase_amt(self, m_date, meal_name, meal_servings, ing, count):
+        name = meal_name
+        ing_name = ing.ingredient_name
+        ing_amt = ing.amt
+        ing_unit = ing.unit
+        total_required = ing_amt * meal_servings
+        total_qty_on_hand = 0
+        # Get the ingredients that fulfill this requirement
+        IngQueryset = Ingredients.objects.all().filter(ingredient_name = ing_name, unit = ing_unit)
+        # For each ingredient option, calculate the total qty we have on hand
+        for ingredient in IngQueryset:
+            pref_isupplier_id = ingredient.pref_isupplier
+            pkg_type = ingredient.pkg_type
+            storage_type = ingredient.storage_type
+            if ingredient.qty_on_hand:
+                total_qty_on_hand += 0
+        # Calculate the total amt to purchase
+        to_purchase = 0
+        if (total_required - total_qty_on_hand > 0):
+                to_purchase += total_required - total_qty_on_hand
+        # Append this ingredient purchase to the queryset
+        return {'id': count,
+                'm_date': m_date,
+                'name': name,
+                'ingredient_name': ing_name,
+                'unit': ing_unit,
+                'qty_on_hand': total_qty_on_hand,
+                'total_required': total_required,
+                'to_purchase': to_purchase,
+        }
+     
      def list(self, request):
         count = 0
         m_date = ''
@@ -78,101 +106,51 @@ class IPLView(ViewSet):
         s_r_num = 0
         meal_servings = 0
         snack_servings = 0
-        name = ''
         meal_name = ''
-        snack_name = ''
-        ingredient_name = ''
-        unit = ''
-        amt = 0
-        pkg_type = ''
-        storage_type = ''
-        qty_on_hand = 0
-        total_required = 0
-        pref_isupplier_id = 0        
-        to_purchase = 0
 
         queryset = []
         #queryset.clear()
         startDate = request.query_params.get('startDate')
         endDate = request.query_params.get('endDate')
         MealsQueryset = MealPlans.objects.filter(m_date__range=[startDate, endDate]).order_by('-m_date')
-        IngQueryset = Ingredients.objects.all()
 
         # Get every meal and snack for the date range
         for meals in MealsQueryset:
+            # Meal and snack ids for filtering
             m_r_num = meals.meal_r_num
             s_r_num = meals.snack_r_num
+            # Meal names to display
             meal_name = meals.meal_r_num.r_name
             snack_name = meals.snack_r_num.r_name
+            # Planned meal date
             m_date = meals.m_date
-            meal_servings = meals.meal_servings
-            snack_servings = meals.snack_servings
-            mealRecipeIngs = RecipeIngredients.objects.filter(ri_recipe_num=m_r_num)
-            snackRecipeIngs = RecipeIngredients.objects.filter(ri_recipe_num=s_r_num)
+            # Serving Calculations
+            getcontext().prec = 2
+            meal_serivngs = Decimal(0)
+            snack_servings = Decimal(0)
 
-            # For each meal in the list...                       
-            for meal in mealRecipeIngs:
-                name = meal_name
-                ingredient_name = meal.ingredient_name
-                amt = meal.amt
-                unit = meal.unit
-                total_required = amt * meal_servings
+            print(type(meal_servings))
 
-                # get all ingredients for that meal
-                for ingredient in IngQueryset:
-                    if ingredient_name == ingredient.ingredient_name:
-                        qty_on_hand = ingredient.qty_on_hand
-                        pref_isupplier_id = ingredient.pref_isupplier
-                        pkg_type = ingredient.pkg_type
-                        storage_type = ingredient.storage_type
-                        if (int(total_required or 0) - int(qty_on_hand or 0)) > 0:
-                            to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
-                        else: 
-                            to_purchase = 0
-                        queryset.append({'id': count,
-                                         'm_date': m_date,
-                                         'name': name,
-                                         'ingredient_name': ingredient_name,
-                                         'unit': unit,
-                                         'amt': amt,
-                                         'pkg_type': pkg_type,
-                                         'storage_type': storage_type,
-                                         'qty_on_hand': qty_on_hand,
-                                         'total_required': total_required,
-                                         'to_purchase': to_purchase,
-                                         'pref_isupplier_id': pref_isupplier_id})
-                        count += 1
+            hh_queryset = Households.objects.all().filter(paused_flag=False)
+            for household in hh_queryset:
+                hh_meal_servings = household.num_adult + household.num_child_gt_6 + (household.num_child_lt_6 *.5)
+                hh_snack_servings = household.num_adult + household.num_child_gt_6 + household.num_child_lt_6
+                meal_servings += Decimal(hh_meal_servings)
+                snack_servings += Decimal(hh_snack_servings)
+
+            # Ingredients for the meal and snack
+            meal_recipe_ings = RecipeIngredients.objects.filter(ri_recipe_num=m_r_num)
+            snack_recipe_ings = RecipeIngredients.objects.filter(ri_recipe_num=s_r_num)
+
+            for ing in meal_recipe_ings:
+                print(m_date)
+                queryset.append(self.calc_ing_purchase_amt(m_date, meal_name, meal_servings, ing, count))
+                count += 1
             
-            # for each snack in that date range
-            for snack in snackRecipeIngs:
-                ingredient_name = snack.ingredient_name
-                name = snack_name
-                amt = snack.amt
-                unit = snack.unit
-                total_required = amt * snack_servings
-                for ingredient in IngQueryset:
-                    if ((ingredient_name == ingredient.ingredient_name)): #(unit == ingredient.unit) & 
-                        qty_on_hand = ingredient.qty_on_hand
-                        pref_isupplier_id = ingredient.pref_isupplier
-                        pkg_type = ingredient.pkg_type
-                        storage_type = ingredient.storage_type
-                        if (int(total_required or 0) - int(qty_on_hand or 0)) > 0:
-                            to_purchase = int(total_required or 0) - int(qty_on_hand or 0)
-                        else: 
-                            to_purchase = 0
-                        queryset.append({'id': count,
-                                         'm_date': m_date,
-                                         'name': name,
-                                         'ingredient_name': ingredient_name,
-                                         'unit': unit,
-                                         'amt': amt,
-                                         'pkg_type': pkg_type,
-                                         'storage_type': storage_type,
-                                         'qty_on_hand': qty_on_hand,
-                                         'total_required': total_required,
-                                         'to_purchase': to_purchase,
-                                         'pref_isupplier_id': pref_isupplier_id})
-                        count += 1
+            for ing in snack_recipe_ings:
+                print(m_date)
+                queryset.append(self.calc_ing_purchase_amt(m_date, meal_name, snack_servings, ing, count))
+                count += 1
                         
         serializer = IPLSerializer(queryset, many=True)
         print(serializer)

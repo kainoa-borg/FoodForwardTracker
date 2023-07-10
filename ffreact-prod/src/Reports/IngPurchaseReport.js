@@ -3,6 +3,11 @@ import axios from 'axios'
 import { DataGrid, GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid'
 import { Box, Button, Input, Snackbar, Typography, FormControl } from '@mui/material';
 
+// Formats data into $0.00 format
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
 
 // Ingredients Purchasing List Component
 export default function PurchasingReport() {
@@ -27,7 +32,7 @@ export default function PurchasingReport() {
         setSearchingSBOpen(true);
         axios({
           method: "GET",
-          url:"http://4.236.185.213:8000/api/ing-purchase-report/",
+          url:"http://localhost:8000/api/ing-purchase-report/",
           params: dateRange
         }).then((response)=>{
           // console.log(response.data);
@@ -97,12 +102,12 @@ export default function PurchasingReport() {
 
     const columns = [
         { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
-        { field: 'm_date', headerName: 'Date Prepared', width: 150 },
-        { field: 'name', headerName: 'Meal Name', width: 120 },
         { field: 'unit', headerName: 'Measure', width: 90, editable: true },
-        { field: 'total_required', headerName: 'Total Required', width: 140, type: 'number', /*valueGetter: ({row}) => (row.unit_cost * row.in_qty),*/ },
-        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 140, type: 'number', editable: false},
-        { field: 'to_purchase', headerName: 'To Purchase', width: 140, type: 'number', editable: false},
+        { field: 'to_purchase', headerName: 'To Purchase', width: 110, type: 'number', editable: false},
+        { field: 'total_required', headerName: 'Total Required', width: 120, type: 'number', /*valueGetter: ({row}) => (row.unit_cost * row.in_qty),*/ },
+        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 100, type: 'number', editable: false},
+        { field: 'm_date', headerName: 'Planned Date', width: 150 },
+        { field: 'name', headerName: 'Meal Name', width: 120 }
       //  { field: 'pref_isupplier_id', headerName: 'Preferered Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
     ]
 
