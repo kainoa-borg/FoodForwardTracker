@@ -68,7 +68,7 @@ class IPLSerializer(serializers.Serializer):
     
 
 class IPLView(ViewSet):
-     def calc_ing_purchase_amt(self, m_date, meal_name, meal_servings, ing, count):
+    def calc_ing_purchase_amt(self, m_date, meal_name, meal_servings, ing, count):
         name = meal_name
         ing_name = ing.ingredient_name
         ing_amt = ing.amt
@@ -89,7 +89,11 @@ class IPLView(ViewSet):
         if (total_required - total_qty_on_hand > 0):
                 to_purchase += total_required - total_qty_on_hand
         # Append this ingredient purchase to the queryset
-        return {'id': count,
+        return {
+             "ing_name": ing_name,
+             "ing_unit": ing_unit,
+             "data": {
+                "id": count,
                 'm_date': m_date,
                 'name': name,
                 'ingredient_name': ing_name,
@@ -97,9 +101,28 @@ class IPLView(ViewSet):
                 'qty_on_hand': total_qty_on_hand,
                 'total_required': total_required,
                 'to_purchase': to_purchase,
+            }
         }
-     
-     def list(self, request):
+    
+    def combine_ing_dict_entries(self, ing_calc, ing_dict):
+        ing_name = ing_calc["ing_name"]
+        ing_unit = ing_calc["ing_unit"]
+        # If this ing is already in ing_dict
+        if ing_name in ing_dict:
+            # If this unit is already in ing_dict
+            if ing_unit in ing_dict[ing_name]:
+                # Add relevant fields
+                temp_ing = ing_dict[ing_name][ing_unit]
+                temp_ing["total_required"] += ing_calc["data"]["total_required"]
+                temp_ing["to_purchase"] += ing_calc["data"]["to_purchase"]
+                ing_dict[ing_name][ing_unit] = temp_ing
+            else:
+                ing_dict[ing_name][ing_unit] = ing_calc["data"]
+        else:
+            ing_dict[ing_name] = {ing_unit: ing_calc["data"]}
+        return
+
+    def list(self, request):
         count = 0
         m_date = ''
         m_r_num = 0
@@ -113,6 +136,8 @@ class IPLView(ViewSet):
         startDate = request.query_params.get('startDate')
         endDate = request.query_params.get('endDate')
         MealsQueryset = MealPlans.objects.filter(m_date__range=[startDate, endDate]).order_by('-m_date')
+
+        ing_dict = {}
 
         # Get every meal and snack for the date range
         for meals in MealsQueryset:
@@ -129,8 +154,6 @@ class IPLView(ViewSet):
             meal_serivngs = Decimal(0)
             snack_servings = Decimal(0)
 
-            print(type(meal_servings))
-
             hh_queryset = Households.objects.all().filter(paused_flag=False)
             for household in hh_queryset:
                 hh_meal_servings = household.num_adult + household.num_child_gt_6 + (household.num_child_lt_6 *.5)
@@ -143,17 +166,24 @@ class IPLView(ViewSet):
             snack_recipe_ings = RecipeIngredients.objects.filter(ri_recipe_num=s_r_num)
 
             for ing in meal_recipe_ings:
-                print(m_date)
-                queryset.append(self.calc_ing_purchase_amt(m_date, meal_name, meal_servings, ing, count))
+                ing_calc = self.calc_ing_purchase_amt(m_date, meal_name, meal_servings, ing, count)
+                self.combine_ing_dict_entries(ing_calc, ing_dict)
+                          
                 count += 1
             
             for ing in snack_recipe_ings:
-                print(m_date)
-                queryset.append(self.calc_ing_purchase_amt(m_date, meal_name, snack_servings, ing, count))
+                ing_calc = self.calc_ing_purchase_amt(m_date, meal_name, meal_servings, ing, count)
+                self.combine_ing_dict_entries(ing_calc, ing_dict)
+
                 count += 1
+
+        for ing_name in ing_dict:
+            for ing_unit in ing_dict[ing_name]:
+                data = ing_dict[ing_name][ing_unit]
+                queryset.append(data)
+                 
                         
         serializer = IPLSerializer(queryset, many=True)
-        print(serializer)
         return Response(serializer.data)
 
 # Create your views here.
