@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import axios from 'axios'
-import { Typography, Stack, Button, Box, Card, Grid, TextField} from "@mui/material"
+import { Typography, Stack, Button, Box, Card, Grid, TextField, Snackbar} from "@mui/material"
 import ffLogo from '../Images/ff_logo.jpg'
+import { createSearchParams } from 'react-router-dom'
 
 // Login Page Component
 // Takes handlePageClick callback function to enable page switching when login is completed
 // Returns a login page component that allows users to enter account information 
 const NewUserPage = (props) => {
     const handlePageClick = props.handlePageClick;
+    const navigate = props.navigate;
     const [user, setUser] = useState(
         {
             username: '',
@@ -17,6 +19,14 @@ const NewUserPage = (props) => {
             admin_flag: 0,
         }
     );
+    const [errorSBOpen, setErrorSBOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState();
+
+    useEffect(() => {
+        if (errorMessage) {
+            setErrorSBOpen(true);
+        }
+    }, [errorMessage])
 
     const sendCreateRequest = () => {
         console.log(JSON.stringify(user));
@@ -25,10 +35,18 @@ const NewUserPage = (props) => {
             url: "http://4.236.185.213:8000/api/users/",
             data: user
         }).then((response) => {
+            // handlePageClick('loginPage');
+            let params = {
+                successMessage: "Account created! Please log in."
+            }
+            navigate({pathname: "login", search: `?${createSearchParams(params)}`})
             const data = response.data;
             console.log(data);
         }).catch((error) => {
             if (error.response) {
+                if (error.response.data.errorText) {
+                    setErrorMessage(error.response.data.errorText);
+                }
                 console.log(error.response);
                 console.log(error.response.status);
                 console.log(error.response.headers);
@@ -55,9 +73,13 @@ const NewUserPage = (props) => {
         event.preventDefault();
         // send login to backend
         sendCreateRequest();
-        // Switch to 'landing' page
-        handlePageClick('loginPage');
-        // TO DO;
+    }
+
+    const handleSBClose = (event, reason, setOpen) => {
+        // if (reason === "clickaway") {
+        //     setOpen(false);
+        // }
+        setOpen(false);
     }
 
     // HTML structure of this component
@@ -108,6 +130,12 @@ const NewUserPage = (props) => {
                     </Stack>            
                 </form>
             </Grid>
+            <Snackbar
+                open={errorSBOpen}
+                autoHideDuration={3000}
+                onClose={(event, reason) => handleSBClose(event, reason, setErrorSBOpen)}
+                message={errorMessage}
+            />
         </Grid>
     );
 }

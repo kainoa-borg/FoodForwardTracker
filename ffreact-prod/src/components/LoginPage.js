@@ -1,12 +1,13 @@
 import * as React from 'react'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import axios from 'axios'
 import Button from '@mui/material/Button'
-import { Grid, Typography, Stack, Box} from '@mui/material'
+import { Grid, Typography, Stack, Box, Snackbar} from '@mui/material'
 import TextField from '@mui/material/TextField'
 import { Card } from '@mui/material'
 
 import ffLogo from '../Images/ff_logo.jpg'
+import { useSearchParams } from 'react-router-dom'
 
 // Login Page Component
 // Takes handlePageClick callback function to enable page switching when login is completed
@@ -17,6 +18,21 @@ const LoginPage = (props) => {
     
     
     const [errorState, setErrorState] = useState('');
+    const [successMessage, setSuccessMessage] = useState();
+    const [successSBOpen, setSuccessSBOpen] = useState();
+    const [urlParams] = useSearchParams();
+
+    useEffect(() => {
+        if (successMessage) {
+            setSuccessSBOpen(true);
+        }
+    }, [successMessage])
+
+    useEffect(() => {
+        if (urlParams.get("successMessage")) {
+            setSuccessMessage(urlParams.get("successMessage"))
+        }
+    }, [])
 
     const [user, setUser] = useState(
         {
@@ -173,6 +189,12 @@ const LoginPage = (props) => {
                     </Stack>            
                 </form>
             </Grid>
+            <Snackbar
+                open={successSBOpen}
+                autoHideDuration={3000}
+                onClose={(event, reason) => setSuccessSBOpen(false)}
+                message={successMessage}
+            />
         </Grid>
     );
 }

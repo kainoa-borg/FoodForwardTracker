@@ -184,7 +184,7 @@ const AppComponent = () => {
                     <Route exact path='/' element={<EntryPage setLoginState={setLoginState} handlePageClick={handlePageClick}/>}/>
                     <Route path='/home' element={<LandingPage handlePageClick={handlePageClick} />}/>
                     <Route path='/login' element={<LoginPage loginState={loginState} setLoginState={setLoginState} handlePageClick={handlePageClick} />}/>
-                    <Route path='/sign-up' element={<NewUserPage handlePageClick={handlePageClick} />}/>
+                    <Route path='/sign-up' element={<NewUserPage handlePageClick={handlePageClick} navigate={navigate} />}/>
                     <Route path='/reset-password' element={<PwResetPage handlePageClick={handlePageClick} />}/>
                     <Route path='/clients' element={<HouseholdPage loginState={loginState} handlePageClick={handlePageClick} />}/>
                     <Route path='/ingredients' element={<IngredientPage loginState={loginState} handlePageClick={handlePageClick} />}/>
