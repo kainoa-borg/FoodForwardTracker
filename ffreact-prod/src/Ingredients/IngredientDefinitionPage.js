@@ -53,7 +53,7 @@ export default function IngredientDefinitionPage(props) {
             rows={ingredientDefs}
             columns={columns}
             apiEndpoint='ing-name-definitions'
-            apiIP='localhost'
+            // apiIP='localhost'
             keyFieldName='ing_name_id'
             entryName='Ingredient Definition'
             searchField='ing_name'
