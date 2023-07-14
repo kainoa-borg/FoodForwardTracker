@@ -12,36 +12,6 @@ const EntryPage = (props) => {
     const handlePageClick = props.handlePageClick;
     const setLoginState = props.setLoginState;
 
-    const readLoginCookie = () => {
-        const parseCookie = str =>
-            str
-            .split(';')
-            .map(v => v.split('='))
-            .reduce((acc, v) => {
-            acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
-            return acc;
-        }, {});
-
-        if (document.cookie !== '') {
-            return parseCookie(document.cookie);
-        }
-        else {
-            return undefined;
-        }
-    }
-
-    useEffect(() => {
-        let cookieData = readLoginCookie();
-
-        if (cookieData !== undefined) {
-            setLoginState({
-                username: cookieData.username,
-                isAuthenticated: cookieData.isAuthenticated === 'true' ? true : false,
-                isAdmin: cookieData.isAdmin === 'true' ? true : false            
-            });
-        }
-    }, [])
-
     // HTML structure of this component
     return (
         <Grid container direction='row' spacing={6} sx={{bgColor: 'lightBlue'}}>

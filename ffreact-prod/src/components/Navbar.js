@@ -57,6 +57,8 @@ import Dropdown from './Dropdown'
             menu={[
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('ingredientPage')}>
                     Ingredients</Button>,
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('ingredientDefPage')}>
+                    Ingredient Definitions</Button>,
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('packagingPage')}>
                     Packaging</Button>
                 ]}/>

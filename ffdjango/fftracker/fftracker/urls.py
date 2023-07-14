@@ -39,35 +39,45 @@ from .StationViews import StationsView
 from .SupplierViews import SupplierView
 from .UserView import UserAuth
 from .UserView import UserView
+from .IngDefViews import IngNameView, IngUnitView
 
 #admin.site.register(Households)
 #admin.site.register(Ingredients)
 #admin.site.register(Packaging)
 
 router = routers.DefaultRouter()
-router.register(r'calculations', CalculationsView, basename='calculations')
-router.register(r'ing-costtotals', IngCostTotalView, basename='ing-costtotals')
-router.register(r'pack-costtotals', PackCostTotalView, basename='pack-costtotals')
-router.register(r'create-account', AccountCreateView, basename='create-account')
-router.register(r'households', HouseholdsWithAllergies, basename='households')
+
+# Report Views
 router.register(r'households-report', HouseholdsView, basename='households-report')
-router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient-inventory')
 router.register(r'ingredients-report', IngredientInvView, basename='ingredients-report')
-router.register(r'ing-purchase-report', IPLView, basename='ing-purchase-report')
-#router.register(r'snacks-purchase-report', IPSnacksView, basename='snacks-purchase-report')
-router.register(r'packaging', PackagingInvView, basename='packaging')
-router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
 router.register(r'packaging-report', PackagingInvView, basename='packaging-report')
+router.register(r'ing-purchase-report', IPLView, basename='ing-purchase-report')
 router.register(r'pack-purchase-report', PPLView, basename='pack-purchase-report')
-router.register(r'packaging-return-report', PackagingReturnView, basename='packaging-return-report')
-router.register(r'users', UserView, basename='users')
-router.register(r'user-auth', UserAuth, basename='user-auth')
-router.register(r'menu', MenuView, basename='menu')
-router.register(r'meal', MealView, basename='meals-list')
-router.register(r'mealplans', MealPlansView, basename='mealplans')
 router.register(r'mealplanreport', MealPlanReportView, basename='mealplanreport')
 router.register(r'mealhistoryreport', MealHistoryReportView, basename='mealhistoryreport')
 router.register(r'snackhistoryreport', SnackHistoryReportView, basename='snackhistoryreport')
+router.register(r'packaging-return-report', PackagingReturnView, basename='packaging-return-report')
+# Functional Views
+router.register(r'serving-calculations', ServingCalculationViews, basename='serving-calculations')
+router.register(r'calculations', CalculationsView, basename='calculations')
+router.register(r'ing-costtotals', IngCostTotalView, basename='ing-costtotals')
+router.register(r'pack-costtotals', PackCostTotalView, basename='pack-costtotals')
+# Definition Views
+router.register(r'ing-name-definitions', IngNameView)
+router.register(r'ing-unit-definitions', IngUnitView)
+# Inventory Views
+router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient-inventory')
+router.register(r'packaging', PackagingInvView, basename='packaging')
+router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
+# Client/User Views
+router.register(r'households', HouseholdsWithAllergies, basename='households')
+router.register(r'users', UserView, basename='users')
+router.register(r'user-auth', UserAuth, basename='user-auth')
+router.register(r'create-account', AccountCreateView, basename='create-account')
+# Meal Views
+router.register(r'menu', MenuView, basename='menu')
+router.register(r'meal', MealView, basename='meals-list')
+router.register(r'mealplans', MealPlansView, basename='mealplans')
 router.register(r'mealrecipes', RecipeView, basename='mealrecipes')
 router.register(r'mealrecipe-image', RecipeImageView, basename='mealrecipe-image')
 router.register(r'mealrecipe-card', RecipeCardView, basename='mealrecipe-card')
@@ -76,7 +86,6 @@ router.register(r'mealrecipe-packaging', RecipePackagingView, basename='mealreci
 router.register(r'mealrecipe-diets', RecipeDietsView, basename='mealrecipe-diets')
 router.register(r'mealrecipe-instructions', RecipeInstructionsView, basename='mealrecipe-instructions')
 router.register(r'recipe-list', RecipeListView, basename='recipe-list')
-router.register(r'serving-calculations', ServingCalculationViews, basename='serving-calculations')
 router.register(r'stations', StationsView, basename='stations')
 router.register(r'suppliers', SupplierView, basename='suppliers')
 router.register(r'tempimageupload', TempImageUploadView, basename='tempimageupload')

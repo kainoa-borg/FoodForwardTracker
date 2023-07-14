@@ -29,13 +29,14 @@ import Recipe from './Recipe/RecipeList.js'
 import RecipePage from './Recipe/RecipePage.js'
 import UnderConstruction from './components/UnderConstruction.js'
 import Navbar from './components/Navbar.js'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Routes, Route, Navigate, useNavigate, createSearchParams, HashRouter } from 'react-router-dom'
 import { useState } from 'react'
 import { Box } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 // import { useOutsideClick} from './components/Dropdown'
 import './App.css';
+import IngredientDefinitionPage from './Ingredients/IngredientDefinitionPage.js'
 
 // SERVER IP 4.236.185.213
 
@@ -67,7 +68,37 @@ const AppComponent = () => {
     
     const handleHeaderClick = (event) => {
         event.stopPropagation();
-      };
+    };
+
+    const readLoginCookie = () => {
+        const parseCookie = str =>
+            str
+            .split(';')
+            .map(v => v.split('='))
+            .reduce((acc, v) => {
+            acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+            return acc;
+        }, {});
+
+        if (document.cookie !== '') {
+            return parseCookie(document.cookie);
+        }
+        else {
+            return undefined;
+        }
+    }
+
+    useEffect(() => {
+        let cookieData = readLoginCookie();
+
+        if (cookieData !== undefined) {
+            setLoginState({
+                username: cookieData.username,
+                isAuthenticated: cookieData.isAuthenticated === 'true' ? true : false,
+                isAdmin: cookieData.isAdmin === 'true' ? true : false            
+            });
+        }
+    }, [])
 
     /*const readLoginCookie = () => {
         const parseCookie = str =>
@@ -105,6 +136,7 @@ const AppComponent = () => {
             case 'householdForm': setCurrPage(<HouseholdForm />); break;
             case 'households-report': navigate('clients-report'); break;
             case 'ingredientPage': navigate('/ingredients'); break;
+            case 'ingredientDefPage': navigate('/ingredient-defs'); break;
             case 'ingredients-report': navigate('ingredients-report'); break;
             case 'ing-purchase-report': navigate('ingredient-purchasing-report'); break;
             case 'inventoryPage': setCurrPage(<InventoryPage handlePageClick={handlePageClick} />); break;
@@ -188,6 +220,7 @@ const AppComponent = () => {
                     <Route path='/reset-password' element={<PwResetPage handlePageClick={handlePageClick} />}/>
                     <Route path='/clients' element={<HouseholdPage loginState={loginState} handlePageClick={handlePageClick} />}/>
                     <Route path='/ingredients' element={<IngredientPage loginState={loginState} handlePageClick={handlePageClick} />}/>
+                    <Route path='/ingredient-defs' element={<IngredientDefinitionPage loginState={loginState} handlePageClick={handlePageClick} />}/>
                     <Route path='/packaging' element={<PackagingPage loginState={loginState} handlePageClick={handlePageClick} />}/>
                     <Route path='/mealplans' element={<MealPlan loginState={loginState} handlePageClick={handlePageClick} />}/>
                     <Route path='/recipes/*' element={<RecipePage loginState={loginState} handlePageClick={handlePageClick} setCurrPage={setCurrPage} />}/>

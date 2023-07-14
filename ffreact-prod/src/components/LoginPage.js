@@ -49,6 +49,7 @@ const LoginPage = (props) => {
         document.cookie = 'username='+username+';expires='+expireTime+';'
         document.cookie = 'isAuthenticated='+isAuthenticated+';expires='+expireTime+';'
         document.cookie = 'isAdmin='+isAdmin+';expires='+expireTime+';'
+        handlePageClick('landingPage');
     }
 
     const sendLoginRequest = () => {
@@ -59,6 +60,7 @@ const LoginPage = (props) => {
           }).then((response)=>{
             if (response.data['code'] === 200) {
                 // Log in success
+                console.log("foo");
                 setLoginState({
                     username: user.username,
                     isAuthenticated: true,
@@ -67,11 +69,10 @@ const LoginPage = (props) => {
                 });
                 // Set the cookie login data
                 setLoginCookie(user.username, 'true', response.data ? 'true' : 'false');
-                handlePageClick('landingPage');
             }
             else if (response.data['code'] === 500) {
                 // User not found
-                console.log('user not found');
+                // console.log('user not found');
                 setErrorState('usernameError');
                 setLoginState({
                     username: undefined,

@@ -100,6 +100,7 @@ export default function NewModularDatagrid(props) {
             setUpdateDoneSBOpen(true);
             setAddFormOpen(false);
           }).catch((error) => {
+            handleErrorMessage("Add Failed!", error)
             if (error.response) {
               console.log(error.response);
               console.log(error.response.status);
@@ -182,7 +183,12 @@ export default function NewModularDatagrid(props) {
 
     const handleErrorMessage = (message, error) => {
         if (error.response.status === 400) {
-            setErrorMessage(message + ' Please check inputs and try again.');
+            if (error.response.data['errorText']) {
+                setErrorMessage(message + ' ' + error.response.data['errorText'])
+            }
+            else {
+                setErrorMessage(message + ' Please check inputs and try again.');
+            }
         }
         else if (error.response.status === 500) {
             setErrorMessage(message + ' System error. Please try again or contact support');
@@ -197,9 +203,10 @@ export default function NewModularDatagrid(props) {
     }, [errorMessage])
 
     useEffect(() => {
-        if (errorSBOpen === false) {
+        // If the error message popup was just open, but also just closed
+        if (errorMessage && errorSBOpen === false) {
             getDBData();
-            setErrorMessage();
+            // setErrorMessage();
         }
     }, [errorSBOpen])
 
