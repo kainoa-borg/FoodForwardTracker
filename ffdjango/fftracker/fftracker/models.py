@@ -3,7 +3,7 @@
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+#   * Remove `managed = True` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -91,7 +91,7 @@ class Contacts(models.Model):
     c_supplier = models.ForeignKey('Supplier', models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'contacts'
 
 
@@ -126,7 +126,7 @@ class DjangoMigrations(models.Model):
     applied = models.DateTimeField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'django_migrations'
 
 
@@ -147,7 +147,7 @@ class HhAllergies(models.Model):
     a_hh_id = models.ForeignKey('Households', models.CASCADE, related_name='hh_allergies', db_column='a_hh_id')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'hh_allergies'
 
 
@@ -157,18 +157,18 @@ class HhKits(models.Model):
     hk_hh_id = models.ForeignKey('Households', models.CASCADE, db_column='hk_hh_id', related_name='hh_kit', blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'hh_kits'
 
 
 class HhMealPlans(models.Model):
     hh_m_id = models.SmallAutoField(primary_key=True)
     meal = models.ForeignKey('MealPlans', models.CASCADE)
-    meal_hh_id = models.ForeignKey('Households', models.CASCADE, related_name='hh_meal', db_column='meal_hh_id')
+    meal_hh_id = models.ForeignKey('Households', models.CASCADE, null=False, related_name='hh_meal', db_column='meal_hh_id')
     hh_s_c = models.OneToOneField('ServingCalculations', models.CASCADE, db_column='hh_s_c_id')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'hh_meal_plans'
 
 
@@ -194,9 +194,28 @@ class Households(models.Model):
     delivery_notes = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'households'
 
+class IngredientUnits(models.Model):
+    i_unit_id = models.AutoField(primary_key=True)
+    i_name_id = models.ForeignKey("IngredientNames", models.CASCADE, related_name="ing_units", db_column='i_name_id')
+    recipe_amt = models.DecimalField(null=False, max_digits=4, decimal_places=2)
+    recipe_unit = models.CharField(null=False, max_length=45)
+    shop_amt = models.DecimalField(null=False, max_digits=4, decimal_places=2)
+    shop_unit = models.CharField(null=False, max_length=45)
+    
+    class Meta:
+        managed = True
+        db_table = 'ingredient_units'
+
+class IngredientNames(models.Model):
+    ing_name_id = models.AutoField(primary_key=True)
+    ing_name = models.CharField(null=False, max_length=100)
+
+    class Meta: 
+        managed = True
+        db_table = 'ingredient_names'
 
 class IngredientUsages(models.Model):
     i_usage_id = models.SmallIntegerField(primary_key=True)
@@ -205,9 +224,8 @@ class IngredientUsages(models.Model):
     used_ing = models.ForeignKey('Ingredients', models.CASCADE, related_name='ingredient_usage')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'ingredient_usages'
-
 
 class Ingredients(models.Model):
     i_id = models.AutoField(primary_key=True)
@@ -225,7 +243,7 @@ class Ingredients(models.Model):
     pref_isupplier = models.ForeignKey('Supplier', models.CASCADE, related_name='pref_isupplier', blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'ingredients'
 
 # class IPLMealPlans(models.Model):
@@ -238,7 +256,7 @@ class Ingredients(models.Model):
 #     recipe_ing = models.ForeignKey('RecipeIngredients', models.CASCADE, db_column='ri_recipe_num', related_name='recipe_ing', blank=True, null=True)
 
 #     class Meta:
-#         managed = False
+#         managed = True
 #         db_table = 'meal_plans'
 
 class KitPackaging(models.Model):
@@ -248,7 +266,7 @@ class KitPackaging(models.Model):
     kp_kit = models.ForeignKey('Kits', models.CASCADE)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'kit_packaging'
 
 
@@ -259,7 +277,7 @@ class Kits(models.Model):
     k_s_c = models.OneToOneField('ServingCalculations', models.CASCADE, db_column='k_s_c_id')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'kits'
 
 class MealPacks(models.Model):
@@ -270,7 +288,7 @@ class MealPacks(models.Model):
     mp_kit = models.ForeignKey(Kits, models.CASCADE)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'meal_packs'
 
 class MealPlans(models.Model):
@@ -282,7 +300,7 @@ class MealPlans(models.Model):
     meal_servings = models.SmallIntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'meal_plans'
 
 class Packaging(models.Model):
@@ -302,7 +320,7 @@ class Packaging(models.Model):
     pref_psupplier = models.ForeignKey('Supplier', models.CASCADE, related_name = 'pref_psupplier', blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'packaging'
 
 
@@ -314,7 +332,7 @@ class PackagingUsages(models.Model):
     used_s_c = models.ForeignKey('ServingCalculations', models.CASCADE, db_column="used_s_c_id")
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'packaging_usages'
 
 
@@ -324,7 +342,7 @@ class RecipeAllergies(models.Model):
     ra_recipe_num = models.ForeignKey('Recipes', models.CASCADE, related_name='r_allergies', db_column='ra_recipe_num')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'recipe_allergies'
 
 
@@ -334,7 +352,7 @@ class RecipeDiets(models.Model):
     rd_recipe_num = models.ForeignKey('Recipes', models.CASCADE, related_name='r_diets', db_column='rd_recipe_num')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'recipe_diets'
 
 
@@ -348,7 +366,7 @@ class RecipeIngredients(models.Model):
     ri_recipe_num = models.ForeignKey('Recipes', models.CASCADE, related_name='r_ingredients', db_column='ri_recipe_num')
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'recipe_ingredients'
 
 
@@ -360,7 +378,7 @@ class RecipeInstructions(models.Model):
     inst_recipe_num = models.ForeignKey('Recipes', models.CASCADE, related_name='r_instructions', db_column='inst_recipe_num', blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'recipe_instructions'
 
 
@@ -375,7 +393,7 @@ class RecipePackaging(models.Model):
     rp_ing_id = models.SmallIntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'recipe_packaging'
 
 
@@ -388,7 +406,7 @@ class Recipes(models.Model):
 
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'recipes'
 
 
@@ -397,7 +415,7 @@ class ServingCalculations(models.Model):
     calc_date = models.DateField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'serving_calculations'
 
 
@@ -407,7 +425,7 @@ class StationIngredients(models.Model):
     # si_station_name = models.ForeignKey('Stations', models.CASCADE, db_column='si_station_name', blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'station_ingredients'
 
 
@@ -417,7 +435,7 @@ class StationPackaging(models.Model):
     # sp_station_name = models.ForeignKey('Stations', models.CASCADE, db_column='sp_station_name', blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'station_packaging'
 
 
@@ -429,7 +447,7 @@ class Stations(models.Model):
     # num_servings = models.SmallIntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'stations'
 
 
@@ -441,7 +459,7 @@ class Supplier(models.Model):
     pcode = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'supplier'
 
 
@@ -453,6 +471,6 @@ class Users(models.Model):
     email = models.CharField(max_length=45)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'users'
 

@@ -49,7 +49,7 @@ class IngredientInvSerializer(ModelSerializer):
 		# ing_instance = Ingredients.objects.create(**validated_data)
 		used = 0
 		# ing_usages = IngredientUsages.objects.filter(used_ing = ing_instance)
-		# if ing_usages:
+		# if ing_usages:1
 		# 	for ing in ing_usages:
 		# 		used += ing.used_qty
 		# used += ing_usage['used_qty']
@@ -76,5 +76,6 @@ class IngredientInvSerializer(ModelSerializer):
 
 # Create your views here.
 class IngredientInvView(ModelViewSet):
-	queryset = Ingredients.objects.all().prefetch_related('ingredient_usage')
+	queryset = Ingredients.objects.all()
+	# queryset = Ingredients.objects.all().prefetch_related('ingredient_usage')
 	serializer_class = IngredientInvSerializer
