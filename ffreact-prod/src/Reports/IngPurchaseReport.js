@@ -39,6 +39,7 @@ export default function PurchasingReport() {
           if (response.data.length > 0) setResultsFoundSBOpen(true);
           else setNoResultsSBOpen(true);
           setIngPurchasing(response.data);
+          console.log(response.data);
         }).catch((error) => {
           if (error.response) {
             console.log(error.response);
@@ -106,6 +107,7 @@ export default function PurchasingReport() {
         { field: 'to_purchase', headerName: 'To Purchase', width: 110, type: 'number', editable: false},
         { field: 'total_required', headerName: 'Total Required', width: 120, type: 'number', /*valueGetter: ({row}) => (row.unit_cost * row.in_qty),*/ },
         { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 100, type: 'number', editable: false},
+        { field: 'converted', headerName: 'Converted', width: 100, type: 'string', editable: false, valueGetter: (params) => String(params.value)}
         // { field: 'm_date', headerName: 'Planned Date', width: 150 },
         // { field: 'name', headerName: 'Meal Name', width: 120 }
       //  { field: 'pref_isupplier_id', headerName: 'Preferered Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},

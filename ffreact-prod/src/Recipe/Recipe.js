@@ -11,7 +11,7 @@ import RecipePkgForm from "./RecipePkgForm.js";
 import RecipeInstForm from './RecipeInstForm.js';
 import RecipeIngList from "./RecipeIngList.js";
 import DataGridDialog from '../components/DatagridDialog.js';
-import ModularSelect from "../components/ModularSelect.js";
+import NewModularSelect from "../components/NewModularSelect.js";
 import { useNavigate } from "react-router-dom";
 // import food_placeholder from '../Images/food_placeholder.jpg'
 
@@ -53,7 +53,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
             type: 'string',
             editable: true,
             renderEditCell: (params) => {
-                return <ModularSelect {...params} noDuplicates options={ingredientOptions} searchField={'ingredient_name'}/>
+                return <NewModularSelect {...params} noDuplicates options={ingredientOptions} searchField={'ing_name'}/>
             }
         },
         {
@@ -70,7 +70,9 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
             type: 'string',
             editable: true,
             renderEditCell: (params) => {
-                return <ModularSelect {...params} noDuplicates options={ingredientOptions} searchField={'unit'}/>
+                let tempOptions = ingredientOptions.find((ing) => ing.ing_name === params.row.ingredient_name)
+                if (!tempOptions) tempOptions = {ing_units: []};
+                return <NewModularSelect {...params} noDuplicates options={tempOptions['ing_units']} searchField={'recipe_unit'}/>
             }
         },
         // {
@@ -96,7 +98,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
             width: 200,
             editable: true,
             renderEditCell: (params) => {
-                return <ModularSelect {...params} options={packagingOptions} searchField={'package_type'}/>
+                return <NewModularSelect {...params} options={packagingOptions} searchField={'package_type'}/>
             }
         },
         {
