@@ -87,6 +87,7 @@ class IPLView(ViewSet):
         # Get ing name definition
         try:
             ing_name_def = IngredientNames.objects.get(ing_name=ing_name)
+            print(ing_name_def.ing_name)
         except:
             ing_name_def = None
         # If ing definition exists
