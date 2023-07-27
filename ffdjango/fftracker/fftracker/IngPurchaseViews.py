@@ -7,7 +7,7 @@ from rest_framework import serializers
 from rest_framework.generics import ListAPIView
 from rest_framework import status
 from django.db.models import Prefetch
-from .models import Ingredients, MealPlans, Recipes, RecipeIngredients, Households
+from .models import Ingredients, IngredientNames, IngredientUnits, MealPlans, Recipes, RecipeIngredients, Households
 from .SupplierViews import SupplierSerializer
 from decimal import *
 
@@ -59,6 +59,7 @@ class IPLSerializer(serializers.Serializer):
     qty_on_hand = serializers.IntegerField(default='', required=False)
     total_required = serializers.IntegerField(default='', required=False)
     to_purchase = serializers.IntegerField(default='', required=False)
+    converted = serializers.BooleanField(default='', required=False)
 
     # pref_isupplier_id = serializers.IntegerField()
     # m_r_num = serializers.IntegerField(blank=True, null=True)
@@ -66,24 +67,58 @@ class IPLSerializer(serializers.Serializer):
     # m_servings = serializers.IntegerField()
     # s_servings = serializers.IntegerField()
     
-
+# Kainoa Borges Revised 7-21-23
 class IPLView(ViewSet):
     def calc_ing_purchase_amt(self, m_date, meal_name, meal_servings, ing, count):
         name = meal_name
         ing_name = ing.ingredient_name
         ing_amt = ing.amt
+        # Default ing conversion ratio (if no unit is defined, there will be no conversion)
+        ing_conv_ratio = 1
+        # Empty ing unit definition
+        ing_unit_def = None
+        # Empty ing_shop_unit
+        ing_shop_unit = None
+        # Default ing_unit (recipe unit by default)
         ing_unit = ing.unit
-        total_required = ing_amt * meal_servings
+        # Default converted value (False by default)
+        converted = False
+
+        # Get ing name definition
+        try:
+            ing_name_def = IngredientNames.objects.get(ing_name=ing_name)
+            print(ing_name_def.ing_name)
+        except:
+            ing_name_def = None
+        # If ing definition exists
+        if ing_name_def:
+            # Get unit definiton for this recipe unit
+            try:
+                ing_unit_def = IngredientUnits.objects.get(i_name_id=ing_name_def, recipe_unit=ing.unit)
+            except:
+                ing_unit_def = None
+            # If unit definiton exists
+            if ing_unit_def:
+                # Calculate ing conversion ratio (shop amount / recipe amount)
+                ing_conv_ratio = ing_unit_def.shop_amt / ing_unit_def.recipe_amt
+                # Set the ing_unit to equal the defined shoppable unit
+                ing_unit = ing_unit_def.shop_unit
+                # Set converted to True
+                converted = True
+
+        # convert ing amount and calculate amount required
+        total_required = ing_amt * ing_conv_ratio * meal_servings
+        # default qty_on_hand
         total_qty_on_hand = 0
-        # Get the ingredients that fulfill this requirement
+        # Get any existing ingredients that fulfill this requirement
         IngQueryset = Ingredients.objects.all().filter(ingredient_name = ing_name, unit = ing_unit)
-        # For each ingredient option, calculate the total qty we have on hand
+        # For each existing ingredient inventory item, calculate the total qty we have on hand
         for ingredient in IngQueryset:
             pref_isupplier_id = ingredient.pref_isupplier
             pkg_type = ingredient.pkg_type
             storage_type = ingredient.storage_type
             if ingredient.qty_on_hand:
-                total_qty_on_hand += 0
+                total_qty_on_hand += ingredient.qty_on_hand
         # Calculate the total amt to purchase
         to_purchase = 0
         if (total_required - total_qty_on_hand > 0):
@@ -101,6 +136,7 @@ class IPLView(ViewSet):
                 'qty_on_hand': total_qty_on_hand,
                 'total_required': total_required,
                 'to_purchase': to_purchase,
+                'converted': converted,
             }
         }
     
@@ -151,7 +187,7 @@ class IPLView(ViewSet):
             m_date = meals.m_date
             # Serving Calculations
             getcontext().prec = 2
-            meal_serivngs = Decimal(0)
+            meal_servings = Decimal(0)
             snack_servings = Decimal(0)
 
             hh_queryset = Households.objects.all().filter(paused_flag=False)
@@ -185,35 +221,3 @@ class IPLView(ViewSet):
                         
         serializer = IPLSerializer(queryset, many=True)
         return Response(serializer.data)
-
-# Create your views here.
-# class IPMealView(viewsets.ViewSet):
-#     # Override create to accept POST requests with date range
-#     def list(self, request):
-#         startDate = request.query_params.get('startDate')
-#         endDate = request.query_params.get('endDate')
-#         MealPlansList = MealPlans.objects.filter(m_date__range=[startDate, endDate]).order_by('m_date')
-#         #ingredientsList = RecipeIngredients.objects.all()
-#         # for x in queryset:
-#         #     if 
-#         #     ingredientsList = RecipeIngredients.objects.filter()
-#         #         querysetIng = Ingredients.objects.filter(in_date__range=[startDate, endDate]).order_by('-in_date')
-
-#         serializer = MealSerializer(MealPlansList, many=True)
-
-#         return Response(serializer.data)
-    
-    # def retrieve(self, request, pk):
-    #     meal_plan = MealPlans.objects.get(m_id=pk)
-    #     queryset = Ingredients.objects.filter(paused_flag=False)
-    #     meal_r_ing = RecipeIngredients.objects.filter(ri_recipe_num = meal_plan.meal_r_num)
-    #     snack_r_ing = RecipeIngredients.objects.filter(ri_recipe_num = meal_plan.snack_r_num)
-
-# class IPSnacksView(viewsets.ViewSet):
-#     # Override create to accept POST requests with date range
-#     def list(self, request):
-#         startDate = request.query_params.get('startDate')
-#         endDate = request.query_params.get('endDate')
-#         queryset = MealPlans.objects.filter(m_date__range=[startDate, endDate]).order_by('m_date')
-#         serializer = SnackSerializer(queryset, many=True)
-#         return Response(serializer.data)

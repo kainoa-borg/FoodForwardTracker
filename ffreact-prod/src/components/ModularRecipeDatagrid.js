@@ -65,8 +65,8 @@ export default function ModularRecipeDatagrid(props) {
         // If a form doesn't take the latest key, it should be added for the datagrid
         if (!formData[keyFieldName])
             formData[keyFieldName] = getLatestKey() + 1;
-        console.log(tableData);
-        console.log(keyFieldName, formData);
+        // console.log(tableData);
+        // console.log(keyFieldName, formData);
         const newTableData = [...tableData, formData];
         setTableData(newTableData);
         setRows(newTableData);
@@ -113,11 +113,12 @@ export default function ModularRecipeDatagrid(props) {
         if (params.reason === 'escapeKeyDown') {event.defaultMuiPrevented = true; setPopoverAnchors({...popoverAnchors, confirmCancelAnchor: event.target})};
     }
 
+    const [deleteParams, setDeleteParams] = useState();
+
     // Takes rowModesModel getter and setter, setUpdateSBOpen ('request sent' message) setter 
     // Returns actions column definition with Popover confirmation prompts
     const modularActions = (params, rowModesModel, setRowModesModel, setUpdateSBOpen) => {
         // Struct with all popover anchors
-        const [deleteParams, setDeleteParams] = useState(null);
         let isInEditMode = false;
         if (rowModesModel[params.id]) isInEditMode = rowModesModel[params.id].mode === GridRowModes.Edit;
 
@@ -192,7 +193,7 @@ export default function ModularRecipeDatagrid(props) {
                 >
                     <Typography>Delete this entry?</Typography>
                     {/* Confirm button fires deleteIngredient using row params state */}
-                    <Button variant='contained' onClick={() => deleteEntry(deleteParams)}>Confirm</Button>
+                    <Button variant='contained' onClick={(event) => {setPopoverAnchors({...popoverAnchors, confirmDeleteAnchor: null}); deleteEntry(deleteParams)}}>Confirm</Button>
                 </Popover>
             ]
         }

@@ -1,7 +1,7 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import React from 'react'
 import { Grid, Typography, Card, Input, InputLabel, Button} from '@mui/material';
-import ModularSelect from '../components/ModularSelect.js';
+import NewModularSelect from '../components/NewModularSelect.js';
 
 // Kainoa Borges
 // Angela McNeese
@@ -22,6 +22,8 @@ const RecipeIngForm = (props) => {
         unit: '',
         prep: '',
     });
+
+    const [unitOptions, setUnitOptions] = useState([]);
 
     // Handle form submission (prevent refresh, pass ingredient to addIngredient, and clear form state)
     // Takes submit event information (form submission)
@@ -55,6 +57,21 @@ const RecipeIngForm = (props) => {
         // updateEditForm('aFlag', true);
     }
 
+    const getOptions = () => {
+        if (ingredient.ingredient_name !== '') {
+            let ing_name_obj = ingredients.find((ing) => {
+                return ing.ing_name === ingredient.ingredient_name
+            })
+            if (ing_name_obj)
+                return ing_name_obj['ing_units']
+        }
+        return []
+    }
+
+    useEffect(() => {
+        setUnitOptions(getOptions);
+    }, [ingredient])
+
     // HTML structure of this component
     return (
     <form onSubmit={handleSubmit}>
@@ -67,15 +84,15 @@ const RecipeIngForm = (props) => {
             <Grid item>
                 <InputLabel>Ingredient Name*: </InputLabel>
                 {/* <Input name="ingredient_name" type="text" maxLength='30' value={ingredient.ingredient_name} onChange={handleFormChange}/> */}
-                <ModularSelect value={ingredient.ingredient_name} required noDuplicates options={ingredients} searchField={'ingredient_name'} onChange={handleFormChange}/>
+                <NewModularSelect value={ingredient.ingredient_name} required options={ingredients} fieldName={'ingredient_name'} searchField={'ing_name'} onChange={handleFormChange}/>
 
                 <InputLabel>Amount*: </InputLabel>
                 <Input name='amt' type="text" value={ingredient.amt} inputProps={{required:true}} onChange={handleFormChange}/>
-                {/* <ModularSelect value={ingredient.storage_type} options={ingredients} searchField={'storage_type'} onChange={handleFormChange}/> */}
+                {/* <NewModularSelect value={ingredient.storage_type} options={ingredients} searchField={'storage_type'} onChange={handleFormChange}/> */}
 
                 <InputLabel>Unit*: </InputLabel>
                 {/* <Input name='unit' type="text" value={ingredient.unit} onChange={handleFormChange}/> */}
-                <ModularSelect value={ingredient.unit} required noDuplicates options={ingredients} searchField={'unit'} onChange={handleFormChange}/>                
+                <NewModularSelect value={ingredient.unit} required options={unitOptions} fieldName={'unit'} searchField={'recipe_unit'} onChange={handleFormChange}/>                
             </Grid>
             <Grid item>
                 <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>

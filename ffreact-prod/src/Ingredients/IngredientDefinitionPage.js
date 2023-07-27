@@ -24,7 +24,7 @@ export default function IngredientDefinitionPage(props) {
     
     // Columns and formatting to be sent to DataGrid 
     const columns = [
-        { field: 'ing_name', headerName: 'Ingredient', width: 140, type: 'text', editable: true},
+        { field: 'ing_name', headerName: 'Ingredient', width: 300, type: 'text', editable: true},
         { field: 'ing_units', headerName: 'Units', width: 150, editable: true,
             renderCell: (params) => {
                 if (params.value && params.value.length > 0)

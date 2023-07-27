@@ -43,3 +43,7 @@
     font: inherit;
     cursor: pointer;
   }
+
+  .yellow-row {
+    background-color: #ffff0050;
+  }

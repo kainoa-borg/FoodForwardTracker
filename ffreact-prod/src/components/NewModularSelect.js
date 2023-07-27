@@ -28,7 +28,7 @@ const CustomInput = ({params, fieldName, searchField, required}) => {
     // required - Whether this TextField will be considered required in forms
     // id and field - Datagrid row params passed in renderEditCell
 // Returns autocomplete select with add functionality
-export default function ModularSelect({id, field, value, options, fieldName, searchField, required, onChange}) {
+export default function NewModularSelect({id, field, value, options, fieldName, getOptions, searchField, required, onChange}) {
   const [selectValue, setSelectValue] = value ? React.useState({[searchField]: value}) : React.useState('');
 
   if (!options) {
@@ -37,12 +37,9 @@ export default function ModularSelect({id, field, value, options, fieldName, sea
 
   // Remove duplicate options
   // Get array of all searchField values
-  const optionSearchFields = options.map((options => options[searchField]));
-  // Make set of that array (remove duplicates)
-  const optionsSet = new Set(optionSearchFields);
+  const optionSearchFields = options.map((option => option[searchField]));
   // Rebuild options array (key/value pairs)
-  options = [...optionsSet].map((opt) => { return {[searchField]: opt} });
-  // console.log(options);
+  options = optionSearchFields.map((opt) => { return {[searchField]: opt} });
 
   // If this is an editable column, use datagrid api to update cell
   if (id && field) {
@@ -71,28 +68,14 @@ export default function ModularSelect({id, field, value, options, fieldName, sea
           setSelectValue({
             [searchField]: newValue,
           });
-        } else if (newValue && newValue.inputValue) {
-          // Create a new value from the user input
-          setSelectValue({
-            [searchField]: newValue.inputValue,
-          });
         } else {
-          setSelectValue(newValue);
+            setSelectValue(newValue);
         }
       }}
       filterOptions={(options, params) => {
         const filtered = filter(options, params);
 
         const { inputValue } = params;
-        // Suggest the creation of a new value
-        const isExisting = options.some((option) => inputValue === option[searchField]);
-        if (inputValue !== '' && !isExisting) {
-          filtered.push({
-            inputValue,
-            [searchField]: inputValue
-            // [searchField]: `Add "${inputValue}"`,
-          });
-        }
 
         return filtered;
       }}
@@ -101,10 +84,6 @@ export default function ModularSelect({id, field, value, options, fieldName, sea
         // Value selected with enter, right from the input
         if (typeof option === 'string') {
           return option;
-        }
-        // Add "xxx" option created dynamically
-        if (option.inputValue) {
-          return 'add ' + option.inputValue;
         }
         // Regular option
         return option[searchField];
@@ -118,6 +97,12 @@ export default function ModularSelect({id, field, value, options, fieldName, sea
       disableClearable
       // handleHomeEndKeys
       // freeSolo
+      renderOption={(props, option) => {
+        console.log(option);
+        return (
+            <li {...props} key={option.id}>{option[searchField]}</li>
+        )
+      }}
       renderInput={(params) => {
         if (onChange) {
           return (<TextField {...params} name={fieldName ? fieldName : searchField} required={required}/>);
