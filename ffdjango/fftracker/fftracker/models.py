@@ -359,7 +359,7 @@ class RecipeDiets(models.Model):
 class RecipeIngredients(models.Model):
     ri_id = models.SmallIntegerField(primary_key=True)
     ingredient_name = models.CharField(max_length=100)
-    amt = models.DecimalField(max_digits=5, decimal_places=2)
+    amt = models.DecimalField(max_digits=6, decimal_places=3)
     unit = models.CharField(max_length=10)
     prep = models.CharField(max_length=100)
     # ri_ing = models.ForeignKey('Ingredients', models.CASCADE, related_name='ing_name')
