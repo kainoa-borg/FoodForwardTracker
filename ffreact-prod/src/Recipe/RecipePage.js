@@ -4,8 +4,9 @@ import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarContainer} from 
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/system';
 import Recipe from './Recipe.js'
-import { Button, Popover, Snackbar, Typography } from '@mui/material';
+import { Button, Popover, Snackbar, Stack, Typography } from '@mui/material';
 import { Outlet, Routes, Route, useNavigate } from 'react-router-dom';
+import SearchToolBar from '../components/SearchToolBar.js';
 
 export default function RecipePage(props) {
     const [currPage, setCurrPage] = useState();
@@ -44,6 +45,7 @@ function RecipePageComponent(props) {
     const [recipes, setRecipes] = useState();
     const [recipeData, setRecipeData] = useState();
     const [recipeEditID, setRecipeEditID] = useState();
+    const [filterModel, setFilterModel] = useState();
     const setCurrPage = props.setCurrPage;
 
     const getDBRecipes = () => {
@@ -332,12 +334,16 @@ function RecipePageComponent(props) {
     return(
         <Fragment>
             <Typography id='page-header' variant='h5'>Recipes</Typography>
+            <Stack>
+                <SearchToolBar setFilterModel={setFilterModel} searchField={'r_name'} searchLabel={'Recipes'}/>
+            </Stack>
             <Box sx={{height: '80vh'}}>
                 <DataGrid
                 components={{Toolbar: CustomToolbar}}
                 // onRowClick={handleRowClick}
                 rows={recipes}
                 columns={columns}
+                filterModel={filterModel}
                 rowModesModel={rowModesModel} 
                 getRowId={(row) => row.r_num}>
                 </DataGrid>

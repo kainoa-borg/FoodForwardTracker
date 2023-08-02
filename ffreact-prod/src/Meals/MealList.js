@@ -58,9 +58,10 @@ export default function MealList(props) {
     }
 
     const recipeFormatter = (params) => { if (params.value) {return recipeList.find((recipe) => recipe.r_num === params.value).r_name;}}
+    const dateParser = value => moment(value).format("YYYY-MM-DD").toString();
 
     const columns = [
-      {field: 'm_date', headerName: 'Delivery Date', width: 170, type: 'date', editable: true, valueParser: params => moment(params.value).format("YYYY-MM-DD")},
+      {field: 'm_date', headerName: 'Delivery Date', width: 170, type: 'date', editable: true, valueParser: dateParser, renderCell: (params) => <Typography>{moment(params.value).format('MM/DD/YYYY')}</Typography>},
       {field: 'meal_r_num', headerName: 'Meal Name', width: 250, type: 'singleSelect', editable: true, valueOptions: getRecipeOptions('meal'), valueFormatter: recipeFormatter},
       // {field: 'meal_servings', headerName: 'Meal Servings', width: 120, type: 'number', editable: true},
       {field: 'snack_r_num', headerName: 'Snack Name', width: 250, type: 'singleSelect', editable: true, valueOptions: getRecipeOptions('snack'), valueFormatter: recipeFormatter},

@@ -94,7 +94,9 @@ class IPLView(ViewSet):
         if ing_name_def:
             # Get unit definiton for this recipe unit
             try:
-                ing_unit_def = IngredientUnits.objects.get(i_name_id=ing_name_def, recipe_unit=ing.unit)
+                ing_unit_def = IngredientUnits.objects.filter(i_name_id=ing_name_def, recipe_unit=ing.unit)
+                print(ing_name_def.ing_name)
+                ing_unit_def = ing_unit_def[0]
             except:
                 ing_unit_def = None
             # If unit definiton exists
@@ -111,7 +113,7 @@ class IPLView(ViewSet):
         # default qty_on_hand
         total_qty_on_hand = 0
         # Get any existing ingredients that fulfill this requirement
-        IngQueryset = Ingredients.objects.all().filter(ingredient_name = ing_name, unit = ing_unit)
+        IngQueryset = Ingredients.objects.filter(ingredient_name = ing_name, unit = ing_unit)
         # For each existing ingredient inventory item, calculate the total qty we have on hand
         for ingredient in IngQueryset:
             pref_isupplier_id = ingredient.pref_isupplier
@@ -190,7 +192,7 @@ class IPLView(ViewSet):
             meal_servings = Decimal(0)
             snack_servings = Decimal(0)
 
-            hh_queryset = Households.objects.all().filter(paused_flag=False)
+            hh_queryset = Households.objects.filter(paused_flag=False)
             for household in hh_queryset:
                 hh_meal_servings = household.num_adult + household.num_child_gt_6 + (household.num_child_lt_6 *.5)
                 hh_snack_servings = household.num_adult + household.num_child_gt_6 + household.num_child_lt_6
