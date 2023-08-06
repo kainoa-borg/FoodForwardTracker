@@ -1,7 +1,8 @@
 import React, { useState, useEffect} from 'react'
 import axios from 'axios'
-import { DataGrid, GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid'
-import { Box, Button, Input, Snackbar, Typography, FormControl } from '@mui/material';
+import { DataGrid, GridToolbarExport, GridToolbarContainer, GridRowModes, useGridApiContext } from '@mui/x-data-grid'
+import { Box, Button, Input, Snackbar, Typography, FormControl, Select, MenuItem} from '@mui/material';
+import NewModularSelect from '../components/NewModularSelect';
 
 // Formats data into $0.00 format
 const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -101,13 +102,50 @@ export default function PurchasingReport() {
           });
     } */
 
+    const getRowUnitsData = (params, fieldName) => {
+      return params.row.units[params.row.unit_index][fieldName]
+    }
+
+    
+
+    const UnitSelect = (params) => {
+      let api = useGridApiContext();
+
+      const handleChange = async (event) => {
+        await api.current.setRowMode(params.id, GridRowModes.Edit);
+        await api.current.setEditCellValue({id: params.id, field: 'unit_index', value: event.target.value});
+        await api.current.commitRowChange(params.id);
+        await api.current.setRowMode(params.id, GridRowModes.View);
+      }
+
+      return (
+        params.row.units.length > 1
+        ?
+        <Select
+          style={{width: '100%'}}
+          value={params.row.unit_index}
+          onChange={handleChange}
+        >
+          {
+            params.row.units.map((unitObj, index) => {
+              return (
+                <MenuItem value={index}>{unitObj.unit}</MenuItem>
+              )
+            })
+          }
+        </Select>
+        :
+        <p>{params.row.units[params.row.unit_index].unit}</p>
+      )
+    }
+
     const columns = [
-        { field: 'ingredient_name', headerName: 'Ingredient', width: 120, editable: true },
-        { field: 'unit', headerName: 'Measure', width: 90, editable: true },
-        { field: 'to_purchase', headerName: 'To Purchase', width: 110, type: 'number', editable: false},
-        { field: 'total_required', headerName: 'Total Required', width: 120, type: 'number', /*valueGetter: ({row}) => (row.unit_cost * row.in_qty),*/ },
-        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 100, type: 'number', editable: false},
-        { field: 'converted', headerName: 'Converted', width: 120, type: 'boolean', editable: false,}
+        { field: 'ingredient_name', headerName: 'Ingredient', width: 250, editable: true },
+        { field: 'unit_index', headerName: 'Measure', width: 130, editable: true, renderCell: (params) => <UnitSelect {...params}/>},
+        { field: 'to_purchase', headerName: 'To Purchase', width: 110, type: 'number', editable: false, valueGetter: (params) => getRowUnitsData(params, 'to_purchase')},
+        { field: 'total_required', headerName: 'Total Required', width: 120, type: 'number', valueGetter: (params) => getRowUnitsData(params, 'total_required')},
+        { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 100, type: 'number', editable: false, valueGetter: (params) => getRowUnitsData(params, 'qty_on_hand')},
+        { field: 'converted', headerName: 'Converted', width: 120, type: 'boolean', editable: false}
         // { field: 'm_date', headerName: 'Planned Date', width: 150 },
         // { field: 'name', headerName: 'Meal Name', width: 120 }
       //  { field: 'pref_isupplier_id', headerName: 'Preferered Supplier', width: 180, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
@@ -160,8 +198,9 @@ export default function PurchasingReport() {
           components = {{Toolbar:CustomToolbar}}
           getRowId={(row) => row.id}
           autoHeight = {true}
+          editMode={'row'}
           getCellClassName={(params) => {
-            if (params.field === "converted" && !params.row.converted) {
+            if (params.field === "converted" && !(params.row.converted)) {
               return "yellow-row"
             }
           }}

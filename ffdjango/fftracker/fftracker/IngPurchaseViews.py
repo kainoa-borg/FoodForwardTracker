@@ -50,114 +50,107 @@ class SnackSerializer(ModelSerializer):
         depth = 1
         fields = ('m_id', 'm_date', 'name', 'r_num', 'servings')
 
+class ShopUnitSerializer(serializers.Serializer):
+    unit = serializers.CharField(allow_blank=True)
+    qty_on_hand = serializers.IntegerField(default='', required=False)
+    total_required = serializers.IntegerField(default='', required=False)
+    to_purchase = serializers.IntegerField(default='', required=False)
+
 class IPLSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     m_date = serializers.CharField(allow_blank=True)
     name = serializers.CharField(allow_blank=True)
     ingredient_name = serializers.CharField(allow_blank=True)
-    unit = serializers.CharField(allow_blank=True)
-    qty_on_hand = serializers.IntegerField(default='', required=False)
-    total_required = serializers.IntegerField(default='', required=False)
-    to_purchase = serializers.IntegerField(default='', required=False)
-    converted = serializers.BooleanField(default='', required=False)
-
+    unit_index = serializers.IntegerField(read_only=True)
+    units = ShopUnitSerializer(many=True)
+    converted = serializers.BooleanField(read_only=True)
+    
     # pref_isupplier_id = serializers.IntegerField()
     # m_r_num = serializers.IntegerField(blank=True, null=True)
     # s_r_num = serializers.IntegerField(blank=True, null=True)
     # m_servings = serializers.IntegerField()
     # s_servings = serializers.IntegerField()
     
-# Kainoa Borges Revised 7-21-23
+# Kainoa Borges Revised 8-5-2023
 class IPLView(ViewSet):
     def calc_ing_purchase_amt(self, m_date, meal_name, meal_servings, ing, count):
         name = meal_name
-        ing_name = ing.ingredient_name
-        ing_amt = ing.amt
-        # Default ing conversion ratio (if no unit is defined, there will be no conversion)
-        ing_conv_ratio = 1
-        # Empty ing unit definition
-        ing_unit_def = None
-        # Empty ing_shop_unit
-        ing_shop_unit = None
-        # Default ing_unit (recipe unit by default)
-        ing_unit = ing.unit
-        # Default converted value (False by default)
         converted = False
 
-        # Get ing name definition
+        units = {}
+
         try:
-            ing_name_def = IngredientNames.objects.get(ing_name=ing_name)
-            print(ing_name_def.ing_name)
+            ing_name_def = IngredientNames.objects.get(ing_name=ing.ingredient_name)
         except:
             ing_name_def = None
-        # If ing definition exists
-        if ing_name_def:
-            # Get unit definiton for this recipe unit
-            try:
-                ing_unit_def = IngredientUnits.objects.filter(i_name_id=ing_name_def, recipe_unit=ing.unit)
-                print(ing_name_def.ing_name)
-                ing_unit_def = ing_unit_def[0]
-            except:
-                ing_unit_def = None
-            # If unit definiton exists
-            if ing_unit_def:
-                # Calculate ing conversion ratio (shop amount / recipe amount)
-                ing_conv_ratio = ing_unit_def.shop_amt / ing_unit_def.recipe_amt
-                # Set the ing_unit to equal the defined shoppable unit
-                ing_unit = ing_unit_def.shop_unit
-                # Set converted to True
+        ing_unit_defs = IngredientUnits.objects.filter(i_name_id=ing_name_def, recipe_unit=ing.unit)
+        if len(ing_unit_defs) > 0:
+            for unit_def in ing_unit_defs:
+                # Calculate converted total_required
+                total_required = meal_servings * ing.amt * (unit_def.shop_amt / unit_def.recipe_amt)
+                # Add to unit dict
+                units[unit_def.shop_unit] = {'unit': unit_def.shop_unit, 'total_required': total_required, 'qty_on_hand': 0}
                 converted = True
+        else:
+            # Default to the recipe unit
+            units[ing.unit] = {'unit': ing.unit, 'total_required': meal_servings * ing.amt, 'qty_on_hand': 0}
+            
+        matching_ingredients = Ingredients.objects.filter(ingredient_name = ing.ingredient_name)
+        # Calculate totals for each shoppable unit across all required shoppable units
+        for ingredient in matching_ingredients:
+            if ingredient.qty_on_hand > 0 and ingredient.unit in units:
+                units[ingredient.unit]['qty_on_hand'] += ingredient.qty_on_hand
 
-        # convert ing amount and calculate amount required
-        total_required = ing_amt * ing_conv_ratio * meal_servings
-        # default qty_on_hand
-        total_qty_on_hand = 0
-        # Get any existing ingredients that fulfill this requirement
-        IngQueryset = Ingredients.objects.filter(ingredient_name = ing_name, unit = ing_unit)
-        # For each existing ingredient inventory item, calculate the total qty we have on hand
-        for ingredient in IngQueryset:
-            pref_isupplier_id = ingredient.pref_isupplier
-            pkg_type = ingredient.pkg_type
-            storage_type = ingredient.storage_type
-            if ingredient.qty_on_hand:
-                total_qty_on_hand += ingredient.qty_on_hand
-        # Calculate the total amt to purchase
-        to_purchase = 0
-        if (total_required - total_qty_on_hand > 0):
-                to_purchase += total_required - total_qty_on_hand
-        # Append this ingredient purchase to the queryset
+        # Calculate to purchase
+        for unit in units:
+            units[unit]['to_purchase'] = units[unit]['total_required'] - units[unit]['qty_on_hand']
+
         return {
-             "ing_name": ing_name,
-             "ing_unit": ing_unit,
+             "ing_name": ing.ingredient_name,
              "data": {
                 "id": count,
                 'm_date': m_date,
                 'name': name,
-                'ingredient_name': ing_name,
-                'unit': ing_unit,
-                'qty_on_hand': total_qty_on_hand,
-                'total_required': total_required,
-                'to_purchase': to_purchase,
+                'ingredient_name': ing.ingredient_name,
+                'unit_index': 0,
                 'converted': converted,
+                'units': units
             }
         }
     
     def combine_ing_dict_entries(self, ing_calc, ing_dict):
-        ing_name = ing_calc["ing_name"]
-        ing_unit = ing_calc["ing_unit"]
-        # If this ing is already in ing_dict
+        ing_name = ing_calc['ing_name']
+        ing_shop_units = ing_calc['data']['units']
         if ing_name in ing_dict:
-            # If this unit is already in ing_dict
-            if ing_unit in ing_dict[ing_name]:
-                # Add relevant fields
-                temp_ing = ing_dict[ing_name][ing_unit]
-                temp_ing["total_required"] += ing_calc["data"]["total_required"]
-                temp_ing["to_purchase"] += ing_calc["data"]["to_purchase"]
-                ing_dict[ing_name][ing_unit] = temp_ing
-            else:
-                ing_dict[ing_name][ing_unit] = ing_calc["data"]
+            for unit in ing_calc['data']['units']:
+                if unit in ing_dict[ing_name]['data']['units']:
+                    temp_ing_unit = ing_dict[ing_name]['data']['units'][unit]
+                    temp_ing_unit['to_purchase'] += ing_shop_units[unit]['to_purchase']
+                    temp_ing_unit['total_required'] += ing_shop_units[unit]['total_required']
+                    temp_ing_unit['qty_on_hand'] += ing_shop_units[unit]['qty_on_hand']
+                    ing_dict[ing_name]['data']['units'][unit] = temp_ing_unit
+                else:
+                    ing_dict[ing_name]['data']['units'][unit] = ing_shop_units[unit]
         else:
-            ing_dict[ing_name] = {ing_unit: ing_calc["data"]}
+            ing_dict[ing_name] = {'data': ing_calc['data']}
+                
+
+        # for unit in ing_calc['data']['units']:
+        #     ing_name = ing_calc["ing_name"]
+        #     ing_unit = unit
+        #     # If this ing is already in ing_dict
+        #     if ing_name in ing_dict:
+        #         # If this unit is already in ing_dict
+        #         if ing_unit in ing_dict[ing_name]:
+        #             # Add relevant fields
+        #             temp_ing = ing_dict[ing_name][ing_unit]
+        #             temp_ing["total_required"] += ing_calc["data"][ing_unit]["total_required"]
+        #             temp_ing["to_purchase"] += ing_calc["data"][ing_unit]["to_purchase"]
+        #             ing_dict[ing_name][ing_unit] = temp_ing
+        #         else:
+        #             ing_dict[ing_name][ing_unit] = ing_calc["data"]
+        #     else:
+        #         ing_dict[ing_name] = {ing_unit: ing_calc["data"]}
         return
 
     def list(self, request):
@@ -216,9 +209,9 @@ class IPLView(ViewSet):
                 count += 1
 
         for ing_name in ing_dict:
-            for ing_unit in ing_dict[ing_name]:
-                data = ing_dict[ing_name][ing_unit]
-                queryset.append(data)
+            ing_dict[ing_name]['data']['units'] = ing_dict[ing_name]['data']['units'].values()
+            data = ing_dict[ing_name]['data']
+            queryset.append(data)
                  
                         
         serializer = IPLSerializer(queryset, many=True)
