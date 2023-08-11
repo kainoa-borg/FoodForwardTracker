@@ -7,6 +7,7 @@ from rest_framework import serializers
 from rest_framework.generics import ListAPIView
 from rest_framework import status
 from django.db.models import Prefetch
+from django.db.models import Q
 from .models import Ingredients, IngredientNames, IngredientUnits, MealPlans, Recipes, RecipeIngredients, Households
 from .SupplierViews import SupplierSerializer
 from decimal import *
@@ -83,7 +84,10 @@ class IPLView(ViewSet):
             ing_name_def = IngredientNames.objects.get(ing_name=ing.ingredient_name)
         except:
             ing_name_def = None
-        ing_unit_defs = IngredientUnits.objects.filter(i_name_id=ing_name_def, recipe_unit=ing.unit)
+        ing_unit_defs = IngredientUnits.objects.filter(Q(recipe_unit__icontains=ing.unit), i_name_id=ing_name_def)
+        if len(ing_unit_defs) < 1:
+            ing_unit_defs = IngredientUnits.objects.filter(Q(recipe_unit__icontains=ing.unit[0:-2]), i_name_id=ing_name_def)
+            print([n.recipe_unit for n in ing_unit_defs])
         if len(ing_unit_defs) > 0:
             for unit_def in ing_unit_defs:
                 # Calculate converted total_required

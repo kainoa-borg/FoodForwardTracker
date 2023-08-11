@@ -16,7 +16,7 @@ ffreact-prod/node_modules
 /node_modules
 node_modules
 /.pnp
-/pycache
+pycache
 .pnp.js
 
 # testing
