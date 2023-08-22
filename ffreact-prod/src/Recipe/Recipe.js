@@ -521,7 +521,6 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
 
                 {/* Recipe Info Tables Stack */}
                 <Stack item spacing={10}>
-                    
                     {/* Ingredient Table */}
                     <Box>
                         <Typography variant='h6'>Ingredients</Typography>

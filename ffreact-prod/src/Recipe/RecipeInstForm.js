@@ -1,6 +1,8 @@
 import {useState} from 'react'
 import React from 'react'
 import { Grid, Typography, Card, Input, InputLabel, Button, TextField} from '@mui/material';
+import CellDialog from '../components/CellDialog';
+import StationIngredientList from './StationIngredientList';
 
 // Kainoa Borges
 // Angela McNeese
@@ -17,6 +19,7 @@ const RecipeInstForm = (props) => {
     const [instruction, setInstruction] = useState({
         stn_name: '',
         stn_desc: '',
+        stn_ings: [],
     });
 
     // Handle form submission (prevent refresh, pass ingredient to addIngredient, and clear form state)
@@ -30,11 +33,12 @@ const RecipeInstForm = (props) => {
         handleClose();
     }
 
-    const updateEditForm = (names, values) => {
+    const updateEditForm = (name, value) => {
         const newInstruction = {...instruction};
-        for (let i = 0; i < names.length; i++) {
-            newInstruction[names[i]] = values[i];
-        }
+        // for (let i = 0; i < names.length; i++) {
+            // newInstruction[names[i]] = values[i];
+        // }
+        newInstruction[name] = value;
         setInstruction(newInstruction);
     }
 
@@ -47,7 +51,7 @@ const RecipeInstForm = (props) => {
         const fieldName = event.target.getAttribute('name');
         const fieldValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
         // Create new instruction object before setting state
-        updateEditForm([fieldName], [fieldValue]);
+        updateEditForm(fieldName, fieldValue);
         // updateEditForm('aFlag', true);
     }
 
@@ -66,6 +70,9 @@ const RecipeInstForm = (props) => {
 
                 <InputLabel>Station Description: </InputLabel>
                 <TextField name='stn_desc' multiline rows={4} value={instruction.stn_desc} onChange={handleFormChange}/>
+
+                <InputLabel>Station Ingredients: </InputLabel>
+                <CellDialog buttonText={'Add Station Ingredients'} dialogTitle={'Add Station Ingredients'} component={<StationIngredientList items={instruction.stn_ings} parentFieldName={'stn_ings'} headers={['Ing Name', 'Amt']} clearItem={{ing_name: '', amt: 0}} updateFunction={updateEditForm}/>}/>
             </Grid>
             <Grid item>
                 <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>

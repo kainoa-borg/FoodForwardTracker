@@ -11,7 +11,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 });
 
 // Ingredients Purchasing List Component
-export default function PurchasingReport() {
+export default function IngPurchasingReport() {
     const [suppliers, setSuppliers] = useState(undefined);
     const [ingPurchasing, setIngPurchasing] = useState([]);
     const [dateRange, setDateRange] = useState([]);
