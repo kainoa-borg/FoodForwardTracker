@@ -28,8 +28,15 @@ const CustomInput = ({params, fieldName, searchField, required}) => {
     // required - Whether this TextField will be considered required in forms
     // id and field - Datagrid row params passed in renderEditCell
 // Returns autocomplete select with add functionality
-export default function NewModularSelect({id, field, value, options, fieldName, getOptions, searchField, required, onChange}) {
+export default function NewModularSelect({id, field, name, value, options, fieldName, getOptions, searchField, required, onChange}) {
   const [selectValue, setSelectValue] = value ? React.useState({[searchField]: value}) : React.useState('');
+
+  if (!field) {
+    field = name;
+  }
+  if (!searchField) {
+    searchField = name;
+  }
 
   if (!options) {
     return <>loading...</>
