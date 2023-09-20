@@ -87,8 +87,7 @@ const RecipeInstForm = (props) => {
                                 items={instruction.stn_ings} 
                                 parentFieldName={'stn_ings'}
                                 fields={[
-                                    {header: 'Ing Name', name: 'ing_name', defaultValue: '', inputComponent: (params) => <NewModularSelect {...params} searchField={'ingredient_name'} options={recipeData.r_ingredients.map((ing) => ing)}/>},
-                                    {header: 'Amt', name: 'amt', defaultValue: 0}
+                                    {header: 'Ingredient', name: 'ing_name', defaultValue: '', inputComponent: (params) => <NewModularSelect style={{width: '10rem'}} {...params} fieldName={'ing_name'} searchField={'ingredient_name'} options={recipeData.r_ingredients.map((ing) => ing)}/>},
                                 ]}
                                 editable
                                 updateFunction={updateEditForm}

@@ -15,7 +15,7 @@ import subprocess
 
 from .models import Recipes, RecipeAllergies, RecipeDiets, RecipeIngredients, Stations, RecipePackaging, RecipeInstructions
 from .IngredientViews import IngredientNameSerializer
-from .StationViews import StationIngSerializer
+from .StationViews import StationIngSerializer, StationsSerializer
 # Create your views here.
 
 class AllergySerializer(serializers.ModelSerializer):
@@ -220,7 +220,7 @@ class RecipesSerializer(ModelSerializer):
     r_packaging = RecipePackagingSerializer(many=True)
     r_diets = RecipeDietsSerializer(many=True)
     r_allergies = AllergySerializer(many=True)
-    r_stations = RecipeStationSerializer(many=True)
+    r_stations = StationsSerializer(many=True)
     m_s = serializers.IntegerField()
 
     class Meta():

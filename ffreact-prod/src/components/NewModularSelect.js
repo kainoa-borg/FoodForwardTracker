@@ -28,7 +28,7 @@ const CustomInput = ({params, fieldName, searchField, required}) => {
     // required - Whether this TextField will be considered required in forms
     // id and field - Datagrid row params passed in renderEditCell
 // Returns autocomplete select with add functionality
-export default function NewModularSelect({id, field, name, value, options, fieldName, getOptions, searchField, required, onChange}) {
+export default function NewModularSelect({id, field, name, value, inputProps, options, fieldName, getOptions, searchField, required, onChange, style}) {
   const [selectValue, setSelectValue] = value ? React.useState({[searchField]: value}) : React.useState('');
 
   if (!field) {
@@ -67,7 +67,8 @@ export default function NewModularSelect({id, field, name, value, options, field
             onChange({target: 
                 {
                     name: fieldName ? fieldName : searchField,
-                    value: newValue[searchField]
+                    value: newValue[searchField],
+                    dataKey: inputProps ? inputProps.dataKey : null
                 }
             });
         }
@@ -105,14 +106,13 @@ export default function NewModularSelect({id, field, name, value, options, field
       // handleHomeEndKeys
       // freeSolo
       renderOption={(props, option) => {
-        console.log(option);
         return (
             <li {...props} key={option.id}>{option[searchField]}</li>
         )
       }}
       renderInput={(params) => {
         if (onChange) {
-          return (<TextField {...params} name={fieldName ? fieldName : searchField} required={required}/>);
+          return (<TextField style={style} {...params} {...inputProps} name={fieldName ? fieldName : searchField} required={required}/>);
         }
         else {
           return (<CustomInput params={params} searchField={searchField} required={required}/>);

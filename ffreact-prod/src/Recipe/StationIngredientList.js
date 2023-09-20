@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import EditableIngUsageTable from '../Ingredients/EditableIngUsageTable.js'
 import { Input, Paper, Table, TableCell, TableContainer, TableHead, TableRow, Button } from '@mui/material';
+import { useGridApiContext } from '@mui/x-data-grid';
 
 // Editable Ingredients Row
 // Takes: key of current row, the state of the Ingredients Page's editFormData, updateIngredients callback, handleEditFormChange callback, and handleCancelClick callback
@@ -10,12 +11,32 @@ const StationIngredientList = (props) => {
     const updateFunction = props.updateFunction;
     const parentFieldName = props.parentFieldName;
     const fields = props.fields;
-    const clearItem = fields.map((field) => field.defaultValue);
+    // Datagrid params id and field
+    const id = props.id;
+    const field = props.field;
+
+    // Create a clearItem object with the names and default values from fields
+    const clearItem = () => {
+        let temp = {}
+        fields.map((field) => temp[field.name] = field.defaultValue);
+        console.log('clearItem clearItem', temp);
+        return temp;
+    };
     const [currItem, setCurrItem] = useState(clearItem);
     const [items, setItems] = useState(props.items);
 
+    // If this is an editable datagrid column, use datagrid api to update cell
+    if (id && field) {
+        const api = useGridApiContext();
+        React.useEffect(() => {
+            console.log('cell Change', items);
+            api.current.setEditCellValue({id, field, value: items, debounceMs: 200})
+        }, [items])
+    }
+
     const handleKeyUnitChange = (event) => {
-        const key = event.target.getAttribute('dataKey');
+        console.log(event);
+        const key = event.target.dataKey;
         const fieldName = event.target.name;
         const fieldValue = event.target.value;
         let newUnit = {...items[key]};
@@ -23,6 +44,7 @@ const StationIngredientList = (props) => {
         let newItems = [...items];
         newItems[key] = newUnit;
         setItems(newItems);
+        console.log(newItems);
         updateFunction(parentFieldName, newItems);
     }
 
@@ -30,9 +52,9 @@ const StationIngredientList = (props) => {
         const fieldName = event.target['name'];
         const fieldValue = event.target.value;
         const newItem = {...currItem};
+        console.log('newItem handleUnitChange', newItem);
         newItem[fieldName] = fieldValue;
         setCurrItem(newItem);
-        console.log(newItem);
     }
 
     const handleAddUnit = (event) => {
@@ -41,6 +63,7 @@ const StationIngredientList = (props) => {
         setItems(newItems);
         setCurrItem(clearItem);
         updateFunction(parentFieldName, newItems);
+        console.log('newItem handleUnitChange', newItems);
     }
 
     const handleDeleteUnit = (thisKey) => {
@@ -72,7 +95,7 @@ const StationIngredientList = (props) => {
         }
         else {
             let fieldType = getFieldInputType(field.defaultValue);
-            return () => <Input type={fieldType}></Input>
+            return (props) => <Input type={fieldType} {...props}></Input>
         }
     }
 
@@ -99,7 +122,7 @@ const StationIngredientList = (props) => {
                             fields.map((field) => {
                                 let InputComponent = getInputComponent(field);
                                 return (
-                                    <TableCell><InputComponent inputProps={{dataKey:thisKey}} name={field.name} value={item[field.name]} onChange={handleUnitChange}/></TableCell>
+                                    <TableCell><InputComponent inputProps={{dataKey: thisKey}} dataKey={thisKey} name={field.name} value={item[field.name]} onChange={handleKeyUnitChange}/></TableCell>
                                 )
                             })
                             :
@@ -109,6 +132,11 @@ const StationIngredientList = (props) => {
                                 )
                             })
                             }
+                            {editable
+                            ?
+                            <TableCell><Button color='lightBlue' variant='contained' onClick={() => handleDeleteUnit(thisKey)}>Delete</Button></TableCell>
+                            :
+                            <></>}
                         </TableRow>
                         )
                     })

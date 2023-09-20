@@ -140,10 +140,8 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                         items={params.row.stn_ings} 
                         parentFieldName={'stn_ings'}
                         fields={[
-                            {header: 'Ing Name', name: 'ing_name', defaultValue: '', inputComponent: () => <NewModularSelect options={recipeData.r_ingredients.map((ing) => ing.ingredient_name)}/>},
-                            {header: 'Amt', name: 'amt', defaultValue: 0}
+                            {header: 'Ingredient', name: 'ing_name', defaultValue: ''},
                         ]}
-                        editable
                         updateFunction={(fieldName, value) => {}}/>}
                 />
                 )
@@ -152,16 +150,17 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                 return (
                     <CellDialog 
                         buttonText={'Edit'} 
-                        dialogTitle={'View Station Ingredients'} 
+                        dialogTitle={'Edit Station Ingredients'} 
                         component={<StationIngredientList 
-                            items={params.row.stn_ings} 
+                            id={params.id}
+                            field={params.field}
+                            items={params.row.stn_ings}
                             parentFieldName={'stn_ings'}
                             fields={[
-                                {header: 'Ing Name', name: 'ing_name', defaultValue: '', inputComponent: () => <NewModularSelect options={recipeData.r_ingredients.map((ing) => ing.ingredient_name)}/>},
-                                {header: 'Amt', name: 'amt', defaultValue: 0}
+                                {header: 'Ingredient', name: 'ing_name', defaultValue: '', inputComponent: (props) => <NewModularSelect style={{width: '10rem'}} {...props} fieldName={'ing_name'} searchField={'ingredient_name'} options={recipeData.r_ingredients.map((ing) => ing)}/>},
                             ]}
                             editable
-                            updateFunction={(fieldName, value) => {console.log(fieldName, value); params.value[fieldName] = value}}/>}
+                            updateFunction={(fieldName, value) => {}}/>}
                     />
                 )
             }
@@ -442,7 +441,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
             }
             axios({
                 method: "PATCH",
-                url:"http://4.236.185.213:8000/api/mealrecipes/" + recipeData.r_num + '/',
+                url:"http://localhost:8000/api/mealrecipes/" + recipeData.r_num + '/',
                 data: r_data,
             }).then((response)=>{
                 // console.log('patch success!')
@@ -597,7 +596,8 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                         <Typography variant='h6'>Station</Typography>
                         <Box sx={{height: '50vh', width: {md: '45vw', sm: '80vw'}}}>
                             <RecipeContext.Provider value={recipeData}>
-                                <ModularRecipeDatagrid 
+                                <ModularRecipeDatagrid
+                                    apiIP={'localhost'}
                                     rows={stationRows}
                                     columns={stationColumns}
                                     setRows={setStationRows}
