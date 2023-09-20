@@ -7,7 +7,7 @@ from rest_framework import serializers
 from rest_framework import status
 from django.db.models import Prefetch
 from django.shortcuts import render
-from .models import Stations, Ingredients, Households
+from .models import Stations, Ingredients, Households, StationIngredients
 from .SupplierViews import SupplierSerializer
 import os
 import logging
@@ -15,77 +15,58 @@ logging.basicConfig(level = logging.WARNING)
 
 
 class HhServingsSerializer(ModelSerializer):
-	class Meta():
-		model = Households
-		depth = 1
-		fields = ('hh_name', 'num_adult', 'num_child_gt_6', 'num_child_lt_6', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag')
-    
+    class Meta():
+        model = Households
+        depth = 1
+        fields = ('hh_name', 'num_adult', 'num_child_gt_6', 'num_child_lt_6', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag')
+  
+    def validate(self, data):
+        return super.validate()
+
+
+class StationIngSerializer(ModelSerializer):
+    class Meta():
+        model = StationIngredients
+        fields = ('si_recipe_ing',)
 
 class StationsSerializer(ModelSerializer):
     # hh_servings = HhServingsSerializer(required=False, allow_null=True, many=True)
+    stn_ings = StationIngSerializer(many=True, read_only=False)
     class Meta():
         model = Stations
-        fields = ('stn_num', 'stn_name', 'stn_desc')
+        fields = ('stn_num', 'stn_name', 'stn_desc', 'stn_ings', 'stn_recipe_num')
         read_only_fields = ('stn_num',)
 
+
     def create(self, validated_data):
-        # hh_servings = validated_data.pop('households')
-        # hh_list = Stations.objects.create(**validated_data)
-        # for item in hh_servings:
-            # hh_model = Households.objects.create(**item)
-        # return hh_list
-    # def update(self, hh_instance, validated_data):
-        # Create nested allergy objects
-        # hh_servings = validated_data.pop('hh_allergies')
-        # Households.objects.all().filter(a_hh_name = hh_instance).delete()
-        # for item in hh_servings:
-            # hh_model = Households.objects.create(**item)
-        # logging.warning(hh_instance.hh_name)
-        # return super().update(hh_instance, validated_data)
-
-        # for hh in hh_list:
-                # latest_id = Households.objects.latest('hh_name').hh_name
-                # hh['hh_name'] = latest_id
-                # tmp = Households.objects.create(**hh)
-                # stn_instance[hh] = tmp['hh_name', 'num_adult', 'hh_name', 'num_child_gt_6', 'num_child_lt_6', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag']
-
-        # hh_portions = validated_data.pop('hh_servings')
         if Stations.objects.count() < 1:
              latest_key = 0
         else:
             latest_key = Stations.objects.latest('stn_num').stn_num
-            
+
+        stn_ings = validated_data.pop('stn_ings')
+        
         validated_data['stn_num'] = latest_key + 1
         stn_instance = Stations.objects.create(**validated_data)
-        # if hh_portions:
-            # Households.objects.all().filter(paused_flag = 0).delete()
-            # for hh in hh_portions:
-                # latest_id = Households.objects.latest('hh_name').hh_name
-                # hh['hh_name'] = latest_id
-                # tmp = Households.objects.create(**hh)
-                # stn_instance[hh] = tmp['hh_name', 'num_adult', 'hh_name', 'num_child_gt_6', 'num_child_lt_6', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag']
-        return stn_instance
         
-    ##def update(self, ing_instance, validated_data):
-		# raise serializers.ValidationError("IM HERE")
-        hh_portions = validated_data.pop('hh_servings')
-		# ing_instance = Ingredients.objects.create(**validated_data)
-        if hh_portions:
-            Households.objects.all().filter(paused_flag == 0).delete()
-            for hh in hh_portions:
-                if (Households.objects.count() > 0):
-                    latest_id = Households.objects.latest('i_usage_id').i_usage_id +1
-                else:
-                    latest_id = 0
-                hh['i_usage_id'] = latest_id
-                hh['used_ing_id'] = validated_data.get('i_id')
-				# raise serializers.ValidationError(usage)
-                Households.objects.create(**hh)
-        in_qty = validated_data['in_qty']
-        validated_data['qty_on_hand'] =  in_qty - used
-        return super().update(ing_instance, validated_data)
-    ##
+        for stn_ing in stn_ings:
+            stn_ing['si_station_num'] = stn_instance
+            StationIngredients.objects.create(**stn_ing)
+
+        return stn_instance
+
+            
+    def update(self, station_instance, validated_data):
+        stn_ings = validated_data.pop('stn_ings')
+        StationIngredients.objects.filter(si_station_num=station_instance.stn_num).delete()
+        for stn_ing in stn_ings:
+            stn_ing['si_station_num'] = station_instance
+            StationIngredients.objects.create(**stn_ing)
+            
+        return super.update(station_instance, validated_data)
+            
+
 
 class StationsView(ModelViewSet):
-	queryset = Stations.objects.all()
-	serializer_class = StationsSerializer
+    queryset = Stations.objects.all().prefetch_related('stn_ings')
+    serializer_class = StationsSerializer

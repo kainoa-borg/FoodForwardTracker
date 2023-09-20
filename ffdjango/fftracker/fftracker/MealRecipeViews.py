@@ -13,8 +13,9 @@ import json
 import string
 import subprocess
 
-from .models import Recipes, RecipeAllergies, RecipeDiets, RecipeIngredients, Stations, RecipePackaging, RecipeInstructions
+from .models import Recipes, RecipeAllergies, RecipeDiets, RecipeIngredients, Stations, StationIngredients, RecipePackaging, RecipeInstructions
 from .IngredientViews import IngredientNameSerializer
+from .StationViews import StationIngSerializer, StationsSerializer
 # Create your views here.
 
 class AllergySerializer(serializers.ModelSerializer):
@@ -52,10 +53,10 @@ class RecipeIngredientSerializer(ModelSerializer):
         read_only_fields = ('ri_id', 'prep')
 
 class RecipeStationSerializer(ModelSerializer):
+    stn_ings = StationIngSerializer(many=True, read_only=False)
     class Meta():
         model = Stations
-        # depth = 1
-        fields = ('stn_num', 'stn_name', 'stn_desc')
+        fields = ('stn_num', 'stn_name', 'stn_desc', 'stn_ings')
         read_only_fields = ('stn_num',)
 
 class RecipePackagingSerializer(ModelSerializer):
@@ -219,7 +220,7 @@ class RecipesSerializer(ModelSerializer):
     r_packaging = RecipePackagingSerializer(many=True)
     r_diets = RecipeDietsSerializer(many=True)
     r_allergies = AllergySerializer(many=True)
-    r_stations = RecipeStationSerializer(many=True)
+    r_stations = StationsSerializer(many=True)
     m_s = serializers.IntegerField()
 
     class Meta():
@@ -323,7 +324,12 @@ class RecipesSerializer(ModelSerializer):
                 latest_id = 0
             station['stn_num'] = latest_id
             station['stn_recipe_num'] = recipe_instance
-            Stations.objects.create(**station)
+            stn_ings = station.pop('stn_ings')
+            stn_instance = Stations.objects.create(**station)
+            for stn_ing in stn_ings:
+                stn_ing['si_station_num'] = stn_instance
+                StationIngredients.objects.create(**stn_ing)
+
         
         RecipeAllergies.objects.filter(ra_recipe_num = recipe_instance).delete()
         for allergy in allergies:

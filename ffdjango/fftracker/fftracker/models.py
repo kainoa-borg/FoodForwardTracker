@@ -198,8 +198,8 @@ class Households(models.Model):
         db_table = 'households'
 
 class IngredientUnits(models.Model):
-    i_unit_id = models.AutoField(primary_key=True)
-    i_name_id = models.ForeignKey("IngredientNames", models.CASCADE, related_name="ing_units", db_column='i_name_id')
+    i_unit_id = models.AutoField(primary_key=True, db_column='i_unit_id')
+    i_name = models.ForeignKey("IngredientNames", models.CASCADE, db_column='i_name_id', related_name="ing_units")
     recipe_amt = models.DecimalField(null=False, max_digits=4, decimal_places=2)
     recipe_unit = models.CharField(null=False, max_length=45)
     shop_amt = models.DecimalField(null=False, max_digits=4, decimal_places=2)
@@ -420,9 +420,10 @@ class ServingCalculations(models.Model):
 
 
 class StationIngredients(models.Model):
-    si_id = models.SmallIntegerField(primary_key=True)
-    si_ing = models.ForeignKey(Ingredients, models.CASCADE, blank=True, null=True)
-    # si_station_name = models.ForeignKey('Stations', models.CASCADE, db_column='si_station_name', blank=True, null=True)
+    si_id = models.AutoField(primary_key=True)
+    # si_ing_name = models.(max_length=50, null=False)
+    si_recipe_ing = models.CharField(max_length=50, db_column='si_recipe_ing', null=False)
+    si_station_num = models.ForeignKey('Stations', models.CASCADE, related_name='stn_ings', db_column='si_station_num')
 
     class Meta:
         managed = True

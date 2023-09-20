@@ -12,7 +12,10 @@ import RecipeInstForm from './RecipeInstForm.js';
 import RecipeIngList from "./RecipeIngList.js";
 import DataGridDialog from '../components/DatagridDialog.js';
 import NewModularSelect from "../components/NewModularSelect.js";
+import RecipeContext from "../contexts/RecipeContext.js"
 import { useNavigate } from "react-router-dom";
+import StationIngredientList from "./StationIngredientList.js";
+import CellDialog from "../components/CellDialog.js";
 // import food_placeholder from '../Images/food_placeholder.jpg'
 
 export default function Recipe({ loginState, recipeData, setRecipeData, ingredientOptions, packagingOptions, setCurrPage, getDBRecipeData, isAdding}) {
@@ -44,7 +47,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
         )
     }
     // 4.236.185.213
-
+ 
     const ingredientsColumns = [
         {
             field: 'ingredient_name',
@@ -120,15 +123,48 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
         {
             field: 'stn_desc',
             headerName: 'Description',
-            width: 350,
+            width: 250,
             editable: true
         },
-        // {
-        //     field: 'stn_num',
-        //     headerName: '',
-        //     width: 0,
-        //     editable: false
-        // },
+        {
+            field: 'stn_ings',
+            headerName: 'Ingredients',
+            width: 100,
+            editable: true,
+            renderCell: (params) => {
+                return (
+                    <CellDialog 
+                    buttonText={'View'} 
+                    dialogTitle={'View Station Ingredients'} 
+                    component={<StationIngredientList 
+                        items={params.row.stn_ings} 
+                        parentFieldName={'stn_ings'}
+                        fields={[
+                            {header: 'Ingredient', name: 'si_recipe_ing', defaultValue: ''},
+                        ]}
+                        updateFunction={(fieldName, value) => {}}/>}
+                />
+                )
+            },
+            renderEditCell: (params) => {
+                return (
+                    <CellDialog 
+                        buttonText={'Edit'} 
+                        dialogTitle={'Edit Station Ingredients'} 
+                        component={<StationIngredientList 
+                            id={params.id}
+                            field={params.field}
+                            items={params.row.stn_ings}
+                            parentFieldName={'stn_ings'}
+                            fields={[
+                                {header: 'Ingredient', name: 'si_recipe_ing', defaultValue: '', inputComponent: (props) => <NewModularSelect style={{width: '10rem'}} {...props} fieldName={'si_recipe_ing'} searchField={'ingredient_name'} options={recipeData.r_ingredients.map((ing) => ing)}/>},
+                            ]}
+                            editable
+                            updateFunction={(fieldName, value) => {}}/>}
+                    />
+                )
+            }
+        }
     ]
 
     const [ingredientRows, setIngredientRows] = useState(recipeData.r_ingredients);
@@ -490,7 +526,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
 
             {/* Recipe Info Lists */}
             <Grid container justifyContent='space-between' direction='row' sx={{paddingTop: '2%'}}>
-                
+
                 {/* Recipe Image and Card Stack */}
                 <Stack item spacing={3}>
                         {/* <InputLabel id='recipeNameLabel'>Recipe Name</InputLabel> */}
@@ -521,7 +557,6 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
 
                 {/* Recipe Info Tables Stack */}
                 <Stack item spacing={10}>
-                    
                     {/* Ingredient Table */}
                     <Box>
                         <Typography variant='h6'>Ingredients</Typography>
@@ -560,15 +595,18 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                     <Box>
                         <Typography variant='h6'>Station</Typography>
                         <Box sx={{height: '50vh', width: {md: '45vw', sm: '80vw'}}}>
-                            <ModularRecipeDatagrid 
-                                rows={stationRows}
-                                columns={stationColumns} 
-                                setRows={setStationRows}
-                                addFormComponent={RecipeInstForm}
-                                keyFieldName={'stn_num'}
-                                searchField={'stn_name'}
-                                entryName={'Station'}
-                            ></ModularRecipeDatagrid>
+                            <RecipeContext.Provider value={recipeData}>
+                                <ModularRecipeDatagrid
+                                    apiIP={'4.236.185.213'}
+                                    rows={stationRows}
+                                    columns={stationColumns}
+                                    setRows={setStationRows}
+                                    addFormComponent={RecipeInstForm}
+                                    keyFieldName={'stn_num'}
+                                    searchField={'stn_name'}
+                                    entryName={'Station'}
+                                ></ModularRecipeDatagrid>
+                            </RecipeContext.Provider>
                         </Box>
                     </Box>
                 </Stack>
