@@ -27,7 +27,7 @@ class HhServingsSerializer(ModelSerializer):
 class StationIngSerializer(ModelSerializer):
     class Meta():
         model = StationIngredients
-        fields = ('si_id', 'si_recipe_ing')
+        fields = ('si_recipe_ing',)
 
 class StationsSerializer(ModelSerializer):
     # hh_servings = HhServingsSerializer(required=False, allow_null=True, many=True)
@@ -68,5 +68,5 @@ class StationsSerializer(ModelSerializer):
 
 
 class StationsView(ModelViewSet):
-    queryset = Stations.objects.all()
+    queryset = Stations.objects.all().prefetch_related('stn_ings')
     serializer_class = StationsSerializer

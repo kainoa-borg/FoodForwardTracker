@@ -140,7 +140,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                         items={params.row.stn_ings} 
                         parentFieldName={'stn_ings'}
                         fields={[
-                            {header: 'Ingredient', name: 'ing_name', defaultValue: ''},
+                            {header: 'Ingredient', name: 'si_recipe_ing', defaultValue: ''},
                         ]}
                         updateFunction={(fieldName, value) => {}}/>}
                 />
@@ -157,7 +157,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                             items={params.row.stn_ings}
                             parentFieldName={'stn_ings'}
                             fields={[
-                                {header: 'Ingredient', name: 'ing_name', defaultValue: '', inputComponent: (props) => <NewModularSelect style={{width: '10rem'}} {...props} fieldName={'ing_name'} searchField={'ingredient_name'} options={recipeData.r_ingredients.map((ing) => ing)}/>},
+                                {header: 'Ingredient', name: 'si_recipe_ing', defaultValue: '', inputComponent: (props) => <NewModularSelect style={{width: '10rem'}} {...props} fieldName={'si_recipe_ing'} searchField={'ingredient_name'} options={recipeData.r_ingredients.map((ing) => ing)}/>},
                             ]}
                             editable
                             updateFunction={(fieldName, value) => {}}/>}
@@ -441,7 +441,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
             }
             axios({
                 method: "PATCH",
-                url:"http://localhost:8000/api/mealrecipes/" + recipeData.r_num + '/',
+                url:"http://4.236.185.213:8000/api/mealrecipes/" + recipeData.r_num + '/',
                 data: r_data,
             }).then((response)=>{
                 // console.log('patch success!')
@@ -597,7 +597,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                         <Box sx={{height: '50vh', width: {md: '45vw', sm: '80vw'}}}>
                             <RecipeContext.Provider value={recipeData}>
                                 <ModularRecipeDatagrid
-                                    apiIP={'localhost'}
+                                    apiIP={'4.236.185.213'}
                                     rows={stationRows}
                                     columns={stationColumns}
                                     setRows={setStationRows}

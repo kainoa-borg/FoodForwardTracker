@@ -422,7 +422,7 @@ class ServingCalculations(models.Model):
 class StationIngredients(models.Model):
     si_id = models.AutoField(primary_key=True)
     # si_ing_name = models.(max_length=50, null=False)
-    si_recipe_ing = models.ForeignKey('RecipeIngredients', models.CASCADE, db_column='si_recipe_ing', null=False)
+    si_recipe_ing = models.CharField(max_length=50, db_column='si_recipe_ing', null=False)
     si_station_num = models.ForeignKey('Stations', models.CASCADE, related_name='stn_ings', db_column='si_station_num')
 
     class Meta:

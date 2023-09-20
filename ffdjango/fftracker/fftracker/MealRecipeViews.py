@@ -13,7 +13,7 @@ import json
 import string
 import subprocess
 
-from .models import Recipes, RecipeAllergies, RecipeDiets, RecipeIngredients, Stations, RecipePackaging, RecipeInstructions
+from .models import Recipes, RecipeAllergies, RecipeDiets, RecipeIngredients, Stations, StationIngredients, RecipePackaging, RecipeInstructions
 from .IngredientViews import IngredientNameSerializer
 from .StationViews import StationIngSerializer, StationsSerializer
 # Create your views here.
@@ -324,7 +324,12 @@ class RecipesSerializer(ModelSerializer):
                 latest_id = 0
             station['stn_num'] = latest_id
             station['stn_recipe_num'] = recipe_instance
-            Stations.objects.create(**station)
+            stn_ings = station.pop('stn_ings')
+            stn_instance = Stations.objects.create(**station)
+            for stn_ing in stn_ings:
+                stn_ing['si_station_num'] = stn_instance
+                StationIngredients.objects.create(**stn_ing)
+
         
         RecipeAllergies.objects.filter(ra_recipe_num = recipe_instance).delete()
         for allergy in allergies:

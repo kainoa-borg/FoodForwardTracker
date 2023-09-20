@@ -13,7 +13,7 @@ const StationIngredientList = (props) => {
     const fields = props.fields;
     // Datagrid params id and field
     const id = props.id;
-    const field = props.field;
+    const field = props.field
 
     // Create a clearItem object with the names and default values from fields
     const clearItem = () => {
