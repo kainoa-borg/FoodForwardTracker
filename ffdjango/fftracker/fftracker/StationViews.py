@@ -11,7 +11,7 @@ from .models import Stations, Ingredients, Households, StationIngredients, Recip
 from .SupplierViews import SupplierSerializer
 import os
 import logging
-from decimal import Decimal
+from decimal import Decimal, getcontext
 logging.basicConfig(level = logging.WARNING)
 
 
@@ -106,6 +106,7 @@ class StationInstructionsView(viewsets.ViewSet):
             for serving in station_instruction['servings']:
                 for station_ing in recipe_station_ingredients:
                         recipe_ing = RecipeIngredients.objects.get(ri_recipe_num = meal_recipe.r_num,ingredient_name = station_ing.si_recipe_ing)
+                        getcontext().prec = 2
                         recipe_ing_amt = Decimal(recipe_ing.amt * station_instruction['servings'][serving]['meal_servings'])
                         recipe_ing_unit = recipe_ing.unit
                         this_ingredient = {

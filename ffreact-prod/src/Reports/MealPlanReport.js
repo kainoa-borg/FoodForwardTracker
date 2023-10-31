@@ -27,8 +27,6 @@ export default function MealPlanReport() {
       setInstructionsDialogOpen(false);
     }
 
-    console.log("RERENDERING");
-
     const getDBMealPlanReport = (dateRange) => {
         setSearchingSBOpen(true);
         axios({
@@ -54,7 +52,7 @@ export default function MealPlanReport() {
       setCalcSBOpen(true);
       axios({
         method: "GET",
-        url:"http://localhost:8000/api/mealplanreport/" + pk + '/',
+        url:"http://4.236.185.213:8000/api/mealplanreport/" + pk + '/',
       }).then((response)=>{
         console.log(response.data);
         getDBMealPlanReport(dateRange);
@@ -79,7 +77,7 @@ export default function MealPlanReport() {
       setSearchingSBOpen(true);
       axios({
         method: "GET",
-        url:"http://localhost:8000/api/station-instructions/" + pk + '/',
+        url:"http://4.236.185.213:8000/api/station-instructions/" + pk + '/',
       }).then((response)=>{
         console.log(response.data);
         setInstructionMealPlan(mealPlan);
