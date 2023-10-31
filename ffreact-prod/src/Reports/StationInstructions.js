@@ -31,7 +31,7 @@ const StationInstructions = (props) => {
                                 console.log(serving);
                                 return ( 
                                 <Box sx={{paddingLeft: '.5rem', paddingY: '.1rem', border: 1, width: '90%', margin: 'auto'}}>
-                                    <Typography variant='h7' sx={{fontWeight: 'bold'}}>{serving.meal_servings} servings</Typography>
+                                    <Typography variant='h7' sx={{fontWeight: 'bold'}}>{serving.meal_servings} servings ({serving.households.length})</Typography>
                                     <Box sx={{display: 'flex', justifyContent: 'space-evenly'}}>
                                         <List sx={{listStyleType: 'disc', minWidth: '25%'}}>
                                             <Typography variant='h7' sx={{fontWeight: 'bold'}}>Ingredients</Typography>
