@@ -140,7 +140,7 @@ class MealPlanReportView(viewsets.ViewSet):
         except:
             serving_calculation = ServingCalculations.objects.create(calc_meal_plan=meal_plan, calc_date=datetime.date.today())
 
-        # Attempt calculations
+        # # Attempt calculations
         try:
             for household in households:
                 # Calculate meal servings for this household
@@ -149,27 +149,27 @@ class MealPlanReportView(viewsets.ViewSet):
                 meal_servings += hh_meal_servings
                 snack_servings += hh_snack_servings
 
-                # Create the kit and meal plan for this household
-                if (Kits.objects.count() > 0):
-                    latest_kit_key = Kits.objects.latest('k_id').k_id + 1
-                else:
-                    latest_kit_key = 0
-                kit = Kits.objects.create(k_date=meal_plan.m_date, k_hh_id=household, k_s_c=serving_calculation)
-                if (HhMealPlans.objects.count() > 0):
-                    latest_hhmp_key = HhMealPlans.objects.latest('hh_m_id').hh_m_id + 1
-                else:
-                    latest_hhmp_key = 0
-                HhMealPlans.objects.create(meal_id=meal_plan.m_id, meal_hh_id=household, hh_s_c=serving_calculation)
+        #         # Create the kit and meal plan for this household
+        #         if (Kits.objects.count() > 0):
+        #             latest_kit_key = Kits.objects.latest('k_id').k_id + 1
+        #         else:
+        #             latest_kit_key = 0
+        #         kit = Kits.objects.create(k_date=meal_plan.m_date, k_hh_id=household, k_s_c=serving_calculation)
+        #         if (HhMealPlans.objects.count() > 0):
+        #             latest_hhmp_key = HhMealPlans.objects.latest('hh_m_id').hh_m_id + 1
+        #         else:
+        #             latest_hhmp_key = 0
+        #         HhMealPlans.objects.create(meal_id=meal_plan.m_id, meal_hh_id=household, hh_s_c=serving_calculation)
 
-                # Calculate usages and create kits across meal and snack recipe packaging
-                self.handle_packaging(package_id_dict, needed_packaging, kit, meal_r_packaging, meal_servings, hh_meal_servings)
-                self.handle_packaging(package_id_dict, needed_packaging, kit, snack_r_packaging, snack_servings, hh_snack_servings)
+        #         # Calculate usages and create kits across meal and snack recipe packaging
+        #         self.handle_packaging(package_id_dict, needed_packaging, kit, meal_r_packaging, meal_servings, hh_meal_servings)
+        #         self.handle_packaging(package_id_dict, needed_packaging, kit, snack_r_packaging, snack_servings, hh_snack_servings)
 
-            if len(needed_packaging) > 1:
-                # Delete this serving calculation, we cannot prepare the meal
-                serving_calculation.delete()
-                return Response({'needed_packaging': needed_packaging.values()}, 200)
-                # return JsonResponse(needed_packaging, safe=False)
+        #     if len(needed_packaging) > 1:
+        #         # Delete this serving calculation, we cannot prepare the meal
+        #         serving_calculation.delete()
+        #         return Response({'needed_packaging': needed_packaging.values()}, 200)
+        #         # return JsonResponse(needed_packaging, safe=False)
         
         # Error during calculation, delete the attempt and return error.
         except:
@@ -183,18 +183,18 @@ class MealPlanReportView(viewsets.ViewSet):
             meal_plan.save()
             return Response({"errorText": "Internal Server Error"}, 500)
         
-        # Create usages on these packaging entries
-        for pkg_id in package_id_dict.keys():
-            print(pkg_id)
-            if PackagingUsages.objects.count() > 0:
-                latest_key = PackagingUsages.objects.all().latest('p_usage_id').p_usage_id + 1
-            else:
-                latest_key = 0
-            pkg_obj = Packaging.objects.filter(p_id=pkg_id)
-            # Create pkg usage on this object
-            pkg_usage = PackagingUsages.objects.create(p_usage_id=latest_key, used_date=meal_plan.m_date, used_qty=package_id_dict[pkg_id]['used_qty'], used_pkg=pkg_obj.first(), used_s_c=serving_calculation)
-            # Associate the usage with this package
-            pkg_obj.update(qty_on_hand=pkg_obj.first().qty_on_hand - package_id_dict[pkg_id]['used_qty'])
+        # # Create usages on these packaging entries
+        # for pkg_id in package_id_dict.keys():
+        #     print(pkg_id)
+        #     if PackagingUsages.objects.count() > 0:
+        #         latest_key = PackagingUsages.objects.all().latest('p_usage_id').p_usage_id + 1
+        #     else:
+        #         latest_key = 0
+        #     pkg_obj = Packaging.objects.filter(p_id=pkg_id)
+        #     # Create pkg usage on this object
+        #     # pkg_usage = PackagingUsages.objects.create(p_usage_id=latest_key, used_date=meal_plan.m_date, used_qty=package_id_dict[pkg_id]['used_qty'], used_pkg=pkg_obj.first(), used_s_c=serving_calculation)
+        #     # Associate the usage with this package
+        #     pkg_obj.update(qty_on_hand=pkg_obj.first().qty_on_hand - package_id_dict[pkg_id]['used_qty'])
 
         meal_plan.meal_servings=meal_servings
         meal_plan.snack_servings=snack_servings

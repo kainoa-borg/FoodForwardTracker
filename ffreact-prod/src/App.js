@@ -9,6 +9,7 @@ import HouseholdPage from './Households/HouseholdPage.js'
 import HouseholdsReport from './Reports/HouseholdsReport.js'
 import Ingredients from './Ingredients/IngredientList.js'
 import IngredientPage from './Ingredients/IngredientPage.js'
+import IngredientManagementReport from './Reports/IngredientManagementReport.js'
 import IngredientsReport from './Reports/IngredientsReport.js'
 import IngPurchaseReport from './Reports/IngPurchaseReport.js'
 import StationList from './Stations/StationList.js'
@@ -137,6 +138,7 @@ const AppComponent = () => {
             case 'households-report': navigate('clients-report'); break;
             case 'ingredientPage': navigate('/ingredients'); break;
             case 'ingredientDefPage': navigate('/ingredient-defs'); break;
+            case 'ingredient-management-report': navigate('ingredient-management-report'); break;
             case 'ingredients-report': navigate('ingredients-report'); break;
             case 'ing-purchase-report': navigate('ingredient-purchasing-report'); break;
             case 'inventoryPage': setCurrPage(<InventoryPage handlePageClick={handlePageClick} />); break;
@@ -226,6 +228,7 @@ const AppComponent = () => {
                     <Route path='/recipes/*' element={<RecipePage loginState={loginState} handlePageClick={handlePageClick} setCurrPage={setCurrPage} />}/>
                     <Route path='/cost-totals-report' element={<CostTotals handlePageClick={handlePageClick} />}/>
                     <Route path='/clients-report' element={<HouseholdsReport handlePageClick={handlePageClick} />}/>
+                    <Route path='/ingredient-management-report' element={<IngredientManagementReport handlePageClick={handlePageClick}/>}/>
                     <Route path='/ingredients-report' element={<IngredientsReport handlePageClick={handlePageClick} />}/>
                     <Route path='/ingredient-purchasing-report' element={<IngPurchaseReport handlePageClick={handlePageClick} />}/>
                     <Route path='/meal-plan-report' element={<MealPlanReport handlePageClick={handlePageClick} />}/>

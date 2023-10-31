@@ -2,6 +2,14 @@ import React, { useState } from 'react';
 import { AppBar, Button, Typography, Toolbar, Tabs, Grid} from "@mui/material"
 import Dropdown from './Dropdown'
 
+const styles = {
+  hideOnPrint: {
+  '@media print': {
+    display: 'none'
+  }
+} 
+}
+
 // const PAGES = ["Landing Page", "Clients", "Households", "Inventory", "Meals", "Reports", "Administration"]
 // console.log(PAGES)
   const Navbar = (props) => {
@@ -38,7 +46,7 @@ import Dropdown from './Dropdown'
   return (
     <React.Fragment>
       {/* #9AB847 */}
-      <AppBar sx={{ background: '#9AB847'}}>
+      <AppBar sx={{...styles.hideOnPrint, background: '#9AB847'}}>
         <Toolbar>
         <Tabs
           value={value}
@@ -82,6 +90,8 @@ import Dropdown from './Dropdown'
                     Ingredients Report</Button>,
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('ing-purchase-report')}>
                     Ingredient Purchasing</Button>,
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('ingredient-management-report')}>
+                    Ingredient Management</Button>,
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('meal-history-report')}>
                     Meal History</Button>,
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('meal-plan-report')}>
