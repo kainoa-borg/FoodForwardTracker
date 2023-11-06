@@ -34,3 +34,8 @@ class KitReportView(viewsets.ViewSet):
                          'hh_last_name': hh_instance.hh_last_name,
                          'contents': m_servings})
             
+class KitTableView(viewsets.ViewSet):
+    def retrieve(self, request, pk):
+        meal_plan = MealPlans.objects.get(pk)
+        recipe_packaging = RecipePackaging.objects.filter()
+            

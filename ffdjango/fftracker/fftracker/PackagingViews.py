@@ -22,6 +22,8 @@ class PackagingUsageSerializer(ModelSerializer):
 		model = PackagingUsages
 		depth = 1
 		fields = ('used_date', 'used_qty')
+  
+  
 
 class PackagingInvSerializer(ModelSerializer):
 	psupplier = SupplierSerializer(read_only=True)
