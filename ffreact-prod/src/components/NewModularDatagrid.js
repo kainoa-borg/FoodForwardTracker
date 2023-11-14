@@ -100,12 +100,12 @@ export default function NewModularDatagrid(props) {
             setUpdateDoneSBOpen(true);
             setAddFormOpen(false);
           }).catch((error) => {
-            handleErrorMessage("Add Failed!", error)
+            handleErrorMessage("Save Failed!", error)
             if (error.response) {
               console.log(error.response);
               console.log(error.response.status);
               console.log(error.response.headers);
-              }
+            }
           });
     }
 
@@ -122,6 +122,7 @@ export default function NewModularDatagrid(props) {
             // Open saving changes success notification
             setUpdateDoneSBOpen(true);
           }).catch((error) => {
+            handleErrorMessage("Save Failed!", error)
             if (error.response) {
               console.log(error.response);
               console.log(error.response.status);

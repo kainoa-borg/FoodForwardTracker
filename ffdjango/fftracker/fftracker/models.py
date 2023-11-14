@@ -302,6 +302,16 @@ class MealPlans(models.Model):
     class Meta:
         managed = True
         db_table = 'meal_plans'
+        
+class PackagingTypeSizes(models.Model):
+    pkg_size_id = models.AutoField(primary_key=True)
+    pkg_size = models.CharField(max_length=50)
+    pkg_holds = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
+    pkg_type_fk = models.ForeignKey('PackagingTypes', models.CASCADE, db_column='pkg_type_fk', related_name='pkg_sizes')
+        
+class PackagingTypes(models.Model):
+    pkg_type_id = models.AutoField(primary_key=True)
+    pkg_type = models.CharField(unique=True, max_length=50)
 
 class Packaging(models.Model):
     p_id = models.AutoField(primary_key=True)

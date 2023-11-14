@@ -46,7 +46,7 @@ export default function IngredientDefinitionPage(props) {
     // Page view; calls NewModularDataGrid
     return(
         <div class='table-div'>
-        <Typography id='page-header' variant='h5'>Ingredients</Typography>
+        <Typography id='page-header' variant='h5'>Ingredient Definitions</Typography>
             <Box sx={{height: '70vh'}}>
             <NewModularDatagrid 
             loginState={loginState}

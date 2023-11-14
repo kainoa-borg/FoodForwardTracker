@@ -38,6 +38,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 // import { useOutsideClick} from './components/Dropdown'
 import './App.css';
 import IngredientDefinitionPage from './Ingredients/IngredientDefinitionPage.js'
+import PackagingDefinitionPage from './Packaging/PackagingDefinitions.js'
 
 // SERVER IP 4.236.185.213
 
@@ -143,6 +144,7 @@ const AppComponent = () => {
             case 'ing-purchase-report': navigate('ingredient-purchasing-report'); break;
             case 'inventoryPage': setCurrPage(<InventoryPage handlePageClick={handlePageClick} />); break;
             case 'packagingPage': navigate('/packaging'); break;
+            case 'packagingDefPage': navigate('/packaging-defs'); break;
             case 'packaging-report': navigate('/packaging-report'); break;
             case 'packaging-return-report': navigate('package-return-report'); break;
             case 'pack-purchase-report': navigate('package-purchasing-report'); break;
@@ -224,6 +226,7 @@ const AppComponent = () => {
                     <Route path='/ingredients' element={<IngredientPage loginState={loginState} handlePageClick={handlePageClick} />}/>
                     <Route path='/ingredient-defs' element={<IngredientDefinitionPage loginState={loginState} handlePageClick={handlePageClick} />}/>
                     <Route path='/packaging' element={<PackagingPage loginState={loginState} handlePageClick={handlePageClick} />}/>
+                    <Route path='/packaging-defs' element={<PackagingDefinitionPage loginState={loginState} handlePageClick={handlePageClick}/>}/>
                     <Route path='/mealplans' element={<MealPlan loginState={loginState} handlePageClick={handlePageClick} />}/>
                     <Route path='/recipes/*' element={<RecipePage loginState={loginState} handlePageClick={handlePageClick} setCurrPage={setCurrPage} />}/>
                     <Route path='/cost-totals-report' element={<CostTotals handlePageClick={handlePageClick} />}/>

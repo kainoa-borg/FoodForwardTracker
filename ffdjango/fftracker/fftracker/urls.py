@@ -30,7 +30,7 @@ from .MenuView import MenuView
 from .MealPlanViews import MealPlansView
 from .MealPlanReportViews import MealPlanReportView, MealHistoryReportView, SnackHistoryReportView
 from .MealView import MealView
-from .PackagingViews import PackagingInvView
+from .PackagingViews import PackagingInvView, PackagingDefView
 from .PacPurchaseViews import PPLView
 from .PackagingReturnViews import PackagingReturnView
 from .RecipeListViews import RecipeListView
@@ -70,6 +70,7 @@ router.register(r'ing-unit-definitions', IngUnitView)
 router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient-inventory')
 router.register(r'packaging', PackagingInvView, basename='packaging')
 router.register(r'packaging-inventory', PackagingInvView, basename='packaging-inventory')
+router.register(r'packaging-type-definitions', PackagingDefView, basename='packaging-defs')
 # Client/User Views
 router.register(r'households', HouseholdsWithAllergies, basename='households')
 router.register(r'users', UserView, basename='users')

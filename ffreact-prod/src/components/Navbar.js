@@ -68,7 +68,9 @@ const styles = {
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('ingredientDefPage')}>
                     Ingredient Definitions</Button>,
                 <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('packagingPage')}>
-                    Packaging</Button>
+                    Packaging</Button>,
+                <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('packagingDefPage')}>
+                    Packaging Definitions</Button>
                 ]}/>
             <Dropdown
             trigger={<Button color='lightGreen' sx ={{boxShadow: '0'}} variant='contained'> Meals </Button>}
