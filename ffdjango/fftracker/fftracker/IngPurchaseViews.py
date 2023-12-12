@@ -74,11 +74,14 @@ class IPLSerializer(serializers.Serializer):
     
 # Kainoa Borges Revised 8-5-2023
 class IPLView(ViewSet):
-    def calc_ing_purchase_amt(self, m_date, meal_name, meal_servings, ing, count):
+    def calc_ing_purchase_amt(self, m_date, meal_name, meal_servings, recipe_servings, ing, count):
         name = meal_name
         converted = False
 
         units = {}
+        
+        if not recipe_servings or recipe_servings == 0:
+            recipe_servings = 1        
 
         try:
             ing_name_def = IngredientNames.objects.get(ing_name=ing.ingredient_name)
@@ -91,13 +94,13 @@ class IPLView(ViewSet):
         if len(ing_unit_defs) > 0:
             for unit_def in ing_unit_defs:
                 # Calculate converted total_required
-                total_required = meal_servings * ing.amt * (unit_def.shop_amt / unit_def.recipe_amt)
+                total_required = meal_servings * (ing.amt / recipe_servings) * (unit_def.shop_amt / unit_def.recipe_amt)
                 # Add to unit dict
                 units[unit_def.shop_unit] = {'unit': unit_def.shop_unit, 'total_required': total_required, 'qty_on_hand': 0}
                 converted = True
         else:
             # Default to the recipe unit
-            units[ing.unit] = {'unit': ing.unit, 'total_required': meal_servings * ing.amt, 'qty_on_hand': 0}
+            units[ing.unit] = {'unit': ing.unit, 'total_required': meal_servings * (ing.amt / recipe_servings), 'qty_on_hand': 0}
             
         matching_ingredients = Ingredients.objects.filter(ingredient_name = ing.ingredient_name)
         # Calculate totals for each shoppable unit across all required shoppable units
@@ -199,15 +202,22 @@ class IPLView(ViewSet):
             # Ingredients for the meal and snack
             meal_recipe_ings = RecipeIngredients.objects.filter(ri_recipe_num=m_r_num)
             snack_recipe_ings = RecipeIngredients.objects.filter(ri_recipe_num=s_r_num)
+            
+            print(meal_servings)
+            print(snack_servings)
+            meal_recipe_servings = Recipes.objects.get(r_num=m_r_num.r_num).r_servings
+            snack_recipe_servings = Recipes.objects.get(r_num=s_r_num.r_num).r_servings
+            print(meal_recipe_servings)
+            print(snack_recipe_servings)
 
             for ing in meal_recipe_ings:
-                ing_calc = self.calc_ing_purchase_amt(m_date, meal_name, meal_servings, ing, count)
+                ing_calc = self.calc_ing_purchase_amt(m_date, meal_name, meal_servings, meal_recipe_servings, ing, count)
                 self.combine_ing_dict_entries(ing_calc, ing_dict)
                           
                 count += 1
             
             for ing in snack_recipe_ings:
-                ing_calc = self.calc_ing_purchase_amt(m_date, meal_name, meal_servings, ing, count)
+                ing_calc = self.calc_ing_purchase_amt(m_date, meal_name, meal_servings, snack_recipe_servings, ing, count)
                 self.combine_ing_dict_entries(ing_calc, ing_dict)
 
                 count += 1

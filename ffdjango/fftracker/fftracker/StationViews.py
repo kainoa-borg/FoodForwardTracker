@@ -78,7 +78,8 @@ class StationInstructionsView(viewsets.ViewSet):
         household_servings = household_servings_list()
         meal_plan = MealPlans.objects.get(m_id = pk)
         meal_recipe = Recipes.objects.get(r_num = meal_plan.meal_r_num.r_num)
-        recipe_stations = Stations.objects.filter(stn_recipe_num = meal_recipe.r_num)
+        snack_recipe = Recipes.objects.get(r_num = meal_plan.snack_r_num.r_num)
+        recipe_stations = Stations.objects.filter(stn_recipe_num = meal_recipe.r_num) | Stations.objects.filter(stn_recipe_num = snack_recipe.r_num)
         station_instructions = []
 
         for recipe_station in recipe_stations:
@@ -105,16 +106,13 @@ class StationInstructionsView(viewsets.ViewSet):
                         }
             for serving in station_instruction['servings']:
                 for station_ing in recipe_station_ingredients:
-                        recipe_ing = RecipeIngredients.objects.get(ri_recipe_num = meal_recipe.r_num,ingredient_name = station_ing.si_recipe_ing)
-                        getcontext().prec = 2
-                        recipe_ing_amt = Decimal(recipe_ing.amt * station_instruction['servings'][serving]['meal_servings'])
+                        recipe_ing = RecipeIngredients.objects.get(ri_recipe_num = recipe_station.stn_recipe_num, ingredient_name = station_ing.si_recipe_ing)
+                        getcontext().prec = 3
+                        recipe_ing_amt = Decimal((recipe_ing.amt / meal_recipe.r_servings) * station_instruction['servings'][serving]['meal_servings'])
                         recipe_ing_amt_dec = recipe_ing_amt - int(recipe_ing_amt)
                         recipe_ing_amt_rounded_dec = 0
-                        print("Before:")
-                        print(recipe_ing_amt)
-                        print(recipe_ing_amt_dec)
                         # Round up the recipe_ing_amts
-                        if recipe_ing_amt_dec > 0 and recipe_ing_amt_dec != Decimal(0.25) and recipe_ing_amt_dec != Decimal(0.5) and recipe_ing_amt_dec != Decimal(0.75):
+                        if recipe_ing_amt_dec > 0:
                             if recipe_ing_amt_dec < .25:
                                 recipe_ing_amt_rounded_dec = Decimal(.25)
                             elif recipe_ing_amt_dec < .5:
@@ -126,8 +124,6 @@ class StationInstructionsView(viewsets.ViewSet):
                         if recipe_ing_amt_rounded_dec > 0:
                             recipe_ing_amt -= recipe_ing_amt_dec
                             recipe_ing_amt += recipe_ing_amt_rounded_dec
-                            print("After:")
-                            print(recipe_ing_amt)
                         
                         recipe_ing_unit = recipe_ing.unit
                         this_ingredient = {

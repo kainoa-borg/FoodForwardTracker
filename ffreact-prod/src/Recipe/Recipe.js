@@ -1,5 +1,5 @@
 import { Button, Typography, Box, Grid, Snackbar, Stack, TextField, 
-    InputLabel, Paper, MenuItem, Select, FormControl } from "@mui/material";
+    InputLabel, Paper, MenuItem, Select, FormControl, Input } from "@mui/material";
 import { HighlightOff } from "@mui/icons-material";
 import React, {useState, useEffect, Fragment, useRef} from 'react';
 import { useGridApiContext } from "@mui/x-data-grid";
@@ -22,6 +22,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
     // If recipeData prop is passed, use that, otherwise use empty recipeData
     // const [recipeName, setRecipeName] = useState(recipeData.r_name);
     const nameField = useRef();
+    const servingField = useRef();
     const navigate = useNavigate();
 
     const IngredientNameEditCell = (params) => {
@@ -157,7 +158,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                             items={params.row.stn_ings}
                             parentFieldName={'stn_ings'}
                             fields={[
-                                {header: 'Ingredient', name: 'si_recipe_ing', defaultValue: '', inputComponent: (props) => <NewModularSelect style={{width: '10rem'}} {...props} fieldName={'si_recipe_ing'} searchField={'ingredient_name'} options={recipeData.r_ingredients.map((ing) => ing)}/>},
+                                {header: 'Ingredient', name: 'si_recipe_ing', defaultValue: '', inputComponent: (props) => <NewModularSelect style={{width: '10rem'}} {...props} fieldName={'si_recipe_ing'} searchField={'ingredient_name'} options={ingredientRows.map((ing) => ing)}/>},
                             ]}
                             editable
                             updateFunction={(fieldName, value) => {}}/>}
@@ -393,7 +394,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
 
     const handleSaveClick = () => {
         // console.log(recipeData);
-        const r_data = {...recipeData, r_name: nameField.current.value, r_ingredients: ingredientRows, r_packaging: packagingRows, r_stations: stationRows, m_s: m_s}
+        const r_data = {...recipeData, r_name: nameField.current.value, r_servings: servingField.current.value, r_ingredients: ingredientRows, r_packaging: packagingRows, r_stations: stationRows, m_s: m_s}
         console.log(JSON.stringify(r_data));
         setUpdateSBOpen(true);
 
@@ -529,8 +530,9 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
 
                 {/* Recipe Image and Card Stack */}
                 <Stack item spacing={3}>
-                        {/* <InputLabel id='recipeNameLabel'>Recipe Name</InputLabel> */}
-                        <TextField label='Recipe Name' required inputProps={{ref: nameField, maxLength: 200}} defaultValue={recipeData.r_name}/>
+
+                    {/* <InputLabel id='recipeNameLabel'>Recipe Name</InputLabel> */}
+                    <TextField label='Recipe Name' required inputProps={{ref: nameField, maxLength: 200}} defaultValue={recipeData.r_name}/>
                     <FormControl>
                         <InputLabel id='mealOrSnackLabel'>Meal Or Snack?</InputLabel>
                         <Select labelID='mealOrSnackLabel' required value={m_s} label={'Meal Or Snack'} onChange={handleMealSnackChange}>
@@ -539,6 +541,9 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                             <MenuItem value={0}>Snack</MenuItem>
                         </Select>
                     </FormControl>
+
+                    {/* Recipe Serving Amount Field */}
+                    <TextField label="Recipe Servings" inputProps={{ref: servingField, maxLength: 100, min: 1}} type="number" defaultValue={recipeData.r_servings}/>
 
                     {/* Recipe Image */}
                     <RecipeImage image_source={tempImagePath ? tempImagePath : imagePath}/>

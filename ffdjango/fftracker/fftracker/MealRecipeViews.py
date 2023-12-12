@@ -216,6 +216,7 @@ class RecipesSerializer(ModelSerializer):
     r_name = serializers.CharField(max_length=200)
     r_img_path = serializers.CharField(read_only=True)
     r_card_path = serializers.CharField(read_only=True)
+    r_servings = serializers.IntegerField()
     r_ingredients = RecipeIngredientSerializer(many=True)
     r_packaging = RecipePackagingSerializer(many=True)
     r_diets = RecipeDietsSerializer(many=True)
@@ -226,7 +227,7 @@ class RecipesSerializer(ModelSerializer):
     class Meta():
         model = Recipes
         # depth = 1
-        fields = ('r_num', 'r_name', 'r_img_path', 'r_card_path', 'r_ingredients', 'r_packaging', 'r_diets', 'r_stations', 'r_allergies', 'm_s')
+        fields = ('r_num', 'r_name', 'r_img_path', 'r_card_path', 'r_servings', 'r_ingredients', 'r_packaging', 'r_diets', 'r_stations', 'r_allergies', 'm_s')
         read_only_fields = ('r_num', 'r_img_path', 'r_card_path')
 
     def create(self, validated_data):
@@ -343,9 +344,10 @@ class RecipesSerializer(ModelSerializer):
         # recipe_instance.r_num = validated_data.get('r_num')
         recipe_instance.r_name = validated_data.get('r_name')
         recipe_instance.m_s = validated_data.get('m_s')
+        recipe_instance.r_servings = validated_data.get('r_servings')
         print(validated_data.get('m_s'))
         print(recipe_instance.m_s)
-        recipe_instance.save(update_fields=['r_name', 'm_s'])
+        recipe_instance.save(update_fields=['r_name', 'm_s', 'r_servings'])
         # print(recipe_instance.m_s)
         return recipe_instance
 

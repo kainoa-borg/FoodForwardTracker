@@ -65,7 +65,8 @@ const StationInstructions = (props) => {
                     <Button variant='contained' onClick={handleClose}>Close</Button>
                 </Box>
             </Box>
-            <Typography variant='h6' sx={{fontWeight: 'bold'}}>Meal: {mealPlan.meal_name} Snack: {mealPlan.snack_name}</Typography>
+            <Typography variant='h6' sx={{fontWeight: 'bold'}}>Meal: {mealPlan.meal_name}</Typography> 
+            <Typography variant='h6' sx={{fontWeight: 'bold'}}>Snack: {mealPlan.snack_name}</Typography>
             <Box sx={{display: 'flex', spacing: '1'}}> 
                 <Typography variant='h6' sx={{paddingRight: '1rem', fontWeight: 'bold'}}>Date: {mealPlan.m_date} Total Servings: {mealPlan.meal_servings}</Typography>
             </Box>
