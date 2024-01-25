@@ -125,6 +125,7 @@ const AppComponent = () => {
         })
     }
 
+    // Replace with link, don't use this callback anymore, overcomplicated
     const handlePageClick = (pageName) => {
         console.log(pageName)
         switch(pageName) {

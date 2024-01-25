@@ -10,7 +10,9 @@ import StationInstructions from '../Reports/StationInstructions.js'
 // Packaging List Component
 export default function MealPlanReport() {
     const [mealPlans, setMealPlans] = useState([]);
-    const [dateRange, setDateRange] = useState({});
+    // Initialize dateRange
+    let currDate = new Date().toJSON().slice(0, 10);
+    const [dateRange, setDateRange] = useState({'startDate': currDate, 'endDate': currDate});
     const [searchingSBOpen, setSearchingSBOpen] = useState(false);
     const [resultsFoundSBOpen, setResultsFoundSBOpen] = useState(false);
     const [noResultsSBOpen, setNoResultsSBOpen] = useState(false);
@@ -144,6 +146,8 @@ export default function MealPlanReport() {
     }, [instructions, instructionMealPlan])
 
     const handleDateRangeChange = (event) => {
+      let newDateRange = dateRange;
+      newDateRange[event.target.name] = event.target.value;
       setDateRange({...dateRange, [event.target.name]: event.target.value})
     }
 
