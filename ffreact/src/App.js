@@ -42,7 +42,7 @@ import PackagingDefinitionPage from './Packaging/PackagingDefinitions.js'
 
 // SERVER IP 4.236.185.213
 
-const style = {
+const pageContainerStyle = {
     padding: '10px',
     // border: '1px solid black',
     display: 'flex',
@@ -58,42 +58,47 @@ const App = () => {
 }
 
 const AppComponent = () => {
+    // Navigate using the useNavigate hook
     const navigate = useNavigate();
+    // loginState of this user to be passed to different pages
     const [loginState, setLoginState] = useState({
         username: "",
         isAuthenticated: false,
         isAdmin: false
     })
 
-    // const handleClickOutside = () => {};
-    // const ref = useOutsideClick(handleClickOutside);
-    
-    const handleHeaderClick = (event) => {
+    // Let this element handle what happens when app background is clicked
+    const handleBackgroundClick = (event) => {
         event.stopPropagation();
     };
 
+    // Parse login cookie text into account data map
     const readLoginCookie = () => {
-        const parseCookie = str =>
-            str
-            .split(';')
-            .map(v => v.split('='))
-            .reduce((acc, v) => {
-            acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
-            return acc;
-        }, {});
-
+        // If there is an existing login cookie
         if (document.cookie !== '') {
-            return parseCookie(document.cookie);
+            // For this login cookie...
+            document.cookie
+            .split(';') // Split by terminating character ';'
+            .map(v => v.split('=')) // Key/value is separated by '='
+            .reduce((accountData, v) => {
+                // Create map of account data as key/value pairs
+                accountData[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+                return accountData;
+            })
         }
         else {
             return undefined;
         }
     }
 
+    // Get existing login cookie when first entering site
     useEffect(() => {
+        // Get account data from cookie
         let cookieData = readLoginCookie();
 
+        // If we got account data from cookie
         if (cookieData !== undefined) {
+            // Set this user's login state (they are already logged in)
             setLoginState({
                 username: cookieData.username,
                 isAuthenticated: cookieData.isAuthenticated === 'true' ? true : false,
@@ -102,18 +107,7 @@ const AppComponent = () => {
         }
     }, [])
 
-    /*const readLoginCookie = () => {
-        const parseCookie = str =>
-            str
-            .split(';')
-            .map(v => v.split('='))
-            .reduce((acc, v) => {
-            acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
-            return acc;
-        }, {});
-        return parseCookie(document.cookie);
-    }*/
-
+    // Clear login cookie when logging out
     const handleLogout = () => {
         document.cookie = 'username=;'
         document.cookie = 'isAuthenticated=false;'
@@ -125,49 +119,36 @@ const AppComponent = () => {
         })
     }
 
+    // Replace with link, don't use this callback anymore, overcomplicated
     const handlePageClick = (pageName) => {
-        console.log(pageName)
+        // console.log(pageName)
         switch(pageName) {
-            case 'cost-totals': navigate('cost-totals-report'); break;
+            case 'cost-totals': navigate('/cost-totals-report'); break;
             case 'loginPage': navigate('/login'); break;
             case 'newUserPage': navigate('/sign-up'); break;
             case 'pwResetPage': navigate('/reset-password'); break;
             case 'landingPage': navigate('/home'); break;
-            case 'mealsPage': setCurrPage(<MealsPage handlePageClick={handlePageClick} />); break;
             case 'households': navigate('/clients'); break;
-            case 'householdForm': setCurrPage(<HouseholdForm />); break;
             case 'households-report': navigate('clients-report'); break;
             case 'ingredientPage': navigate('/ingredients'); break;
             case 'ingredientDefPage': navigate('/ingredient-defs'); break;
             case 'ingredient-management-report': navigate('ingredient-management-report'); break;
             case 'ingredients-report': navigate('ingredients-report'); break;
             case 'ing-purchase-report': navigate('ingredient-purchasing-report'); break;
-            case 'inventoryPage': setCurrPage(<InventoryPage handlePageClick={handlePageClick} />); break;
             case 'packagingPage': navigate('/packaging'); break;
             case 'packagingDefPage': navigate('/packaging-defs'); break;
             case 'packaging-report': navigate('/packaging-report'); break;
             case 'packaging-return-report': navigate('package-return-report'); break;
             case 'pack-purchase-report': navigate('package-purchasing-report'); break;
-            case 'stations': setCurrPage(<StationList handlePageClick={handlePageClick} />); break;
             case 'meals': navigate('/mealplans'); break;
             case 'meal-plan-report': navigate('/meal-plan-report'); break;
             case 'meal-history-report': navigate('/meal-history-report'); break;
-            case 'recipes': setCurrPage(<Recipe handlePageClick={handlePageClick} />); break;
             case 'recipePage': navigate('/recipes'); break;
-            case 'reports': setCurrPage(<ReportsPage handlePageClick={handlePageClick} />); break;
-            case 'userPage': setCurrPage(<UserPage handlePageClick={handlePageClick} />); break;
             case 'userList': navigate('/admin'); break;
             case 'entryPage': navigate('/'); break;
-            case 'under-construction': setCurrPage(<UnderConstruction handlePageClick={handlePageClick}/>); break;
-            default: setCurrPage(<LandingPage handlePageClick={handlePageClick} />); break;
+            default: navigate('/home');
         }
     }
-
-    const [currPage, setCurrPage] = useState(<EntryPage handlePageClick={handlePageClick} setLoginState={setLoginState} />);
-
-    // useEffect(() => {setCurrPage(<EntryPage handlePageClick={handlePageClick}/>)}, [])
-    // Charcoal: #898989
-    // Ultraviolet: #5A5874
 
     const theme = createTheme({
         palette: {
@@ -205,9 +186,10 @@ const AppComponent = () => {
         return children;
     };
 
+    // JSX HTML Structure
     return (
         <ThemeProvider theme={theme}>
-        <div className="App" style={style} onClick={handleHeaderClick}>
+        <div className="App" style={pageContainerStyle} onClick={handleBackgroundClick}>
             <Navbar handlePageClick={handlePageClick} handleLogout={handleLogout} loginState={loginState} />
             <Box sx={{
                 bgcolor: (theme) => theme.palette.background.default,
@@ -228,7 +210,7 @@ const AppComponent = () => {
                     <Route path='/packaging' element={<PackagingPage loginState={loginState} handlePageClick={handlePageClick} />}/>
                     <Route path='/packaging-defs' element={<PackagingDefinitionPage loginState={loginState} handlePageClick={handlePageClick}/>}/>
                     <Route path='/mealplans' element={<MealPlan loginState={loginState} handlePageClick={handlePageClick} />}/>
-                    <Route path='/recipes/*' element={<RecipePage loginState={loginState} handlePageClick={handlePageClick} setCurrPage={setCurrPage} />}/>
+                    <Route path='/recipes/*' element={<RecipePage loginState={loginState} handlePageClick={handlePageClick}/>}/>
                     <Route path='/cost-totals-report' element={<CostTotals handlePageClick={handlePageClick} />}/>
                     <Route path='/clients-report' element={<HouseholdsReport handlePageClick={handlePageClick} />}/>
                     <Route path='/ingredient-management-report' element={<IngredientManagementReport handlePageClick={handlePageClick}/>}/>

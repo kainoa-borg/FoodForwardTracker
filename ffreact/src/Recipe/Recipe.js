@@ -25,28 +25,28 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
     const servingField = useRef();
     const navigate = useNavigate();
 
-    const IngredientNameEditCell = (params) => {
-        const api = useGridApiContext();
-        const [selectDialogOpen, setSelectDialogOpen] = useState(false);
+    // const IngredientNameEditCell = (params) => {
+    //     const api = useGridApiContext();
+    //     const [selectDialogOpen, setSelectDialogOpen] = useState(false);
 
-        const setIngID = (ingName, ingID, unit) => {
-            const {id, value, field} = params;
-            api.current.setEditCellValue({id, field: 'ingredient_name', value: ingName});
-            api.current.setEditCellValue({id, field: 'ri_ing', value: ingID});
-            api.current.setEditCellValue({id, field: 'unit', value: unit});
-        }
+    //     const setIngID = (ingName, ingID, unit) => {
+    //         const {id, value, field} = params;
+    //         api.current.setEditCellValue({id, field: 'ingredient_name', value: ingName});
+    //         api.current.setEditCellValue({id, field: 'ri_ing', value: ingID});
+    //         api.current.setEditCellValue({id, field: 'unit', value: unit});
+    //     }
 
 
-        var ing_name = params.value;
-        if (!ing_name) ing_name = 'ingredient';
+    //     var ing_name = params.value;
+    //     if (!ing_name) ing_name = 'ingredient';
 
-        return (
-            <div>
-                <Button variant='outlined' sx={{width: '100%'}}onClick={() => setSelectDialogOpen(true)}>{ing_name}</Button>
-                <DataGridDialog DataGridComponent={RecipeIngList} setID={setIngID} open={selectDialogOpen} setOpen={setSelectDialogOpen}/>
-            </div>
-        )
-    }
+    //     return (
+    //         <div>
+    //             <Button variant='outlined' sx={{width: '100%'}}onClick={() => setSelectDialogOpen(true)}>{ing_name}</Button>
+    //             <DataGridDialog DataGridComponent={RecipeIngList} setID={setIngID} open={selectDialogOpen} setOpen={setSelectDialogOpen}/>
+    //         </div>
+    //     )
+    // }
     // 4.236.185.213
  
     const ingredientsColumns = [
@@ -79,13 +79,6 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                 return <NewModularSelect {...params} noDuplicates options={tempOptions['ing_units']} searchField={'recipe_unit'}/>
             }
         },
-        // {
-        //     field: 'prep',
-        //     headerName: 'Prep',
-        //     width: 80,
-        //     type: 'string',
-        //     editable: true,
-        // },
         {
             field: 'ri_ing',
             headerName: '',
@@ -488,7 +481,6 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
     }
 
     const RecipeCard = (props) => {
-        // console.log(props.card_source)
         // Replace image with a prompt if undefined
         if (props.card_source) {
             return (

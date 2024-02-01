@@ -150,6 +150,7 @@ class PPLView(viewsets.ViewSet):
 		amt = 0
 
 		queryset = []
+		# ||TRAINING|| this area is the most important bit to understand why the issue is happening 
 		startDate = request.query_params.get('startDate')
 		endDate = request.query_params.get('endDate')
 		MealsQueryset = MealPlans.objects.filter(m_date__range=(startDate, endDate)).order_by('-m_date')
@@ -157,7 +158,7 @@ class PPLView(viewsets.ViewSet):
 		recipeset = RecipePackaging.objects.all()
 		pkg_type_totals = defaultdict(lambda: {"total_qty_on_hand": 0, "qty_needed": 0, "total_cost": 0})
 		for meals in MealsQueryset:
-    # calculate servings needed for meal and snack
+    	# calculate servings needed for meal and snack
 			# meal_servings = meal_plan.meal.rp_pkg.servings_per_recipe * meal_plan.meal_servings
 			m_r_num = meals.meal_r_num
 			s_r_num = meals.snack_r_num
@@ -169,7 +170,7 @@ class PPLView(viewsets.ViewSet):
 			mealRecipePkg = RecipePackaging.objects.filter(rp_recipe_num=m_r_num)
 			snackRecipePkg = RecipePackaging.objects.filter(rp_recipe_num=s_r_num)
 			qty_needed += meal_servings
-    # process meal packaging
+    		# process meal packaging
 			for meal in mealRecipePkg:
 				name = meal_name
 				PkgQueryset = Packaging.objects.get(p_id=meal.rp_pkg)
@@ -259,41 +260,3 @@ class PPLView(viewsets.ViewSet):
 		serializer = PPLSerializer(queryset, many=True)
 		print (serializer)
 		return Response(serializer.data)
-    # process snack packaging
-	# startDate = request.query_params.get('startDate')
-	# endDate = request.query_params.get('endDate')
-
-	# meal_plans = MealPlans.objects.filter(m_date__range=(startDate, endDate))
-	# pkg_type_totals = defaultdict(lambda: {"total_qty_on_hand": 0, "qty_needed": 0, "total_cost": 0})
-
-	# snack_servings = meal_plans.snack.rp_pkg.servings_per_recipe * meal_plans.snack_servings
-	# snack_rp_pkg = MealPlans.snack_r_num.rp_pkg
-	# snack_packaging_options = Packaging.objects.filter(package_type=snack_rp_pkg.pkg_type).order_by("-qty_on_hand")
-	# for packaging in snack_packaging_options:
-	# 	qty_on_hand = packaging.qty_on_hand
-	# 	if qty_on_hand >= snack_servings:
-	# 		qty_needed = qty_on_hand - snack_servings
-	# 		cost = qty_needed * packaging.unit_cost
-	# 		pkg_type_totals[snack_rp_pkg.pkg_type]["qty_on_hand"] += qty_on_hand
-	# 		pkg_type_totals[snack_rp_pkg.pkg_type]["qty_needed"] += qty_needed
-	# 		pkg_type_totals[snack_rp_pkg.pkg_type]["total_cost"] += cost
-	# 		break
-    
-    # handle duplicate package types by adding totals to existing entry
-# def list(self, request):
-# 	startDate = request.query_params.get('startDate')
-# 	endDate = request.query_params.get('endDate')
-# 	used_pkg = PackagingUsages.objects.filter(used_date__range=(startDate, endDate))
-# 	pkg_type_totals = defaultdict(lambda: {"total_qty_on_hand": 0, "qty_needed": 0, "total_cost": 0})
-# 	snack_rp_pkg = MealPlans.snack_r_num.rp_pkg
-# 	meal_rp_pkg = MealPlans.meal.rp_pkg
-
-# 	for pkg_type, totals in pkg_type_totals.items():
-# 		if pkg_type != meal_rp_pkg.pkg_type and pkg_type != snack_rp_pkg.pkg_type:
-# 			continue
-# 		if pkg_type == meal_rp_pkg.pkg_type and pkg_type == snack_rp_pkg.pkg_type:
-#             # both meal and snack use the same package type, so only add once
-# 			continue
-# 	pkg_type_totals[pkg_type]["total_qty_on_hand"] += totals["total_qty_on_hand"]
-# 	pkg_type_totals[pkg_type]["qty_needed"] += totals["qty_needed"]
-# 	pkg_type_totals[pkg_type]["total_cost"] += totals["total_cost"]
