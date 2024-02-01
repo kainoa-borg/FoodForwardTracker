@@ -14,6 +14,7 @@ export default function RecipePage(props) {
     const loginState = props.loginState.isAuthenticated ? props.loginState : {isAuthenticated: false};
     const handlePageClick = props.handlePageClick;        
 
+    // Set the currPage to RecipePageComponent with necessary props
     useEffect(() => {
         setCurrPage(<RecipePageComponent loginState={loginState} handlePageClick={handlePageClick} setCurrPage={setCurrPage}/>)
     }, [loginState])
