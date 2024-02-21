@@ -45,7 +45,7 @@ class IngNameSerializer(ModelSerializer):
         if ing_units:
             for unit in ing_units:
                 # Set the foreign key to reference this ing name def
-                unit['i_name_id'] = ing_name_instance
+                unit['i_name_id'] = getattr(ing_name_instance, 'ing_name_id')
                 # Create or Update this unit
                 IngredientUnits.objects.update_or_create(**unit)
         # Have the base modelserializer update method update this ing name def
@@ -55,21 +55,21 @@ class IngNameView(ModelViewSet):
     queryset = IngredientNames.objects.all()
     serializer_class = IngNameSerializer
 
-    def create(self, request):
-        ret = None
-        try:
-            ret = super().create(request)
-        except IntegrityError:
-            return Response({'errorText': 'There already exists an ingredient definition with that name.'}, 400)
-        return ret
+    # def create(self, request):
+    #     ret = None
+    #     try:
+    #         ret = super().create(request)
+    #     except IntegrityError:
+    #         return Response({'errorText': 'There already exists an ingredient definition with that name.'}, 400)
+    #     return ret
 
-    def update(self, request, *args, **kwargs):
-        ret = None
-        try:
-            ret = super().update(request, *args, **kwargs)
-        except IntegrityError:
-            return Response({'errorText': 'Error in one of your inputs! Please try again.'}, 400)
-        return ret
+    # def update(self, request, *args, **kwargs):
+    #     ret = None
+    #     try:
+    #         ret = super().update(request, *args, **kwargs)
+    #     except IntegrityError:
+    #         return Response({'errorText': 'Error in one of your inputs! Please try again.'}, 400)
+    #     return ret
 
 
 class IngUnitView(ModelViewSet):
