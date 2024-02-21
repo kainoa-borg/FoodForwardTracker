@@ -11,12 +11,11 @@ const IngUnitTable = (props) => {
         let i = numString.length - 1;
         // Start at end of string, stop at first non-zero number
         while (i >= 0) {
-            console.log(numString.slice(0,i));
             if (numString[i] != 0 && numString[i] != '.') {
                 // Truncate trailing zeros
                 return numString.slice(0, i+1);
             }
-            i -= 1;
+                i -= 1;
         }
     }
 
