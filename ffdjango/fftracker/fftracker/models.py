@@ -200,9 +200,9 @@ class Households(models.Model):
 class IngredientUnits(models.Model):
     i_unit_id = models.AutoField(primary_key=True, db_column='i_unit_id')
     i_name = models.ForeignKey("IngredientNames", models.CASCADE, db_column='i_name_id', related_name="ing_units")
-    recipe_amt = models.DecimalField(null=False, max_digits=8, decimal_places=4)
+    recipe_amt = models.DecimalField(null=False, max_digits=8, decimal_places=2)
     recipe_unit = models.CharField(null=False, max_length=45)
-    shop_amt = models.DecimalField(null=False, max_digits=8, decimal_places=4)
+    shop_amt = models.DecimalField(null=False, max_digits=8, decimal_places=2)
     shop_unit = models.CharField(null=False, max_length=45)
     
     class Meta:
