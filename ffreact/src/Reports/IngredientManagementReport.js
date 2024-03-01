@@ -90,7 +90,7 @@ const IngredientManagementReport = (props) => {
     const getData = () => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/ingredients-report"
+            url:"http://4.236.185.213:8000/api/ing-name-definitions"
           }).then((response)=>{
             setReportData(response.data);
           }).catch((error) => {

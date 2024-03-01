@@ -39,6 +39,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 import './App.css';
 import IngredientDefinitionPage from './Ingredients/IngredientDefinitionPage.js'
 import PackagingDefinitionPage from './Packaging/PackagingDefinitions.js'
+import IngredientDefReport from './Reports/IngredientDefReport.js'
 
 // SERVER IP 4.236.185.213
 
@@ -135,6 +136,7 @@ const AppComponent = () => {
             case 'ingredient-management-report': navigate('ingredient-management-report'); break;
             case 'ingredients-report': navigate('ingredients-report'); break;
             case 'ing-purchase-report': navigate('ingredient-purchasing-report'); break;
+            case 'ing-def-report': navigate('/ing-def-report'); break;
             case 'packagingPage': navigate('/packaging'); break;
             case 'packagingDefPage': navigate('/packaging-defs'); break;
             case 'packaging-report': navigate('/packaging-report'); break;
@@ -216,6 +218,7 @@ const AppComponent = () => {
                     <Route path='/ingredient-management-report' element={<IngredientManagementReport handlePageClick={handlePageClick}/>}/>
                     <Route path='/ingredients-report' element={<IngredientsReport handlePageClick={handlePageClick} />}/>
                     <Route path='/ingredient-purchasing-report' element={<IngPurchaseReport handlePageClick={handlePageClick} />}/>
+                    <Route path='/ing-def-report' element={<IngredientDefReport/>}/>
                     <Route path='/meal-plan-report' element={<MealPlanReport handlePageClick={handlePageClick} />}/>
                     <Route path='/meal-history-report' element={<MealHistoryReport handlePageClick={handlePageClick} />}/>
                     <Route path='/packaging-report' element={<PackagingReport handlePageClick={handlePageClick} />}/>
