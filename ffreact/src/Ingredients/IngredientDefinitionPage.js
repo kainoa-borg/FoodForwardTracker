@@ -49,16 +49,16 @@ export default function IngredientDefinitionPage(props) {
         <Typography id='page-header' variant='h5'>Ingredient Definitions</Typography>
             <Box sx={{height: '70vh'}}>
             <NewModularDatagrid 
-            loginState={loginState}
-            rows={ingredientDefs}
-            columns={columns}
-            apiEndpoint='ing-name-definitions'
-            // apiIP='localhost'
-            keyFieldName='ing_name_id'
-            entryName='Ingredient Definition'
-            searchField='ing_name'
-            searchLabel='Ingredient Names'
-            AddFormComponent={IngredientDefForm}
+                loginState={loginState}
+                rows={ingredientDefs}
+                columns={columns}
+                apiEndpoint='ing-name-definitions'
+                // apiIP='localhost'
+                keyFieldName='ing_name_id'
+                entryName='Ingredient Definition'
+                searchField='ing_name'
+                searchLabel='Ingredient Names'
+                AddFormComponent={IngredientDefForm}
             >
             </NewModularDatagrid>
         </Box>

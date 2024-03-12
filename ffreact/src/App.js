@@ -25,6 +25,7 @@ import PackagingPage from './Packaging/PackagingPage.js'
 import PackagingReport from './Reports/PackagingReport.js'
 import PackagingReturns from './Reports/PackagingReturns.js'
 import PackagingPurchaseReport from './Reports/PackagingPurchaseReport.js'
+import RecipeIngredientReport from './Reports/RecipeIngredientReport.js'
 import PwResetPage from './components/PwResetPage.js'
 import Recipe from './Recipe/RecipeList.js'
 import RecipePage from './Recipe/RecipePage.js'
@@ -142,6 +143,7 @@ const AppComponent = () => {
             case 'packaging-report': navigate('/packaging-report'); break;
             case 'packaging-return-report': navigate('package-return-report'); break;
             case 'pack-purchase-report': navigate('package-purchasing-report'); break;
+            case 'recipe-ing-report': navigate('recipe-ing-report'); break;
             case 'meals': navigate('/mealplans'); break;
             case 'meal-plan-report': navigate('/meal-plan-report'); break;
             case 'meal-history-report': navigate('/meal-history-report'); break;
@@ -224,6 +226,7 @@ const AppComponent = () => {
                     <Route path='/packaging-report' element={<PackagingReport handlePageClick={handlePageClick} />}/>
                     <Route path='/package-purchasing-report' element={<PackagingPurchaseReport handlePageClick={handlePageClick} />}/>
                     <Route path='/package-return-report' element={<PackagingReturns handlePageClick={handlePageClick} />}/>
+                    <Route path="/recipe-ing-report" element={<RecipeIngredientReport/>}/>
                     <Route path='/under-construction' element={<UnderConstruction handlePageClick={handlePageClick}/>}/>
                     <Route path='/admin' element={
                         <ProtectedRoute isAdmin={loginState && loginState.isAdmin}>
