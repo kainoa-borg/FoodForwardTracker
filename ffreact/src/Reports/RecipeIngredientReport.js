@@ -34,16 +34,25 @@ export default function RecipeIngredientReport(props) {
     // ----
     return (
         <Box style={{margin: '-5%'}}>
-            <h2>Recipe Ingredient Report</h2>
+            <h2 style={{paddingTop: '5%'}}>Recipe Ingredient Report</h2>
             <Box style={{display: "flex", width: '100vw', flexWrap: 'wrap', md: {justifyContent: 'space-between'}}}>
                 {recipeData.map((thisRecipe) => {
                     return (
                         // Outer shell of the "Recipe Ingredient Information component"
-                        <Box style={{width: '20vw', paddingLeft: '1rem', paddingRight: '1rem', marginBottom: '2rem'}}>
-                            <h4>{thisRecipe.r_name}</h4>
+                        <Box style={{display: 'flex', width: '20vw', paddingLeft: '1rem', paddingRight: '1rem', marginBottom: '2rem', border: 10}}>
+                            <h4 style={{width: '50%'}}>{thisRecipe.r_name}</h4>
+                            <Box>
+                                <h4 style={{width: '50%', paddingRight: '1%'}}>Ingredients:</h4>
+                                {thisRecipe.r_ingredients.map((ing) => {
+                                    return (
+                                        <p>{ing.ingredient_name}</p>
+                                    )
+                                })}
+                            </Box>
                             {/* Look at 4.236.185.213:8000/api/mealrecipes to see how the data is structured and the key names for each field */}
                             {/* Insert Recipe Info (recipe.r_name, etc.) */}
                             {/* Map each recipe ingredient (recipe.r_ingredients) and return data in a formatted list (similar to IngredientDefReport) */}
+                            
                         </Box>
                     )
                 })}
