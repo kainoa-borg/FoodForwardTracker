@@ -40,6 +40,7 @@ export default function RecipeIngredientReport(props) {
                     return (
                         // Outer shell of the "Recipe Ingredient Information component"
                         <Box style={{width: '20vw', paddingLeft: '1rem', paddingRight: '1rem', marginBottom: '2rem'}}>
+                            <h4>{thisRecipe.r_name}</h4>
                             {/* Look at 4.236.185.213:8000/api/mealrecipes to see how the data is structured and the key names for each field */}
                             {/* Insert Recipe Info (recipe.r_name, etc.) */}
                             {/* Map each recipe ingredient (recipe.r_ingredients) and return data in a formatted list (similar to IngredientDefReport) */}
