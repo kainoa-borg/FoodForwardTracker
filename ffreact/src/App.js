@@ -41,6 +41,7 @@ import './App.css';
 import IngredientDefinitionPage from './Ingredients/IngredientDefinitionPage.js'
 import PackagingDefinitionPage from './Packaging/PackagingDefinitions.js'
 import IngredientDefReport from './Reports/IngredientDefReport.js'
+import RecipePackagingReport from './Reports/RecipePackagingReport.js'
 
 // SERVER IP 4.236.185.213
 
@@ -144,6 +145,7 @@ const AppComponent = () => {
             case 'packaging-return-report': navigate('package-return-report'); break;
             case 'pack-purchase-report': navigate('package-purchasing-report'); break;
             case 'recipe-ing-report': navigate('recipe-ing-report'); break;
+            case 'recipe-packaging-report': navigate('recipe-packaging-report'); break;
             case 'meals': navigate('/mealplans'); break;
             case 'meal-plan-report': navigate('/meal-plan-report'); break;
             case 'meal-history-report': navigate('/meal-history-report'); break;
@@ -227,6 +229,7 @@ const AppComponent = () => {
                     <Route path='/package-purchasing-report' element={<PackagingPurchaseReport handlePageClick={handlePageClick} />}/>
                     <Route path='/package-return-report' element={<PackagingReturns handlePageClick={handlePageClick} />}/>
                     <Route path="/recipe-ing-report" element={<RecipeIngredientReport/>}/>
+                    <Route path="/recipe-packaging-report" element={<RecipePackagingReport/>}/>
                     <Route path='/under-construction' element={<UnderConstruction handlePageClick={handlePageClick}/>}/>
                     <Route path='/admin' element={
                         <ProtectedRoute isAdmin={loginState && loginState.isAdmin}>
