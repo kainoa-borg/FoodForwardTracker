@@ -141,7 +141,11 @@ export default function IngPurchasingReport() {
 
     const columns = [
         { field: 'ingredient_name', headerName: 'Ingredient', width: 250, editable: false },
-        { field: 'unit_index', headerName: 'Measure', width: 130, editable: true, renderCell: (params) => <UnitSelect {...params}/>, renderEditCell: (params) => <p>{params.row.units[params.row.unit_index].unit}</p>},
+        { field: 'unit_index', headerName: 'Measure', width: 130, editable: true, 
+          renderCell: (params) => <UnitSelect {...params}/>, 
+          renderEditCell: (params) => <p>{params.row.units[params.row.unit_index].unit}</p>,
+          valueFormatter: (params) => params.api.getRowParams(params.id).row.units[params.value].unit
+        },
         { field: 'to_purchase', headerName: 'To Purchase', width: 110, type: 'number', editable: false, valueGetter: (params) => getRowUnitsData(params, 'to_purchase')},
         { field: 'total_required', headerName: 'Total Required', width: 120, type: 'number', valueGetter: (params) => getRowUnitsData(params, 'total_required')},
         { field: 'qty_on_hand', headerName: 'Qty on Hand', width: 100, type: 'number', editable: false, valueGetter: (params) => getRowUnitsData(params, 'qty_on_hand')},

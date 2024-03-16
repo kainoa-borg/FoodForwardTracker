@@ -16,7 +16,7 @@ class ServingCalculationViews(ViewSet):
 
         for household in queryset:
             meal_servings += household.num_adult + household.num_child_gt_6 + (household.num_child_lt_6 *.5)
-            snack_servings += household.num_adult + household.num_child_gt_6 + household.num_child_lt_6
+            snack_servings += household.num_child_gt_6 + household.num_child_lt_6
 
         serializer = ServingSerializer({'meal_servings': meal_servings, 'snack_servings': snack_servings})
 
