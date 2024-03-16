@@ -11,6 +11,7 @@ from django.db.models import Q
 from .models import Ingredients, IngredientNames, IngredientUnits, MealPlans, Recipes, RecipeIngredients, Households
 from .SupplierViews import SupplierSerializer
 from decimal import *
+import math
 
 class RecipeSerializer(ModelSerializer):
      class Meta():
@@ -224,6 +225,9 @@ class IPLView(ViewSet):
 
         for ing_name in ing_dict:
             ing_dict[ing_name]['data']['units'] = ing_dict[ing_name]['data']['units'].values()
+            for ing_unit in ing_dict[ing_name]['data']['units']:
+                ing_unit['to_purchase'] = math.ceil(ing_unit['to_purchase'])
+                ing_unit['total_required'] = math.ceil(ing_unit['total_required'])
             data = ing_dict[ing_name]['data']
             queryset.append(data)
                  
