@@ -310,6 +310,7 @@ export default function NewModularDatagrid(props) {
                     {/* Confirm button fires deleteIngredient using row params state */}
                     <Button variant='contained' onClick={() => deleteEntry(deleteParams)}>Confirm</Button>
                 </Popover>
+
             ]
         }
     }
