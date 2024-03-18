@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { Box } from "@mui/material";
 
+
+
 export default function RecipeIngredientReport(props) {
     const [recipeData, setRecipeData] = useState([]);
     // Get data from the API
@@ -39,17 +41,16 @@ export default function RecipeIngredientReport(props) {
                 {recipeData.map((thisRecipe) => {
                     return (
                         // Outer shell of the "Recipe Ingredient Information component"
-                        <Box style={{ display: 'flex', width: '20vw', paddingLeft: '1rem', paddingRight: '1rem', marginBottom: '2rem', border: 10 }}>
-                            <Box style={{ width: '50%', paddingRight: '1%' }}>
+                        // removed width: '15vw'
+                        <Box style={{ display: 'flex', paddingLeft: '1rem', paddingRight: '2rem', marginBottom: '1rem', border: 20 }}>
+                            <Box style={{ width: 'flex', paddingRight: '1%', paddingLeft: '1%', }}>
                                 <h4 >{thisRecipe.r_name}</h4>
-                                <h4 >servings:{thisRecipe.r_servings}</h4>
-                            </Box>
-
-                            <Box style={{ width: '50%', paddingRight: '1%' }}>
+                                <h4 >servings: {thisRecipe.r_servings}</h4>
                                 <h4 >Ingredients: </h4>
                                 {thisRecipe.r_ingredients.map((ing) => {
                                     return (
-                                        <Box> <p>{ing.ingredient_name}</p>
+                                        <Box sx={{ borderBottom: 1 }} style={{ marginBottom: '1rem' }}>
+                                            <p>{ing.ingredient_name}</p>
                                             <p>Amt:{ing.amt}</p>
                                             <p>Unit:{ing.unit}</p>
                                         </Box>
