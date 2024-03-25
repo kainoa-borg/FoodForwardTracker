@@ -44,15 +44,15 @@ export default function RecipeIngredientReport(props) {
                         // removed width: '15vw'
                         <Box style={{ display: 'flex', paddingLeft: '1rem', paddingRight: '2rem', marginBottom: '1rem', border: 20 }}>
                             <Box style={{ width: 'flex', paddingRight: '1%', paddingLeft: '1%', }}>
-                                <h4 >{thisRecipe.r_name}</h4>
-                                <h4 >servings: {thisRecipe.r_servings}</h4>
-                                <h4 >Ingredients: </h4>
+                                <h4 style={{ marginBottom: -15 }}>{thisRecipe.r_name}</h4>
+                                <h4 style={{ marginBottom: -15 }}>servings: {thisRecipe.r_servings}</h4>
+                                <h4 style={{ marginBottom: -15 }}>Ingredients: </h4>
                                 {thisRecipe.r_ingredients.map((ing) => {
                                     return (
-                                        <Box sx={{ borderBottom: 1 }} style={{ marginBottom: '1rem' }}>
-                                            <p>{ing.ingredient_name}</p>
-                                            <p>Amt:{ing.amt}</p>
-                                            <p>Unit:{ing.unit}</p>
+                                        <Box sx={{ borderBottom: 0 }} style={{ marginBottom: '1rem' }}>
+                                            <p style={{ marginBottom: -15, marginTop: 15 }}>{ing.ingredient_name}</p>
+                                            <p style={{ marginBottom: -15 }}>Amt:{ing.amt}</p>
+                                            <p style={{ marginBottom: 5 }}>Unit:{ing.unit}</p>
                                         </Box>
                                     )
                                 })}
