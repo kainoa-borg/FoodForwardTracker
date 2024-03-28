@@ -3,6 +3,36 @@ import axios from 'axios';
 import { Box } from "@mui/material";
 
 
+function sortForLength(recipeA, recipeB) {
+    //3 cases 
+    //before,after,the same
+    //checking ingredient length
+    recipeA = getValue(recipeA, 'num_of_ingredients')
+    recipeB = getValue(recipeB, 'num_of_ingredients')
+
+    if (recipeA > recipeB) {
+        //put before recipe b
+        return -1
+    } else if (recipeB > recipeA) {
+        //put b before recipe a
+        return 1
+    } else if (recipeA === recipeB) {
+        //leave as is
+        return 0
+    }
+    return 0;
+}
+
+function getValue(recipeItem, sortBy) {
+
+    switch (sortBy) {
+        case 'num_of_ingredients':
+            return recipeItem.r_ingredients.length
+        case 'hi':
+            return recipeItem.r_name
+    }
+
+}
 
 export default function RecipeIngredientReport(props) {
     const [recipeData, setRecipeData] = useState([]);
@@ -12,6 +42,9 @@ export default function RecipeIngredientReport(props) {
             method: "GET",
             url: "http://4.236.185.213:8000/api/mealrecipes"
         }).then((response) => {
+            //sort data
+            response.data.sort(sortForLength)
+            //sets the data
             setRecipeData(response.data);
         }).catch((error) => {
             if (error.response) {
