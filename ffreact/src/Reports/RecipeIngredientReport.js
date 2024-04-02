@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
-import { Box } from "@mui/material";
+import { Box, FormControl, MenuItem, Select } from "@mui/material";
 
 
 function sortForLength(recipeA, recipeB, sortBySelection) {
@@ -63,6 +63,9 @@ export default function RecipeIngredientReport(props) {
         getData();
     }, [])
 
+    useEffect(() => {
+        getData();
+    }, [sortBySelection])
     // ---- RETURNED JSX (HTML) STRUCTURE ----
     // (For each recipe)
     // FlexBox
@@ -73,7 +76,21 @@ export default function RecipeIngredientReport(props) {
     // ----
     return (
         <Box style={{ margin: '-5%' }}>
-            <h2 style={{ paddingTop: '5%' }}>Recipe Ingredient Report</h2>
+            <Box style={{ display: "flex", paddingTop: '5%' }}>
+                <h2 style={{ marginRight: '5%' }}>Recipe Ingredient Report</h2>
+                <FormControl variant="filled">
+                    <Select
+                        labelId="filter"
+                        id="sort by select"
+                        value={sortBySelection}
+                        label="sort_by"
+                        onChange={(event) => {
+                            setSortBySelection(event.target.value)//updates on what the user selects
+                        }}
+                    >
+                        <MenuItem value={'num_of_ingredients'}>Number of ingrediants</MenuItem>
+                        <MenuItem value={'sort_alphabeticaly'}>Alphabeticaly</MenuItem>
+                    </Select></FormControl></Box>
             <Box style={{ display: "flex", width: '100vw', flexWrap: 'wrap', md: { justifyContent: 'space-between' } }}>
                 {recipeData.map((thisRecipe) => {
                     return (
