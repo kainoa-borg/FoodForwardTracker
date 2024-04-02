@@ -3,13 +3,13 @@ import axios from 'axios';
 import { Box } from "@mui/material";
 
 
-function sortForLength(recipeA, recipeB) {
+function sortForLength(recipeA, recipeB, sortBySelection) {
     //3 cases 
     //before,after,the same
     //checking ingredient length
-    recipeA = getValue(recipeA, 'num_of_ingredients')
-    recipeB = getValue(recipeB, 'num_of_ingredients')
-
+    recipeA = getValue(recipeA, sortBySelection)
+    recipeB = getValue(recipeB, sortBySelection)
+    //decending sort right now
     if (recipeA > recipeB) {
         //put before recipe b
         return -1
@@ -24,18 +24,20 @@ function sortForLength(recipeA, recipeB) {
 }
 
 function getValue(recipeItem, sortBy) {
-
     switch (sortBy) {
         case 'num_of_ingredients':
             return recipeItem.r_ingredients.length
-        case 'hi':
-            return recipeItem.r_name
+        case 'sort_alphabeticaly':
+            return recipeItem.r_name.toUpperCase()//toUpper makes sure ascii values dont mess it up
+        //  case 'sort_foo':
+        //return recipeItem.
     }
 
 }
 
 export default function RecipeIngredientReport(props) {
     const [recipeData, setRecipeData] = useState([]);
+    const [sortBySelection, setSortBySelection] = useState('sort_alphabeticaly');//default filter is num_of_ingrediants
     // Get data from the API
     const getData = () => {
         axios({
@@ -43,7 +45,9 @@ export default function RecipeIngredientReport(props) {
             url: "http://4.236.185.213:8000/api/mealrecipes"
         }).then((response) => {
             //sort data
-            response.data.sort(sortForLength)
+            response.data.sort((recipeA, recipeB) => {
+                return sortForLength(recipeA, recipeB, sortBySelection)
+            })
             //sets the data
             setRecipeData(response.data);
         }).catch((error) => {
