@@ -14,12 +14,12 @@ const Dropdown = ({ trigger, menu }) => {
   const ref = useOutsideClick(handleClose);
 
   return (
-    <Box className="dropdown" sx={{height: '100%'}} ref={ref}>
+    <Box className="dropdown" sx={{ height: '100%' }} ref={ref}>
       {React.cloneElement(trigger, {
         onClick: handleOpen,
       })}
       {open ? (
-        <ul className="menu">
+        <ul className="menu" style={{ maxHeight: '200px', overflowY: 'auto' }}>
           {menu.map((menuItem, index) => (
             <li key={index} className="menu-item">
               {React.cloneElement(menuItem, {
@@ -42,7 +42,7 @@ export const useOutsideClick = (callback) => {
   React.useEffect(() => {
     const handleClick = (event) => {
       if (ref.current && !ref.current.contains(event.target)) {
-          callback();
+        callback();
       }
     };
 
