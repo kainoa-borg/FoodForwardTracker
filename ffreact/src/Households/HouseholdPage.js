@@ -6,11 +6,15 @@ import AllergiesList from './AllergiesList';
 import NewModularDatagrid from '../components/NewModularDatagrid';
 import CellDialog from '../components/CellDialog.js';
 import HouseholdForm from './HouseholdForm.js';
+//
+import { MenuItem, FormControl, Select } from '@mui/material';
+//
 // import ModularSelect from '../components/ModularSelect';
 // import axios from 'axios';
 
 // Households/Clients List Component
 export default function HouseholdPage(props) {
+
     const loginState = props.loginState.isAuthenticated ? props.loginState : {isAuthenticated: false};
     
     const AllergyListCell = (params) => {
@@ -60,6 +64,39 @@ export default function HouseholdPage(props) {
         },
         { field: 'paused_flag', headerName: 'Paused', width: 70, type: 'boolean', editable: true, valueParser: (value) => {return value ? 1 : 0} },
         { field: 'paying', headerName: 'Paying', width: 70, type: 'boolean', editable: true, valueParser: (value) => {return value ? 1 : 0} },
+        { field: 'hh_bags_or_crates', headerName: 'Bags or Crates', defaultValue:"bags", width: 120, editable: true, 
+        renderEditCell: (params) => 
+            {    let api = useGridApiContext();
+                return (
+            
+            <FormControl fullWidth>
+              <Select
+                value={params.value}
+
+                onChange={(event) => {
+                  const newValue = event.target.value;
+                  // Implement your logic to update the data here, e.g., via an API call
+                  // Example:
+                  // updateData(params.id, params.field, newValue);
+
+                  //console.log(event, newValue, params)
+                  console.log(newValue);
+
+                  const handleChange = async (event) => {
+                    await api.current.setEditCellValue({id: params.id, field: 'hh_bags_or_crates', value: newValue});
+                    
+                    //await api.current.commitRowChange(params.id);
+                    console.log(newValue);
+                }
+                handleChange(newValue, params.id);
+                
+            }}
+              >
+                <MenuItem value="bags">Bags</MenuItem>
+                <MenuItem value="crates">Crates</MenuItem>
+              </Select>
+            </FormControl>)
+          }}
     ]
     
     const columnGroupingModel = [

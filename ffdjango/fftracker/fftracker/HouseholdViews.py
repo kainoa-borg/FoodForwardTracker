@@ -25,7 +25,7 @@ class HouseholdAllergySerializer(serializers.ModelSerializer):
     class Meta():
         model = Households
         depth = 1
-        fields = ('hh_id', 'hh_first_name', 'hh_last_name', 'num_adult', 'num_child_lt_6', 'num_child_gt_6', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag', 'paying', 'phone', 'street', 'city', 'pcode', 'state', 'delivery_notes', 'hh_allergies')
+        fields = ('hh_id', 'hh_first_name', 'hh_last_name', 'num_adult', 'num_child_lt_6', 'num_child_gt_6', 'sms_flag', 'veg_flag', 'allergy_flag', 'gf_flag', 'ls_flag', 'paused_flag', 'paying', 'phone', 'street', 'city', 'pcode', 'state', 'delivery_notes', 'hh_allergies', 'hh_bags_or_crates')
 
     def create(self, validated_data):
         allergy_data = validated_data.pop('hh_allergies')

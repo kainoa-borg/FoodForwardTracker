@@ -192,6 +192,7 @@ class Households(models.Model):
     pcode = models.PositiveIntegerField(blank=True, null=True)
     state = models.CharField(max_length=2, blank=True, null=True)
     delivery_notes = models.TextField(blank=True, null=True)
+    hh_bags_or_crates = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = True

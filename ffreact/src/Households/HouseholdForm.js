@@ -32,7 +32,8 @@ const HouseholdForm = (props) => {
       pcode: undefined,
       state: "",
       delivery_notes: "",
-      hh_allergies: []
+      hh_allergies: [],
+      bags_or_crates: ""
     }
   }
 
@@ -133,6 +134,10 @@ const HouseholdForm = (props) => {
 
                 <InputLabel htmlFor='delivery_notes'>Delivery Notes: </InputLabel>
                 <Input name='delivery_notes' id='delivery_notes' inputProps={{maxLength: '255'}} value={household.delivery_notes} onChange={handleFormChange}/>
+
+                <InputLabel htmlFor='hh_bags_or_crates'>Bags or Crates: </InputLabel>
+                <Input name='hh_bags_or_crates' id='hh_bags_or_crates' inputProps={{maxLength: '255'}} value={household.hh_bags_or_crates} onChange={handleFormChange}/>
+                
               </Grid>
 
               <Grid item>
