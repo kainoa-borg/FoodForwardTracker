@@ -58,6 +58,7 @@ export default function IngredientDefReport(props) {
         // Ingredient Definitions with conversions
             // 1/3rd of the container width
             // Listed alphabetically
+            // Listed alphabetically
     // ----
     return (
         <Box style={{margin: '-5%'}}>
