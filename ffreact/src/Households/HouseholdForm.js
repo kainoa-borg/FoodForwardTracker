@@ -76,6 +76,8 @@ const HouseholdForm = (props) => {
       // updateEditForm('aFlag', true);
     }
 
+    
+
     // HTML structure of this component
     return (
       <Card sx={{marginTop: '1em', padding: '1em'}}>
@@ -136,7 +138,12 @@ const HouseholdForm = (props) => {
                 <Input name='delivery_notes' id='delivery_notes' inputProps={{maxLength: '255'}} value={household.delivery_notes} onChange={handleFormChange}/>
 
                 <InputLabel htmlFor='hh_bags_or_crates'>Bags or Crates: </InputLabel>
-                <Input name='hh_bags_or_crates' id='hh_bags_or_crates' inputProps={{maxLength: '255'}} value={household.hh_bags_or_crates} onChange={handleFormChange}/>
+                
+
+<select name="hh_bags_or_crates" id="hh_bags_or_crates" value={household.hh_bags_or_crates} onChange={handleFormChange}>
+  <option value="bags">Bags</option>
+  <option value="crates">Crates</option>
+</select>
                 
               </Grid>
 
