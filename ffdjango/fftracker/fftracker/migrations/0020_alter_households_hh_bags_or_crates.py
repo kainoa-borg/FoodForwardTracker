@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('fftracker', '0019_households_hh_bags_or_crates'),
+        ('fftracker', '0018_alter_ingredientunits_recipe_amt_and_more'),
     ]
 
     operations = [

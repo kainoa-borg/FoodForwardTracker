@@ -15,8 +15,7 @@ import { useSearchParams } from 'react-router-dom'
 const LoginPage = (props) => {
     const handlePageClick = props.handlePageClick;
     const setLoginState = props.setLoginState;
-    
-    
+        
     const [errorState, setErrorState] = useState('');
     const [successMessage, setSuccessMessage] = useState();
     const [successSBOpen, setSuccessSBOpen] = useState();
@@ -30,7 +29,11 @@ const LoginPage = (props) => {
 
     useEffect(() => {
         if (urlParams.get("successMessage")) {
-            setSuccessMessage(urlParams.get("successMessage"))
+            setSuccessMessage(urlParams.get("successMessage"));
+        }
+        if (urlParams.get("isAuthenticated")) {
+            console.log("foo");
+            setSuccessMessage("Please login to view this page");
         }
     }, [])
 

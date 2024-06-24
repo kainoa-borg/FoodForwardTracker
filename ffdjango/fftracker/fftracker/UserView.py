@@ -15,7 +15,6 @@ class UserSerializer(serializers.ModelSerializer):
 		password = validated_data.pop('password')
 		email = validated_data.pop('email')
 		admin_flag = validated_data.pop('admin_flag')
-		print(password)
 		if username:
 			instance.username = username
 		print('checking password')
