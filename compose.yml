@@ -1,0 +1,16 @@
+services:
+  api:
+    build: ./ffdjango      
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ffdjango:/ffdjango
+    command: bash -c "python manage.py runserver 0.0.0.0:8000"
+
+  web:
+    build: ./ffreact
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./ffreact:/ffreact
+
