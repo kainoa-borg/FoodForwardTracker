@@ -2,11 +2,16 @@ FROM  python:3.11.4-bullseye
 
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /api
+WORKDIR /ffdjango/fftracker
 
-RUN pip install django django-cors-headers
+ADD . /ffdjango/
 
-# copy from the current directory of the Dockerfile to /api in the image
-COPY . . 
+RUN pip install -r requirements.txt
+
+RUN echo hello
+
+# copy from the current directory of the Dockerfile to /ffdjango in the image
 
 EXPOSE 8000
+
+CMD ["python", "manage.py", "runserver"]
