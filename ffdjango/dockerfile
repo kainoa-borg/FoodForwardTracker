@@ -1,4 +1,4 @@
-FROM  python:3.11.4-bullseye
+FROM --platform=linux/amd64 python:3.11.4-bullseye
 
 ENV PYTHONUNBUFFERED=1
 
@@ -7,11 +7,10 @@ WORKDIR /ffdjango/fftracker
 ADD . /ffdjango/
 
 RUN pip install -r requirements.txt
+RUN pip install gunicorn
 
-RUN echo hello
+COPY entrypoint.sh /docker-entrypoint.d/
 
-# copy from the current directory of the Dockerfile to /ffdjango in the image
+RUN chmod +x /docker-entrypoint.d/entrypoint.sh
 
-EXPOSE 8000
-
-CMD ["python", "manage.py", "runserver"]
+ENTRYPOINT [ "/docker-entrypoint.d/entrypoint.sh" ]

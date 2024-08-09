@@ -1,11 +1,9 @@
 services:
   api:
-    build: ./ffdjango      
+    image: fftracker-api
     ports:
       - "8000:8000"
     restart: always
-    volumes:
-      - ./ffdjango/fftracker:/ffdjango/fftracker
 
   # web:
   #   build: ./ffreact
@@ -15,9 +13,7 @@ services:
   #     - ./ffreact:/ffreact
 
   nginx:
-    build:
-      context: .
-      dockerfile: ./webserver/dockerfile
+    image: fftracker-nginx
     ports:
       - "80:80"
     depends_on: 
