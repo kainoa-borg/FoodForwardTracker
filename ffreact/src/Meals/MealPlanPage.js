@@ -35,7 +35,7 @@ export default function MealPlanPage() {
         console.log('MAKING REQUEST TO DJANGO')
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/mealplans/"
+            url:process.env.REACT_APP_API_URL + "mealplans/"
           }).then((response)=>{
             const mealData = response.data
             setMealPlan(mealData);
@@ -52,7 +52,7 @@ export default function MealPlanPage() {
         console.log('MAKING REQUEST TO DJANGO')
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/recipe-list/"
+            url:process.env.REACT_APP_API_URL + "recipe-list/"
           }).then((response)=>{
             const recipeData = response.data
             setRecipeList(recipeData);

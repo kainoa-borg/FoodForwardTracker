@@ -19,7 +19,7 @@ export default function PackagingReport() {
     const getDBPackaging = () => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/packaging-report"
+            url:process.env.REACT_APP_API_URL + "packaging-report"
           }).then((response)=>{
             const pkgData = response.data
             setPackaging(pkgData);

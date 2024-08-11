@@ -14,7 +14,7 @@ export default function HouseholdReport() {
     const getDBHouseholds = () => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/households-report"
+            url:process.env.REACT_APP_API_URL + "households-report"
           }).then((response)=>{
             const hhData = response.data
             setHouseholds(hhData);

@@ -1,16 +1,24 @@
+# Build Django
 FROM --platform=linux/amd64 python:3.11.4-bullseye
 
+# Enable real-time terminal logs for build process
 ENV PYTHONUNBUFFERED=1
+# Set the working directory to /ffdjango
+WORKDIR /
+# Add all files from /ffdjango to the container's /ffdjango
+ADD ./fftracker/requirements.txt ./
 
-WORKDIR /ffdjango/fftracker
-
-ADD . /ffdjango/
-
-RUN pip install -r requirements.txt
+# Install dependencies and gunicorn
+RUN pip install -r fftracker/requirements.txt
 RUN pip install gunicorn
 
+ADD . /
+
+# Copy the gunicorn bash startup script to the docker entrypoint script location in the container
 COPY entrypoint.sh /docker-entrypoint.d/
-
+# Allow read/write access in the container
 RUN chmod +x /docker-entrypoint.d/entrypoint.sh
-
+# Expose port 8080 on docker container
+EXPOSE 8080:8080
+# Have docker use our custom entrypoint script
 ENTRYPOINT [ "/docker-entrypoint.d/entrypoint.sh" ]

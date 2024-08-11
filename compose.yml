@@ -1,26 +1,31 @@
+# Define the services in our multi-container app
 services:
+  # api contains the Django API
   api:
+    # Run the Django build dockerfile
     build: ./ffdjango      
+    # Expose port 8080
     ports:
-      - "8000:8000"
+      - "8080:8080"
+    # Restart when killed (during redeployment etc.)
     restart: always
+    # Create the Django folder structure in the container
     volumes:
       - ./ffdjango/fftracker:/ffdjango/fftracker
-
-  # web:
-  #   build: ./ffreact
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ./ffreact:/ffreact
-
+  # nginx contains the NGINX web server and the React build files
   nginx:
+    # Build the React site and set up NGINX
     build:
       context: .
       dockerfile: ./webserver/dockerfile
+    # Expose port 80
     ports:
       - "80:80"
-    depends_on: 
+    # Connect this service to the Django service in the Docker network
+    links: 
+      - api
+    # Do not run this service if the Django API is not running
+    depends_on:
       - api
 
 

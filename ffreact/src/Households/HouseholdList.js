@@ -15,7 +15,7 @@ export default function HouseholdList() {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/households"
+            url:process.env.REACT_APP_API_URL + "households"
           }).then((response)=>{
             console.log(response.data[0])
             const hhData = response.data

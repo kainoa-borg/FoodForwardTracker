@@ -21,7 +21,7 @@ export default function PackagingReturns() {
         setSearchingSBOpen(true);
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/packaging-return-report/",
+            url:process.env.REACT_APP_API_URL + "packaging-return-report/",
             params: dateRange
           }).then((response)=>{
             // console.log(response.data);
@@ -40,7 +40,7 @@ export default function PackagingReturns() {
     const getDBPackaging = () => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/packaging"
+            url:process.env.REACT_APP_API_URL + "packaging"
           }).then((response)=>{
             const pkgRetData = response.data
             setPackaging(pkgRetData);

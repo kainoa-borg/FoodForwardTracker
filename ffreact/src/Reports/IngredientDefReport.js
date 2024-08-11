@@ -37,7 +37,7 @@ export default function IngredientDefReport(props) {
     const getData = () => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/ing-name-definitions"
+            url:process.env.REACT_APP_API_URL + "ing-name-definitions"
           }).then((response)=>{
             setIngDefs(response.data);
           }).catch((error) => {
