@@ -108,7 +108,6 @@ const LoginPage = (props) => {
         const thisUser = {...user};
         thisUser[fieldName] = fieldValue;
         setUser(thisUser);
-        console.log(user.username, user.password)
     }
     
     // Handle login form submit
