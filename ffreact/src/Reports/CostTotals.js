@@ -28,7 +28,7 @@ export default function costTotals() {
         setSearchingSBOpen(true);
         axios({
           method: "GET",
-          url:"http://4.236.185.213:8000/api/ing-costtotals/",
+          url:process.env.REACT_APP_API_URL + "ing-costtotals/",
           params: dateRange
         }).then((response)=>{
           if (response.data.length > 0) setResultsFoundSBOpen(true);
@@ -46,7 +46,7 @@ export default function costTotals() {
         setSearchingSBOpen(true);
         axios({
           method: "GET",
-          url:"http://4.236.185.213:8000/api/pack-costtotals/",
+          url:process.env.REACT_APP_API_URL + "pack-costtotals/",
           params: dateRange
         }).then((response)=>{
           if (response.data.length > 0) setResultsFoundSBOpen(true);
@@ -68,7 +68,7 @@ export default function costTotals() {
       console.log("MAKING REQUEST TO DJANGO")
       axios({
           method: "GET",
-          url:"http://4.236.185.213:8000/api/suppliers"
+          url:process.env.REACT_APP_API_URL + "suppliers"
         }).then((response)=>{
           setSuppliers(response.data);
         }).catch((error) => {

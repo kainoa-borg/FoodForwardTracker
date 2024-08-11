@@ -23,7 +23,7 @@ export default function NewModularDatagrid(props) {
     // IP of the api to send requests to
     var apiIP = props.apiIP;
     // If apiIP prop not defined, default to server 
-    if (!apiIP) apiIP = '4.236.185.213';
+    if (!apiIP) apiIP = process.env.REACT_APP_API_URL;
     // Field name of the row key/id
     const keyFieldName = props.keyFieldName;
     // Add entry form to be passed to FormDialog
@@ -92,7 +92,7 @@ export default function NewModularDatagrid(props) {
         let addStatus = false;
         axios({
             method: 'POST',
-            url:"http://"+apiIP+":8000/api/" + apiEndpoint + '/',
+            url:apiIP + apiEndpoint + '/',
             data: formData
         }).then((response)=>{
             getDBData();
@@ -116,7 +116,7 @@ export default function NewModularDatagrid(props) {
         
         axios({
             method: "DELETE",
-            url:"http://"+apiIP+":8000/api/" + apiEndpoint + "/"+params.id+'/',
+            url:apiIP+ apiEndpoint + "/"+params.id+'/',
           }).then((response)=>{
             getDBData();
             // Open saving changes success notification
@@ -139,7 +139,7 @@ export default function NewModularDatagrid(props) {
 
         axios({
             method: "PATCH",
-            url:"http://"+apiIP+":8000/api/" + apiEndpoint + "/" + newRow[keyFieldName] +'/',
+            url:apiIP + apiEndpoint + "/" + newRow[keyFieldName] +'/',
             data: newRow
             }).then((response)=>{
             getDBData();
@@ -162,7 +162,7 @@ export default function NewModularDatagrid(props) {
         // console.log('REFRESHING')
         axios({
             method: "GET",
-            url:"http://"+apiIP+":8000/api/" + apiEndpoint
+            url:apiIP + apiEndpoint
         }).then((response)=>{
             // console.log(response.data);
             setTableData(response.data);

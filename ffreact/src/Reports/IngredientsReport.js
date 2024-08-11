@@ -27,7 +27,7 @@ export default function IngredientReport() {
     const getDBIngredients = () => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/ingredients-report"
+            url:process.env.REACT_APP_API_URL + "ingredients-report"
           }).then((response)=>{
             const ingData = response.data
             setIngredients(ingData);
@@ -46,7 +46,7 @@ export default function IngredientReport() {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/suppliers"
+            url:process.env.REACT_APP_API_URL + "suppliers"
           }).then((response)=>{
             setSuppliers(response.data);
           }).catch((error) => {

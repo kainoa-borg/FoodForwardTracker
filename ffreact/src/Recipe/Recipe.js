@@ -227,7 +227,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
         if (recipeData.r_img_path || recipeData.r_card_path) {
             axios({
                 method: "DELETE",
-                url:"http://4.236.185.213:8000/api/" + (imgOrCard==='image' ? 'mealrecipe-image' : 'mealrecipe-card') + "/" + recipeData.r_num + '/'
+                url:process.env.REACT_APP_API_URL + "" + (imgOrCard==='image' ? 'mealrecipe-image' : 'mealrecipe-card') + "/" + recipeData.r_num + '/'
             }).then((response)=>{
                 setUpdateDoneSBOpen(true);
                 // console.log(imgOrCard, 'delete recipe image success!')
@@ -246,7 +246,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
         if (tempImagePath) {
             axios({
                 method: "PATCH",
-                url:"http://4.236.185.213:8000/api/" + ('tempimageupload') + '/' + 0 + '/',
+                url:process.env.REACT_APP_API_URL + "" + ('tempimageupload') + '/' + 0 + '/',
                 data: {path: tempImagePath}
             }).then((response)=>{
                 // console.log(imgOrCard, 'temp image delete success!')
@@ -262,7 +262,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
         if (tempCardPath) {
             axios({
                 method: "PATCH",
-                url:"http://4.236.185.213:8000/api/" + ('tempcardupload') + '/' + 0 + '/',
+                url:process.env.REACT_APP_API_URL + "" + ('tempcardupload') + '/' + 0 + '/',
                 data: {path: tempCardPath}
             }).then((response)=>{
                 // console.log(imgOrCard, 'temp image delete success!')
@@ -283,7 +283,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
         if (tempImagePath || tempCardPath) {
             axios({
                 method: "PATCH",
-                url:"http://4.236.185.213:8000/api/" + (imgOrCard==='image' ? 'tempimageupload' : 'tempcardupload') + '/' + 0 + '/',
+                url:process.env.REACT_APP_API_URL + "" + (imgOrCard==='image' ? 'tempimageupload' : 'tempcardupload') + '/' + 0 + '/',
                 data: (imgOrCard==='image') ? {path: tempImagePath} : {path: tempCardPath}
             }).then((response)=>{
                 // console.log(imgOrCard, 'temp image delete success!')
@@ -321,7 +321,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
         // setUpdateSBOpen(true);
         axios({
             method: "PATCH",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/" + r_num + '/',
+            url:process.env.REACT_APP_API_URL + "" + apiEndpoint + "/" + r_num + '/',
             data: formData,
             headers: {
                 'Content-Type': 'multipart/form-data'
@@ -405,7 +405,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
         if (isAdding) {
             axios({
                 method: "POST",
-                url:"http://4.236.185.213:8000/api/mealrecipes/",
+                url:process.env.REACT_APP_API_URL + "mealrecipes/",
                 data: r_data,
             }).then((response)=>{
                 if (imageFile) {
@@ -435,7 +435,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
             }
             axios({
                 method: "PATCH",
-                url:"http://4.236.185.213:8000/api/mealrecipes/" + recipeData.r_num + '/',
+                url:process.env.REACT_APP_API_URL + "mealrecipes/" + recipeData.r_num + '/',
                 data: r_data,
             }).then((response)=>{
                 // console.log('patch success!')
