@@ -20,7 +20,7 @@ export default function MealHistoryReport() {
         setSearchingSBOpen(true);
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/"+ apiEndpoint +"/",
+            url:process.env.REACT_APP_API_URL + ""+ apiEndpoint +"/",
             params: dateRange
           }).then((response)=>{
             // console.log(response.data);

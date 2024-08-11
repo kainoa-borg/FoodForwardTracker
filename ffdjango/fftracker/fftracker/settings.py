@@ -27,9 +27,9 @@ mimetypes.add_type("text/css", ".css", True)
 SECRET_KEY = 'django-insecure-#xtryp(1+$_w)9h6i)8+zhg+!#h3knvm4mb1j3mem0p_mb494^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['4.236.185.213']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'foodforwardwebqaeast-b0bph9dkhygdfmaj.eastus-01.azurewebsites.net', 'api']
 
 # Application definition
 
@@ -42,10 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'fftracker'
+    'fftracker',
 ]
-
-#AUTH_USER_MODEL = 'users.CustomUser'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -61,7 +59,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'fftracker.urls'
 
 # White listing the localhost:8000 port
-CORS_ORIGIN_WHITELIST = ['http://0.0.0.0:8000', 'http:://127.0.0.1:8000']
+# CORS_ORIGIN_WHITELIST = ['http://0.0.0.0:8000']
 CORS_ORIGIN_ALLOW_ALL = True
 
 TEMPLATES = [
@@ -87,6 +85,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+ca_path = os.path.join(os.getcwd() + '/DigiCertGlobalRootCA.crt.pem')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -96,7 +96,7 @@ DATABASES = {
 	'HOST': 'foodforwardserver.mysql.database.azure.com',
 	'PORT': '3306',
 	'OPTIONS':  {
-            'ssl': {'ca': '/var/www/html/ffdjango/fftracker/DigiCertGlobalRootCA.crt.pem'}
+            'ssl': {'ca': ca_path}
         }
     }
 }

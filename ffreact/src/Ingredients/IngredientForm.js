@@ -44,7 +44,7 @@ const IngredientForm = (props) => {
     console.log("MAKING REQUEST TO DJANGO")
     axios({
         method: "GET",
-        url:"http://4.236.185.213:8000/api/ingredient-inventory"
+        url:process.env.REACT_APP_API_URL + "ingredient-inventory"
       }).then((response)=>{
         setIngredients(response.data)
       }).catch((error) => {
@@ -62,7 +62,7 @@ const IngredientForm = (props) => {
     console.log("MAKING REQUEST TO DJANGO")
     axios({
         method: "GET",
-        url:"http://4.236.185.213:8000/api/suppliers"
+        url:process.env.REACT_APP_API_URL + "suppliers"
       }).then((response)=>{
         setSupplierList(response.data)
       }).catch((error) => {

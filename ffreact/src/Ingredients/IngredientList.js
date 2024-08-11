@@ -56,7 +56,7 @@ export default function IngredientList() {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/suppliers"
+            url:process.env.REACT_APP_API_URL + "suppliers"
           }).then((response)=>{
             setSuppliers(response.data);
           }).catch((error) => {
@@ -73,7 +73,7 @@ export default function IngredientList() {
         setLoadingComponent(<Error text="LOADING DATA..."/>);
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/ingredient-inventory"
+            url:process.env.REACT_APP_API_URL + "ingredient-inventory"
           }).then((response)=>{
             const ingData = response.data
             setIngredients(ingData);
@@ -109,7 +109,7 @@ export default function IngredientList() {
         ingredient['i_id'] = lastID + 1;
         axios({
             method: "POST",
-            url:"http://4.236.185.213:8000/api/ingredient-inventory/",
+            url:process.env.REACT_APP_API_URL + "ingredient-inventory/",
             data: ingredient
           }).then((response)=>{
             getDBIngredients();
@@ -127,7 +127,7 @@ export default function IngredientList() {
         const ingID = ingredients[key]['i_id']; 
         axios({
             method: "DELETE",
-            url:"http://4.236.185.213:8000/api/ingredient-inventory/"+ingID+'/',
+            url:process.env.REACT_APP_API_URL + "ingredient-inventory/"+ingID+'/',
           }).then((response)=>{
             getDBIngredients();
           }).catch((error) => {
@@ -146,7 +146,7 @@ export default function IngredientList() {
             setEditIngredientID(null);
             axios({
                 method: "PATCH",
-                url:"http://4.236.185.213:8000/api/ingredient-inventory/"+thisID+'/',
+                url:process.env.REACT_APP_API_URL + "ingredient-inventory/"+thisID+'/',
                 data: editFormData
               }).then((response)=>{
                 getDBIngredients();

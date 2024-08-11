@@ -35,7 +35,7 @@ const UserPage = (props) => {
         setLoadingComponent(<Error text="LOADING DATA..."/>);
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/users/"+user.username[1]+'/',
+            url:process.env.REACT_APP_API_URL + "users/"+user.username[1]+'/',
           }).then((response)=>{
             const userData = response.data
             setUser(userData);
