@@ -6,13 +6,11 @@ ENV PYTHONUNBUFFERED=1
 # Set the working directory to /ffdjango
 WORKDIR /
 # Add all files from /ffdjango to the container's /ffdjango
-ADD ./fftracker/requirements.txt ./
+ADD . /
 
 # Install dependencies and gunicorn
 RUN pip install -r fftracker/requirements.txt
 RUN pip install gunicorn
-
-ADD . /
 
 # Copy the gunicorn bash startup script to the docker entrypoint script location in the container
 COPY entrypoint.sh /docker-entrypoint.d/
