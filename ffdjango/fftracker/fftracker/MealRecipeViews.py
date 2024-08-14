@@ -67,7 +67,7 @@ class RecipePackagingSerializer(ModelSerializer):
         fields = ('rp_id', 'pkg_type', 'pkg_contents', 'ing_name', 'amt', 'rp_pkg')
         read_only_fields = ['rp_id', 'rp_pkg', 'amt']
 
-
+# Blob Storage Endpoint https://foodforwardstorage.blob.core.windows.net/
 class RecipeImageSerializer(serializers.ModelSerializer):
     class Meta():
         model = Recipes

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import logging
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,9 +28,9 @@ mimetypes.add_type("text/css", ".css", True)
 SECRET_KEY = 'django-insecure-#xtryp(1+$_w)9h6i)8+zhg+!#h3knvm4mb1j3mem0p_mb494^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'foodforwardwebqaeast-b0bph9dkhygdfmaj.eastus-01.azurewebsites.net', 'api']
+ALLOWED_HOSTS = ['foodforwardwebqaeast-b0bph9dkhygdfmaj.eastus-01.azurewebsites.net', 'https://foodforwardwebprodeast-e5bcgbgrcea0eebs.eastus-01.azurewebsites.net/', 'api']
 
 # Application definition
 
@@ -87,13 +88,17 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 ca_path = os.path.join(os.getcwd() + '/DigiCertGlobalRootCA.crt.pem')
 
+db_username = os.environ.get('APPSETTING_DB_USERNAME')
+db_pass = os.environ.get('APPSETTING_DB_PASS')
+db_host = os.environ.get('APPSETTING_DB_HOST')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'foodforwarddb',
-	'USER': 'adminuser',
-	'PASSWORD': 'FdFrdgHkw4s',
-	'HOST': 'foodforwardserver.mysql.database.azure.com',
+	'USER': db_username,
+	'PASSWORD': db_pass,
+	'HOST': db_host,
 	'PORT': '3306',
 	'OPTIONS':  {
             'ssl': {'ca': ca_path}

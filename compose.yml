@@ -2,22 +2,23 @@
 services:
   # api contains the Django API
   api:
+    image: fftracker-api:$BUILD_ENV
     # Run the Django build dockerfile
-    build: ./ffdjango      
+    build: ./ffdjango
     # Expose port 8080
     ports:
       - "8080:8080"
     # Restart when killed (during redeployment etc.)
     restart: always
-    # Create the Django folder structure in the container
-    volumes:
-      - ./ffdjango/fftracker:/ffdjango/fftracker
   # nginx contains the NGINX web server and the React build files
   nginx:
+    image: fftracker-nginx:$BUILD_ENV
     # Build the React site and set up NGINX
     build:
       context: .
       dockerfile: ./webserver/dockerfile
+      args:
+        BUILD_FOR: $BUILD_FOR
     # Expose port 80
     ports:
       - "80:80"

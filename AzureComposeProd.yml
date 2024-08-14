@@ -1,0 +1,20 @@
+# Azure Docker-Compose that runs the multi-container app
+services:
+  api:
+    # Use the latest Django container image
+    image: foodforwardcontainerregistry.azurecr.io/fftracker-api:production
+    # Expose port 8080 (internal only)
+    ports:
+      - "8080:8080"
+    # Restart when killed
+    restart: always
+
+  nginx:
+    # Use the latest React container image
+    image: foodforwardcontainerregistry.azurecr.io/fftracker-nginx:production
+    # Expose port 80 (This is the only accessible port externally)
+    ports:
+      - "80:80"
+    # Don't run unless Django API is up and running
+    depends_on: 
+      - api
