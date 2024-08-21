@@ -5,6 +5,10 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
+    dependencies = [
+        ('fftracker', '0018_alter_ingredientunits_recipe_amt_and_more'),
+    ]
+
     operations = [
         migrations.AlterField(
             model_name='households',

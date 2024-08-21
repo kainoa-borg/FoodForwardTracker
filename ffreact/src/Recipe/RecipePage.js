@@ -134,6 +134,34 @@ function RecipePageComponent(props) {
             method: "DELETE",
             url:process.env.REACT_APP_API_URL + "mealrecipes/"+params.id+'/',
         }).then((response)=>{
+            // Open saving changes success notification
+            setUpdateDoneSBOpen(true);
+        }).catch((error) => {
+            if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
+
+        axios({
+            method: "DELETE",
+            url:process.env.REACT_APP_API_URL + "mealrecipe-image/"+params.id+'/',
+        }).then((response)=>{
+            // Open saving changes success notification
+            setUpdateDoneSBOpen(true);
+        }).catch((error) => {
+            if (error.response) {
+            console.log(error.response);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            }
+        });
+
+        axios({
+            method: "DELETE",
+            url:process.env.REACT_APP_API_URL + "mealrecipe-card/"+params.id+'/',
+        }).then((response)=>{
             getDBRecipes();
             // Open saving changes success notification
             setUpdateDoneSBOpen(true);
