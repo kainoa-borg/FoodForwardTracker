@@ -196,30 +196,21 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
     }
 
     const handleTempUpload = (file, apiEndpoint) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        // setUpdateSBOpen(true);
-        axios({
-            method: "POST",
-            url:"http:///4.236.185.213:8000/api/" + apiEndpoint + '/',
-            data: formData,
-            headers: {
-                'Content-Type': 'multipart/form-data'
+        if (!file) {
+        return
+        }
+    
+        const reader = new FileReader()
+    
+        reader.onloadend = () => {
+            if (apiEndpoint == 'tempimageupload') {
+                setTempImagePath(reader.result)
             }
-        }).then((response)=>{
-            if (apiEndpoint === 'tempimageupload')
-                setTempImagePath(response.data);
-            if (apiEndpoint === 'tempcardupload')
-                setTempCardPath(response.data);
-            // console.log(apiEndpoint, 'temp upload success')
-        }).catch((error) => {
-        if (error.response) {
-            handleErrorMessage(error);
-            console.log(error.response);
-            console.log(error.response.status);
-            console.log(error.response.headers);
+            else if (apiEndpoint == 'tempcardupload') {
+                setTempCardPath(reader.result);
             }
-        });
+        }
+        reader.readAsDataURL(file)
     }
 
     const handleDeleteRecipeImage = (imgOrCard) => {
@@ -280,22 +271,22 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
         // if (imgOrCard === 'image' && recipeData.r_img_path) setDeleteImage(true);
         // if (imgOrCard === 'card' && recipeData.r_card_path) setDeleteCard(true);
         // console.log('handleDeleteImageClick: ', tempImagePath, tempCardPath);
-        if (tempImagePath || tempCardPath) {
-            axios({
-                method: "PATCH",
-                url:process.env.REACT_APP_API_URL + "" + (imgOrCard==='image' ? 'tempimageupload' : 'tempcardupload') + '/' + 0 + '/',
-                data: (imgOrCard==='image') ? {path: tempImagePath} : {path: tempCardPath}
-            }).then((response)=>{
-                // console.log(imgOrCard, 'temp image delete success!')
-            }).catch((error) => {
-            if (error.response) {
-                handleErrorMessage(error);
-                console.log(error.response);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                }
-            });
-        }
+        // if (tempImagePath || tempCardPath) {
+        //     axios({
+        //         method: "PATCH",
+        //         url:process.env.REACT_APP_API_URL + "" + (imgOrCard==='image' ? 'tempimageupload' : 'tempcardupload') + '/' + 0 + '/',
+        //         data: (imgOrCard==='image') ? {path: tempImagePath} : {path: tempCardPath}
+        //     }).then((response)=>{
+        //         // console.log(imgOrCard, 'temp image delete success!')
+        //     }).catch((error) => {
+        //     if (error.response) {
+        //         handleErrorMessage(error);
+        //         console.log(error.response);
+        //         console.log(error.response.status);
+        //         console.log(error.response.headers);
+        //         }
+        //     });
+        // }
         if (imgOrCard==='image') {
             setImageFile();
             setTempImagePath();
@@ -470,7 +461,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                         <HighlightOff/>
                     </Button>
                     <Box sx={{height: '100%', width: '100%'}}>
-                        <iframe style={{height: '50vh', width: '30vw'}} src={`${props.image_source}?${Date.now()}`} key={props.image_source}></iframe>
+                        <iframe style={{height: '50vh', width: '30vw'}} src={props.image_source} key={props.image_source}></iframe>
                     </Box>
                 </Box>                
             );
@@ -489,7 +480,7 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                         <HighlightOff/>
                     </Button>
                     <Box sx={{height: '100%', width: '100%'}}>
-                        <iframe style={{height: '50vh', width: '30vw'}} src={`${props.card_source}?${Date.now()}`} key={props.card_source} type='application/pdf'/>
+                        <iframe style={{height: '50vh', width: '30vw'}} src={props.card_source} key={props.card_source} type='application/pdf'/>
                     </Box>
                 </Box>
             );
