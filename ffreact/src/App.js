@@ -32,7 +32,7 @@ import RecipePage from './Recipe/RecipePage.js'
 import UnderConstruction from './components/UnderConstruction.js'
 import Navbar from './components/Navbar.js'
 import React, { useEffect } from 'react'
-import { Routes, Route, Navigate, useNavigate, createSearchParams, HashRouter } from 'react-router-dom'
+import { Routes, Route, Navigate, Outlet, useNavigate, createSearchParams, HashRouter } from 'react-router-dom'
 import { useState } from 'react'
 import { Box } from '@mui/material'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
@@ -84,17 +84,19 @@ const AppComponent = () => {
     const readLoginCookie = () => {
         let accountData = {};
         // If there is an existing login cookie
-        if (document.cookie !== '') {
+        if (document.cookie) {
             // For this login cookie...
-            accountData = document.cookie
+            let cookieValues = document.cookie
             .split(';') // Split by terminating character ';'
             .map(v => v.split('=')) // Key/value is separated by '='
             .reduce((accountData, v) => {
                 // Create map of account data as key/value pairs
+                if (v.length > 1)
                 accountData[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+                // console.log(decodeURIComponent(v[0].trim()), decodeURIComponent(v[1].trim()))
                 return accountData;
-            }, {});
-            return accountData;
+            })
+            return {...cookieValues}
         }
         else {
             return undefined;
@@ -189,7 +191,7 @@ const AppComponent = () => {
     })
 
     // Protected Route component that navigates back to landing page when not admin
-    const ProtectedRoute = ({ isAdmin, children }) => {
+    const AdminRoute = ({ isAdmin, children }) => {
         const params = {isAdmin: isAdmin};
         if (!isAdmin) {
           return navigate({pathname: "/home", search: `?${createSearchParams(params)}`});
@@ -197,6 +199,15 @@ const AppComponent = () => {
       
         return children;
     };
+
+    // User Route component navigates to login unless user is authenticated
+    const UserRoute = ({children}) => {
+        if (!loginState.isAuthenticated) {
+            const params = {isAuthenticated: false};
+            return navigate({pathname: "/login", search: `?${createSearchParams(params)}`});
+        }
+        return <Outlet/>;
+    }
 
     // JSX HTML Structure
     return (
@@ -216,31 +227,33 @@ const AppComponent = () => {
                     <Route path='/login' element={<LoginPage loginState={loginState} setLoginState={setLoginState} handlePageClick={handlePageClick} />}/>
                     <Route path='/sign-up' element={<NewUserPage handlePageClick={handlePageClick} navigate={navigate} />}/>
                     <Route path='/reset-password' element={<PwResetPage handlePageClick={handlePageClick} />}/>
-                    <Route path='/clients' element={<HouseholdPage loginState={loginState} handlePageClick={handlePageClick} />}/>
-                    <Route path='/ingredients' element={<IngredientPage loginState={loginState} handlePageClick={handlePageClick} />}/>
-                    <Route path='/ingredient-defs' element={<IngredientDefinitionPage loginState={loginState} handlePageClick={handlePageClick} />}/>
-                    <Route path='/packaging' element={<PackagingPage loginState={loginState} handlePageClick={handlePageClick} />}/>
-                    <Route path='/packaging-defs' element={<PackagingDefinitionPage loginState={loginState} handlePageClick={handlePageClick}/>}/>
-                    <Route path='/mealplans' element={<MealPlan loginState={loginState} handlePageClick={handlePageClick} />}/>
-                    <Route path='/recipes/*' element={<RecipePage loginState={loginState} handlePageClick={handlePageClick}/>}/>
-                    <Route path='/cost-totals-report' element={<CostTotals handlePageClick={handlePageClick} />}/>
-                    <Route path='/clients-report' element={<HouseholdsReport handlePageClick={handlePageClick} />}/>
-                    <Route path='/ingredient-management-report' element={<IngredientManagementReport handlePageClick={handlePageClick}/>}/>
-                    <Route path='/ingredients-report' element={<IngredientsReport handlePageClick={handlePageClick} />}/>
-                    <Route path='/ingredient-purchasing-report' element={<IngPurchaseReport handlePageClick={handlePageClick} />}/>
-                    <Route path='/ing-def-report' element={<IngredientDefReport/>}/>
-                    <Route path='/meal-plan-report' element={<MealPlanReport handlePageClick={handlePageClick} />}/>
-                    <Route path='/meal-history-report' element={<MealHistoryReport handlePageClick={handlePageClick} />}/>
-                    <Route path='/packaging-report' element={<PackagingReport handlePageClick={handlePageClick} />}/>
-                    <Route path='/package-purchasing-report' element={<PackagingPurchaseReport handlePageClick={handlePageClick} />}/>
-                    <Route path='/package-return-report' element={<PackagingReturns handlePageClick={handlePageClick} />}/>
-                    <Route path="/recipe-ing-report" element={<RecipeIngredientReport/>}/>
-                    <Route path="/recipe-packaging-report" element={<RecipePackagingReport/>}/>
-                    <Route path='/under-construction' element={<UnderConstruction handlePageClick={handlePageClick}/>}/>
-                    <Route path='/admin' element={
-                        <ProtectedRoute isAdmin={loginState && loginState.isAdmin}>
-                            <UserList loginState={loginState} handlePageClick={handlePageClick}/>
-                        </ProtectedRoute>}>
+                    <Route element={<UserRoute/>}>
+                        <Route path='/clients' element={<HouseholdPage loginState={loginState} handlePageClick={handlePageClick} />}/>
+                        <Route path='/ingredients' element={<IngredientPage loginState={loginState} handlePageClick={handlePageClick} />}/>
+                        <Route path='/ingredient-defs' element={<IngredientDefinitionPage loginState={loginState} handlePageClick={handlePageClick} />}/>
+                        <Route path='/packaging' element={<PackagingPage loginState={loginState} handlePageClick={handlePageClick} />}/>
+                        <Route path='/packaging-defs' element={<PackagingDefinitionPage loginState={loginState} handlePageClick={handlePageClick}/>}/>
+                        <Route path='/mealplans' element={<MealPlan loginState={loginState} handlePageClick={handlePageClick} />}/>
+                        <Route path='/recipes/*' element={<RecipePage loginState={loginState} handlePageClick={handlePageClick}/>}/>
+                        <Route path='/cost-totals-report' element={<CostTotals handlePageClick={handlePageClick} />}/>
+                        <Route path='/clients-report' element={<HouseholdsReport handlePageClick={handlePageClick} />}/>
+                        <Route path='/ingredient-management-report' element={<IngredientManagementReport handlePageClick={handlePageClick}/>}/>
+                        <Route path='/ingredients-report' element={<IngredientsReport handlePageClick={handlePageClick} />}/>
+                        <Route path='/ingredient-purchasing-report' element={<IngPurchaseReport handlePageClick={handlePageClick} />}/>
+                        <Route path='/ing-def-report' element={<IngredientDefReport/>}/>
+                        <Route path='/meal-plan-report' element={<MealPlanReport handlePageClick={handlePageClick} />}/>
+                        <Route path='/meal-history-report' element={<MealHistoryReport handlePageClick={handlePageClick} />}/>
+                        <Route path='/packaging-report' element={<PackagingReport handlePageClick={handlePageClick} />}/>
+                        <Route path='/package-purchasing-report' element={<PackagingPurchaseReport handlePageClick={handlePageClick} />}/>
+                        <Route path='/package-return-report' element={<PackagingReturns handlePageClick={handlePageClick} />}/>
+                        <Route path="/recipe-ing-report" element={<RecipeIngredientReport/>}/>
+                        <Route path="/recipe-packaging-report" element={<RecipePackagingReport/>}/>
+                        <Route path='/under-construction' element={<UnderConstruction handlePageClick={handlePageClick}/>}/>
+                        <Route path='/admin' element={
+                            <AdminRoute isAdmin={loginState && loginState.isAdmin}>
+                                <UserList loginState={loginState} handlePageClick={handlePageClick}/>
+                            </AdminRoute>}>
+                        </Route>
                     </Route>
                     <Route path='/user-page' element={<UserPage handlePageClick={handlePageClick} />}/>
                 </Routes>
