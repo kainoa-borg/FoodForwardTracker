@@ -8,9 +8,9 @@ def main():
     """Run administrative tasks."""
     environ = 'dev'
     if environ == 'prod':
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fftracker.settings')
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fftracker.settings-deploy')
     elif environ == 'dev':
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fftracker.localsettings')
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fftracker.settings-dev')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

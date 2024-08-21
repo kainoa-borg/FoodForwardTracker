@@ -42,7 +42,7 @@ export default function RecipeIngredientReport(props) {
     const getData = () => {
         axios({
             method: "GET",
-            url: "http://4.236.185.213:8000/api/mealrecipes"
+            url: process.env.REACT_APP_API_URL + "mealrecipes"
         }).then((response) => {
             //sort data
             response.data.sort((recipeA, recipeB) => {

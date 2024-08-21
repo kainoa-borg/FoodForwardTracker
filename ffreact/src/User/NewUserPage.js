@@ -32,7 +32,7 @@ const NewUserPage = (props) => {
         console.log(JSON.stringify(user));
         axios({
             method: "POST",
-            url: "http://4.236.185.213:8000/api/users/",
+            url: process.env.REACT_APP_API_URL + "users/",
             data: user
         }).then((response) => {
             // handlePageClick('loginPage');

@@ -19,7 +19,7 @@ const PwResetPage = (props) => {
     const sendResetRequest = () => {
         axios({
             method: "POST",
-            url:"http://4.236.185.213:8000/api/users/",
+            url:process.env.REACT_APP_API_URL + "users/",
             data: user
           }).then((response)=>{
             const data = response.data;

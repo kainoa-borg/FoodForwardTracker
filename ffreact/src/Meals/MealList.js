@@ -20,7 +20,7 @@ export default function MealList(props) {
         console.log('MAKING REQUEST TO DJANGO')
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/recipe-list/"
+            url:process.env.REACT_APP_API_URL + "recipe-list/"
           }).then((response)=>{
             const recipeData = response.data
             setRecipeList(recipeData);

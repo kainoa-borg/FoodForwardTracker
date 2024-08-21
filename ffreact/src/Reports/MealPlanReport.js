@@ -33,7 +33,7 @@ export default function MealPlanReport() {
         setSearchingSBOpen(true);
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/mealplanreport/",
+            url:process.env.REACT_APP_API_URL + "mealplanreport/",
             params: dateRange
           }).then((response)=>{
             // console.log(response.data);
@@ -54,7 +54,7 @@ export default function MealPlanReport() {
       setCalcSBOpen(true);
       axios({
         method: "GET",
-        url:"http://4.236.185.213:8000/api/mealplanreport/" + pk + '/',
+        url:process.env.REACT_APP_API_URL + "mealplanreport/" + pk + '/',
       }).then((response)=>{
         console.log(response.data);
         getDBMealPlanReport(dateRange);
@@ -79,7 +79,7 @@ export default function MealPlanReport() {
       setSearchingSBOpen(true);
       axios({
         method: "GET",
-        url:"http://4.236.185.213:8000/api/station-instructions/" + pk + '/',
+        url:process.env.REACT_APP_API_URL + "station-instructions/" + pk + '/',
       }).then((response)=>{
         console.log(response.data);
         setInstructionMealPlan(mealPlan);

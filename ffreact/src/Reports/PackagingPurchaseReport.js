@@ -32,7 +32,7 @@ export default function PurchasingReport() {
     const getDBPackPurchaseList = (dateRange, value) => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/pack-purchase-report/",
+            url:process.env.REACT_APP_API_URL + "pack-purchase-report/",
             params: dateRange
           }).then((response)=>{
             if (response.data.length > 0) setResultsFoundSBOpen(true);
@@ -51,7 +51,7 @@ export default function PurchasingReport() {
     const getDBPackaging = () => {
       axios({
           method: "GET",
-          url:"http://4.236.185.213:8000/api/packaging-report"
+          url:process.env.REACT_APP_API_URL + "packaging-report"
         }).then((response)=>{
           const pkgData = response.data
           setPackaging(pkgData);
@@ -67,7 +67,7 @@ export default function PurchasingReport() {
     console.log('MAKING REQUEST TO DJANGO')
     axios({
         method: "GET",
-        url:"http://4.236.185.213:8000/api/mealplans/"
+        url:process.env.REACT_APP_API_URL + "mealplans/"
       }).then((response)=>{
         const mealData = response.data
         setMealPlans(mealData);
@@ -83,7 +83,7 @@ export default function PurchasingReport() {
       setSearchingSBOpen(true);
       axios({
           method: "GET",
-          url:"http://4.236.185.213:8000/api/mealplanreport/",
+          url:process.env.REACT_APP_API_URL + "mealplanreport/",
           params: dateRange
         }).then((response)=>{
           // console.log(response.data);

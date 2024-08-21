@@ -14,6 +14,8 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.1.3",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
     "formik": "^2.2.9",
     "lodash": "^4.17.21",
     "material": "^0.5.2",
@@ -38,7 +40,13 @@
     "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build-development": "dotenv -e .env.development -- npm run build",
+    "build-qa": "dotenv -e .env.qa -- npm run build",
+    "build-production": "dotenv -e .env.production  -- npm run build",
+    "start-local": "dotenv -e .env.local -- react-scripts --openssl-legacy-provider start",
+    "start-qa": "dotenv -e .env.qa -- npm start",
+    "start-production": "dotenv -e .env.qa -- npm start"
   },
   "eslintConfig": {
     "extends": [

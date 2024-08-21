@@ -48,7 +48,7 @@ export default function ModularDatagrid(props) {
 
         axios({
             method: "DELETE",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/"+params.id+'/',
+            url:process.env.REACT_APP_API_URL + apiEndpoint + "/"+params.id+'/',
           }).then((response)=>{
             getDBData();
             // Open saving changes success notification
@@ -70,7 +70,7 @@ export default function ModularDatagrid(props) {
         
         axios({
             method: "PATCH",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint + "/" + newRow[keyFieldName] +'/',
+            url:process.env.REACT_APP_API_URL + "" + apiEndpoint + "/" + newRow[keyFieldName] +'/',
             data: newRow
             }).then((response)=>{
             getDBData();
@@ -91,7 +91,7 @@ export default function ModularDatagrid(props) {
     const getDBData = () => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/" + apiEndpoint
+            url:process.env.REACT_APP_API_URL + "" + apiEndpoint
         }).then((response)=>{
         setTableData(response.data);
         }).catch((error) => {

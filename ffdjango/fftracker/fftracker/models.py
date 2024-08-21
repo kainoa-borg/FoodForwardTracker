@@ -198,6 +198,17 @@ class Households(models.Model):
         managed = True
         db_table = 'households'
 
+from storages.backends.azure_storage import AzureStorage
+
+class OverwriteAzureStorage(AzureStorage):
+    def get_available_name(self, name, max_length=None):
+        self.delete(name)
+        return name
+
+class ImageUpload(models.Model):
+    file = models.FileField(storage=OverwriteAzureStorage)
+    date_uploaded = models.DateTimeField(auto_now_add=True)
+
 class IngredientUnits(models.Model):
     i_unit_id = models.AutoField(primary_key=True, db_column='i_unit_id')
     i_name = models.ForeignKey("IngredientNames", models.CASCADE, db_column='i_name_id', related_name="ing_units")
@@ -413,7 +424,9 @@ class Recipes(models.Model):
     r_name = models.CharField(max_length=50, blank=True, null=True)
     r_servings = models.SmallIntegerField(default='1')
     r_img_path = models.CharField(max_length=200, blank=True, null=True)
+    r_img_upload = models.ForeignKey('ImageUpload', models.SET_NULL, related_name='r_image', db_column='r_img_upload', blank=True, null=True)
     r_card_path = models.CharField(max_length=200, blank=True, null=True)
+    r_card_upload = models.ForeignKey('ImageUpload', models.SET_NULL, related_name='r_card', db_column='r_card_upload', blank=True, null=True)
     m_s = models.SmallIntegerField()
 
 
