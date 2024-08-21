@@ -58,7 +58,7 @@ const LoginPage = (props) => {
     const sendLoginRequest = () => {
         axios({
             method: "POST",
-            url:"http://4.236.185.213:8000/api/user-auth/",
+            url:process.env.REACT_APP_API_URL + "user-auth/",
             data: user
           }).then((response)=>{
             if (response.data['code'] === 200) {
@@ -111,7 +111,6 @@ const LoginPage = (props) => {
         const thisUser = {...user};
         thisUser[fieldName] = fieldValue;
         setUser(thisUser);
-        console.log(user.username, user.password)
     }
     
     // Handle login form submit

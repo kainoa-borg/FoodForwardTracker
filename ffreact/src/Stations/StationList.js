@@ -50,7 +50,7 @@ export default function StationList() {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/households"
+            url:process.env.REACT_APP_API_URL + "households"
         }).then((response)=>{
             console.log(response.data[0])
             const hhData = response.data
@@ -69,7 +69,7 @@ export default function StationList() {
         setLoadingComponent(<Error text="LOADING DATA..."/>);
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/stations"
+            url:process.env.REACT_APP_API_URL + "stations"
           }).then((response)=>{
             const stnData = response.data
             setStations(stnData);
@@ -105,7 +105,7 @@ export default function StationList() {
         station['s_id'] = lastID + 1;
         axios({
             method: "POST",
-            url:"http://4.236.185.213:8000/api/stations/",
+            url:process.env.REACT_APP_API_URL + "stations/",
             data: station
           }).then((response)=>{
             getDBStations();
@@ -122,7 +122,7 @@ export default function StationList() {
         // const stationID = key; 
         axios({
             method: "DELETE",
-            url: "http://4.236.185.213:8000/api/stations/" + stations[key].stn_name,
+            url: process.env.REACT_APP_API_URL + "stations/" + stations[key].stn_name,
           }).then((response)=>{
               setStations(getDBStations());
           }).catch((error) => {
@@ -139,7 +139,7 @@ export default function StationList() {
         console.log(JSON.stringify(editFormData));
         axios({
             method: "PATCH",
-            url: "http://4.236.185.213:8000/api/stations/"+thisName+'/',
+            url: process.env.REACT_APP_API_URL + "stations/"+thisName+'/',
             data: editFormData
           }).then((response)=>{
               setStations(getDBStations());

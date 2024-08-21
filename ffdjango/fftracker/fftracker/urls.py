@@ -93,7 +93,6 @@ router.register(r'suppliers', SupplierView, basename='suppliers')
 router.register(r'tempimageupload', TempImageUploadView, basename='tempimageupload')
 router.register(r'tempcardupload', TempCardUploadView, basename='tempcardupload')
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),

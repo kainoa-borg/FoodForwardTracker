@@ -43,6 +43,11 @@ import PackagingDefinitionPage from './Packaging/PackagingDefinitions.js'
 import IngredientDefReport from './Reports/IngredientDefReport.js'
 import RecipePackagingReport from './Reports/RecipePackagingReport.js'
 
+// require("dotenv").config({path: `.env.${process.env.NODE_ENV}`})
+
+console.log('NODE_ENV: ' + process.env.NODE_ENV);
+console.log('API URL: ' + process.env.REACT_APP_API_URL);
+
 // SERVER IP 4.236.185.213
 
 const pageContainerStyle = {
@@ -77,6 +82,7 @@ const AppComponent = () => {
 
     // Parse login cookie text into account data map
     const readLoginCookie = () => {
+        let accountData = {};
         // If there is an existing login cookie
         if (document.cookie) {
             // For this login cookie...
@@ -101,7 +107,6 @@ const AppComponent = () => {
     useEffect(() => {
         // Get account data from cookie
         let cookieData = readLoginCookie();
-
         // If we got account data from cookie
         if (cookieData !== undefined) {
             // Set this user's login state (they are already logged in)

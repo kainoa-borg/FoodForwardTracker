@@ -38,7 +38,7 @@ export default function PackagingPage(props) {
         console.log("MAKING REQUEST TO DJANGO")
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/suppliers"
+            url:process.env.REACT_APP_API_URL + "suppliers"
           }).then((response)=>{
             setSuppliers(response.data);
           }).catch((error) => {
@@ -55,7 +55,7 @@ export default function PackagingPage(props) {
     const getDBPackaging = () => {
         axios({
             method: "GET",
-            url:"http://4.236.185.213:8000/api/packaging-inventory"
+            url:process.env.REACT_APP_API_URL + "packaging-inventory"
         }).then((response)=>{
         setPackaging(response.data);
         }).catch((error) => {
