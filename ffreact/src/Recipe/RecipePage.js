@@ -135,6 +135,7 @@ function RecipePageComponent(props) {
             url:process.env.REACT_APP_API_URL + "mealrecipes/"+params.id+'/',
         }).then((response)=>{
             // Open saving changes success notification
+            getDBRecipes();
             setUpdateDoneSBOpen(true);
         }).catch((error) => {
             if (error.response) {
@@ -162,7 +163,6 @@ function RecipePageComponent(props) {
             method: "DELETE",
             url:process.env.REACT_APP_API_URL + "mealrecipe-card/"+params.id+'/',
         }).then((response)=>{
-            getDBRecipes();
             // Open saving changes success notification
             setUpdateDoneSBOpen(true);
         }).catch((error) => {
