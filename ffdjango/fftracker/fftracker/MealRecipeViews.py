@@ -7,13 +7,12 @@ from rest_framework import serializers
 from rest_framework import status
 from rest_framework.decorators import action
 from PIL import Image
+from io import BytesIO
 from datetime import datetime as dt
 import os
-import json
-import string
-import subprocess
 
-from .models import Recipes, RecipeAllergies, RecipeDiets, RecipeIngredients, Stations, StationIngredients, RecipePackaging, RecipeInstructions
+
+from .models import ImageUpload, Recipes, RecipeAllergies, RecipeDiets, RecipeIngredients, Stations, StationIngredients, RecipePackaging, RecipeInstructions
 from .IngredientViews import IngredientNameSerializer
 from .StationViews import StationIngSerializer, StationsSerializer
 # Create your views here.
@@ -71,7 +70,7 @@ class RecipePackagingSerializer(ModelSerializer):
 class RecipeImageSerializer(serializers.ModelSerializer):
     class Meta():
         model = Recipes
-        fields = ('r_img_path')
+        fields = ('r_img_path', 'r_img_upload')
 
 class TempCardUploadView(viewsets.ViewSet):
     def retrieve(self, request, pk):
@@ -111,33 +110,41 @@ class TempImageUploadView(viewsets.ViewSet):
         def hash_datetime():
             curr_time = dt.now()
             return (str(int(round(curr_time.timestamp())) % 999999))
-        
-        # save the temporary image uploaded for this session
-        # get image file from request
+        img = Image.open(request.data['file'])
+        try:
+            img.verify()
+        except:
+            print('image corrupt')
+            return Response(request)
+        file = request.data['file']
         img = Image.open(request.data['file']).convert('RGB')
-        # store image with identifier for this session
-        rel_file_path = 'Images/temp_r_image_%s.jpg'%(hash_datetime())
-        abs_file_path = 'var/www/html/' + rel_file_path
-        # Create local debug image storage if it doesn't exist 
-        if not os.path.exists('var/www/html/Images'):
-            os.makedirs('var/www/html/Images')
-        img.save(abs_file_path)
-        ###### COMMENT OUT IN PROD ######
-        # os.startfile(os.path.normpath('var/www/html/Images'))
-        ###### COMMENT OUT IN PROD ######
-        # return a link to temporary image and abs path
-        return Response(rel_file_path)
+        img_buffer = BytesIO()
+        rel_file_path = 'r_%s_image.jpg'%(0)
+        img.save(img_buffer, format='JPEG')
+        file.file = img_buffer
+        file.name = rel_file_path
+        ImageUpload.objects.create(file=file)
+        return Response(200)
     
     def patch(self, request, pk):
-        print('request.data = %s'%(request.data))
-        os.remove('var/www/html/' + request.data['path'])
         return Response(200)
+
+class ImageUploadSerializer(ModelSerializer):
+    class Meta:
+        model = ImageUpload
+        fields = ('file', 'date_uploaded')
 
 class RecipeImageView(viewsets.ViewSet):
     def list(self, request):
         return Response('list')
     def retrieve(self, request, pk):
-        return Response(pk)
+        queryset = Recipes.objects.filter(r_num = pk)
+        recipe = queryset[0]
+        r_img_upload = recipe.r_img_upload
+        serializer = ImageUploadSerializer(r_img_upload)
+        print(r_img_upload)
+        print(serializer.data)
+        return Response(serializer.data)
     def patch(self, request, pk):
         queryset = Recipes.objects.filter(r_num = pk)
         img = Image.open(request.data['file'])
@@ -146,33 +153,35 @@ class RecipeImageView(viewsets.ViewSet):
         except:
             print('image corrupt')
             return Response(request)
+        file = request.data['file']
         img = Image.open(request.data['file']).convert('RGB')
-        abs_file_path = 'var/www/html/Images/r_%s_image.jpg'%(pk)
-        rel_file_path = 'Images/r_%s_image.jpg'%(pk)
-        img.save(abs_file_path)
+        img_buffer = BytesIO()
+        rel_file_path = 'r_%s_image.jpg'%(pk)
+        img.save(img_buffer, format='JPEG')
+        file.file = img_buffer
+        file.name = rel_file_path
+        r_image = ImageUpload.objects.create(file=file)
+        serializer = ImageUploadSerializer(r_image)
+        r_img_path = serializer.data['file']
         # r_obj.r_img_path = rel_file_path
         # r_obj.save(update_fields=['r_img_path'])
-        Recipes.objects.filter(r_num=pk).update(r_img_path = rel_file_path)
+        Recipes.objects.filter(r_num=pk).update(r_img_path = r_img_path, r_img_upload = r_image)
             
         return Response(queryset[0].r_img_path)
     
     def destroy(self, request, pk):
         r_obj = Recipes.objects.get(pk=pk)
-        img_path=''
-        img_path = r_obj.r_img_path[:]
-        # Recipes.objects.filter(r_num=pk).update(r_img_path=None)
-        # r_obj.r_img_path = None
         # r_obj.save(update_fields=['r_img_path'])
+        r_img_upload = r_obj.r_img_upload
+        if (r_img_upload):
+            r_img_upload.file.delete()
+            r_img_upload.delete()
         updated_count = Recipes.objects.filter(pk=pk).update(r_img_path = None)
-        if (img_path and os.path.exists('var/www/html/' + img_path)):
-            os.remove('var/www/html/' + img_path)
         if updated_count > 0:
             return Response(200)
         else:
             return Response(500)
          
-
-
 class RecipeCardView(viewsets.ViewSet):
     def list(self, request):
         return Response('list')
@@ -183,30 +192,24 @@ class RecipeCardView(viewsets.ViewSet):
         if len(queryset) > 0:
             # img = Image.open(request.data['file'])
             # img = Image.open(request.data['file']).convert('RGB')
-            abs_file_path = 'var/www/html/Images/r_%s_card.pdf'%(pk)
-            rel_file_path = 'Images/r_%s_card.pdf'%(pk)
-            # img.save(abs_file_path)
-            with open(abs_file_path, 'wb') as f:
-                f.write(request.data['file'].read())
-            # queryset[0].r_card_path = rel_file_path
-            # queryset[0].save(update_fields=['r_card_path'])
-            queryset.update(r_card_path = rel_file_path)
+            file_name = 'r_%s_card.pdf'%(pk)
+            file = request.data['file']
+            file.name = file_name
+            r_card_upload = ImageUpload.objects.create(file=request.data['file'])
+            serializer = ImageUploadSerializer(r_card_upload)
+            r_card_path = serializer.data['file']
+            queryset.update(r_card_path = r_card_path, r_card_upload = r_card_upload)
             
         return Response(queryset[0].r_card_path)
     
     def destroy(self, request, pk):
-        r_obj = Recipes.objects.get(r_num=pk)
-        print('tmpCard: %s'%(r_obj.r_name))
-        print('tmpCard: %s'%(r_obj.r_card_path))
-        card_path = r_obj.r_card_path[:]
-        # Recipes.objects.filter(r_num=pk).update(r_card_path = None)
-        # r_obj.r_card_path = None
-        # r_obj.save(update_fields=['r_card_path'])
-        # print(card_path)
+        r_obj = Recipes.objects.get(pk=pk)
+        r_card_upload = r_obj.r_card_upload
+        if (r_card_upload):
+            r_card_upload.file.delete()
+            r_card_upload.delete()
         updated_count = Recipes.objects.filter(pk=pk).update(r_card_path = None)
-        if (card_path and os.path.exists('var/www/html/' + card_path)):
-            os.remove('var/www/html/' + card_path)
-        if (updated_count > 0):
+        if updated_count > 0:
             return Response(200)
         else:
             return Response(500)

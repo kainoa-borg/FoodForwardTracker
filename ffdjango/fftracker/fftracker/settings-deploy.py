@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import logging
-from dotenv import load_dotenv
+from azure.identity import DefaultAzureCredential
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-#xtryp(1+$_w)9h6i)8+zhg+!#h3knvm4mb1j3mem0p_mb494^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['foodforwardwebqaeast-b0bph9dkhygdfmaj.eastus-01.azurewebsites.net', 'https://foodforwardwebprodeast-e5bcgbgrcea0eebs.eastus-01.azurewebsites.net/', 'api']
+ALLOWED_HOSTS = ['foodforwardwebqaeast-b0bph9dkhygdfmaj.eastus-01.azurewebsites.net', 'https://foodforwardwebprodeast-e5bcgbgrcea0eebs.eastus-01.azurewebsites.net/', 'api', 'localhost']
 
 # Application definition
 
@@ -92,6 +92,19 @@ db_username = os.environ.get('APPSETTING_DB_USERNAME')
 db_pass = os.environ.get('APPSETTING_DB_PASS')
 db_host = os.environ.get('APPSETTING_DB_HOST')
 
+storage_account = 'foodforwardstorage'
+storage_container = os.environ.get('APPSETTING_STORAGE_CONTAINER') if os.environ.get('APPSETTING_STORAGE_CONTAINER') else 'images-qa'
+storage_key = os.environ.get('APPSETTING_STORAGE_KEY')
+
+if not db_username: db_username = 'FFDAdmin'
+if not db_pass: db_pass = 'F00dF0rw@rd'
+if not db_host: db_host = 'foodforwardqadb.mysql.database.azure.com'
+
+DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
+AZURE_ACCOUNT_NAME = 'foodforwardstorage'
+AZURE_CONTAINER = storage_container
+AZURE_ACCOUNT_KEY = storage_key
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -99,6 +112,17 @@ DATABASES = {
 	'USER': db_username,
 	'PASSWORD': db_pass,
 	'HOST': db_host,
+	'PORT': '3306',
+	'OPTIONS':  {
+            'ssl': {'ca': ca_path}
+        }
+    },
+    'foodforwardqa': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'foodforwarddb',
+	'USER': 'FFDAdmin',
+	'PASSWORD': 'F00dF0rw@rd',
+	'HOST': 'foodforwardqadb.mysql.database.azure.com',
 	'PORT': '3306',
 	'OPTIONS':  {
             'ssl': {'ca': ca_path}

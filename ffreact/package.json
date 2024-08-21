@@ -44,8 +44,9 @@
     "build-development": "dotenv -e .env.development -- npm run build",
     "build-qa": "dotenv -e .env.qa -- npm run build",
     "build-production": "dotenv -e .env.production  -- npm run build",
+    "start-local": "dotenv -e .env.local -- react-scripts --openssl-legacy-provider start",
     "start-qa": "dotenv -e .env.qa -- npm start",
-    "start-production": "dotenv-e .env.qa -- npm start"
+    "start-production": "dotenv -e .env.qa -- npm start"
   },
   "eslintConfig": {
     "extends": [
