@@ -94,7 +94,7 @@ export default function IngredientPage(props) {
             renderEditCell: (params) => (<GridEditInputCell {...params} inputProps={{ min: 0,}}/>) },
         { field: 'unit_cost', headerName: 'Unit Cost', align: 'right', width: 90, editable: true, valueFormatter: ({ value }) => currencyFormatter.format(value),
             renderEditCell: (params) => (<GridEditInputCell {...params} inputProps={{ min: 0,}}/>)},
-        { field: 'pref_isupplier_id', headerName: 'Supplier', type: 'singleSelect', valueOptions: supplierOptions, width: 170, editable: true, valueFormatter: (params) => { if (params.value) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
+        { field: 'pref_isupplier_id', headerName: 'Supplier', type: 'singleSelect', valueOptions: supplierOptions, width: 170, editable: true, valueFormatter: (params) => { if (params.value != undefined) {return suppliers.find((supp) => supp.s_id === params.value).s_name;}}},
         { field: 'in_date', headerName: 'Purchase Date', width: 120, type: 'date', editable: true, valueFormatter: params => moment(params.value).format('MM/DD/YYYY'), valueParser: value => moment(value).format("YYYY-MM-DD") },
         { field: 'in_qty', headerName: 'Purchased Amount', width: 140, type: 'number', 
             renderEditCell: (params) => (<GridEditInputCell {...params} inputProps={{ max: 1000, min: 0,}}/>), editable: true },
