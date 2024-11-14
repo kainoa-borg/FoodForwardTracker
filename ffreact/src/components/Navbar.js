@@ -41,7 +41,6 @@ const styles = {
     }
   }
 
-
   const handlePageClick = props.handlePageClick;
   return (
     <React.Fragment>
@@ -56,7 +55,7 @@ const styles = {
       
         <Grid container justifyContent='space-between' alignItems='center' direction='row'>
           <Grid item sx={{width: '70%'}} container alignItems='center' direction='row'>
-            <Typography component='img' sx={{width: '7%'}} src="ffreact-prod/src/Images/ff_logo.jpg" onClick = {() => handlePageClick('landingPage')}/>
+            <Typography component='img' sx={{width: '7%'}} src={process.env.REACT_APP_SITE_IMAGE_URL + "ff_logo.jpg"} onClick = {() => handlePageClick('landingPage')}/>
             <Button color='lightGreen' sx={{boxShadow:'0'}} variant='contained' onClick={() => handlePageClick('households')}>
                 Clients
             </Button>
