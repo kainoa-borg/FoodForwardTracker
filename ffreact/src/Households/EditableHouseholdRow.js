@@ -21,6 +21,10 @@ const EditableHouseholdRow = (props) => {
             <TableCell align='right'><Input name='gf_flag' type='checkbox' checked={hh.gf_flag} onChange={handleEditFormChange}/></TableCell>
             <TableCell align='right'><Input name='a_flag' type='checkbox' checked={hh.a_flag} onChange={handleEditFormChange}/></TableCell>
             <TableCell align='right'><Input name='sms_flag' type='checkbox' checked={hh.sms_flag} onChange={handleEditFormChange}/></TableCell>
+            <TableCell align='right'><Input name='ppMealKit_flag' type='checkbox' checked={false} onChange={handleEditFormChange}/></TableCell>
+            <TableCell align='right'><Input name='childrenSnacks_flag' type='checkbox' checked={false} onChange={handleEditFormChange}/></TableCell>
+            <TableCell align='right'><Input name='foodBox_flag' type='checkbox' checked={false} onChange={handleEditFormChange}/></TableCell>
+            <TableCell align='right'><Input name='rteMeal_flag' type='checkbox' checked={false} onChange={handleEditFormChange}/></TableCell>
             <TableCell align='right'><Input name='paused_flag' type='checkbox' checked={hh.paused_flag} onChange={handleEditFormChange}/></TableCell>
             <TableCell align='right'><Input name='phone' type='tel' pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}' minLength='12' maxLength='12' defaultValue={hh.phone} onChange={handleEditFormChange}/></TableCell>
             <TableCell align='right'><Input name='sTableRoweet' type='text' defaultValue={hh.sTableRoweet} onChange={handleEditFormChange}/></TableCell>

@@ -193,6 +193,10 @@ class Households(models.Model):
     state = models.CharField(max_length=2, blank=True, null=True)
     delivery_notes = models.TextField(blank=True, null=True)
     hh_bags_or_crates = models.CharField(max_length=30, blank=True, null=True)
+    ppMealKit_flag = models.BooleanField(default=False)
+    childrenSnacks_flag = models.BooleanField(default=False)
+    foodBox_flag = models.BooleanField(default=False)
+    rteMeal_flag = models.BooleanField(default=False)
 
     class Meta:
         managed = True

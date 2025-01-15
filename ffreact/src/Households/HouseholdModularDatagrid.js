@@ -36,6 +36,10 @@ export default function HouseholdModularDatagrid() {
         { field: 'sms_flag', headerName: 'SMS', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'veg_flag', headerName: 'Veg', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'gf_flag', headerName: 'Gluten Free', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0},
+        { field: 'ppMealKit_flag', headerName: 'Part. Prep. M.K.', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
+        { field: 'childrenSnacks_flag', headerName: 'Children Snacks', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
+        { field: 'foodBox_flag', headerName: 'Food Box', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
+        { field: 'rteMeal_flag', headerName: 'RTE Meal', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'hh_allergies', headerName: 'Allergies', width: 100, type: 'string', editable: true, 
             renderCell: AllergyListCell,
             renderEditCell: (params) => <AllergyListEditCell {...params} sx={{height: 'auto', minHeight: 200, maxHeight: 1000}}/>
