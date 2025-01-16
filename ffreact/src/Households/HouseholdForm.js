@@ -4,6 +4,7 @@ import React from 'react'
 import { Button, Grid, Input, Typography } from '@mui/material'
 import { InputLabel } from '@mui/material'
 import { Card } from '@mui/material'
+import { plPL } from '@mui/x-data-grid'
 // Kainoa Borges
 
 // Household Form component
@@ -25,6 +26,10 @@ const HouseholdForm = (props) => {
       gf_flag: 0,
       ls_flag: 0,
       paused_flag: 0,
+      ppMealKit_flag: 0,
+      childrenSnacks_flag: 0,
+      foodBox_flag: 0,
+      rteMeal_flag: 0,
       paying: 0,
       phone: "",
       street: "",
@@ -112,6 +117,18 @@ const HouseholdForm = (props) => {
                 <InputLabel htmlFor='sms_flag'>Recieving SMS: </InputLabel>
                 <Input name='sms_flag' id='sms_flag' type='checkbox' checked={household.sms_flag} onChange={handleFormChange}/>
 
+                <InputLabel htmlFor='ppMealKit_flag'>Participating in Meal Kits: </InputLabel>
+                <Input name='ppMealKit_flag' id='ppMealKit_flag' type='checkbox' checked={household.ppMealKit_flag} onChange={handleFormChange}/>
+
+                <InputLabel htmlFor='childrenSnacks_flag'>Receiving Children's Snacks: </InputLabel>
+                <Input name='childrenSnacks_flag' id='childrenSnacks_flag' type='checkbox' checked={household.childrenSnacks_flag} onChange={handleFormChange}/>
+
+                <InputLabel htmlFor='foodBox_flag'>Receiving Food Box: </InputLabel>
+                <Input name='foodBox_flag' id='foodBox_flag' type='checkbox' checked={household.foodBox_flag} onChange={handleFormChange}/>
+
+                <InputLabel htmlFor='rteMeal_flag'>Receiving Ready-to-Eat Meals: </InputLabel>
+                <Input name='rteMeal_flag' id='rteMeal_flag' type='checkbox' checked={household.rteMeal_flag} onChange={handleFormChange}/>
+                
                 <InputLabel htmlFor='paused_flag'>Is Paused: </InputLabel>          
                 <Input name='paused_flag' id='paused_flag' type='checkbox' checked={household.paused_flag} onChange={handleFormChange}/>
               
