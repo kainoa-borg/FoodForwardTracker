@@ -40,6 +40,7 @@ from .SupplierViews import SupplierView
 from .UserView import UserAuth
 from .UserView import UserView
 from .IngDefViews import IngNameView, IngUnitView
+from .HistoricalDataViews import ProductSubscriptionHistoryView
 
 #admin.site.register(Households)
 #admin.site.register(Ingredients)
@@ -92,7 +93,7 @@ router.register(r'stations', StationsView, basename='stations')
 router.register(r'suppliers', SupplierView, basename='suppliers')
 router.register(r'tempimageupload', TempImageUploadView, basename='tempimageupload')
 router.register(r'tempcardupload', TempCardUploadView, basename='tempcardupload')
-
+router.register(r'product-subscription-history', ProductSubscriptionHistoryView, basename='product-subscription-history')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),

@@ -197,10 +197,20 @@ class Households(models.Model):
     childrenSnacks_flag = models.BooleanField(default=False)
     foodBox_flag = models.BooleanField(default=False)
     rteMeal_flag = models.BooleanField(default=False)
-
+  
     class Meta:
         managed = True
         db_table = 'households'
+
+class ProductSubscriptionHistory(models.Model):
+    household = models.ForeignKey(Households, on_delete=models.CASCADE, related_name='subscription_history')
+    product_type = models.CharField(max_length=30)
+    subscribed = models.BooleanField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = True
+        db_table = 'product_subscription_history'
 
 from storages.backends.azure_storage import AzureStorage
 

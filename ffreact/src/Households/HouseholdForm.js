@@ -38,7 +38,8 @@ const HouseholdForm = (props) => {
       state: "",
       delivery_notes: "",
       hh_allergies: [],
-      bags_or_crates: ""
+      historicalTimeStamps: [],
+      bags_or_crates: "",
     }
   }
 
@@ -51,9 +52,26 @@ const HouseholdForm = (props) => {
     const handleSubmit = (event) => {
       // Prevent refresh
       event.preventDefault();
-      // Pass household object to HouseholdList callback
-      // props.addHousehold(household)
+
+      const subscriptionHistory = [
+        { product_type: 'ppMealKit', subscribed: household.ppMealKit_flag, timestamp: currentTime },
+        { product_type: 'childrenSnacks', subscribed: household.childrenSnacks_flag, timestamp: currentTime },
+        { product_type: 'foodBox', subscribed: household.foodBox_flag, timestamp: currentTime },
+        { product_type: 'rteMeal', subscribed: household.rteMeal_flag, timestamp: currentTime },
+      ];
       addEntry(household);
+
+      const historicalDataHandler = new HistoricalDataHandler('/api/product_subscription_history');
+       for (const history of subscriptionHistory) {
+        if (history.subscribed) {
+          historicalDataHandler.addEntry({
+            household: household.hh_id,
+            product_type: history.product_type,
+            subscribed: history.subscribed,
+            timestamp: history.timestamp,
+          });
+        }
+      }
       // Clear the form state
       setHousehold(clearHousehold());
       handleClose();
