@@ -206,7 +206,7 @@ class ProductSubscriptionHistory(models.Model):
     household = models.ForeignKey(Households, on_delete=models.CASCADE, related_name='subscription_history')
     product_type = models.CharField(max_length=30)
     subscribed = models.BooleanField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField()
 
     class Meta:
         managed = True

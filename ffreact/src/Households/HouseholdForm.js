@@ -5,6 +5,7 @@ import { Button, Grid, Input, Typography } from '@mui/material'
 import { InputLabel } from '@mui/material'
 import { Card } from '@mui/material'
 import { plPL } from '@mui/x-data-grid'
+import HistoricalDataHandler from './HistoricalDataHandler.js'
 // Kainoa Borges
 
 // Household Form component
@@ -49,19 +50,22 @@ const HouseholdForm = (props) => {
     // Handle form submission (prevent refresh, pass household to addHousehold, and clear form state)
     // Takes submit event information (form submission)
     // Returns none
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
       // Prevent refresh
       event.preventDefault();
 
+      const currentTime = new Date().toISOString();
       const subscriptionHistory = [
         { product_type: 'ppMealKit', subscribed: household.ppMealKit_flag, timestamp: currentTime },
         { product_type: 'childrenSnacks', subscribed: household.childrenSnacks_flag, timestamp: currentTime },
         { product_type: 'foodBox', subscribed: household.foodBox_flag, timestamp: currentTime },
         { product_type: 'rteMeal', subscribed: household.rteMeal_flag, timestamp: currentTime },
       ];
-      addEntry(household);
 
-      const historicalDataHandler = new HistoricalDataHandler('/api/product_subscription_history');
+      // Add the household to the database
+      addEntry(household);
+      await new Promise(resolve => setTimeout(resolve, 500));
+      const historicalDataHandler = new HistoricalDataHandler('product-subscription-history/');
        for (const history of subscriptionHistory) {
         if (history.subscribed) {
           historicalDataHandler.addEntry({
