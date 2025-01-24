@@ -160,7 +160,9 @@ const LandingPage = (props) => {
                         Packaging Returns</Button>,
                     <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('pack-purchase-report')}>
                         Packaging Purchase Report</Button>,
-                ]}/>
+                    <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('individual-household-product-report')}>
+                        Individual Household Product Report</Button>
+                    ]}/>
             </Grid>
 
             <Grid item sm={12} md={4}>

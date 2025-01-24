@@ -11,6 +11,7 @@ import PackagingReturns from './PackagingReturns.js'
 import MealPlanReport from './MealPlanReport.js'
 import MealHistory from './MealHistoryReport.js'
 import CostTotals from './CostTotals.js'
+import IndividualHouseholdProductReport from './IndividualHouseholdProductReport'
 
 const theme = createTheme({
     palette: {
@@ -56,6 +57,7 @@ const ReportsPage = (props) => {
         if (pageName === 'meal-plan-report') setCurrPage(<MealPlanReport handlePageClick={handlePageClick} />);
         if (pageName === 'packaging-report') setCurrPage(<PackagingReport handlePageClick={handlePageClick} />);
         if (pageName === 'packaging-returns') setCurrPage(<PackagingReturns handlePageClick={handlePageClick} />);
+        if (pageName === 'individual-household-product-report') setCurrPage(<IndividualHouseholdProductReport handlePageClick={handlePageClick} />);
         else if (pageName === 'pack-purchase-report') setCurrPage(<PackagingPurchaseReport handlePageClick={handlePageClick} />);
     }
 
@@ -85,6 +87,8 @@ const ReportsPage = (props) => {
                     Packaging Returns</button>,
                  <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('households-report')}>
                     PackagePurchasing Report</button>,
+                <button color='lightGreen' ref={props.ref} type="button" onClick={() => handlePageClick('individual-household-product-report')}>
+                    Individual Household Product Report</button>
                 ]}/>
             {currPage}
         </div>

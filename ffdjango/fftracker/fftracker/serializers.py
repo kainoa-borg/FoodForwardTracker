@@ -106,3 +106,9 @@ class ProductSubscriptionHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductSubscriptionHistory
         fields = '__all__'
+
+class HouseholdReportSerializer(serializers.ModelSerializer):
+    products = serializers.SerializerMethodField()
+    class Meta:
+        model = Households
+        fields = ['id', 'hh_first_name', 'hh_last_name', 'products', 'paused_flag' , 'children_under_6', 'children_over_6', 'adults']

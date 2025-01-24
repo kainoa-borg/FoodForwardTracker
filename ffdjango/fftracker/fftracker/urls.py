@@ -41,6 +41,8 @@ from .UserView import UserAuth
 from .UserView import UserView
 from .IngDefViews import IngNameView, IngUnitView
 from .HistoricalDataViews import ProductSubscriptionHistoryView
+from .IndividualClientViews import IndividualClientView
+from .HouseholdIdView import HouseholdIdView
 
 #admin.site.register(Households)
 #admin.site.register(Ingredients)
@@ -59,6 +61,7 @@ router.register(r'mealhistoryreport', MealHistoryReportView, basename='mealhisto
 router.register(r'snackhistoryreport', SnackHistoryReportView, basename='snackhistoryreport')
 router.register(r'packaging-return-report', PackagingReturnView, basename='packaging-return-report')
 router.register(r'station-instructions', StationInstructionsView, basename='station-instructions')
+router.register(r'individual-client', IndividualClientView, basename='individual-client')
 # Functional Views
 router.register(r'serving-calculations', ServingCalculationViews, basename='serving-calculations')
 router.register(r'calculations', CalculationsView, basename='calculations')
@@ -113,4 +116,5 @@ urlpatterns = [
     path('api/get-mealplans', MealPlansView.as_view({'get': 'retrieve'})),
     path('api/get-mealrecipes', RecipeView.as_view({'get': 'retrieve'})),
     path('api/get-stations', StationsView.as_view({'get': 'list', 'get': 'retrieve'})),
+    path('api/household-id/', HouseholdIdView.as_view(), name='household-id'),
 ]
