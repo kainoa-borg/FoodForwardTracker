@@ -127,6 +127,11 @@ export default function HouseholdPage(props) {
             headerName: 'Dietary Requirements',
             children:[{ field: 'veg_flag' }, { field: 'gf_flag'}, { field: 'hh_allergies'}]
         },
+        {
+            groupId: 'services',
+            headerName: 'Services',
+            children: [{ field: 'ppMealKit_flag' }, { field: 'childrenSnacks_flag'}, { field: 'foodBox_flag'}, { field: 'rteMeal_flag'}]
+        },
         { field: 'paused_flag' }, { field: 'paying'}
     ];
 
