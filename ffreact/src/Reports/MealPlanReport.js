@@ -155,7 +155,7 @@ export default function MealPlanReport() {
     return (
         <div>
           <Typography variant='h5'>Meal Plan Report</Typography>
-          <Typography variant='p' sx={{marginBottom: '5%'}}>Show planned meals between a start and end date</Typography>
+          
           <form onSubmit={handleSubmit}>
             {/* <Stack direction='row'> */}
               <FormControl>
@@ -173,13 +173,22 @@ export default function MealPlanReport() {
           </form>
           <Box sx={{height: '70vh'}}>
             <DataGrid
-              columns={columns}
-              rows={mealPlans}
-              getRowId={(row) => row ? row.m_id : 0}
-              autoHeight={true}
-              components={{Toolbar: CustomToolbar}}
-            >
-            </DataGrid>
+                            columns={columns}
+                            rows={mealPlans}
+                            getRowId={(row) => (row ? row.i_id : 0)}
+                            autoHeight={true}
+                            components={{
+                              Toolbar: CustomToolbar,
+                              NoRowsOverlay: () => (
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                                  <Typography variant="body1">
+                                    Please Enter a Start and End Date to view planned meals during the entered time
+                                  </Typography>
+                                </Box>
+                              ),
+                            }}
+            />
+            
             <Dialog
               fullScreen
               open={instructionsDialogOpen}

@@ -11,6 +11,7 @@ const EditableHouseholdRow = (props) => {
     const hh = editFormData;
     const key = thisKey;
 
+
     return (
         <TableRow key={key} sx={{ '&:last-child TableCell, &:last-child th': { border: 0 } }}>
             <TableCell align='right'><Input type="text" name="hh_name" defaultValue={hh.hh_name} onChange={handleEditFormChange}/></TableCell>
@@ -20,7 +21,7 @@ const EditableHouseholdRow = (props) => {
             <TableCell align='right'><Input name='veg_flag' type="checkbox" checked={hh.veg_flag} onChange={handleEditFormChange}/></TableCell>
             <TableCell align='right'><Input name='gf_flag' type='checkbox' checked={hh.gf_flag} onChange={handleEditFormChange}/></TableCell>
             <TableCell align='right'><Input name='a_flag' type='checkbox' checked={hh.a_flag} onChange={handleEditFormChange}/></TableCell>
-            <TableCell align='right'><Input name='sms_flag' type='checkbox' checked={hh.sms_flag} onChange={handleEditFormChange}/></TableCell>
+            
             <TableCell align='right'><Input name='paused_flag' type='checkbox' checked={hh.paused_flag} onChange={handleEditFormChange}/></TableCell>
             <TableCell align='right'><Input name='phone' type='tel' pattern='[0-9]{3}-[0-9]{3}-[0-9]{4}' minLength='12' maxLength='12' defaultValue={hh.phone} onChange={handleEditFormChange}/></TableCell>
             <TableCell align='right'><Input name='sTableRoweet' type='text' defaultValue={hh.sTableRoweet} onChange={handleEditFormChange}/></TableCell>

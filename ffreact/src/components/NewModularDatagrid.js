@@ -4,6 +4,7 @@ import {DataGrid, GridRowModes, GridActionsCellItem, GridToolbarContainer} from 
 import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/material';
 import { Button, Popover, Snackbar, Stack, Typography } from '@mui/material';
+import { Table, TableHead, TableRow, TableCell, TableBody, CircularProgress } from '@mui/material';
 
 import FormDialog from './FormDialog.js'
 import SearchToolBar from './SearchToolBar.js'
@@ -67,6 +68,9 @@ export default function NewModularDatagrid(props) {
 
     // Open state of the Add form popup
     const [addFormOpen, setAddFormOpen] = useState(false);
+ 
+     
+      
 
     // Helper function closes Snackbar notification
     const handleSBClose = (event, reason, setOpen) => {
@@ -212,7 +216,7 @@ export default function NewModularDatagrid(props) {
     }, [errorSBOpen])
 
     // Wait until table data is loaded to render datagrid
-    if (tableData === undefined) {
+    if (tableData === undefined ||  tableData.length === 0) {
         return (
             <>loading...</>
         )
@@ -331,11 +335,14 @@ export default function NewModularDatagrid(props) {
         );
     }
     
-    if (tableData === undefined) {
+    if (tableData === undefined ||  tableData.length === 0)  {
         return (
             <>loading...</>
         )
     }
+
+
+
 
     // The HTML structure of this component
     return(
