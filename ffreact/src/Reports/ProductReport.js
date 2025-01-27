@@ -46,7 +46,6 @@ const ProductReport = () => {
                     <table>
                         <thead>
                             <tr>
-                                <th style={{ padding: '20px' }}>Household ID</th>
                                 <th style={{ padding: '20px' }}>First Name</th>
                                 <th style={{ padding: '20px' }}>Last Name</th>
                                 {!report.product.includes('childrenSnacks') && (
@@ -59,8 +58,7 @@ const ProductReport = () => {
                         <tbody>
                             {report.households.map((household) => (
                                 <tr key={household.household_id}>
-                                    <td style={{ padding: '20px' }}>{household.household_id}</td>
-                                    <td style={{ padding: '20px' }}>{household.first_name}</td>
+                                    <td style={{ padding: '22px' }}>{household.first_name}</td>
                                     <td style={{ padding: '20px' }}>{household.last_name}</td>
                                     {!report.product.includes('childrenSnacks') && (
                                         <td style={{ padding: '20px' }}>{household.adult_servings}</td>
