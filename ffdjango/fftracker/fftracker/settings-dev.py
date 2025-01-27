@@ -30,7 +30,9 @@ SECRET_KEY = 'django-insecure-#xtryp(1+$_w)9h6i)8+zhg+!#h3knvm4mb1j3mem0p_mb494^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['foodforwardwebqaeast-b0bph9dkhygdfmaj.eastus-01.azurewebsites.net', 'https://foodforwardwebprodeast-e5bcgbgrcea0eebs.eastus-01.azurewebsites.net/', 'api', 'localhost', '127.0.0.1']
+
+ALLOWED_HOSTS = ['foodforwardwebqaeast-b0bph9dkhygdfmaj.eastus-01.azurewebsites.net', 'https://foodforwardwebprodeast-e5bcgbgrcea0eebs.eastus-01.azurewebsites.net/', 'api', 'localhost' , '127.0.0.1']
+
 
 # Application definition
 

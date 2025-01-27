@@ -4,6 +4,8 @@ import React from 'react'
 import { Button, Grid, Input, Typography } from '@mui/material'
 import { InputLabel } from '@mui/material'
 import { Card } from '@mui/material'
+import { plPL } from '@mui/x-data-grid'
+import HistoricalDataHandler from './HistoricalDataHandler.js'
 // Kainoa Borges
 
 // Household Form component
@@ -25,6 +27,10 @@ const HouseholdForm = (props) => {
       gf_flag: 0,
       ls_flag: 0,
       paused_flag: 0,
+      ppMealKit_flag: 0,
+      childrenSnacks_flag: 0,
+      foodBox_flag: 0,
+      rteMeal_flag: 0,
       paying: 0,
       phone: "",
       street: "",
@@ -33,7 +39,8 @@ const HouseholdForm = (props) => {
       state: "",
       delivery_notes: "",
       hh_allergies: [],
-      bags_or_crates: ""
+      historicalTimeStamps: [],
+      bags_or_crates: "",
     }
   }
 
@@ -43,12 +50,32 @@ const HouseholdForm = (props) => {
     // Handle form submission (prevent refresh, pass household to addHousehold, and clear form state)
     // Takes submit event information (form submission)
     // Returns none
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
       // Prevent refresh
       event.preventDefault();
-      // Pass household object to HouseholdList callback
-      // props.addHousehold(household)
+
+      const currentTime = new Date().toISOString();
+      const subscriptionHistory = [
+        { product_type: 'ppMealKit', subscribed: household.ppMealKit_flag, timestamp: currentTime },
+        { product_type: 'childrenSnacks', subscribed: household.childrenSnacks_flag, timestamp: currentTime },
+        { product_type: 'foodBox', subscribed: household.foodBox_flag, timestamp: currentTime },
+        { product_type: 'rteMeal', subscribed: household.rteMeal_flag, timestamp: currentTime },
+      ];
+
+      // Add the household to the database
       addEntry(household);
+      await new Promise(resolve => setTimeout(resolve, 500));
+      const historicalDataHandler = new HistoricalDataHandler('product-subscription-history/');
+       for (const history of subscriptionHistory) {
+        if (history.subscribed) {
+          historicalDataHandler.addEntry({
+            household: household.hh_id,
+            product_type: history.product_type,
+            subscribed: history.subscribed,
+            timestamp: history.timestamp,
+          });
+        }
+      }
       // Clear the form state
       setHousehold(clearHousehold());
       handleClose();
@@ -111,6 +138,18 @@ const HouseholdForm = (props) => {
                 
                 
 
+                <InputLabel htmlFor='ppMealKit_flag'>Participating in Meal Kits: </InputLabel>
+                <Input name='ppMealKit_flag' id='ppMealKit_flag' type='checkbox' checked={household.ppMealKit_flag} onChange={handleFormChange}/>
+
+                <InputLabel htmlFor='childrenSnacks_flag'>Receiving Children's Snacks: </InputLabel>
+                <Input name='childrenSnacks_flag' id='childrenSnacks_flag' type='checkbox' checked={household.childrenSnacks_flag} onChange={handleFormChange}/>
+
+                <InputLabel htmlFor='foodBox_flag'>Receiving Food Box: </InputLabel>
+                <Input name='foodBox_flag' id='foodBox_flag' type='checkbox' checked={household.foodBox_flag} onChange={handleFormChange}/>
+
+                <InputLabel htmlFor='rteMeal_flag'>Receiving Ready-to-Eat Meals: </InputLabel>
+                <Input name='rteMeal_flag' id='rteMeal_flag' type='checkbox' checked={household.rteMeal_flag} onChange={handleFormChange}/>
+                
                 <InputLabel htmlFor='paused_flag'>Is Paused: </InputLabel>          
                 <Input name='paused_flag' id='paused_flag' type='checkbox' checked={household.paused_flag} onChange={handleFormChange}/>
               

@@ -5,6 +5,7 @@ import {Cancel, Delete, Edit, Save} from '@mui/icons-material'
 import { Box } from '@mui/material';
 import { Button, Popover, Snackbar, Stack, Typography } from '@mui/material';
 import { Table, TableHead, TableRow, TableCell, TableBody, CircularProgress } from '@mui/material';
+import HistoricalDataHandler from '../Households/HistoricalDataHandler.js';
 
 import FormDialog from './FormDialog.js'
 import SearchToolBar from './SearchToolBar.js'
@@ -138,7 +139,25 @@ export default function NewModularDatagrid(props) {
     // Generalized Update Row
     const processRowUpdate = (newRow) => {
         const updatedRow = {...newRow, isNew: false}; 
-        
+        if(apiEndpoint === 'households') {
+            
+            const originalRow = tableData.find(row => row[keyFieldName] === newRow[keyFieldName]);
+            const serviceFlags = ['ppMealKit_flag', 'childrenSnacks_flag', 'foodBox_flag', 'rteMeal_flag']; // replace with actual service flag fields
+
+            serviceFlags.forEach(flag => {
+                if (originalRow[flag] !== newRow[flag]) {
+                    const historicalDataHandler = new HistoricalDataHandler('product-subscription-history/');
+                    const timestamp = new Date().toISOString();
+                    const historicalData = {
+                        household: newRow[keyFieldName],
+                        product_type: flag,
+                        subscribed: newRow[flag] ? 1 : 0,
+                        timestamp: timestamp
+                    };
+                    historicalDataHandler.addEntry(historicalData);
+                }
+            });
+        }
         // console.log(newRow);
 
         axios({

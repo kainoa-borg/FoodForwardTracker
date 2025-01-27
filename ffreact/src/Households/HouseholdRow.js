@@ -40,6 +40,10 @@ const HouseholdRow = (props) => {
             
             <TableCell align='left'>{TrueMarker(Boolean(hh.veg_flag))}</TableCell>
             <TableCell align='left'>{TrueMarker(Boolean(hh.gf_flag))}</TableCell>
+            <TableCell aligh='left'>{TrueMarker(Boolean(hh.ppMealKit_flag))}</TableCell>
+            <TableCell align='left'>{TrueMarker(Boolean(hh.childrenSnacks_flag))}</TableCell>
+            <TableCell align='left'>{TrueMarker(Boolean(hh.foodBox_flag))}</TableCell>
+            <TableCell align='left'>{TrueMarker(Boolean(hh.rteMeal_flag))}</TableCell>
 
             <TableCell align='left'><AllergiesList allergies={hh.hh_allergies} isEditable={false}/></TableCell>
             <TableCell align='left'>{TrueMarker(Boolean(hh.paused_flag))}</TableCell>

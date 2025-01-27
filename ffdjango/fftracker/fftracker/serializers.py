@@ -1,7 +1,7 @@
 from collections import UserString
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
-from .models import Households, HhAllergies, Ingredients, Kits, MealPlans, Packaging, Recipes, Users, MealPacks, RecipeAllergies, RecipeDiets, RecipeIngredients, RecipeInstructions
+from .models import Households, HhAllergies, Ingredients, Kits, MealPlans, Packaging, ProductSubscriptionHistory, Recipes, Users, MealPacks, RecipeAllergies, RecipeDiets, RecipeIngredients, RecipeInstructions
 
 class AllergySerializer(ModelSerializer):
 	class Meta():
@@ -101,3 +101,14 @@ class StationListSerializer(ModelSerializer):
 	class Meta():
 		model = Households
 		fields = ('stn_name', 'num_servings', 'hh_allergies')
+
+class ProductSubscriptionHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductSubscriptionHistory
+        fields = '__all__'
+
+class HouseholdReportSerializer(serializers.ModelSerializer):
+    products = serializers.SerializerMethodField()
+    class Meta:
+        model = Households
+        fields = ['id', 'hh_first_name', 'hh_last_name', 'products', 'paused_flag' , 'children_under_6', 'children_over_6', 'adults']

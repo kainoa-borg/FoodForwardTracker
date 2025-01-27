@@ -51,6 +51,10 @@ export default function HouseholdPage(props) {
         { field: 'state', headerName: 'State', width: 50, type: 'string', editable: true },
         { field: 'pcode', headerName: 'Zip Code', width: 80, type: 'string', editable: true, /*valueFormatter: (value) => {return value}*/ },
         { field: 'delivery_notes', headerName: 'Delivery Notes', width: 150, editable: true },
+        { field: 'ppMealKit_flag', headerName: 'Part. Prep. M.K.', width: 150, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
+        { field: 'childrenSnacks_flag', headerName: 'Children Snacks', width: 100, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
+        { field: 'foodBox_flag', headerName: 'Food Box', width: 100, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
+        { field: 'rteMeal_flag', headerName: 'RTE Meal', width: 100, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'veg_flag', headerName: 'Veg', width: 70, type: 'boolean', description: 'Vegetarian', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'gf_flag', headerName: 'Gluten Free', width: 70, type: 'boolean', description: 'Gluten Free', editable: true, valueParser: (value) => value ? 1 : 0},
         { field: 'hh_allergies', headerName: 'Allergies', width: 130, type: 'string', editable: true, 
@@ -124,6 +128,11 @@ export default function HouseholdPage(props) {
             groupId: 'diet',
             headerName: 'Dietary Requirements',
             children:[{ field: 'veg_flag' }, { field: 'gf_flag'}, { field: 'hh_allergies'}]
+        },
+        {
+            groupId: 'services',
+            headerName: 'Services',
+            children: [{ field: 'ppMealKit_flag' }, { field: 'childrenSnacks_flag'}, { field: 'foodBox_flag'}, { field: 'rteMeal_flag'}]
         },
         { field: 'paused_flag' }, { field: 'paying'}
     ];
