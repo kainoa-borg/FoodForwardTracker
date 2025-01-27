@@ -21,7 +21,7 @@ const HouseholdForm = (props) => {
       num_adult: undefined,
       num_child_lt_6: undefined,
       num_child_gt_6: undefined,
-      sms_flag: 0,
+      
       veg_flag: 0,
       allergy_flag: 0,
       gf_flag: 0,
@@ -136,8 +136,7 @@ const HouseholdForm = (props) => {
                 <InputLabel htmlFor='gf_flag'>Gluten Free: </InputLabel>          
                 <Input name='gf_flag' id='gf_flag' type='checkbox' checked={household.gf_flag} onChange={handleFormChange} />
                 
-                <InputLabel htmlFor='sms_flag'>Recieving SMS: </InputLabel>
-                <Input name='sms_flag' id='sms_flag' type='checkbox' checked={household.sms_flag} onChange={handleFormChange}/>
+                
 
                 <InputLabel htmlFor='ppMealKit_flag'>Participating in Meal Kits: </InputLabel>
                 <Input name='ppMealKit_flag' id='ppMealKit_flag' type='checkbox' checked={household.ppMealKit_flag} onChange={handleFormChange}/>

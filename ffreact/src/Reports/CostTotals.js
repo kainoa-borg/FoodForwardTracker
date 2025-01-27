@@ -15,7 +15,7 @@ export default function costTotals() {
     const [value, setValue] = useState('Ingredients');
     const totalTotal = costTotals.map((item) => (item.in_qty*item.unit_cost)).reduce((a, b) => Number(a) + Number(b), 0);
     const handleRadioChange = (event) => {setValue(event.target.value);};
-
+   
     const currencyFormatter = new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -42,6 +42,7 @@ export default function costTotals() {
             }
         });
       }
+      
       if (value === 'Packaging') {
         setSearchingSBOpen(true);
         axios({
@@ -90,7 +91,7 @@ export default function costTotals() {
       { field: 'unit', headerName: 'Measure', width: 90, editable: true },
       { field: 'total', headerName: 'Total', align: 'right', width: 100, groupable: false, valueGetter: ({row}) => (row.unit_cost * row.in_qty), valueFormatter: ({ value }) => currencyFormatter.format(value)},
     ] 
-    
+   
     // Defines columns to be displayed on Cost Totals Report page
     const packColumns = [ 
       { field: 'package_type', headerName: 'Packaging', width: 120, editable: true },
@@ -101,6 +102,7 @@ export default function costTotals() {
       { field: 'unit', headerName: 'Measure', width: 90, editable: true },
       { field: 'total', headerName: 'Total', align: 'right', width: 100, groupable: false, valueGetter: ({row}) => (row.unit_cost * row.in_qty), valueFormatter: ({ value }) => currencyFormatter.format(value)},
     ] 
+    
 
     // Defines the file name the DataGrd Export function will use 
     function CustomToolbar() {
@@ -120,7 +122,7 @@ export default function costTotals() {
       event.preventDefault();
       getCostTotalsList(dateRange, value);
     }
-    
+       
     // Required to get Supplier names 
     useEffect(() => {
       getDBSuppliers();
@@ -132,7 +134,7 @@ export default function costTotals() {
         <div>
           <br />
           <Typography variant='h5'>Cost Total Report</Typography>
-          <Typography variant='p' sx={{marginBottom: '5%'}}>Select date range to calculate the total costs.</Typography><br />
+          
           <Typography variant='p' sx={{marginBottom: '5%'}}>Only completed ingredient and packaging entries are included.</Typography><br /><br />
           
           <form onSubmit={handleSubmit}>
@@ -160,13 +162,22 @@ export default function costTotals() {
           </form>
           <Box sx={{height: '70vh'}}>
             <DataGrid
-              columns={ingColumns}
-              rows={costTotals}
-              getRowId={(row) => row ? row.i_id : 0}
-              autoHeight={true}
-              components={{Toolbar: CustomToolbar}}
-            >
-            </DataGrid>
+                columns={ingColumns}
+                rows={costTotals}
+                getRowId={(row) => (row ? row.i_id : 0)}
+                autoHeight={true}
+                components={{
+                  Toolbar: CustomToolbar,
+                  NoRowsOverlay: () => (
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                      <Typography variant="body1">
+                        Please Enter a Start and End Date to get your Ingredient Cost Total Report
+                      </Typography>
+                    </Box>
+                  ),
+                }}
+              />
+
             <br />
             <Typography variant='p' sx={{ ml: 2 }}> Total: {currencyFormatter.format(totalTotal)} </Typography>
           </Box>
@@ -196,7 +207,7 @@ export default function costTotals() {
       <div>
         <br />
         <Typography variant='h5'>Cost Total Report</Typography>
-        <Typography variant='p' sx={{marginBottom: '5%'}}>Select date range to calculate the total costs.</Typography><br />
+    
         <Typography variant='p' sx={{marginBottom: '5%'}}>Only completed ingredient and packaging entries are included.</Typography><br /><br />
         
         <form onSubmit={handleSubmit}>
@@ -224,13 +235,22 @@ export default function costTotals() {
         </form>
         <Box sx={{height: '70vh'}}>
           <DataGrid
-            columns={packColumns}
-            rows={costTotals}
-            getRowId={(row) => row ? row.p_id : 0}
-            autoHeight={true}
-            components={{Toolbar: CustomToolbar}}
-          >
-          </DataGrid>
+                columns={ingColumns}
+                rows={costTotals}
+                getRowId={(row) => (row ? row.i_id : 0)}
+                autoHeight={true}
+                components={{
+                  Toolbar: CustomToolbar,
+                  NoRowsOverlay: () => (
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                      <Typography variant="body1">
+                        Please Enter a Start and End Date to get your Packaging Cost Total Report 
+                      </Typography>
+                    </Box>
+                  ),
+                }}
+              />
+
           <div> Total: {currencyFormatter.format(totalTotal)} </div>
         </Box>
         <Snackbar

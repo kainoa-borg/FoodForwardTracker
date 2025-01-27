@@ -6,6 +6,7 @@ import AllergiesList from './AllergiesList';
 import NewModularDatagrid from '../components/NewModularDatagrid';
 import CellDialog from '../components/CellDialog.js';
 import HouseholdForm from './HouseholdForm.js';
+
 //
 import { MenuItem, FormControl, Select } from '@mui/material';
 //
@@ -13,6 +14,7 @@ import { MenuItem, FormControl, Select } from '@mui/material';
 // import axios from 'axios';
 
 // Households/Clients List Component
+
 export default function HouseholdPage(props) {
 
     const loginState = props.loginState.isAuthenticated ? props.loginState : {isAuthenticated: false};
@@ -43,7 +45,7 @@ export default function HouseholdPage(props) {
             renderEditCell: (params) => (<GridEditInputCell {...params} inputProps={{ max: 25, min: 0,}}/>),
             description: 'Number of children from age 0 to 6', width: 70, editable: true },
         { field: 'phone', headerName: 'Phone', defaultValue:'xxx-xxx-xxxx', width: 130, type: 'phone', editable: true },
-        { field: 'sms_flag', headerName: 'SMS', width: 50, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
+       
         { field: 'street', headerName: 'Street', width: 160, type: 'string', editable: true },
         { field: 'city', headerName: 'City', width: 100, type: 'string', editable: true },
         { field: 'state', headerName: 'State', width: 50, type: 'string', editable: true },
@@ -139,19 +141,23 @@ export default function HouseholdPage(props) {
         <div class='table-div'>
         <Typography id='page-header' variant='h5'>Clients</Typography>
         <Box sx={{height: '70vh'}}>
+            
             <NewModularDatagrid
-                loginState={loginState}
-                columns={columns}
-                columnGroupingModel={columnGroupingModel}
-                getRowHeight={() => 'auto'}
-                getEstimatedRowHeight={() => 300} 
-                keyFieldName={'hh_id'}
-                apiEndpoint={'households'}
-                entryName={'Client'}
-                searchField={'hh_last_name'}
-                searchLabel={'Client Names'}
-                AddFormComponent={HouseholdForm}
-                experimentalFeatures={{ columnGrouping: true }}>
+                    loginState={loginState}
+                    columns={columns}
+                    columnGroupingModel={columnGroupingModel}
+                    getRowHeight={() => 'auto'}
+                    getEstimatedRowHeight={() => 300}
+                    keyFieldName={'hh_id'}
+                    apiEndpoint={'households'}
+                    entryName={'Client'}
+                    searchField={'hh_last_name'}
+                    searchLabel={'Client Names'}
+                    AddFormComponent={HouseholdForm}
+                    experimentalFeatures={{ columnGrouping: true }}
+            >
+               
+                  
             </NewModularDatagrid>
         </Box>
         </div>

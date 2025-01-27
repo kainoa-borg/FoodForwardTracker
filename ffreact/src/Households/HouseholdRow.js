@@ -37,7 +37,7 @@ const HouseholdRow = (props) => {
             <TableCell align='left'>{hh.state}</TableCell>
             <TableCell align='left'>{hh.pcode}</TableCell>
             <TableCell align='left'>{hh.delivery_notes}</TableCell>
-            <TableCell align='left'>{TrueMarker(Boolean(hh.sms_flag))}</TableCell>
+            
             <TableCell align='left'>{TrueMarker(Boolean(hh.veg_flag))}</TableCell>
             <TableCell align='left'>{TrueMarker(Boolean(hh.gf_flag))}</TableCell>
             <TableCell aligh='left'>{TrueMarker(Boolean(hh.ppMealKit_flag))}</TableCell>

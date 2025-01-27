@@ -142,7 +142,7 @@ export default function PurchasingReport() {
     return (
       <div>
           <Typography variant='h5'>Package Purchasing Report</Typography>
-          <Typography variant='p' sx={{marginBottom: '5%'}}>Select for packaging planned within a start and end date.</Typography>
+          
           <form onSubmit={handleSubmit}>
             {/* <Stack direction='row'> */}
               <FormControl>
@@ -161,16 +161,24 @@ export default function PurchasingReport() {
 
       <Box sx={{height: '80%'}}>
       {/* Show a row for each ingredient in packaging.*/}
-      <DataGrid
-          columns={columns}
-          rows={packPurchasing}
-          // row={mealPlans}
-          components = {{Toolbar:CustomToolbar}}
-          getRowId={(row) => row.id}
-          // getRowsId={(row) => row.m_id}
-          autoHeight = {true}
-      >
-      </DataGrid>
+     <DataGrid
+                     columns={columns}
+                     rows={packPurchasing}
+                     getRowId={(row) => (row ? row.i_id : 0)}
+                     autoHeight={true}
+                     components={{
+                       Toolbar: CustomToolbar,
+                       NoRowsOverlay: () => (
+                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                           <Typography variant="body1">
+                             Please Enter a Start and End Date to get your planned Package Purchasing Report
+                           </Typography>
+                         </Box>
+                       ),
+                     }}
+                   />
+     
+     
       </Box>
         <Snackbar
             open={searchingSBOpen}

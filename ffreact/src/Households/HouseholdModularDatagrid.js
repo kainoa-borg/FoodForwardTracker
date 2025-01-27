@@ -33,7 +33,7 @@ export default function HouseholdModularDatagrid() {
         { field: 'state', headerName: 'State', width: 70, type: 'string', editable: true },
         { field: 'pcode', headerName: 'Zip Code', width: 80, type: 'string', editable: true, /*valueFormatter: (value) => {return value}*/ },
         { field: 'delivery_notes', headerName: 'Delivery Notes', width: 100, editable: true },
-        { field: 'sms_flag', headerName: 'SMS', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
+       
         { field: 'veg_flag', headerName: 'Veg', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'gf_flag', headerName: 'Gluten Free', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0},
         { field: 'ppMealKit_flag', headerName: 'Part. Prep. M.K.', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },

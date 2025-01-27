@@ -13,6 +13,7 @@ const EditableHouseholdRow = (props) => {
     const hh = editFormData;
     const key = thisKey;
 
+
     const handleSaveClick = () => {
         const productFlags = ['ppMealKit_flag', 'rteMeal_flag', 'childrenSnacks_flag', 'foodBox_flag'];
         const changedFlags = productFlags.filter(flag => hh[flag] != editFormData[flag]);
@@ -43,7 +44,6 @@ const EditableHouseholdRow = (props) => {
             <TableCell align='right'><Input name='veg_flag' type="checkbox" checked={hh.veg_flag} onChange={handleEditFormChange}/></TableCell>
             <TableCell align='right'><Input name='gf_flag' type='checkbox' checked={hh.gf_flag} onChange={handleEditFormChange}/></TableCell>
             <TableCell align='right'><Input name='a_flag' type='checkbox' checked={hh.a_flag} onChange={handleEditFormChange}/></TableCell>
-            <TableCell align='right'><Input name='sms_flag' type='checkbox' checked={hh.sms_flag} onChange={handleEditFormChange}/></TableCell>
             <TableCell align='right'><Input name='ppMealKit_flag' type='checkbox' checked={hh.ppMealKit_flag} onChange={handleEditFormChange}/></TableCell>
             <TableCell align='right'><Input name='childrenSnacks_flag' type='checkbox' checked={hh.childrenSnacks_flag} onChange={handleEditFormChange}/></TableCell>
             <TableCell align='right'><Input name='foodBox_flag' type='checkbox' checked={hh.foodBox_flag} onChange={handleEditFormChange}/></TableCell>
