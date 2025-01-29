@@ -163,7 +163,7 @@ const LandingPage = (props) => {
                     <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('individual-household-product-report')}>
                         Individual Household Product Report</Button>,
                     <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('ebt-reports')}>
-                        EBT Reports</Button>
+                        EBT Reports</Button>,
                     <Button ref={props.ref} type="button" sx={{justifyContent: 'left', "&.MuiButton-text": { color:'black'}}} onClick={() => handlePageClick('product-report')}>
                         Product Report</Button>
                     ]}/>
