@@ -44,6 +44,7 @@ from .HistoricalDataViews import ProductSubscriptionHistoryView
 from .IndividualClientViews import IndividualClientView
 from .HouseholdIdView import HouseholdIdView
 from .EbtViews import EbtView
+from .ProductReportView import ProductReportView
 
 #admin.site.register(Households)
 #admin.site.register(Ingredients)
@@ -119,4 +120,5 @@ urlpatterns = [
     path('api/get-mealrecipes', RecipeView.as_view({'get': 'retrieve'})),
     path('api/get-stations', StationsView.as_view({'get': 'list', 'get': 'retrieve'})),
     path('api/household-id/', HouseholdIdView.as_view(), name='household-id'),
+    path('api/product-report/', ProductReportView.as_view(), name='product-report'),
 ]
