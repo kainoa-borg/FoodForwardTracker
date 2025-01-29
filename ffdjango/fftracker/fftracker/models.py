@@ -7,6 +7,7 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # AbstractUser Authorization model: Uses email as unique login
 #class CustomUser(AbstractUser):
@@ -191,6 +192,8 @@ class Households(models.Model):
     city = models.CharField(max_length=50, blank=True, null=True)
     pcode = models.PositiveIntegerField(blank=True, null=True)
     state = models.CharField(max_length=2, blank=True, null=True)
+    ebt = models.CharField(max_length=16, blank=True, null=True)
+    ebt_refill_date = models.PositiveIntegerField(blank=True, null=True, validators=[MinValueValidator(1), MaxValueValidator(31)])
     delivery_notes = models.TextField(blank=True, null=True)
     hh_bags_or_crates = models.CharField(max_length=30, blank=True, null=True)
     ppMealKit_flag = models.BooleanField(default=False)

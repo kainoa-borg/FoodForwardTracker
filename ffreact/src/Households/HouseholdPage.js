@@ -50,6 +50,8 @@ export default function HouseholdPage(props) {
         { field: 'city', headerName: 'City', width: 100, type: 'string', editable: true },
         { field: 'state', headerName: 'State', width: 50, type: 'string', editable: true },
         { field: 'pcode', headerName: 'Zip Code', width: 80, type: 'string', editable: true, /*valueFormatter: (value) => {return value}*/ },
+        { field: 'ebt', headerName: 'EBT', width: 120, type: 'string', editable: true },
+        { field: 'ebt_refill_date', headerName: 'EBT Refill Date', width: 150, type: 'day', editable: true },
         { field: 'delivery_notes', headerName: 'Delivery Notes', width: 150, editable: true },
         { field: 'ppMealKit_flag', headerName: 'Part. Prep. M.K.', width: 150, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
         { field: 'childrenSnacks_flag', headerName: 'Children Snacks', width: 100, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
