@@ -43,6 +43,7 @@ from .IngDefViews import IngNameView, IngUnitView
 from .HistoricalDataViews import ProductSubscriptionHistoryView
 from .IndividualClientViews import IndividualClientView
 from .HouseholdIdView import HouseholdIdView
+from .EbtViews import EbtView
 from .ProductReportView import ProductReportView
 
 #admin.site.register(Households)
@@ -81,6 +82,7 @@ router.register(r'households', HouseholdsWithAllergies, basename='households')
 router.register(r'users', UserView, basename='users')
 router.register(r'user-auth', UserAuth, basename='user-auth')
 router.register(r'create-account', AccountCreateView, basename='create-account')
+router.register(r'Ebt-reports', EbtView, basename='Ebt-reports')
 # Meal Views
 router.register(r'menu', MenuView, basename='menu')
 router.register(r'meal', MealView, basename='meals-list')

@@ -44,6 +44,7 @@ export default function HouseholdModularDatagrid() {
             renderCell: AllergyListCell,
             renderEditCell: (params) => <AllergyListEditCell {...params} sx={{height: 'auto', minHeight: 200, maxHeight: 1000}}/>
         },
+        { field: 'EBT', headerName: 'EBT', width: 70, type: 'string', editable: true },
         { field: 'paused_flag', headerName: 'Paused', width: 70, type: 'boolean', editable: true, valueParser: (value) => value ? 1 : 0 },
     ]
     
