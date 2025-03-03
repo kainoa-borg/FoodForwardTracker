@@ -8,6 +8,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
+from .IngCategoryEnum import ParentCategory, SpecificCategory
 
 # AbstractUser Authorization model: Uses email as unique login
 #class CustomUser(AbstractUser):
@@ -302,6 +303,14 @@ class Ingredients(models.Model):
     class Meta:
         managed = True
         db_table = 'ingredients'
+
+class IngredientCategory(models.Model):
+    parent_category = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in ParentCategory])
+    specific_category = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in SpecificCategory])
+
+    class Meta:
+        managed = True
+        db_table = 'ingredient_category'
 
 # class IPLMealPlans(models.Model):
 #     m_id = models.AutoField(primary_key=True)
