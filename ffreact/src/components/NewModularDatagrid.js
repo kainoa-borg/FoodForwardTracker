@@ -235,11 +235,11 @@ export default function NewModularDatagrid(props) {
     }, [errorSBOpen])
 
     // Wait until table data is loaded to render datagrid
-    if (tableData === undefined ||  tableData.length === 0) {
-        return (
-            <>loading...</>
-        )
-    }
+   // if (tableData === undefined ||  tableData.length === 0) {
+    //    return (
+     //       <>loading...</>
+      //  )
+    //}
 
     // const [popoverAnchors, setPopoverAnchors] = useState({confirmDeleteAnchor: null, confirmCancelAnchor: null});
 
@@ -354,11 +354,11 @@ export default function NewModularDatagrid(props) {
         );
     }
     
-    if (tableData === undefined ||  tableData.length === 0)  {
-        return (
-            <>loading...</>
-        )
-    }
+   // if (tableData === undefined ||  tableData.length === 0)  {
+     //   return (
+       //     <>loading...</>
+        //)
+    //}
 
 
 

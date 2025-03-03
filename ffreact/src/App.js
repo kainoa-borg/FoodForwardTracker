@@ -48,6 +48,7 @@ import ShowServingsReport from './Reports/ShowServingsReport.js'
 import EbtReports from './Reports/EbtReports.js'
 import ProductReport from './Reports/ProductReport.js'
 import DietaryRestrictionsReport from './Reports/DietaryRestrictionsReport.js'
+import CategoryIngredientPage from './Ingredients/CategoryIngredientPage';
 
 
 // require("dotenv").config({path: `.env.${process.env.NODE_ENV}`})
@@ -267,6 +268,8 @@ const AppComponent = () => {
                         <Route path='/show-servings-report' element={<ShowServingsReport handlePageClick={handlePageClick} />}/>
                         <Route path='/product-report' element={<ProductReport handlePageClick={handlePageClick} />}/>
                         <Route path='/dietary-restrictions-report' element={<DietaryRestrictionsReport />} />
+                        <Route path="/ingredients" element={<IngredientDefinitionPage />} />
+                        <Route path="/ingredients/:categoryId" element={<CategoryIngredientPage />} />
                         <Route path='/under-construction' element={<UnderConstruction handlePageClick={handlePageClick}/>}/>
                         <Route path='/admin' element={
                             <AdminRoute isAdmin={loginState && loginState.isAdmin}>
