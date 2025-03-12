@@ -304,13 +304,8 @@ class Ingredients(models.Model):
         managed = True
         db_table = 'ingredients'
 
-class IngredientCategory(models.Model):
-    parent_category = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in ParentCategory])
-    specific_category = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in SpecificCategory])
 
-    class Meta:
-        managed = True
-        db_table = 'ingredient_category'
+       
 
 # class IPLMealPlans(models.Model):
 #     m_id = models.AutoField(primary_key=True)
@@ -562,3 +557,26 @@ class Servings(models.Model):
         managed = True
         db_table = 'servings'
 
+class IngredientCategory(models.Model):
+    parent_category = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in ParentCategory])
+    specific_category = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in SpecificCategory])
+
+    class Meta:
+        managed = True
+        db_table = 'ingredient_category'  
+
+
+class IngredientSubCategory(models.Model):
+    name = models.CharField(max_length=100)
+    category = models.ForeignKey(IngredientCategory, on_delete=models.CASCADE, related_name='subcategories')
+
+    class Meta:
+        db_table = 'ingredient_subcategory'  
+
+
+class Ingredient(models.Model):
+    ing_name = models.CharField(max_length=100)
+    subcategory = models.ForeignKey(IngredientSubCategory, on_delete=models.CASCADE, related_name='ingredients')
+
+    class Meta:
+        db_table = 'ingredient'  

@@ -35,7 +35,7 @@ export default function CategoryIngredientPage() {
 
     useEffect(() => {
         if (subCategoryId !== '') {
-            axios.get(`${process.env.REACT_APP_API_URL}/api/ingredients/${categoryId}/${subCategoryId}/`)
+            axios.get(`${process.env.REACT_APP_API_URL}ingredients/${categoryId}/${subCategoryId}/`)
                 .then(response => setIngredients(response.data))
                 .catch(error => console.error("Error fetching ingredients:", error));
         }
@@ -50,7 +50,7 @@ export default function CategoryIngredientPage() {
     };
 
     const handleAddIngredient = () => {
-        axios.post(`${process.env.REACT_APP_API_URL}/api/ingredients/${categoryId}/${subCategoryId}/`, { ing_name: newIngredient })
+        axios.post(`${process.env.REACT_APP_API_URL}ingredients/${categoryId}/${subCategoryId}/`, { ing_name: newIngredient })
             .then(response => {
                 setIngredients([...ingredients, response.data]);
                 setNewIngredient('');
@@ -70,7 +70,7 @@ export default function CategoryIngredientPage() {
     };
 
     const handleEditIngredient = () => {
-        axios.put(`${process.env.REACT_APP_API_URL}/api/ingredients/${categoryId}/${subCategoryId}/${editIngredient.ing_name_id}/`, { ing_name: editIngredient.ing_name })
+        axios.put(`${process.env.REACT_APP_API_URL}ingredients/${categoryId}/${subCategoryId}/${editIngredient.ing_name_id}/`, { ing_name: editIngredient.ing_name })
             .then(response => {
                 setIngredients(ingredients.map(ingredient => ingredient.ing_name_id === editIngredient.ing_name_id ? response.data : ingredient));
                 handleEditClose();
@@ -79,7 +79,7 @@ export default function CategoryIngredientPage() {
     };
 
     const handleDeleteIngredient = (ingredientId) => {
-        axios.delete(`${process.env.REACT_APP_API_URL}/api/ingredients/${categoryId}/${subCategoryId}/${ingredientId}/`)
+        axios.delete(`${process.env.REACT_APP_API_URL}ingredients/${categoryId}/${subCategoryId}/${ingredientId}/`)
             .then(() => {
                 setIngredients(ingredients.filter(ingredient => ingredient.ing_name_id !== ingredientId));
             })
