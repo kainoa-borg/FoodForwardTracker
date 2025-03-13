@@ -48,7 +48,6 @@ from .ShowServingsReport import ServingsReportView
 from .EbtViews import EbtView
 from .ProductReportView import ProductReportView
 from .DietaryRestrictionsViews import DietaryRestrictionsViewSet
-from .IngredientDefinitionsPageBE import IngredientListCreateViewNEW, IngredientUpdateDeleteViewNEW, IngredientAllListViewNEW
 #admin.site.register(Households)
 #admin.site.register(Ingredients)
 #admin.site.register(Packaging)
@@ -132,7 +131,4 @@ urlpatterns = [
     path('api/household/<str:pk>/delete_all_dates/', HouseholdDateView.as_view({'delete': 'delete_all_dates'})),
     path('api/servings', ServingsReportView.as_view(), name='servings-report'),
     path('api/product-report/', ProductReportView.as_view(), name='product-report'),
-    path('api/ingredients/<int:category_id>/<int:subcategory_id>/', IngredientListCreateViewNEW.as_view(), name='ingredient_list_create'),
-    path('api/ingredients/<int:category_id>/<int:subcategory_id>/<int:ing_id>/', IngredientUpdateDeleteViewNEW.as_view(), name='ingredient_update_delete'),
-    path('api/ingredients/all/', IngredientAllListViewNEW.as_view(), name='ingredient_all_list'),
 ]

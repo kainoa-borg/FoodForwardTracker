@@ -1,7 +1,7 @@
 from collections import UserString
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
-from .models import Households, HhAllergies, PausedDates, Servings, Ingredients, Kits, MealPlans, Packaging, ProductSubscriptionHistory, Recipes, Users, MealPacks, RecipeAllergies, RecipeDiets, RecipeIngredients, RecipeInstructions, DietaryRestrictions,  Ingredient, IngredientCategory, IngredientSubCategory
+from .models import Households, HhAllergies, PausedDates, Servings, Ingredients, Kits, MealPlans, Packaging, ProductSubscriptionHistory, Recipes, Users, MealPacks, RecipeAllergies, RecipeDiets, RecipeIngredients, RecipeInstructions, DietaryRestrictions
 
 
 class AllergySerializer(ModelSerializer):
@@ -140,18 +140,3 @@ class ServingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Servings
         fields = ['date', 'total_servings']
-
-class IngredientCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = IngredientCategory
-        fields = '__all__'
-
-class IngredientSubCategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = IngredientSubCategory
-        fields = '__all__'
-
-class IngredientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ingredient
-        fields = '__all__'
