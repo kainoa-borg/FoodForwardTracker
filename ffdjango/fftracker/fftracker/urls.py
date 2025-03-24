@@ -48,7 +48,6 @@ from .ShowServingsReport import ServingsReportView
 from .EbtViews import EbtView
 from .ProductReportView import ProductReportView
 from .DietaryRestrictionsViews import DietaryRestrictionsViewSet
-
 #admin.site.register(Households)
 #admin.site.register(Ingredients)
 #admin.site.register(Packaging)

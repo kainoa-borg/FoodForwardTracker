@@ -1,9 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.utils.dateparse import parse_date
-from datetime import datetime
+from datetime import datetime, timedelta
 from .models import Households
 
 class ServingsReportView(APIView):
@@ -24,11 +24,17 @@ class ServingsReportView(APIView):
         delta = to_date - from_date
         weeks = (delta.days // 7) + 1
 
-        # Get total adults
-        total_adults = Households.objects.aggregate(Sum('num_adult'))['num_adult__sum'] or 0
+        # Exclude households that are paused during the week
+        paused_households = Households.objects.filter(
+            Q(paused_dates__pause_start_date__lte=to_date, paused_dates__pause_end_date__gte=from_date) |
+            Q(paused_dates__pause_start_date__lte=to_date, paused_dates__pause_end_date__isnull=True)
+        ).values_list('hh_id', flat=True)
 
-        # Get total children (grouped by age)
-        total_children_data = Households.objects.aggregate(
+        # Get total adults excluding paused households
+        total_adults = Households.objects.exclude(hh_id__in=paused_households).aggregate(Sum('num_adult'))['num_adult__sum'] or 0
+
+        # Get total children (grouped by age) excluding paused households
+        total_children_data = Households.objects.exclude(hh_id__in=paused_households).aggregate(
             Sum('num_child_lt_6'),  # Children aged 0-6
             Sum('num_child_gt_6')   # Children aged 7-17
         )
@@ -39,7 +45,7 @@ class ServingsReportView(APIView):
         total_children = total_children_0_6 + total_children_7_17  # Total children
 
         # Compute total servings (adults + children/2) multiplied by the number of weeks
-        total_servings = (total_adults + total_children_7_17 + total_children_0_6 / 2) * weeks
+        total_servings = (total_adults + total_children_7_17 + (total_children_0_6 / 2)) * weeks
 
         return Response({
             'total_servings': round(total_servings, 2),

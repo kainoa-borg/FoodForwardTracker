@@ -299,18 +299,15 @@ class Ingredients(models.Model):
     flat_fee = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
     isupplier = models.ForeignKey('Supplier', models.CASCADE, related_name='isupplier', blank=True, null=True)
     pref_isupplier = models.ForeignKey('Supplier', models.CASCADE, related_name='pref_isupplier', blank=True, null=True)
+    parent_category = models.SmallIntegerField(default=0)
+    specific_category = models.SmallIntegerField(default=0)
 
     class Meta:
         managed = True
         db_table = 'ingredients'
 
-class IngredientCategory(models.Model):
-    parent_category = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in ParentCategory])
-    specific_category = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in SpecificCategory])
 
-    class Meta:
-        managed = True
-        db_table = 'ingredient_category'
+       
 
 # class IPLMealPlans(models.Model):
 #     m_id = models.AutoField(primary_key=True)
@@ -562,3 +559,13 @@ class Servings(models.Model):
         managed = True
         db_table = 'servings'
 
+class IngredientConversion(models.Model):
+    ingredientId = models.ForeignKey(Ingredients, on_delete=models.CASCADE, related_name='ingredient_conversion', db_column='ingredientId')
+    unit_a = models.SmallIntegerField(default=0)
+    unit_b = models.SmallIntegerField(default=0)
+    amt_a = models.DecimalField(max_digits=5, decimal_places=2)
+    amt_b = models.DecimalField(max_digits=5, decimal_places=2)
+
+    class Meta:
+        managed = True
+        db_table = 'ingredient_conversion'
