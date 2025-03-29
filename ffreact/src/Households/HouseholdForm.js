@@ -18,9 +18,9 @@ const HouseholdForm = (props) => {
     return {
       hh_last_name: "",
       hh_first_name: "",
-      num_adult: undefined,
-      num_child_lt_6: undefined,
-      num_child_gt_6: undefined,
+      num_adult: 0,          // Changed from undefined to 0
+      num_child_lt_6: 0,     // Changed from undefined to 0
+      num_child_gt_6: 0,     // Changed from undefined to 0
       
       veg_flag: 0,
       allergy_flag: 0,
@@ -111,26 +111,26 @@ const HouseholdForm = (props) => {
     // HTML structure of this component
     return (
       <Card sx={{marginTop: '1em', padding: '1em'}}>
-        <Typography component='h5' variant='h5'>Add a Client: </Typography>
-        <Typography component='h6' variant='h6'>Required * </Typography>
+        <Typography component='h5' variant='h5'>Add a Client</Typography>
+        <Typography component='h6' variant='h6'>Required fields marked with *</Typography>
         <form onSubmit={handleSubmit}>
             {/* Basic household info */}
             <Grid container spacing={4}>
               <Grid item>
-                <InputLabel htmlFor="hh_last_name">Last Name*: </InputLabel>
-                <Input name="hh_last_name" id="hh_last_name" type="text" inputProps={{maxLength: '30'}} required={true} value={household.hh_last_name} onChange={handleFormChange} oninput="validity.valid||(value='');"/>
+                <InputLabel htmlFor="hh_last_name">Last Name *</InputLabel>
+                <Input name="hh_last_name" id="hh_last_name" type="text" inputProps={{maxLength: '30'}} required={true} value={household.hh_last_name} onChange={handleFormChange}/>
                 
-                <InputLabel htmlFor="hh_first_name">First Name*: </InputLabel>
-                <Input name="hh_first_name" id="hh_first_name" type="text" inputProps={{maxLength: '30'}} required={true} value={household.hh_first_name} onChange={handleFormChange} oninput="validity.valid||(value='');"/>
+                <InputLabel htmlFor="hh_first_name">First Name *</InputLabel>
+                <Input name="hh_first_name" id="hh_first_name" type="text" inputProps={{maxLength: '30'}} required={true} value={household.hh_first_name} onChange={handleFormChange}/>
 
-                <InputLabel htmlFor='num_adult'>Number of Adults: </InputLabel>
-                <Input name='num_adult' id="num_adult" type="number" inputProps={{min: 0}} value={household.num_adult} onChange={handleFormChange} oninput="validity.valid||(value='');"/>
+                <InputLabel htmlFor='num_adult'>Number of Adults *</InputLabel>
+                <Input name='num_adult' id="num_adult" type="number" inputProps={{min: 0}} required={true} defaultValue={0} value={household.num_adult} onChange={handleFormChange}/>
                 
-                <InputLabel htmlFor='num_child_lt_6'>Number of Children 0-6: </InputLabel>
-                <Input name='num_child_lt_6' id="num_child_lt_6" type="number" inputProps={{min: 0}} value={household.num_child_lt_6} onChange={handleFormChange} oninput="validity.valid||(value='');"/>
+                <InputLabel htmlFor='num_child_lt_6'>Number of Children 0-6 *</InputLabel>
+                <Input name='num_child_lt_6' id="num_child_lt_6" type="number" inputProps={{min: 0}} required={true} defaultValue={0} value={household.num_child_lt_6} onChange={handleFormChange}/>
                 
-                <InputLabel htmlFor='num_child_gt_6'>Number of Children 7-17: </InputLabel>
-                <Input name='num_child_gt_6' id="num_child_gt_6" type="number" inputProps={{min: 0}} value={household.num_child_gt_6} onChange={handleFormChange} oninput="validity.valid||(value='');"/>
+                <InputLabel htmlFor='num_child_gt_6'>Number of Children 7-17 *</InputLabel>
+                <Input name='num_child_gt_6' id="num_child_gt_6" type="number" inputProps={{min: 0}} required={true} defaultValue={0} value={household.num_child_gt_6} onChange={handleFormChange}/>
               </Grid>
               <Grid item>
                 <InputLabel htmlFor='veg_flag'>Vegan/Vegetarian: </InputLabel>          
@@ -167,20 +167,20 @@ const HouseholdForm = (props) => {
                 <Input name='ebt_refill_date' id='ebt_refill_date' type='number' value={household.ebt_refill_date} onChange={handleFormChange}/>
               </Grid>
               <Grid item>
-                <InputLabel htmlFor='phone'>Phone Number*: </InputLabel>          
-                <Input name='phone' id='phone' type='tel' inputProps={{pattern: '[0-9]{3}-[0-9]{3}-[0-9]{4}', placeholder: '###-###-####', minLength: '12', maxLength: '12'}} value={household.phone} onChange={handleFormChange}>###-###-####</Input>
+                <InputLabel htmlFor='phone'>Phone Number *</InputLabel>          
+                <Input name='phone' id='phone' type='tel' required={true} inputProps={{pattern: '[0-9]{3}-[0-9]{3}-[0-9]{4}', placeholder: '###-###-####', minLength: '12', maxLength: '12'}} value={household.phone} onChange={handleFormChange}>###-###-####</Input>
                 
-                <InputLabel htmlFor='street'>Street*: </InputLabel>          
-                <Input name='street' id='street' inputProps={{maxLength: '50'}} value={household.street} onChange={handleFormChange}/>
+                <InputLabel htmlFor='street'>Street *</InputLabel>          
+                <Input name='street' id='street' required={true} inputProps={{maxLength: '50'}} value={household.street} onChange={handleFormChange}/>
 
-                <InputLabel htmlFor='city'>City*: </InputLabel>
-                <Input name='city' id='city' inputProps={{maxLength: '50'}} value={household.city} onChange={handleFormChange}/>
+                <InputLabel htmlFor='city'>City *</InputLabel>
+                <Input name='city' id='city' required={true} inputProps={{maxLength: '50'}} value={household.city} onChange={handleFormChange}/>
 
-                <InputLabel htmlFor='pcode'>Postal Code*: </InputLabel>
-                <Input name='pcode' id='pcode' inputProps={{minLength:'5', maxLength:'5', placeholder: '#####'}} value={household.pcode} onChange={handleFormChange}/>
+                <InputLabel htmlFor='pcode'>Postal Code *</InputLabel>
+                <Input name='pcode' id='pcode' type="text" required={true} inputProps={{minLength:'5', maxLength:'5', placeholder: '#####'}} value={household.pcode} onChange={handleFormChange}/>
 
-                <InputLabel htmlFor='state'>State: </InputLabel>
-                <Input name='state' id='state' inputProps={{minLength:'2', maxLength:'2'}} value={household.state} onChange={handleFormChange}/>
+                <InputLabel htmlFor='state'>State *</InputLabel>
+                <Input name='state' id='state' required={true} inputProps={{minLength:'2', maxLength:'2', placeholder: 'XX'}} value={household.state} onChange={handleFormChange}/>
 
                 <InputLabel htmlFor='delivery_notes'>Delivery Notes: </InputLabel>
                 <Input name='delivery_notes' id='delivery_notes' inputProps={{maxLength: '255'}} value={household.delivery_notes} onChange={handleFormChange}/>
@@ -200,7 +200,7 @@ const HouseholdForm = (props) => {
                 <AllergiesList allergies={household.hh_allergies} isEditable={true} updateEditForm={updateEditForm}/>
               </Grid>
             </Grid>
-            <Button type='Submit' color='lightBlue' variant='contained' onClick={handleClose}>Add Client</Button>
+            <Button type='Submit' color='lightBlue' variant='contained'>Add Client</Button>
         </form>
       </Card>
 
