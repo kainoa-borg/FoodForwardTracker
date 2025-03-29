@@ -28,6 +28,61 @@ export default function IngredientPage(props) {
     // Struct of option definitions for Supplier dropdown
     const [supplierOptions, setSupplierOptions] = useState();
 
+    const parentCategories = [
+        { value: 0, label: 'No Category' },
+        { value: 1, label: 'Fruits' },
+        { value: 2, label: 'Vegetables' },
+        { value: 3, label: 'Dairy' },
+        { value: 4, label: 'Protein' },
+        { value: 5, label: 'Grains' },
+        { value: 6, label: 'Specialty' },
+        { value: 7, label: 'Condiments' }
+    ];
+
+    const specificCategoriesMap = {
+        0: [{ value: 0, label: 'No Category' }],
+        1: [ // Fruits
+            { value: 1, label: 'Melons' },
+            { value: 2, label: 'Berries' },
+            { value: 3, label: 'Other Fruits' }
+        ],
+        2: [ // Vegetables
+            { value: 4, label: 'Darkgreen Vegetables' },
+            { value: 5, label: 'Red Orange Vegetables' },
+            { value: 6, label: 'Starchy Vegetables' },
+            { value: 7, label: 'Beans Peas Lentils' },
+            { value: 8, label: 'Other Vegetables' }
+        ],
+        3: [ // Dairy
+            { value: 9, label: 'Milk' },
+            { value: 10, label: 'Cheese' },
+            { value: 11, label: 'Yogurt' },
+            { value: 12, label: 'Non-Dairy Calcium Alternatives' }
+        ],
+        4: [ // Protein
+            { value: 13, label: 'Meats' },
+            { value: 14, label: 'Poultry' },
+            { value: 15, label: 'Seafood' },
+            { value: 16, label: 'Eggs' },
+            { value: 17, label: 'Nuts Seeds' },
+            { value: 18, label: 'Beans Peas Lentils (Protein)' }
+        ],
+        5: [ // Grains
+            { value: 19, label: 'Whole Grains' },
+            { value: 20, label: 'Refined Grains' },
+            { value: 21, label: 'Gluten Free' }
+        ],
+        6: [ // Specialty
+            { value: 22, label: 'Vegan' },
+            { value: 23, label: 'Allergies' }
+        ],
+        7: [ // Condiments
+            { value: 24, label: 'Sauces' },
+            { value: 25, label: 'Seasonings' },
+            { value: 26, label: 'Broths' }
+        ]
+    };
+
     // Get suppliers from database
     // Set supplier variable with supplier data
     const getDBSuppliers = () => {
@@ -116,7 +171,54 @@ export default function IngredientPage(props) {
             },
         },
         { field: 'qty_on_hand', headerName: 'Amt On Hand', width: 100, type: 'number', 
-            renderEditCell: (params) => (<GridEditInputCell {...params} inputProps={{ max: 25, min: 0,}}/>), editable: false}
+            renderEditCell: (params) => (<GridEditInputCell {...params} inputProps={{ max: 25, min: 0,}}/>), editable: false},
+        { 
+            field: 'parent_category', 
+            headerName: 'Food Group', 
+            width: 130, 
+            type: 'singleSelect',
+            valueOptions: parentCategories,
+            editable: true,
+            valueFormatter: (params) => {
+                const category = parentCategories.find(cat => cat.value === params.value);
+                return category ? category.label : 'No Category';
+            }
+        },
+        { 
+            field: 'specific_category', 
+            headerName: 'Specific Category', 
+            width: 150, 
+            type: 'singleSelect',
+            editable: true,
+            valueOptions: (params) => {
+                const parentCategory = params && params.row ? 
+                    (params.row.parent_category || 0) : 0;
+                return specificCategoriesMap[parentCategory] || specificCategoriesMap[0];
+            },
+            valueFormatter: (params) => {
+                // If no value, return No Category
+                if (params.value === null || params.value === undefined) {
+                    return 'No Category';
+                }
+
+                // Search through all category lists to find the matching value
+                for (const categoryList of Object.values(specificCategoriesMap)) {
+                    const found = categoryList.find(cat => cat.value === params.value);
+                    if (found) {
+                        return found.label;
+                    }
+                }
+                
+                return 'No Category';
+            },
+            preProcessEditCellProps: (params) => {
+                const parentCategory = params && params.row ? 
+                    (params.row.parent_category || 0) : 0;
+                const validOptions = specificCategoriesMap[parentCategory] || specificCategoriesMap[0];
+                const isValid = validOptions.some(opt => opt.value === params.props.value);
+                return { ...params.props, value: isValid ? params.props.value : 0 };
+            }
+        },
     ]
 
     // Page view; calls NewModularDataGrid

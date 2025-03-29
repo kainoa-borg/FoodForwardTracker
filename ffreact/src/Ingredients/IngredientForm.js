@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
 import React from 'react'
 import axios from 'axios'
-import { Grid, Typography, Card, Input, InputLabel, Select, MenuItem, Button} from '@mui/material';
+import { Grid, Typography, Card, Input, InputLabel, Select, MenuItem, Button, FormControl} from '@mui/material';
 import ModularSelect from '../components/ModularSelect.js';
 
 // Kainoa Borges
@@ -32,7 +32,9 @@ const IngredientForm = (props) => {
       unit_cost: null,
       flat_fee: null,
       isupplier_id: null,
-      pref_isupplier_id: null
+      pref_isupplier_id: null,
+      parent_category: 0,
+      specific_category: 0
   }
   }
   // The state of this Ingredient Form with each attribute of Ingredient
@@ -116,6 +118,76 @@ const IngredientForm = (props) => {
     // updateEditForm('aFlag', true);
   }
 
+  const parentCategories = [
+    { value: 0, label: 'No Category' },
+    { value: 1, label: 'Fruits' },
+    { value: 2, label: 'Vegetables' },
+    { value: 3, label: 'Dairy' },
+    { value: 4, label: 'Protein' },
+    { value: 5, label: 'Grains' },
+    { value: 6, label: 'Specialty' },
+    { value: 7, label: 'Condiments' }
+];
+
+const specificCategoriesMap = {
+    0: [{ value: 0, label: 'No Category' }],
+    1: [ // Fruits
+        { value: 1, label: 'Melons' },
+        { value: 2, label: 'Berries' },
+        { value: 3, label: 'Other Fruits' }
+    ],
+    2: [ // Vegetables
+        { value: 4, label: 'Darkgreen Vegetables' },
+        { value: 5, label: 'Red Orange Vegetables' },
+        { value: 6, label: 'Starchy Vegetables' },
+        { value: 7, label: 'Beans Peas Lentils' },
+        { value: 8, label: 'Other Vegetables' }
+    ],
+    3: [ // Dairy
+        { value: 9, label: 'Milk' },
+        { value: 10, label: 'Cheese' },
+        { value: 11, label: 'Yogurt' },
+        { value: 12, label: 'Non-Dairy Calcium Alternatives' }
+    ],
+    4: [ // Protein
+        { value: 13, label: 'Meats' },
+        { value: 14, label: 'Poultry' },
+        { value: 15, label: 'Seafood' },
+        { value: 16, label: 'Eggs' },
+        { value: 17, label: 'Nuts Seeds' },
+        { value: 18, label: 'Beans Peas Lentils (Protein)' }
+    ],
+    5: [ // Grains
+        { value: 19, label: 'Whole Grains' },
+        { value: 20, label: 'Refined Grains' },
+        { value: 21, label: 'Gluten Free' }
+    ],
+    6: [ // Specialty
+        { value: 22, label: 'Vegan' },
+        { value: 23, label: 'Allergies' }
+    ],
+    7: [ // Condiments
+        { value: 24, label: 'Sauces' },
+        { value: 25, label: 'Seasonings' },
+        { value: 26, label: 'Broths' }
+    ]
+};
+
+// Get available specific categories based on selected parent category
+const getFilteredSpecificCategories = () => {
+    return specificCategoriesMap[ingredient.parent_category || 0] || [];
+};
+
+// Reset specific category when parent category changes
+const handleParentCategoryChange = (event) => {
+    const newParentCategory = event.target.value;
+    setIngredient(prev => ({
+        ...prev,
+        parent_category: newParentCategory,
+        specific_category: 0 // Reset to "No Category"
+    }));
+};
+
   if (!ingredients || !supplierList) {
     return (<>loading...</>)
   }
@@ -170,6 +242,37 @@ const IngredientForm = (props) => {
 
               <InputLabel htmlFor="exp_date">Exp Date*: </InputLabel>
               <Input name="exp_date" type="date" data-date="" data-date-format="YYYY-MM-DD" inputProps={{required: true}} value={ingredient.exp_date} onChange={handleFormChange}/>
+            </Grid>
+            <Grid item>
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel>Parent Category</InputLabel>
+                <Select
+                    name="parent_category"
+                    value={ingredient.parent_category || 0}
+                    onChange={handleParentCategoryChange}
+                >
+                    {parentCategories.map((category) => (
+                        <MenuItem key={category.value} value={category.value}>
+                            {category.label}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
+
+            <FormControl fullWidth>
+                <InputLabel>Specific Category</InputLabel>
+                <Select
+                    name="specific_category"
+                    value={ingredient.specific_category || 0}
+                    onChange={handleFormChange}
+                >
+                    {getFilteredSpecificCategories().map((category) => (
+                        <MenuItem key={category.value} value={category.value}>
+                            {category.label}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
             </Grid>
             <Grid item>
               <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>

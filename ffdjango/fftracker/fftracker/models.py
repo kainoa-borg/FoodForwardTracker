@@ -8,7 +8,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
-from .IngCategoryEnum import ParentCategory, SpecificCategory
 
 # AbstractUser Authorization model: Uses email as unique login
 #class CustomUser(AbstractUser):
@@ -153,23 +152,6 @@ class HhAllergies(models.Model):
         db_table = 'hh_allergies'
 
 
-class PausedDates(models.Model):
-    paused_date_id = models.SmallAutoField(primary_key=True)
-    pause_start_date = models.DateField()
-    pause_end_date = models.DateField()
-    description = models.TextField(blank=True, null=True)
-    hh_id = models.ForeignKey('Households', on_delete=models.CASCADE, related_name='paused_dates', db_column='hh_id')
-
-    class Meta:
-        managed = True
-        db_table = 'paused_dates'
-
-    def __str__(self):
-        return f"Paused from {self.pause_start_date} to {self.pause_end_date}"
-
-
-
-    
 class HhKits(models.Model):
     hk_id = models.SmallIntegerField(primary_key=True)
     hk_kit = models.ForeignKey('Kits', models.CASCADE, blank=True, null=True)
@@ -218,7 +200,6 @@ class Households(models.Model):
     childrenSnacks_flag = models.BooleanField(default=False)
     foodBox_flag = models.BooleanField(default=False)
     rteMeal_flag = models.BooleanField(default=False)
-    restriction_flag = models.PositiveIntegerField(blank=True, null=True, default=0)
   
     class Meta:
         managed = True
@@ -299,15 +280,10 @@ class Ingredients(models.Model):
     flat_fee = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
     isupplier = models.ForeignKey('Supplier', models.CASCADE, related_name='isupplier', blank=True, null=True)
     pref_isupplier = models.ForeignKey('Supplier', models.CASCADE, related_name='pref_isupplier', blank=True, null=True)
-    parent_category = models.SmallIntegerField(default=0)
-    specific_category = models.SmallIntegerField(default=0)
 
     class Meta:
         managed = True
         db_table = 'ingredients'
-
-
-       
 
 # class IPLMealPlans(models.Model):
 #     m_id = models.AutoField(primary_key=True)
@@ -551,21 +527,3 @@ class Users(models.Model):
         managed = True
         db_table = 'users'
 
-class Servings(models.Model):
-    date = models.DateField()
-    total_servings = models.PositiveIntegerField()
-
-    class Meta:
-        managed = True
-        db_table = 'servings'
-
-class IngredientConversion(models.Model):
-    ingredientId = models.ForeignKey(Ingredients, on_delete=models.CASCADE, related_name='ingredient_conversion', db_column='ingredientId')
-    unit_a = models.SmallIntegerField(default=0)
-    unit_b = models.SmallIntegerField(default=0)
-    amt_a = models.DecimalField(max_digits=5, decimal_places=2)
-    amt_b = models.DecimalField(max_digits=5, decimal_places=2)
-
-    class Meta:
-        managed = True
-        db_table = 'ingredient_conversion'
