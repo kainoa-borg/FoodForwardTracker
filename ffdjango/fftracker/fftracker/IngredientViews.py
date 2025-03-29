@@ -31,11 +31,13 @@ class IngredientInvSerializer(ModelSerializer):
 	ingredient_usage = IngredientUsageSerializer(required=False, allow_null=True, many=True)
 	class Meta():
 		model = Ingredients
-		fields = ('i_id', 'ingredient_name', 'pkg_type', 'storage_type', 'in_date', 'in_qty', 'ingredient_usage', 'qty_on_hand', 'unit', 'exp_date', 'unit_cost', 'flat_fee', 'isupplier_id', 'pref_isupplier_id', 'isupplier', 'pref_isupplier')
+		fields = ('i_id', 'ingredient_name', 'pkg_type', 'storage_type', 'in_date', 'in_qty', 'ingredient_usage', 'qty_on_hand', 'unit', 'exp_date', 'unit_cost', 'flat_fee', 'isupplier_id', 'pref_isupplier_id', 'isupplier', 'pref_isupplier', 'parent_category', 'specific_category')
 
 	def create(self, validated_data):
-		# raise serializers.ValidationError("IM HERE")
 		ing_usage = validated_data.pop('ingredient_usage')
+		# Ensure parent_category and specific_category have default values
+		validated_data['parent_category'] = validated_data.get('parent_category', 0)
+		validated_data['specific_category'] = validated_data.get('specific_category', 0)
 		ing_instance = Ingredients.objects.create(**validated_data)
 		in_qty = getattr(ing_instance, 'in_qty')
 		setattr(ing_instance, 'qty_on_hand', in_qty)
@@ -43,39 +45,55 @@ class IngredientInvSerializer(ModelSerializer):
 		return ing_instance
 		
 	def update(self, ing_instance, validated_data):
-		# raise serializers.ValidationError("IM HERE")
 		ing_usage = validated_data.pop('ingredient_usage')
-		print(ing_instance)
-		# ing_instance = Ingredients.objects.create(**validated_data)
+		# Ensure parent_category and specific_category are properly updated
+		ing_instance.parent_category = validated_data.get('parent_category', ing_instance.parent_category)
+		ing_instance.specific_category = validated_data.get('specific_category', ing_instance.specific_category)
+		
+		# Initialize used variable
 		used = 0
-		# ing_usages = IngredientUsages.objects.filter(used_ing = ing_instance)
-		# if ing_usages:1
-		# 	for ing in ing_usages:
-		# 		used += ing.used_qty
-		# used += ing_usage['used_qty']
-		# latest_id = IngredientUsages.object.latest('i_usage_id').i_usage_id + 1
-		# ing_usage['i_usage_id'] = latest_id
-		# ing_usage['used_ing_id'] = ing_instance
-		# IngredientUsages.objects.create(**ing_usage)
-		IngredientUsages.objects.filter(used_ing = ing_instance).delete()
+		
+		# Delete existing usages
+		IngredientUsages.objects.filter(used_ing=ing_instance).delete()
+		
+		# Process new usages if they exist
 		if ing_usage:
 			for usage in ing_usage:
 				used += int(usage['used_qty'])
+				latest_id = 0
 				if (IngredientUsages.objects.count() > 0):
-					latest_id = IngredientUsages.objects.latest('i_usage_id').i_usage_id +1
-				else:
-					latest_id = 0
+					latest_id = IngredientUsages.objects.latest('i_usage_id').i_usage_id + 1
 				usage['i_usage_id'] = latest_id
 				usage['used_ing_id'] = getattr(ing_instance, 'i_id')
-				# raise serializers.ValidationError(usage)
 				IngredientUsages.objects.create(**usage)
+		
+		# Update quantities
 		in_qty = validated_data['in_qty']
-		validated_data['qty_on_hand'] =  in_qty - used
+		validated_data['qty_on_hand'] = in_qty - used
+		
 		return super().update(ing_instance, validated_data)
-# 
+
+	def delete(self, instance):
+		# Delete all related ingredient usages first
+		IngredientUsages.objects.filter(used_ing=instance).delete()
+		# Then delete the ingredient
+		instance.delete()
 
 # Create your views here.
 class IngredientInvView(ModelViewSet):
 	queryset = Ingredients.objects.all()
 	# queryset = Ingredients.objects.all().prefetch_related('ingredient_usage')
 	serializer_class = IngredientInvSerializer
+
+	def destroy(self, request, *args, **kwargs):
+		try:
+			instance = self.get_object()
+			# Delete all related ingredient usages first
+			IngredientUsages.objects.filter(used_ing=instance).delete()
+			# Then perform the standard delete operation
+			return super().destroy(request, *args, **kwargs)
+		except Exception as e:
+			return Response(
+				{'error': str(e)},
+				status=status.HTTP_500_INTERNAL_SERVER_ERROR
+			)
