@@ -8,6 +8,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator, MaxValueValidator
+from .IngCategoryEnum import ParentCategory, SpecificCategory
 
 # AbstractUser Authorization model: Uses email as unique login
 #class CustomUser(AbstractUser):
@@ -205,6 +206,20 @@ class Households(models.Model):
         managed = True
         db_table = 'households'
 
+class PausedDates(models.Model):
+    paused_date_id = models.SmallAutoField(primary_key=True)
+    pause_start_date = models.DateField()
+    pause_end_date = models.DateField()
+    description = models.TextField(blank=True, null=True)
+    hh_id = models.ForeignKey('Households', on_delete=models.CASCADE, related_name='paused_dates', db_column='hh_id')
+
+    class Meta:
+        managed = True
+        db_table = 'paused_dates'
+
+    def __str__(self):
+        return f"Paused from {self.pause_start_date} to {self.pause_end_date}"
+
 class ProductSubscriptionHistory(models.Model):
     household = models.ForeignKey(Households, on_delete=models.CASCADE, related_name='subscription_history')
     product_type = models.CharField(max_length=30)
@@ -280,10 +295,18 @@ class Ingredients(models.Model):
     flat_fee = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
     isupplier = models.ForeignKey('Supplier', models.CASCADE, related_name='isupplier', blank=True, null=True)
     pref_isupplier = models.ForeignKey('Supplier', models.CASCADE, related_name='pref_isupplier', blank=True, null=True)
+    parent_category = models.SmallIntegerField(choices=[(tag.value, tag.name) for tag in ParentCategory], default=ParentCategory.NoCategory.value)
+    specific_category = models.SmallIntegerField(choices=[(tag.value, tag.name) for tag in SpecificCategory], default=SpecificCategory.NoCategory.value)
 
     class Meta:
         managed = True
         db_table = 'ingredients'
+
+    def save(self, *args, **kwargs):
+        # Ensure categories are valid integers
+        self.parent_category = int(self.parent_category or 0)
+        self.specific_category = int(self.specific_category or 0)
+        super().save(*args, **kwargs)
 
 # class IPLMealPlans(models.Model):
 #     m_id = models.AutoField(primary_key=True)
@@ -469,6 +492,18 @@ class ServingCalculations(models.Model):
     class Meta:
         managed = True
         db_table = 'serving_calculations'
+
+
+class Servings(models.Model):
+    date = models.DateField(primary_key=True)
+    total_servings = models.PositiveIntegerField()
+
+    class Meta:
+        managed = True
+        db_table = 'servings'
+
+    def __str__(self):
+        return f"{self.date}: {self.total_servings} servings"
 
 
 class StationIngredients(models.Model):
