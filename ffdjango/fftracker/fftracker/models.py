@@ -562,3 +562,13 @@ class Users(models.Model):
         managed = True
         db_table = 'users'
 
+class IngredientConversion(models.Model):
+    ingredientId = models.ForeignKey(Ingredients, on_delete=models.CASCADE, related_name='ingredient_conversion', db_column='ingredientId')
+    unit_a = models.SmallIntegerField(default=0)
+    unit_b = models.SmallIntegerField(default=0)
+    amt_a = models.DecimalField(max_digits=5, decimal_places=2)
+    amt_b = models.DecimalField(max_digits=5, decimal_places=2)
+
+    class Meta:
+        managed = True
+        db_table = 'ingredient_conversion'
