@@ -98,7 +98,7 @@ storage_key = os.environ.get('APPSETTING_STORAGE_KEY')
 
 if not db_username: db_username = 'FFDAdmin'
 if not db_pass: db_pass = 'F00dF0rw@rd'
-if not db_host: db_host = 'foodforwardqadb.mysql.database.azure.com'
+if not db_host: db_host = 'foodforwardproddb.mysql.database.azure.com'
 
 DEFAULT_FILE_STORAGE = 'storages.backends.azure_storage.AzureStorage'
 AZURE_ACCOUNT_NAME = 'foodforwardstorage'

@@ -201,6 +201,7 @@ class Households(models.Model):
     childrenSnacks_flag = models.BooleanField(default=False)
     foodBox_flag = models.BooleanField(default=False)
     rteMeal_flag = models.BooleanField(default=False)
+    restriction_flag = models.PositiveIntegerField(blank=True, null=True, default=0)
   
     class Meta:
         managed = True
@@ -495,7 +496,8 @@ class ServingCalculations(models.Model):
 
 
 class Servings(models.Model):
-    date = models.DateField(primary_key=True)
+    id = models.AutoField(primary_key=True)
+    date = models.DateField()
     total_servings = models.PositiveIntegerField()
 
     class Meta:
