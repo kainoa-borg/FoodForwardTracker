@@ -5,73 +5,105 @@ from rest_framework.serializers import ModelSerializer
 from fftracker.models import IngredientUnits, IngredientNames
 from django.db.models import Q
 from django.db import IntegrityError
+from rest_framework.decorators import action
 
-class IngUnitSerializer(ModelSerializer):
-    # i_name_id = serializers.IntegerField(allow_null=False)
-    class Meta():
+class IngUnitSerializer(serializers.ModelSerializer):
+    class Meta:
         model = IngredientUnits
         fields = ('i_unit_id', 'recipe_amt', 'recipe_unit', 'shop_amt', 'shop_unit', 'i_name_id')
-        # read_only_fields = ('i_unit_id',)
 
-class IngNameSerializer(ModelSerializer):
-    ing_units = IngUnitSerializer(required=False, many=True)
 
-    class Meta():
+class IngNameSerializer(serializers.ModelSerializer):
+    ing_units = IngUnitSerializer(many=True, required=False)
+    category_id = serializers.IntegerField()
+    subcategory_id = serializers.IntegerField()
+
+    class Meta:
         model = IngredientNames
-        fields = ('ing_name_id', 'ing_name', 'ing_units',)
-        read_only_fields = ('ing_name_id', 'ing_units')
+        fields = ('ing_name_id', 'ing_name', 'ing_units', 'category_id', 'subcategory_id')
+        read_only_fields = ('ing_name_id',)
 
     def create(self, validated_data):
-        # Get the units from this ing name def
-        if 'ing_units' in validated_data:
-            validated_data.pop('ing_units')
-        # Create the ingredient name definition
-        ing_name_instance = IngredientNames.objects.create(**validated_data)
-        # # For each new ing unit
-        # if ing_units:
-        #     for unit in ing_units:
-        #         # Set the foreign key to reference this ing name def 
-        #         unit['i_name_id'] = getattr(ing_name_instance, 'ing_name_id')
-        #         # Create this unit
-        #         IngredientUnits.objects.create(**unit)
-        return ing_name_instance
-    
-    def update(self, ing_name_instance, validated_data):
-        # Get the units from this ing name def
-        ing_units = validated_data.pop('ing_units')
-        # Delete any existing units for this ingredient
-        IngredientUnits.objects.filter(i_name_id=ing_name_instance).delete()
-        # For each newly defined ing unit
-        if ing_units:
-            for unit in ing_units:
-                # Set the foreign key to reference this ing name def
-                unit['i_name_id'] = getattr(ing_name_instance, 'ing_name_id')
-                # Create or Update this unit
-                IngredientUnits.objects.update_or_create(**unit)
-        # Have the base modelserializer update method update this ing name def
-        return super().update(ing_name_instance, validated_data)
+        ing_units_data = validated_data.pop('ing_units', [])
+        ing_name = IngredientNames.objects.create(**validated_data)
+
+        for unit_data in ing_units_data:
+            IngredientUnits.objects.create(i_name_id=ing_name, **unit_data)
+
+        return ing_name
+
+    def update(self, instance, validated_data):
+        ing_units_data = validated_data.pop('ing_units', [])
+
+        # Update the IngredientName fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # Replace all IngredientUnits
+        IngredientUnits.objects.filter(i_name_id=instance).delete()
+        for unit_data in ing_units_data:
+            IngredientUnits.objects.create(i_name_id=instance, **unit_data)
+
+        return instance
 
 class IngNameView(ModelViewSet):
     queryset = IngredientNames.objects.all()
     serializer_class = IngNameSerializer
 
-    # def create(self, request):
-    #     ret = None
-    #     try:
-    #         ret = super().create(request)
-    #     except IntegrityError:
-    #         return Response({'errorText': 'There already exists an ingredient definition with that name.'}, 400)
-    #     return ret
+    def get_queryset(self):
+        category_id = self.request.query_params.get('category_id')
+        subcategory_id = self.request.query_params.get('subcategory_id')
 
-    # def update(self, request, *args, **kwargs):
-    #     ret = None
-    #     try:
-    #         ret = super().update(request, *args, **kwargs)
-    #     except IntegrityError:
-    #         return Response({'errorText': 'Error in one of your inputs! Please try again.'}, 400)
-    #     return ret
+        queryset = self.queryset
+
+        if category_id:
+            queryset = queryset.filter(category_id=int(category_id))
+        if subcategory_id:
+            queryset = queryset.filter(subcategory_id=int(subcategory_id))
+
+        return queryset
+
+    @action(detail=False, methods=['get'], url_path='category/(?P<category_id>[0-9]+)/subcategory/(?P<subcategory_id>[0-9]+)')
+    def filter_by_category(self, request, category_id=None, subcategory_id=None):
+        queryset = self.queryset.filter(category_id=category_id, subcategory_id=subcategory_id)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['post'], url_path='category/(?P<category_id>[0-9]+)/subcategory/(?P<subcategory_id>[0-9]+)')
+    def add_ingredient(self, request, category_id=None, subcategory_id=None):
+        data = request.data.copy()
+        data['category_id'] = category_id
+        data['subcategory_id'] = subcategory_id
+
+        serializer = self.get_serializer(data=data)
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=201)
+        except IntegrityError:
+            return Response({'error': 'Ingredient with this name already exists.'}, status=400)
+
+    def create(self, request, *args, **kwargs):
+        try:
+            return super().create(request, *args, **kwargs)
+        except IntegrityError:
+            return Response({'errorText': 'An ingredient with this name already exists.'}, status=400)
+
+    def update(self, request, *args, **kwargs):
+        try:
+            return super().update(request, *args, **kwargs)
+        except IntegrityError:
+            return Response({'errorText': 'Error updating the ingredient.'}, status=400)
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            return super().destroy(request, *args, **kwargs)
+        except IntegrityError:
+            return Response({'errorText': 'Error deleting the ingredient.'}, status=400)
 
 
 class IngUnitView(ModelViewSet):
     queryset = IngredientUnits.objects.all()
     serializer_class = IngUnitSerializer
+

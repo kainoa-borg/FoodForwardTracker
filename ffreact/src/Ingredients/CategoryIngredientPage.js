@@ -18,7 +18,7 @@ const subCategoryNames = {
     1: ["Dark green Vegetables", "Red/Orange Vegetables", "Starchy Vegetables", "Beans, Peas, Lentils", "Other Vegetables"],
     2: ["Milk", "Cheese", "Yogurt", "Non-Dairy Calcium Alternatives"],
     3: ["Meats", "Poultry", "Seafood", "Eggs", "Nuts/Seeds", "Beans, Peas, Lentils (Protein)"],
-    4: ["Whole Grains", "Refined Grains"],
+    4: ["Whole Grains", "Refined Grains"],      
     5: ["Gluten Free", "Vegan", "Allergies"],
     6: ["Sauces", "Seasonings", "Broths"]
 };
@@ -35,9 +35,14 @@ export default function CategoryIngredientPage() {
 
     useEffect(() => {
         if (subCategoryId !== '') {
-            axios.get(`${process.env.REACT_APP_API_URL}ingredients/${categoryId}/${subCategoryId}/`)
+            axios.get(`${process.env.REACT_APP_API_URL}ingredients/category/${categoryId}/subcategory/${subCategoryId}/`)
                 .then(response => setIngredients(response.data))
-                .catch(error => console.error("Error fetching ingredients:", error));
+                .catch(error => {
+                    console.error("Error fetching ingredients:", error);
+                    if (error.response && error.response.status === 404) {
+                        setIngredients([]); // Clear ingredients if no data is found
+                    }
+                });
         }
     }, [categoryId, subCategoryId]);
 
@@ -50,9 +55,9 @@ export default function CategoryIngredientPage() {
     };
 
     const handleAddIngredient = () => {
-        axios.post(`${process.env.REACT_APP_API_URL}ingredients/${categoryId}/${subCategoryId}/`, { ing_name: newIngredient })
+        axios.get(`${process.env.REACT_APP_API_URL}ingredients/category/${categoryId}/subcategory/${subCategoryId}/`)
             .then(response => {
-                setIngredients([...ingredients, response.data]);
+                setIngredients(prevIngredients => [...prevIngredients, response.data]); // Update state to include the new ingredient
                 setNewIngredient('');
                 handleClose();
             })

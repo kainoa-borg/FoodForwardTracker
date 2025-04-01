@@ -29,7 +29,7 @@ export default function IngredientDefinitionPage() {
                             <Paper 
                                 elevation={3} 
                                 sx={{ p: 2, textAlign: 'center', cursor: 'pointer' }} 
-                                onClick={() => navigate(`/ingredients/${category.value}`)}
+                                onClick={() => navigate(`/ingredients/${category.value}`)} // Ensure category.value is passed correctly
                             >
                                 <Typography variant="body1">{category.name}</Typography>
                             </Paper>

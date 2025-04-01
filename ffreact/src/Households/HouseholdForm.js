@@ -44,6 +44,7 @@ const HouseholdForm = (props) => {
       bags_or_crates: "",
       ebt: "",
       ebt_refill_date: undefined,
+      email: "",
     }
   }
 
@@ -165,6 +166,10 @@ const HouseholdForm = (props) => {
 
                 <InputLabel htmlFor='ebt_refill_date'>EBT Refill Date: </InputLabel>
                 <Input name='ebt_refill_date' id='ebt_refill_date' type='number' value={household.ebt_refill_date} onChange={handleFormChange}/>
+
+                <InputLabel htmlFor='email'>Email: </InputLabel>
+                <Input name='email' id='email' type='email' inputProps={{maxLength: '50'}} value={household.email} onChange={handleFormChange}/>
+                
               </Grid>
               <Grid item>
                 <InputLabel htmlFor='phone'>Phone Number *</InputLabel>          
