@@ -1,6 +1,7 @@
 import {useState} from 'react'
 import React from 'react'
-// import ReusableForm from '../ReusableForm'
+import { Button, Dialog, DialogContent } from '@mui/material';
+import RecipeIngForm from './RecipeIngForm';
 
 // Sabona Abubeker
 
@@ -24,12 +25,13 @@ const RecipeForm = (props) => {
       step_inst: '',
       stn_name: '',
       inst_recipe_num: '',
+      ingredients: [],
     }
   }
 
   // The state of this Recipe Form with each attribute of Recipes
   const [recipe, setRecipe] = useState(clearRecipe());
-  //const [recipeList, setRecipeList] = useState([{r_num: 1, r_name: 'Recipe Name'}, {r_num: 2, r_name: 'Recipe Name'}]);
+  const [showIngredientForm, setShowIngredientForm] = useState(false);
 
     // Handle form submission (prevent refresh, pass Recipe to addRecipe, and clear form state)
     // Takes submit event information (form submission)
@@ -64,6 +66,21 @@ const RecipeForm = (props) => {
       updateEditForm([fieldName], [fieldValue]);
       // updateEditForm('aFlag', true);
     }
+
+    const handleAddIngredient = (newIngredient) => {
+        // First update the recipe state
+        setRecipe(prevRecipe => {
+            const updatedRecipe = {
+                ...prevRecipe,
+                ingredients: [...(prevRecipe.ingredients || []), newIngredient]
+            };
+            console.log('Updated recipe:', updatedRecipe);
+            return updatedRecipe;
+        });
+        
+        // Then close the form
+        setShowIngredientForm(false);
+    };
 
     // HTML structure of this component
     return (
@@ -110,6 +127,37 @@ const RecipeForm = (props) => {
 
           <label htmlFor="inst_recipe_num">Recipe Instruction Number: </label>
           <input name="inst_recipe_num" type="text" value={recipe.inst_recipe_num} onChange={handleFormChange}/>
+
+          <div className="ingredients-section" style={{ margin: '20px 0', border: '1px solid #ccc', padding: '10px' }}>
+              <h3>Recipe Ingredients</h3>
+              {recipe.ingredients && recipe.ingredients.length > 0 ? (
+                  recipe.ingredients.map((ingredient, index) => (
+                      <div key={index}>
+                          {ingredient.ingredient_name} - {ingredient.amt} {ingredient.unit}
+                      </div>
+                  ))
+              ) : (
+                  <p>No ingredients added yet</p>
+              )}
+              <Button 
+                  onClick={() => setShowIngredientForm(true)}
+                  variant="contained"
+                  color="primary"
+              >
+                  Add Ingredient
+              </Button>
+              <Dialog 
+                  open={showIngredientForm} 
+                  onClose={() => setShowIngredientForm(false)}
+              >
+                  <DialogContent>
+                      <RecipeIngForm 
+                          addEntry={handleAddIngredient}
+                          handleClose={() => setShowIngredientForm(false)}
+                      />
+                  </DialogContent>
+              </Dialog>
+          </div>
 
           <button type='Submit'>Add</button>
 
