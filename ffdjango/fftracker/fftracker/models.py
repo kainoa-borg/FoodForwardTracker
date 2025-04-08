@@ -479,8 +479,12 @@ class Recipes(models.Model):
     r_img_upload = models.ForeignKey('ImageUpload', models.SET_NULL, related_name='r_image', db_column='r_img_upload', blank=True, null=True)
     r_card_path = models.CharField(max_length=200, blank=True, null=True)
     r_card_upload = models.ForeignKey('ImageUpload', models.SET_NULL, related_name='r_card', db_column='r_card_upload', blank=True, null=True)
-    m_s = models.SmallIntegerField()
-
+    RECIPE_TYPES = [
+        (0, 'Snack'),
+        (1, 'Meal'),
+        (2, 'Sauce/Dip')
+    ]
+    m_s = models.SmallIntegerField(choices=RECIPE_TYPES)
 
     class Meta:
         managed = True

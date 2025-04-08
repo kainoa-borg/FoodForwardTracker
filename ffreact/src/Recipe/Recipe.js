@@ -517,11 +517,12 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                     {/* <InputLabel id='recipeNameLabel'>Recipe Name</InputLabel> */}
                     <TextField label='Recipe Name' required inputProps={{ref: nameField, maxLength: 200}} defaultValue={recipeData.r_name}/>
                     <FormControl>
-                        <InputLabel id='mealOrSnackLabel'>Meal Or Snack?</InputLabel>
-                        <Select labelID='mealOrSnackLabel' required value={m_s} label={'Meal Or Snack'} onChange={handleMealSnackChange}>
-                            <MenuItem value={undefined} disabled>Meal/Snack</MenuItem>
+                        <InputLabel id='mealOrSnackLabel'>Recipe Type</InputLabel>
+                        <Select labelID='mealOrSnackLabel' required value={m_s} label={'Recipe Type'} onChange={handleMealSnackChange}>
+                            <MenuItem value={undefined} disabled>Select Type</MenuItem>
                             <MenuItem value={1}>Meal</MenuItem>
                             <MenuItem value={0}>Snack</MenuItem>
+                            <MenuItem value={2}>Sauce/Dip</MenuItem>
                         </Select>
                     </FormControl>
 
