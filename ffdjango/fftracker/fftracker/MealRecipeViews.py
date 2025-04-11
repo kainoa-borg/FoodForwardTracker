@@ -215,7 +215,6 @@ class RecipeCardView(viewsets.ViewSet):
             return Response(500)
 
 class RecipesSerializer(ModelSerializer):
-    # r_num = serializers.CharField(max_length=200)
     r_name = serializers.CharField(max_length=200)
     r_img_path = serializers.CharField(read_only=True)
     r_card_path = serializers.CharField(read_only=True)
@@ -224,12 +223,11 @@ class RecipesSerializer(ModelSerializer):
     r_packaging = RecipePackagingSerializer(many=True)
     r_diets = RecipeDietsSerializer(many=True)
     r_allergies = AllergySerializer(many=True)
-    r_stations = StationsSerializer(many=True)
+    r_stations = StationsSerializer(many=True, required=False)
     m_s = serializers.IntegerField()
 
     class Meta():
         model = Recipes
-        # depth = 1
         fields = ('r_num', 'r_name', 'r_img_path', 'r_card_path', 'r_servings', 'r_ingredients', 'r_packaging', 'r_diets', 'r_stations', 'r_allergies', 'm_s')
         read_only_fields = ('r_num', 'r_img_path', 'r_card_path')
 
@@ -240,7 +238,8 @@ class RecipesSerializer(ModelSerializer):
         pkgs = validated_data.pop('r_packaging')
         diets = validated_data.pop('r_diets')
         allergies = validated_data.pop('r_allergies')
-        stations = validated_data.pop('r_stations')
+        if 'r_stations' in validated_data:
+            validated_data.pop('r_stations')
         if validated_data.get('r_ing_path', None):
             r_ing_path = validated_data.pop('r_ing_path')
         if validated_data.get('r_card_path', None):
@@ -263,11 +262,6 @@ class RecipesSerializer(ModelSerializer):
             diet['rd_id'] = latest_key + 1
             diet['rd_recipe_num'] = recipe_instance
             RecipeDiets(**diet).save()
-        for station in stations:
-            latest_key = Stations.objects.latest('stn_num').stn_num if (Stations.objects.count() > 0) else 0
-            station['stn_num'] = latest_key + 1
-            station['stn_recipe_num'] = recipe_instance
-            Stations(**station).save()
         for allergy in allergies:
             latest_key = RecipeAllergies.objects.latest('ra_id').ra_id if (RecipeAllergies.objects.count > 0) else 0
             allergy['ra_id'] = latest_key + 1
@@ -280,13 +274,13 @@ class RecipesSerializer(ModelSerializer):
         ings = validated_data.pop('r_ingredients')
         pkgs = validated_data.pop('r_packaging')
         diets = validated_data.pop('r_diets')
-        stations = validated_data.pop('r_stations')
         allergies = validated_data.pop('r_allergies')
+        if 'r_stations' in validated_data:
+            validated_data.pop('r_stations')
         if validated_data.get('r_ing_path', None):
             r_ing_path = validated_data.pop('r_ing_path')
         if validated_data.get('r_card_path', None):
             r_card_path = validated_data.pop('r_card_path')
-		# ing_instance = Ingredients.objects.create(**validated_data)
 
         RecipeIngredients.objects.filter(ri_recipe_num = recipe_instance).delete()
         for ing in ings:
@@ -296,7 +290,6 @@ class RecipesSerializer(ModelSerializer):
                 latest_id = 0
             ing['ri_id'] = latest_id
             ing['ri_recipe_num'] = recipe_instance
-            # raise serializers.ValidationError(usage)
             RecipeIngredients.objects.create(**ing)
         
         RecipePackaging.objects.filter(rp_recipe_num = recipe_instance).delete()
@@ -307,7 +300,6 @@ class RecipesSerializer(ModelSerializer):
                 latest_id = 0
             pkg['rp_id'] = latest_id
             pkg['rp_recipe_num'] = recipe_instance
-            # raise serializers.ValidationError(usage)
             RecipePackaging.objects.create(**pkg)
         
         RecipeDiets.objects.filter(rd_recipe_num = recipe_instance).delete()
@@ -320,21 +312,6 @@ class RecipesSerializer(ModelSerializer):
             diet['rd_recipe_num'] = recipe_instance
             RecipeDiets.objects.create(**diet)
         
-        Stations.objects.filter(stn_recipe_num = recipe_instance).delete()
-        for station in stations:
-            if (Stations.objects.count() > 0):
-                latest_id = Stations.objects.latest('stn_num').stn_num + 1
-            else:
-                latest_id = 0
-            station['stn_num'] = latest_id
-            station['stn_recipe_num'] = recipe_instance
-            stn_ings = station.pop('stn_ings')
-            stn_instance = Stations.objects.create(**station)
-            for stn_ing in stn_ings:
-                stn_ing['si_station_num'] = stn_instance
-                StationIngredients.objects.create(**stn_ing)
-
-        
         RecipeAllergies.objects.filter(ra_recipe_num = recipe_instance).delete()
         for allergy in allergies:
             if (RecipeAllergies.objects.count() > 0):
@@ -344,14 +321,11 @@ class RecipesSerializer(ModelSerializer):
             allergy['ra_id'] = latest_id
             allergy['ra_recipe_num'] = recipe_instance
             RecipeAllergies.objects.create(**allergy)
-        # recipe_instance.r_num = validated_data.get('r_num')
+
         recipe_instance.r_name = validated_data.get('r_name')
         recipe_instance.m_s = validated_data.get('m_s')
         recipe_instance.r_servings = validated_data.get('r_servings')
-        print(validated_data.get('m_s'))
-        print(recipe_instance.m_s)
         recipe_instance.save(update_fields=['r_name', 'm_s', 'r_servings'])
-        # print(recipe_instance.m_s)
         return recipe_instance
 
 
@@ -380,37 +354,23 @@ class RecipeDietsView(viewsets.ViewSet):
     
 
 class RecipeView(viewsets.ModelViewSet):
-    def list(self, request):
-        # keys = ('r_num', 'r_name')
-        # query = 'SELECT mp.m_date, ri.prep, ri.amt, ri.unit, i.ingredient_name, ra.allergy, rd.diet_category FROM ingredients AS i JOIN recipe_ingredients AS ri ON i.i_id = ri.ri_ing_id JOIN recipes AS r on ri.ri_recipe_num = r.r_num JOIN meal_plans AS mp ON r.r_num = mp.meal_r_num OR r.r_num = mp.snack_r_num LEFT JOIN recipe_allergies ra ON ra.ra_recipe_num = r.r_num LEFT JOIN recipe_diets rd ON rd.rd_recipe_num = r.r_num WHERE r.r_name = "pizza" OR mp.m_date = "22/11/7"'
-        # queryset = execute_query(query, keys)
-        # serializer = RecipesSerializer(queryset)
-        # return Response(serializer.data)
-        queryset = Recipes.objects.all().prefetch_related('r_ingredients').prefetch_related('r_packaging').prefetch_related('r_diets').prefetch_related('r_stations').prefetch_related('r_allergies')
-        serializer = RecipesSerializer(queryset, many=True)
-        return Response(serializer.data)
-    
-    def create(self, request):
-        serializer = RecipesSerializer(data=request.data)
-        r_instance = None
-        if serializer.is_valid():
-            r_instance = serializer.create(serializer.validated_data)
-            return Response(r_instance.r_num)
-        else:
-            print(serializer.errors)
-            return Response(serializer.errors, 500)
-
-    # def retrieve(self, pk):
-        # query = 'SELECT mp.m_date, ri.prep, ri.amt, ri.unit, i.ingredient_name, ra.allergy, rd.diet_category FROM ingredients AS i JOIN recipe_ingredients AS ri ON i.i_id = ri.ri_ing_id JOIN recipes AS r on ri.ri_recipe_num = r.r_num JOIN meal_plans AS mp ON r.r_num = mp.meal_r_num OR r.r_num = mp.snack_r_num LEFT JOIN recipe_allergies ra ON ra.ra_recipe_num = r.r_num LEFT JOIN recipe_diets rd ON rd.rd_recipe_num = r.r_num WHERE r.r_name = "pizza" OR mp.m_date = "22/11/7"=%s'%(pk)
-        # keys = ('r_num', 'r_name')
-        # print('entered retrieve')
-        # queryset = Recipes.objects.get(r_num=pk)
-        # print('still no error')
-        # serializer = RecipesSerializer(queryset)
-        # return Response(serializer.data)
-    
-    queryset = Recipes.objects.all().prefetch_related('r_ingredients').prefetch_related('r_packaging').prefetch_related('r_diets').prefetch_related('r_stations').prefetch_related('r_allergies')
     serializer_class = RecipesSerializer
+    
+    def get_queryset(self):
+        return Recipes.objects.all().prefetch_related(
+            'r_ingredients',
+            'r_packaging',
+            'r_diets',
+            'r_allergies'
+        )
+
+    def destroy(self, request, pk=None):
+        try:
+            instance = Recipes.objects.get(pk=pk)
+            instance.delete()
+            return Response(status=204)
+        except Recipes.DoesNotExist:
+            return Response(status=404)
 
 class RecipeIngredientsView(viewsets.ViewSet):
     def list(self, request):

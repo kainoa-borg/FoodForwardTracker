@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Grid, Typography, Card, Input, InputLabel, Button, TextField, Box } from '@mui/material';
 
-const RecipeInstForm = (props) => {
+const InstructionForm = (props) => {
     const { addEntry, handleClose, type } = props;
     
     const [instruction, setInstruction] = useState({
@@ -80,7 +80,7 @@ const RecipeInstForm = (props) => {
                         </Box>
                     </Grid>
                     <Grid item>
-                        <Button color="lightBlue" variant='contained' type='submit'>Add</Button>
+                        <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>
                     </Grid>
                 </Grid>
             </Card>
@@ -88,4 +88,4 @@ const RecipeInstForm = (props) => {
     );
 }
 
-export default RecipeInstForm;
+export default InstructionForm;
