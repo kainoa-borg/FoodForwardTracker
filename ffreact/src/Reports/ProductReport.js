@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Box, Typography, Button } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
-
+import { DataGrid, GridToolbarExport, GridToolbarContainer} from '@mui/x-data-grid';
 const ProductReport = () => {
     const [report, setReport] = useState(null);
     const [error, setError] = useState(null);
@@ -72,11 +71,24 @@ const ProductReport = () => {
                         rows={report.households}
                         autoHeight
                         getRowId={(row) => row.household_id}
+                        components={{ Toolbar: CustomToolbar }}
                     />
                 </Box>
             )}
         </Box>
     );
 };
+  // Defines the file name the DataGrd Export function will use 
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer>
+        <GridToolbarExport
+          csvOptions={{
+              fileName: 'Cost Totals Report',
+              delimeter: ';'
+          }} />
+      </GridToolbarContainer>
+    );
+  }
 
 export default ProductReport;

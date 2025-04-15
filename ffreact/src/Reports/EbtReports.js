@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Box, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid,GridToolbarExport, GridToolbarContainer } from '@mui/x-data-grid';
 
 const EbtReports = () => {
     const [dayNumber, setDayNumber] = useState('');
@@ -87,6 +87,7 @@ const EbtReports = () => {
                     rows={peopleByEbtDay}
                     autoHeight
                     getRowId={(row) => row.ebt_number}
+                    components={{ Toolbar: CustomToolbar }}
                 />
             </Box>
 
@@ -112,10 +113,20 @@ const EbtReports = () => {
                     rows={allHouseholds}
                     autoHeight
                     getRowId={(row) => row.ebt_number}
+                    components={{ Toolbar: CustomToolbar }}
                 />
             </Box>
         </Box>
     );
 };
-
+// Custom Toolbar for Export
+function CustomToolbar() {
+    return (
+        <GridToolbarContainer>
+            <GridToolbarExport
+                csvOptions={{ fileName: 'Servings Report', delimiter: ';' }}
+            />
+        </GridToolbarContainer>
+    );
+}
 export default EbtReports;
