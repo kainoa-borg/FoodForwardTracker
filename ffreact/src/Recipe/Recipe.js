@@ -1,7 +1,9 @@
 import { Button, Typography, Box, Grid, Snackbar, Stack, TextField, 
-    InputLabel, Paper, MenuItem, Select, FormControl, Input } from "@mui/material";
-import { HighlightOff } from "@mui/icons-material";
-import React, {useState, useEffect, Fragment, useRef} from 'react';
+    InputLabel, Paper, MenuItem, Select, FormControl, Input, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from "@mui/material";
+import { HighlightOff, Remove as RemoveIcon, Add as AddIcon } from "@mui/icons-material";
+import React, { useState, useEffect, Fragment, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
+import ReactDOM from 'react-dom';
 import axios from 'axios';
 import RecipePage from './RecipePage.js';
 import ModularRecipeDatagrid from "../components/ModularRecipeDatagrid.js";
@@ -16,7 +18,123 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
     const nameField = useRef();
     const servingField = useRef();
     const navigate = useNavigate();
- 
+
+    const SubstepsEditDialog = ({ params, onClose, onSave }) => {
+        const [substeps, setSubsteps] = useState(params.value || []);
+        const [newSubstep, setNewSubstep] = useState({ description: '' });
+    
+        const handleSave = () => {
+            onSave(substeps);
+            onClose();
+        };
+    
+        const handleAddSubstep = () => {
+            if (newSubstep.description) {
+                setSubsteps([...substeps, { ...newSubstep }]);
+                setNewSubstep({ description: '' });
+            }
+        };
+    
+        const handleRemoveSubstep = (index) => {
+            setSubsteps(substeps.filter((_, i) => i !== index));
+        };
+    
+        return (
+            <Dialog open onClose={onClose}>
+                <DialogTitle>Edit Substeps</DialogTitle>
+                <DialogContent>
+                    <Box sx={{ minWidth: 400, p: 2 }}>
+                        {substeps.map((substep, index) => (
+                            <Box key={index} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
+                                <Typography>{`${index + 1}.`}</Typography>
+                                <TextField
+                                    value={substep.description}
+                                    onChange={(e) => {
+                                        const newSubsteps = [...substeps];
+                                        newSubsteps[index].description = e.target.value;
+                                        setSubsteps(newSubsteps);
+                                    }}
+                                    fullWidth
+                                />
+                                <IconButton onClick={() => handleRemoveSubstep(index)} size="small">
+                                    <RemoveIcon />
+                                </IconButton>
+                            </Box>
+                        ))}
+                        <Box sx={{ display: 'flex', gap: 1, mt: 2, alignItems: 'center' }}>
+                            <TextField
+                                label="New Substep"
+                                value={newSubstep.description}
+                                onChange={(e) => setNewSubstep({ description: e.target.value })}
+                                fullWidth
+                            />
+                            <IconButton onClick={handleAddSubstep} color="primary">
+                                <AddIcon />
+                            </IconButton>
+                        </Box>
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={onClose}>Cancel</Button>
+                    <Button onClick={handleSave} variant="contained" color="primary">Save</Button>
+                </DialogActions>
+            </Dialog>
+        );
+    };
+
+    const SubstepEditPortal = ({ isOpen, params, onClose, onSave }) => {
+        if (!isOpen) return null;
+        
+        return createPortal(
+            <SubstepsEditDialog params={params} onClose={onClose} onSave={onSave} />,
+            document.body
+        );
+    };
+
+    const SubstepEditCell = React.memo(({ params }) => {
+        const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+        const handleOpen = (event) => {
+            event.stopPropagation();
+            setIsDialogOpen(true);
+        };
+
+        const handleClose = () => {
+            setIsDialogOpen(false);
+        };
+
+        const handleSave = (newSubsteps) => {
+            params.api.setEditCellValue({
+                id: params.id,
+                field: params.field,
+                value: newSubsteps
+            }, true);
+            handleClose();
+        };
+
+        return (
+            <>
+                <Box sx={{ width: '100%', height: '100%' }}>
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={handleOpen}
+                        fullWidth
+                        sx={{ height: '100%' }}
+                    >
+                        Edit Substeps ({(params.value || []).length})
+                    </Button>
+                </Box>
+                <SubstepEditPortal
+                    isOpen={isDialogOpen}
+                    params={params}
+                    onClose={handleClose}
+                    onSave={handleSave}
+                />
+            </>
+        );
+    });
+
     const ingredientsColumns = [
         {
             field: 'ingredient_name',
@@ -84,17 +202,58 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
             type: 'number'
         },
         {
+            field: 'amount_per_serving',
+            headerName: 'Amount/Serving',
+            width: 120,
+            editable: true,
+            type: 'number'
+        },
+        {
+            field: 'unit',
+            headerName: 'Unit',
+            width: 100,
+            editable: true
+        },
+        {
             field: 'description',
             headerName: 'Description',
             width: 250,
             editable: true
         },
         {
-            field: 'time_minutes',
-            headerName: 'Time (min)',
-            width: 100,
+            field: 'substeps',
+            headerName: 'Substeps',
+            width: 400,
             editable: true,
-            type: 'number'
+            renderCell: (params) => {
+                if (!params.value) return null;
+                return (
+                    <Box
+                        sx={{
+                            width: '100%',
+                            height: '100%',
+                            overflow: 'auto',
+                            '&:hover': {
+                                position: 'absolute',
+                                backgroundColor: 'white',
+                                zIndex: 1000,
+                                height: 'auto',
+                                maxHeight: '300px',
+                                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                                padding: '8px',
+                                borderRadius: '4px'
+                            }
+                        }}
+                    >
+                        {params.value.map((substep, index) => (
+                            <Typography key={index} sx={{ whiteSpace: 'pre-wrap', marginBottom: '4px' }}>
+                                {`${index + 1}. ${substep.description}`}
+                            </Typography>
+                        ))}
+                    </Box>
+                );
+            },
+            renderEditCell: (params) => <SubstepEditCell params={params} />
         },
         {
             field: 'notes',
@@ -113,17 +272,58 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
             type: 'number'
         },
         {
+            field: 'amount_per_serving',
+            headerName: 'Amount/Serving',
+            width: 120,
+            editable: true,
+            type: 'number'
+        },
+        {
+            field: 'unit',
+            headerName: 'Unit',
+            width: 100,
+            editable: true
+        },
+        {
             field: 'description',
             headerName: 'Description',
             width: 250,
             editable: true
         },
         {
-            field: 'time_minutes',
-            headerName: 'Time (min)',
-            width: 100,
+            field: 'substeps',
+            headerName: 'Substeps',
+            width: 400,
             editable: true,
-            type: 'number'
+            renderCell: (params) => {
+                if (!params.value) return null;
+                return (
+                    <Box
+                        sx={{
+                            width: '100%',
+                            height: '100%',
+                            overflow: 'auto',
+                            '&:hover': {
+                                position: 'absolute',
+                                backgroundColor: 'white',
+                                zIndex: 1000,
+                                height: 'auto',
+                                maxHeight: '300px',
+                                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                                padding: '8px',
+                                borderRadius: '4px'
+                            }
+                        }}
+                    >
+                        {params.value.map((substep, index) => (
+                            <Typography key={index} sx={{ whiteSpace: 'pre-wrap', marginBottom: '4px' }}>
+                                {`${index + 1}. ${substep.description}`}
+                            </Typography>
+                        ))}
+                    </Box>
+                );
+            },
+            renderEditCell: (params) => <SubstepEditCell params={params} />
         },
         {
             field: 'notes',

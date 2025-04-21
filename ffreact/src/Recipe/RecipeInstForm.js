@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Grid, Typography, Card, Input, InputLabel, Button, TextField, Box } from '@mui/material';
+import { Grid, Typography, Card, Input, InputLabel, Button, TextField, Box, IconButton } from '@mui/material';
+import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
 
 const RecipeInstForm = (props) => {
     const { addEntry, handleClose, type } = props;
@@ -7,8 +8,14 @@ const RecipeInstForm = (props) => {
     const [instruction, setInstruction] = useState({
         step_num: '',
         description: '',
-        time_minutes: '',
-        notes: ''
+        notes: '',
+        amount_per_serving: '',
+        unit: '',
+        substeps: []
+    });
+
+    const [substep, setSubstep] = useState({
+        description: ''
     });
 
     const handleSubmit = (event) => {
@@ -22,6 +29,33 @@ const RecipeInstForm = (props) => {
         setInstruction(prev => ({
             ...prev,
             [name]: value
+        }));
+    }
+
+    const handleSubstepChange = (event) => {
+        const { name, value } = event.target;
+        setSubstep(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    }
+
+    const addSubstep = () => {
+        if (substep.description) {
+            setInstruction(prev => ({
+                ...prev,
+                substeps: [...prev.substeps, {...substep}]
+            }));
+            setSubstep({
+                description: ''
+            });
+        }
+    }
+
+    const removeSubstep = (index) => {
+        setInstruction(prev => ({
+            ...prev,
+            substeps: prev.substeps.filter((_, i) => i !== index)
         }));
     }
 
@@ -45,6 +79,26 @@ const RecipeInstForm = (props) => {
                                 />
                             </div>
 
+                            <Box sx={{display: 'flex', gap: 1, alignItems: 'flex-start'}}>
+                                <TextField
+                                    name="amount_per_serving"
+                                    label="Amount/Serving"
+                                    type="number"
+                                    value={instruction.amount_per_serving}
+                                    onChange={handleFormChange}
+                                    size="small"
+                                    sx={{width: 120}}
+                                />
+                                <TextField
+                                    name="unit"
+                                    label="Unit"
+                                    value={instruction.unit}
+                                    onChange={handleFormChange}
+                                    size="small"
+                                    sx={{width: 100}}
+                                />
+                            </Box>
+
                             <div>
                                 <InputLabel>Description*: </InputLabel>
                                 <TextField
@@ -58,16 +112,6 @@ const RecipeInstForm = (props) => {
                             </div>
 
                             <div>
-                                <InputLabel>Time (minutes): </InputLabel>
-                                <Input
-                                    name="time_minutes"
-                                    type="number"
-                                    value={instruction.time_minutes}
-                                    onChange={handleFormChange}
-                                />
-                            </div>
-
-                            <div>
                                 <InputLabel>Notes: </InputLabel>
                                 <TextField
                                     name="notes"
@@ -76,6 +120,31 @@ const RecipeInstForm = (props) => {
                                     value={instruction.notes}
                                     onChange={handleFormChange}
                                 />
+                            </div>
+
+                            <div>
+                                <Typography variant="h6">Substeps</Typography>
+                                {instruction.substeps.map((step, index) => (
+                                    <Box key={index} sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1}}>
+                                        <Typography>{step.description}</Typography>
+                                        <IconButton onClick={() => removeSubstep(index)} size="small">
+                                            <RemoveIcon />
+                                        </IconButton>
+                                    </Box>
+                                ))}
+                                
+                                <Box sx={{display: 'flex', gap: 1, alignItems: 'flex-start', mt: 1}}>
+                                    <TextField
+                                        name="description"
+                                        label="Substep Description"
+                                        value={substep.description}
+                                        onChange={handleSubstepChange}
+                                        size="small"
+                                    />
+                                    <IconButton onClick={addSubstep} color="primary">
+                                        <AddIcon />
+                                    </IconButton>
+                                </Box>
                             </div>
                         </Box>
                     </Grid>

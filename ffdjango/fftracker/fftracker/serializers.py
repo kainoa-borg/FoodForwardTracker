@@ -5,7 +5,7 @@ from .models import (Households, HhAllergies, PausedDates, Servings, Ingredients
                     Kits, MealPlans, Packaging, ProductSubscriptionHistory, Recipes, 
                     Users, MealPacks, RecipeAllergies, RecipeDiets, RecipeIngredients, 
                     RecipeInstructions, RecipePackaging, DietaryRestrictions, 
-                    IngredientUnits, IngredientNames)
+                    IngredientUnits, IngredientNames, ImageUpload)
 
 
 class AllergySerializer(ModelSerializer):
@@ -103,9 +103,11 @@ class RecipeIngredientsSerializers(ModelSerializer):
 		fields = ('__all__')
 
 class RecipeInstructionsSerializers(ModelSerializer):
+    substeps = serializers.JSONField(required=False)
+
     class Meta():
         model = RecipeInstructions
-        fields = ['inst_id', 'step_num', 'description', 'time_minutes', 'notes', 'instruction_type', 'inst_recipe_num']
+        fields = ['inst_id', 'step_num', 'description', 'notes', 'instruction_type', 'inst_recipe_num', 'substeps', 'amount_per_serving', 'unit']
         read_only_fields = ['instruction_type']
 
 class RecipePackagingSerializers(ModelSerializer):
@@ -113,11 +115,11 @@ class RecipePackagingSerializers(ModelSerializer):
         model = RecipePackaging
         fields = ('__all__')
 
-class RecipeSerializer(serializers.ModelSerializer):
+class RecipesSerializer(serializers.ModelSerializer):
     r_ingredients = RecipeIngredientsSerializers(many=True, required=False)
     r_packaging = RecipePackagingSerializers(many=True, required=False)
-    prep_instructions = RecipeInstructionsSerializers(many=True, required=False)
-    cooking_instructions = RecipeInstructionsSerializers(many=True, required=False)
+    prep_instructions = RecipeInstructionsSerializers(many=True, required=False, source='r_instructions')
+    cooking_instructions = RecipeInstructionsSerializers(many=True, required=False, source='r_instructions')
     r_img_upload = serializers.ImageField(required=False, allow_null=True)
     r_card_upload = serializers.ImageField(required=False, allow_null=True)
 
@@ -143,10 +145,22 @@ class RecipeSerializer(serializers.ModelSerializer):
             RecipePackaging.objects.create(rp_recipe_num=recipe, **package)
             
         for instruction in prep_instructions_data:
-            RecipeInstructions.objects.create(inst_recipe_num=recipe, instruction_type='prep', **instruction)
+            RecipeInstructions.objects.create(
+                inst_recipe_num=recipe, 
+                instruction_type='prep',
+                amount_per_serving=instruction.get('amount_per_serving'),
+                unit=instruction.get('unit'),
+                **{k: v for k, v in instruction.items() if k not in ['amount_per_serving', 'unit']}
+            )
             
         for instruction in cooking_instructions_data:
-            RecipeInstructions.objects.create(inst_recipe_num=recipe, instruction_type='cook', **instruction)
+            RecipeInstructions.objects.create(
+                inst_recipe_num=recipe, 
+                instruction_type='cook',
+                amount_per_serving=instruction.get('amount_per_serving'),
+                unit=instruction.get('unit'),
+                **{k: v for k, v in instruction.items() if k not in ['amount_per_serving', 'unit']}
+            )
             
         return recipe
 
@@ -177,13 +191,25 @@ class RecipeSerializer(serializers.ModelSerializer):
         if 'prep_instructions' in self.initial_data:
             instance.r_instructions.filter(instruction_type='prep').delete()
             for instruction in prep_instructions_data:
-                RecipeInstructions.objects.create(inst_recipe_num=instance, instruction_type='prep', **instruction)
+                RecipeInstructions.objects.create(
+                    inst_recipe_num=instance, 
+                    instruction_type='prep',
+                    amount_per_serving=instruction.get('amount_per_serving'),
+                    unit=instruction.get('unit'),
+                    **{k: v for k, v in instruction.items() if k not in ['amount_per_serving', 'unit']}
+                )
                 
         # Handle cooking instructions
         if 'cooking_instructions' in self.initial_data:
             instance.r_instructions.filter(instruction_type='cook').delete()
             for instruction in cooking_instructions_data:
-                RecipeInstructions.objects.create(inst_recipe_num=instance, instruction_type='cook', **instruction)
+                RecipeInstructions.objects.create(
+                    inst_recipe_num=instance, 
+                    instruction_type='cook',
+                    amount_per_serving=instruction.get('amount_per_serving'),
+                    unit=instruction.get('unit'),
+                    **{k: v for k, v in instruction.items() if k not in ['amount_per_serving', 'unit']}
+                )
                 
         return instance
 
@@ -231,3 +257,8 @@ class IngredientNamesSerializer(ModelSerializer):
     class Meta:
         model = IngredientNames
         fields = ['ing_name_id', 'ing_name', 'ing_units']
+
+class ImageUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImageUpload
+        fields = ('file', 'date_uploaded')

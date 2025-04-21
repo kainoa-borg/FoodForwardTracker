@@ -9,11 +9,12 @@ from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from .models import Households, HhAllergies, Ingredients, Users, Recipes, MealPlans, Stations, PausedDates, Packaging, IngredientNames
 from .serializers import (HouseholdSerializer, AllergySerializer, HouseholdAllergySerializer, 
                         IngredientInvSerializer, UserSerializer, StationSerializer, 
                         StationListSerializer, PausedDatesSerializer, RecipeSerializer, 
-                        PackagingSerializer, IngredientNamesSerializer)
+                        PackagingSerializer, IngredientNamesSerializer, RecipeInstructionsSerializers)
 from .helperfuncs import execute_query
 from django.db import connection
 
@@ -142,23 +143,11 @@ class StationListView(ModelViewSet):
 	queryset = Stations.objects.all()
 	serializer_class = StationListSerializer
 
-class RecipeViewSet(APIView):
+class RecipeViewSet(ModelViewSet):
+    queryset = Recipes.objects.all()
     serializer_class = RecipeSerializer
 
-    def get(self, request, pk=None):
-        if pk is None:
-            recipes = Recipes.objects.all()
-            serializer = self.serializer_class(recipes, many=True)
-            return Response(serializer.data)
-        else:
-            try:
-                recipe = Recipes.objects.get(r_num=pk)
-                serializer = self.serializer_class(recipe)
-                return Response(serializer.data)
-            except Recipes.DoesNotExist:
-                return Response({'error': 'Recipe not found'}, status=404)
-
-    def post(self, request):
+    def create(self, request):
         try:
             serializer = self.serializer_class(data=request.data)
             if serializer.is_valid():
@@ -168,9 +157,9 @@ class RecipeViewSet(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=400)
 
-    def patch(self, request, pk):
+    def update(self, request, pk=None):
         try:
-            recipe = Recipes.objects.get(r_num=pk)
+            recipe = self.get_object()
             serializer = self.serializer_class(recipe, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
@@ -180,6 +169,22 @@ class RecipeViewSet(APIView):
             return Response({'error': 'Recipe not found'}, status=404)
         except Exception as e:
             return Response({'error': str(e)}, status=400)
+
+    @action(detail=True, methods=['get'])
+    def get_recipe(self, request, pk=None):
+        recipe = self.get_object()
+        serializer = self.get_serializer(recipe)
+        data = serializer.data
+        
+        # Get prep instructions
+        prep_instructions = recipe.r_instructions.filter(instruction_type='prep').order_by('step_num')
+        data['prep_instructions'] = RecipeInstructionsSerializers(prep_instructions, many=True).data
+        
+        # Get cooking instructions
+        cooking_instructions = recipe.r_instructions.filter(instruction_type='cook').order_by('step_num')
+        data['cooking_instructions'] = RecipeInstructionsSerializers(cooking_instructions, many=True).data
+        
+        return Response(data)
 
 class PackagingInventoryView(APIView):
     def get(self, request):

@@ -444,14 +444,31 @@ class RecipeIngredients(models.Model):
         db_table = 'recipe_ingredients'
 
 
+class Recipes(models.Model):
+    r_num = models.SmallIntegerField(primary_key=True)
+    r_name = models.CharField(max_length=50, blank=True, null=True)
+    r_servings = models.SmallIntegerField(default='1')
+    r_img_path = models.CharField(max_length=200, blank=True, null=True)
+    r_img_upload = models.ForeignKey('ImageUpload', models.SET_NULL, related_name='r_image', db_column='r_img_upload', blank=True, null=True)
+    r_card_path = models.CharField(max_length=200, blank=True, null=True)
+    r_card_upload = models.ForeignKey('ImageUpload', models.SET_NULL, related_name='r_card', db_column='r_card_upload', blank=True, null=True)
+    m_s = models.SmallIntegerField(choices=[(0, 'Snack'), (1, 'Meal'), (2, 'Sauce/Dip')])
+
+    class Meta:
+        managed = True
+        db_table = 'recipes'
+
+
 class RecipeInstructions(models.Model):
-    inst_id = models.IntegerField(primary_key=True)
-    step_num = models.IntegerField(null=False, default=1)
-    description = models.TextField(null=False, default='')
-    time_minutes = models.IntegerField(blank=True, null=True)
-    notes = models.TextField(blank=True, null=True)
-    instruction_type = models.CharField(max_length=10, choices=[('prep', 'Preparation'), ('cook', 'Cooking')], default='prep')
-    inst_recipe_num = models.ForeignKey('Recipes', models.CASCADE, related_name='r_instructions', db_column='inst_recipe_num')
+    inst_id = models.AutoField(primary_key=True)
+    step_num = models.IntegerField()
+    description = models.TextField()
+    notes = models.TextField(null=True, blank=True)
+    instruction_type = models.CharField(max_length=20)  # 'prep' or 'cook'
+    amount_per_serving = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    unit = models.CharField(max_length=45, null=True, blank=True)
+    substeps = models.JSONField(null=True, blank=True)
+    inst_recipe_num = models.ForeignKey(Recipes, on_delete=models.CASCADE, related_name='r_instructions')
 
     class Meta:
         managed = True
@@ -471,21 +488,6 @@ class RecipePackaging(models.Model):
     class Meta:
         managed = True
         db_table = 'recipe_packaging'
-
-
-class Recipes(models.Model):
-    r_num = models.SmallIntegerField(primary_key=True)
-    r_name = models.CharField(max_length=50, blank=True, null=True)
-    r_servings = models.SmallIntegerField(default='1')
-    r_img_path = models.CharField(max_length=200, blank=True, null=True)
-    r_img_upload = models.ForeignKey('ImageUpload', models.SET_NULL, related_name='r_image', db_column='r_img_upload', blank=True, null=True)
-    r_card_path = models.CharField(max_length=200, blank=True, null=True)
-    r_card_upload = models.ForeignKey('ImageUpload', models.SET_NULL, related_name='r_card', db_column='r_card_upload', blank=True, null=True)
-    m_s = models.SmallIntegerField(choices=[(0, 'Snack'), (1, 'Meal'), (2, 'Sauce/Dip')])
-
-    class Meta:
-        managed = True
-        db_table = 'recipes'
 
 
 class ServingCalculations(models.Model):
