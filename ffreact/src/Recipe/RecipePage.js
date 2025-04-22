@@ -205,7 +205,19 @@ function RecipePageComponent(props) {
             field: 'r_name', headerName: 'Recipe Name', width: 300, editable: false
         },
         {
-            field: 'm_s', headerName: 'Meal/Snack', width: 150, editable: false, valueFormatter: (params) => {return params.value===1 ? 'Meal' : 'Snack'}
+            field: 'm_s', headerName: 'Recipe Type', width: 150, editable: false, 
+            valueFormatter: (params) => {
+                switch(params.value) {
+                    case 0:
+                        return 'Snack';
+                    case 1:
+                        return 'Meal';
+                    case 2:
+                        return 'Sauce/Dip';
+                    default:
+                        return '';
+                }
+            }
         },
         loginState.isAuthenticated ?
         { field: 'actions', type: 'actions', headerName: 'Actions', width: 100,

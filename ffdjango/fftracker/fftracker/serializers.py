@@ -1,7 +1,11 @@
 from collections import UserString
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
-from .models import Households, HhAllergies, PausedDates, Servings, Ingredients, Kits, MealPlans, Packaging, ProductSubscriptionHistory, Recipes, Users, MealPacks, RecipeAllergies, RecipeDiets, RecipeIngredients, RecipeInstructions, DietaryRestrictions
+from .models import (Households, HhAllergies, PausedDates, Servings, Ingredients, 
+                    Kits, MealPlans, Packaging, ProductSubscriptionHistory, Recipes, 
+                    Users, MealPacks, RecipeAllergies, RecipeDiets, RecipeIngredients, 
+                    RecipeInstructions, RecipePackaging, DietaryRestrictions, 
+                    IngredientUnits, IngredientNames, ImageUpload)
 
 
 class AllergySerializer(ModelSerializer):
@@ -99,14 +103,115 @@ class RecipeIngredientsSerializers(ModelSerializer):
 		fields = ('__all__')
 
 class RecipeInstructionsSerializers(ModelSerializer):
-	class Meta():
-		model = RecipeInstructions
-		fields = ('__all__')
+    substeps = serializers.JSONField(required=False)
 
-class RecipesSerializers(ModelSerializer):
-	class Meta():
-		model = Recipes
-		fields = ('__all__')
+    class Meta():
+        model = RecipeInstructions
+        fields = ['inst_id', 'step_num', 'description', 'notes', 'instruction_type', 'inst_recipe_num', 'substeps', 'amount_per_serving', 'unit']
+        read_only_fields = ['instruction_type']
+
+class RecipePackagingSerializers(ModelSerializer):
+    class Meta():
+        model = RecipePackaging
+        fields = ('__all__')
+
+class RecipesSerializer(serializers.ModelSerializer):
+    r_ingredients = RecipeIngredientsSerializers(many=True, required=False)
+    r_packaging = RecipePackagingSerializers(many=True, required=False)
+    prep_instructions = RecipeInstructionsSerializers(many=True, required=False, source='r_instructions')
+    cooking_instructions = RecipeInstructionsSerializers(many=True, required=False, source='r_instructions')
+    r_img_upload = serializers.ImageField(required=False, allow_null=True)
+    r_card_upload = serializers.ImageField(required=False, allow_null=True)
+
+    class Meta:
+        model = Recipes
+        fields = ['r_num', 'r_name', 'r_servings', 'r_img_path', 'r_img_upload', 
+                 'r_card_path', 'r_card_upload', 'm_s', 'r_ingredients', 
+                 'r_packaging', 'prep_instructions', 'cooking_instructions']
+        read_only_fields = ('r_num',)
+
+    def create(self, validated_data):
+        ingredients_data = validated_data.pop('r_ingredients', [])
+        packaging_data = validated_data.pop('r_packaging', [])
+        prep_instructions_data = validated_data.pop('prep_instructions', [])
+        cooking_instructions_data = validated_data.pop('cooking_instructions', [])
+        
+        recipe = Recipes.objects.create(**validated_data)
+        
+        for ingredient in ingredients_data:
+            RecipeIngredients.objects.create(ri_recipe_num=recipe, **ingredient)
+            
+        for package in packaging_data:
+            RecipePackaging.objects.create(rp_recipe_num=recipe, **package)
+            
+        for instruction in prep_instructions_data:
+            RecipeInstructions.objects.create(
+                inst_recipe_num=recipe, 
+                instruction_type='prep',
+                amount_per_serving=instruction.get('amount_per_serving'),
+                unit=instruction.get('unit'),
+                **{k: v for k, v in instruction.items() if k not in ['amount_per_serving', 'unit']}
+            )
+            
+        for instruction in cooking_instructions_data:
+            RecipeInstructions.objects.create(
+                inst_recipe_num=recipe, 
+                instruction_type='cook',
+                amount_per_serving=instruction.get('amount_per_serving'),
+                unit=instruction.get('unit'),
+                **{k: v for k, v in instruction.items() if k not in ['amount_per_serving', 'unit']}
+            )
+            
+        return recipe
+
+    def update(self, instance, validated_data):
+        ingredients_data = validated_data.pop('r_ingredients', [])
+        packaging_data = validated_data.pop('r_packaging', [])
+        prep_instructions_data = validated_data.pop('prep_instructions', [])
+        cooking_instructions_data = validated_data.pop('cooking_instructions', [])
+        
+        # Update recipe fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        
+        # Handle ingredients
+        if 'r_ingredients' in self.initial_data:
+            instance.r_ingredients.all().delete()
+            for ingredient in ingredients_data:
+                RecipeIngredients.objects.create(ri_recipe_num=instance, **ingredient)
+                
+        # Handle packaging
+        if 'r_packaging' in self.initial_data:
+            instance.r_packaging.all().delete()
+            for package in packaging_data:
+                RecipePackaging.objects.create(rp_recipe_num=instance, **package)
+                
+        # Handle prep instructions
+        if 'prep_instructions' in self.initial_data:
+            instance.r_instructions.filter(instruction_type='prep').delete()
+            for instruction in prep_instructions_data:
+                RecipeInstructions.objects.create(
+                    inst_recipe_num=instance, 
+                    instruction_type='prep',
+                    amount_per_serving=instruction.get('amount_per_serving'),
+                    unit=instruction.get('unit'),
+                    **{k: v for k, v in instruction.items() if k not in ['amount_per_serving', 'unit']}
+                )
+                
+        # Handle cooking instructions
+        if 'cooking_instructions' in self.initial_data:
+            instance.r_instructions.filter(instruction_type='cook').delete()
+            for instruction in cooking_instructions_data:
+                RecipeInstructions.objects.create(
+                    inst_recipe_num=instance, 
+                    instruction_type='cook',
+                    amount_per_serving=instruction.get('amount_per_serving'),
+                    unit=instruction.get('unit'),
+                    **{k: v for k, v in instruction.items() if k not in ['amount_per_serving', 'unit']}
+                )
+                
+        return instance
 
 
 class StationSerializer(ModelSerializer):
@@ -140,3 +245,20 @@ class ServingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Servings
         fields = ['date', 'total_servings']
+
+class IngredientUnitSerializer(ModelSerializer):
+    class Meta:
+        model = IngredientUnits
+        fields = ['recipe_unit']
+
+class IngredientNamesSerializer(ModelSerializer):
+    ing_units = IngredientUnitSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = IngredientNames
+        fields = ['ing_name_id', 'ing_name', 'ing_units']
+
+class ImageUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImageUpload
+        fields = ('file', 'date_uploaded')

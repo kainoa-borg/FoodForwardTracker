@@ -1,107 +1,160 @@
-import {useState, useContext, useEffect} from 'react'
-import React from 'react'
-import { Grid, Typography, Card, Input, InputLabel, Button, TextField} from '@mui/material';
-import CellDialog from '../components/CellDialog';
-import StationIngredientList from './StationIngredientList';
-import NewModularSelect from '../components/NewModularSelect';
-import RecipeContext from '../contexts/RecipeContext';
+import React, { useState } from 'react';
+import { Grid, Typography, Card, Input, InputLabel, Button, TextField, Box, IconButton } from '@mui/material';
+import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
 
-// Kainoa Borges
-// Angela McNeese
-
-
-// Ingredient Form component
-// Takes AddIngredient callback function
-// Returns a form that can be used to define a new ingredient object in a IngredientList
 const RecipeInstForm = (props) => {
-    const addEntry = props.addEntry;
-    const handleClose = props.handleClose;
-    const recipeData = useContext(RecipeContext);
+    const { addEntry, handleClose, type } = props;
     
-    useEffect(() => {
-        console.log(recipeData);
-    }, [])
-
-    // The state of this Ingredient Form with each attribute of Ingredient
     const [instruction, setInstruction] = useState({
-        stn_name: '',
-        stn_desc: '',
-        stn_ings: [],
+        step_num: '',
+        description: '',
+        notes: '',
+        amount_per_serving: '',
+        unit: '',
+        substeps: []
     });
 
-    // Handle form submission (prevent refresh, pass ingredient to addIngredient, and clear form state)
-    // Takes submit event information (form submission)
-    // Returns none
+    const [substep, setSubstep] = useState({
+        description: ''
+    });
+
     const handleSubmit = (event) => {
-        // Prevent refresh
         event.preventDefault();
-        // Pass ingredient object to IngredientList callback
         addEntry(instruction);
         handleClose();
     }
 
-    const updateEditForm = (name, value) => {
-        const newInstruction = {...instruction};
-        // for (let i = 0; i < names.length; i++) {
-            // newInstruction[names[i]] = values[i];
-        // }
-        newInstruction[name] = value;
-        setInstruction(newInstruction);
-    }
-
-    // Handle the data inputted to each form input and set the state with the new values
-    // General solution, input verification is tricky with this implementation
-    // Takes input change event information (name, type, and value)
-    // Returns None
     const handleFormChange = (event) => {
-        // Get the name and value of the changed field
-        const fieldName = event.target.getAttribute('name');
-        const fieldValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        // Create new instruction object before setting state
-        updateEditForm(fieldName, fieldValue);
-        // updateEditForm('aFlag', true);
+        const { name, value } = event.target;
+        setInstruction(prev => ({
+            ...prev,
+            [name]: value
+        }));
     }
 
-    // HTML structure of this component
+    const handleSubstepChange = (event) => {
+        const { name, value } = event.target;
+        setSubstep(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    }
+
+    const addSubstep = () => {
+        if (substep.description) {
+            setInstruction(prev => ({
+                ...prev,
+                substeps: [...prev.substeps, {...substep}]
+            }));
+            setSubstep({
+                description: ''
+            });
+        }
+    }
+
+    const removeSubstep = (index) => {
+        setInstruction(prev => ({
+            ...prev,
+            substeps: prev.substeps.filter((_, i) => i !== index)
+        }));
+    }
+
     return (
         <form onSubmit={handleSubmit}>
-            {/* Basic instruction info */}
             <Card sx={{marginTop: '1em', padding: '1em'}}>
-                <Typography variant='h5'>Add Instruction</Typography>
+                <Typography variant='h5'>Add {type} Instruction</Typography>
                 <Typography component='h6' variant='h6'>Required * </Typography>
 
                 <Grid container direction='row' spacing={4}>
-                <Grid item>
-                    <InputLabel>Station Name*: </InputLabel>
-                    <Input name='stn_name' type="text" value={instruction.stn_name} onChange={handleFormChange}/>
+                    <Grid item>
+                        <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
+                            <div>
+                                <InputLabel>Step Number*: </InputLabel>
+                                <Input 
+                                    name="step_num" 
+                                    type="number" 
+                                    value={instruction.step_num}
+                                    required
+                                    onChange={handleFormChange}
+                                />
+                            </div>
 
-                    <InputLabel>Station Description*: </InputLabel>
-                    <TextField name='stn_desc' multiline rows={4} value={instruction.stn_desc} onChange={handleFormChange}/>
+                            <Box sx={{display: 'flex', gap: 1, alignItems: 'flex-start'}}>
+                                <TextField
+                                    name="amount_per_serving"
+                                    label="Amount/Serving"
+                                    type="number"
+                                    value={instruction.amount_per_serving}
+                                    onChange={handleFormChange}
+                                    size="small"
+                                    sx={{width: 120}}
+                                />
+                                <TextField
+                                    name="unit"
+                                    label="Unit"
+                                    value={instruction.unit}
+                                    onChange={handleFormChange}
+                                    size="small"
+                                    sx={{width: 100}}
+                                />
+                            </Box>
 
-                    <InputLabel>Station Ingredients*: </InputLabel>
-                    <CellDialog
-                        buttonText={'Add Station Ingredients'}
-                        dialogTitle={'Add Station Ingredients'}
-                        component={
-                            <StationIngredientList 
-                                items={instruction.stn_ings} 
-                                parentFieldName={'stn_ings'}
-                                fields={[
-                                    {header: 'Ingredient', name: 'si_recipe_ing', defaultValue: '', inputComponent: (params) => <NewModularSelect style={{width: '10rem'}} {...params} fieldName={'si_recipe_ing'} searchField={'ingredient_name'} options={recipeData.r_ingredients.map((ing) => ing)}/>},
-                                ]}
-                                editable
-                                updateFunction={updateEditForm}
-                            />
-                        }
-                    />
-                </Grid>
-                <Grid item>
-                    <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>
-                </Grid>
+                            <div>
+                                <InputLabel>Description*: </InputLabel>
+                                <TextField
+                                    name="description"
+                                    multiline
+                                    rows={4}
+                                    value={instruction.description}
+                                    required
+                                    onChange={handleFormChange}
+                                />
+                            </div>
+
+                            <div>
+                                <InputLabel>Notes: </InputLabel>
+                                <TextField
+                                    name="notes"
+                                    multiline
+                                    rows={2}
+                                    value={instruction.notes}
+                                    onChange={handleFormChange}
+                                />
+                            </div>
+
+                            <div>
+                                <Typography variant="h6">Substeps</Typography>
+                                {instruction.substeps.map((step, index) => (
+                                    <Box key={index} sx={{display: 'flex', alignItems: 'center', gap: 1, mb: 1}}>
+                                        <Typography>{step.description}</Typography>
+                                        <IconButton onClick={() => removeSubstep(index)} size="small">
+                                            <RemoveIcon />
+                                        </IconButton>
+                                    </Box>
+                                ))}
+                                
+                                <Box sx={{display: 'flex', gap: 1, alignItems: 'flex-start', mt: 1}}>
+                                    <TextField
+                                        name="description"
+                                        label="Substep Description"
+                                        value={substep.description}
+                                        onChange={handleSubstepChange}
+                                        size="small"
+                                    />
+                                    <IconButton onClick={addSubstep} color="primary">
+                                        <AddIcon />
+                                    </IconButton>
+                                </Box>
+                            </div>
+                        </Box>
+                    </Grid>
+                    <Grid item>
+                        <Button color="lightBlue" variant='contained' type='submit'>Add</Button>
+                    </Grid>
                 </Grid>
             </Card>
         </form>
     );
 }
 
-export default RecipeInstForm
+export default RecipeInstForm;

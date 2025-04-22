@@ -9,8 +9,12 @@ from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
-from .models import Households, HhAllergies, Ingredients, Users, Recipes, MealPlans, Stations, PausedDates
-from .serializers import HouseholdSerializer, AllergySerializer, HouseholdAllergySerializer, IngredientInvSerializer, UserSerializer, StationSerializer, StationListSerializer, PausedDatesSerializer
+from rest_framework.decorators import action
+from .models import Households, HhAllergies, Ingredients, Users, Recipes, MealPlans, Stations, PausedDates, Packaging, IngredientNames
+from .serializers import (HouseholdSerializer, AllergySerializer, HouseholdAllergySerializer, 
+                        IngredientInvSerializer, UserSerializer, StationSerializer, 
+                        StationListSerializer, PausedDatesSerializer, RecipeSerializer, 
+                        PackagingSerializer, IngredientNamesSerializer, RecipeInstructionsSerializers)
 from .helperfuncs import execute_query
 from django.db import connection
 
@@ -138,4 +142,59 @@ class StationView(ModelViewSet):
 class StationListView(ModelViewSet):
 	queryset = Stations.objects.all()
 	serializer_class = StationListSerializer
+
+class RecipeViewSet(ModelViewSet):
+    queryset = Recipes.objects.all()
+    serializer_class = RecipeSerializer
+
+    def create(self, request):
+        try:
+            serializer = self.serializer_class(data=request.data)
+            if serializer.is_valid():
+                recipe = serializer.save()
+                return Response({'r_num': recipe.r_num})
+            return Response(serializer.errors, status=400)
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)
+
+    def update(self, request, pk=None):
+        try:
+            recipe = self.get_object()
+            serializer = self.serializer_class(recipe, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=400)
+        except Recipes.DoesNotExist:
+            return Response({'error': 'Recipe not found'}, status=404)
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)
+
+    @action(detail=True, methods=['get'])
+    def get_recipe(self, request, pk=None):
+        recipe = self.get_object()
+        serializer = self.get_serializer(recipe)
+        data = serializer.data
+        
+        # Get prep instructions
+        prep_instructions = recipe.r_instructions.filter(instruction_type='prep').order_by('step_num')
+        data['prep_instructions'] = RecipeInstructionsSerializers(prep_instructions, many=True).data
+        
+        # Get cooking instructions
+        cooking_instructions = recipe.r_instructions.filter(instruction_type='cook').order_by('step_num')
+        data['cooking_instructions'] = RecipeInstructionsSerializers(cooking_instructions, many=True).data
+        
+        return Response(data)
+
+class PackagingInventoryView(APIView):
+    def get(self, request):
+        packaging = Packaging.objects.all()
+        serializer = PackagingSerializer(packaging, many=True)
+        return Response(serializer.data)
+
+class IngredientDefinitionsView(APIView):
+    def get(self, request):
+        ingredients = IngredientNames.objects.all().prefetch_related('ing_units')
+        serializer = IngredientNamesSerializer(ingredients, many=True)
+        return Response(serializer.data)
 

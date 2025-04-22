@@ -1,19 +1,17 @@
 import {useEffect, useState} from 'react'
 import React from 'react'
-import { Grid, Typography, Card, Input, InputLabel, Button} from '@mui/material';
-import NewModularSelect from '../components/NewModularSelect.js';
+import { Grid, Typography, Card, Input, InputLabel, Button } from '@mui/material';
+import ModularSelect from '../components/ModularSelect.js';
+import axios from 'axios';
 
 // Kainoa Borges
 // Angela McNeese
-
 
 // Ingredient Form component
 // Takes AddIngredient callback function
 // Returns a form that can be used to define a new ingredient object in a IngredientList
 const RecipeIngForm = (props) => {
-    const addEntry = props.addEntry;
-    const handleClose = props.handleClose;
-    const ingredients = props.ingredients;
+    const { addEntry, handleClose } = props;
 
     // The state of this Ingredient Form with each attribute of Ingredient
     const [ingredient, setIngredient] = useState({
@@ -23,18 +21,23 @@ const RecipeIngForm = (props) => {
         prep: '',
     });
 
-    const [unitOptions, setUnitOptions] = useState([]);
+    const [dbIngredients, setDbIngredients] = useState([]);
 
-    // Handle form submission (prevent refresh, pass ingredient to addIngredient, and clear form state)
-    // Takes submit event information (form submission)
-    // Returns none
-    const handleSubmit = (event) => {
-        // Prevent refresh
-        event.preventDefault();
-        // Pass ingredient object to IngredientList callback
-        addEntry(ingredient);
-        handleClose();
+    // Add function to fetch ingredients from database
+    const getDBIngredients = () => {
+        axios({
+            method: "GET",
+            url: process.env.REACT_APP_API_URL + "ingredient-inventory"
+        }).then((response) => {
+            setDbIngredients(response.data);
+        }).catch((error) => {
+            console.error("Error fetching ingredients:", error);
+        });
     }
+
+    useEffect(() => {
+        getDBIngredients();
+    }, []);
 
     const updateEditForm = (names, values) => {
         const newIngredient = {...ingredient};
@@ -49,58 +52,115 @@ const RecipeIngForm = (props) => {
     // Takes input change event information (name, type, and value)
     // Returns None
     const handleFormChange = (event) => {
-        // Get the name and value of the changed field
-        const fieldName = event.target['name'];
-        const fieldValue = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
-        // Create new ingredient object before setting state
-        updateEditForm([fieldName], [fieldValue]);
-        // updateEditForm('aFlag', true);
-    }
-
-    const getOptions = () => {
-        if (ingredient.ingredient_name !== '') {
-            let ing_name_obj = ingredients.find((ing) => {
-                return ing.ing_name === ingredient.ingredient_name
-            })
-            if (ing_name_obj)
-                return ing_name_obj['ing_units']
+        const fieldName = event.target.name;
+        const fieldValue = event.target.value;
+        
+        console.log('Field changing:', { fieldName, fieldValue }); // Debug log
+        
+        if (fieldName === 'ingredient_name') {
+            // Find the ingredient directly from the dropdown options
+            const selectedIngredient = dbIngredients.find(ing => ing.ingredient_name === fieldValue);
+            console.log('Selected ingredient:', selectedIngredient); // Debug log
+            
+            if (selectedIngredient) {
+                // Update both name and unit in one call
+                updateEditForm(
+                    ['ingredient_name', 'unit'], 
+                    [selectedIngredient.ingredient_name, selectedIngredient.unit]
+                );
+            }
+        } else {
+            updateEditForm([fieldName], [fieldValue]);
         }
-        return []
     }
 
-    useEffect(() => {
-        setUnitOptions(getOptions);
-    }, [ingredient])
+    // Handle form submission (prevent refresh, pass ingredient to addIngredient, and clear form state)
+    // Takes submit event information (form submission)
+    // Returns none
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        
+        console.log('Current ingredient state:', ingredient); // Debug log
+        console.log('Available ingredients:', dbIngredients); // Debug log
+        
+        const selectedIngredient = dbIngredients.find(ing => 
+            ing.ingredient_name.toLowerCase() === ingredient.ingredient_name.toLowerCase()
+        );
+        
+        console.log('Found ingredient:', selectedIngredient); // Debug log
+
+        if (!selectedIngredient) {
+            alert('Please select a valid ingredient from the list');
+            return;
+        }
+
+        if (!ingredient.amt) {
+            alert('Please enter an amount');
+            return;
+        }
+
+        const formattedIngredient = {
+            ingredient_name: selectedIngredient.ingredient_name,
+            amt: parseFloat(ingredient.amt),
+            unit: selectedIngredient.unit,
+            prep: ingredient.prep || ''
+        };
+        
+        console.log('Submitting ingredient:', formattedIngredient); // Debug log
+        
+        addEntry(formattedIngredient);
+        handleClose();
+    };
 
     // HTML structure of this component
     return (
-    <form onSubmit={handleSubmit}>
-        {/* Basic ingredient info */}
-        <Card sx={{marginTop: '1em', padding: '1em'}}>
-            <Typography variant='h5'>Add Ingredient</Typography>
-            <Typography component='h6' variant='h6'>Required * </Typography>
+        <form onSubmit={handleSubmit}>
+            <Card sx={{marginTop: '1em', padding: '1em'}}>
+                <Typography variant='h5'>Add Recipe Ingredient</Typography>
+                <Typography component='h6' variant='h6'>Required * </Typography>
 
-            <Grid container direction='row' spacing={4}>
-            <Grid item>
-                <InputLabel>Ingredient Name*: </InputLabel>
-                {/* <Input name="ingredient_name" type="text" maxLength='30' value={ingredient.ingredient_name} onChange={handleFormChange}/> */}
-                <NewModularSelect value={ingredient.ingredient_name} required options={ingredients} fieldName={'ingredient_name'} searchField={'ing_name'} onChange={handleFormChange}/>
+                <Grid container direction='row' spacing={4}>
+                    <Grid item>
+                        <InputLabel>Ingredient Name*: </InputLabel>
+                        <ModularSelect 
+                            name="ingredient_name"
+                            value={ingredient.ingredient_name}
+                            options={dbIngredients}
+                            required
+                            searchField={'ingredient_name'}
+                            onChange={handleFormChange}
+                            noDuplicates
+                            noAdd={true}
+                            displayField="ingredient_name" // Add this prop
+                            valueField="ingredient_name"   // Add this prop
+                        />
 
-                <InputLabel>Amount*: </InputLabel>
-                <Input name='amt' type="text" value={ingredient.amt} inputProps={{required:true}} onChange={handleFormChange}/>
-                {/* <NewModularSelect value={ingredient.storage_type} options={ingredients} searchField={'storage_type'} onChange={handleFormChange}/> */}
+                        <InputLabel>Amount*: </InputLabel>
+                        <Input 
+                            name='amt' 
+                            type="number" 
+                            value={ingredient.amt} 
+                            inputProps={{
+                                required: true,
+                                min: 0,
+                                step: "0.01"
+                            }} 
+                            onChange={handleFormChange}
+                        />
 
-                <InputLabel>Unit*: </InputLabel>
-                {/* <Input name='unit' type="text" value={ingredient.unit} onChange={handleFormChange}/> */}
-                <NewModularSelect value={ingredient.unit} required options={unitOptions} fieldName={'unit'} searchField={'recipe_unit'} onChange={handleFormChange}/>                
-            </Grid>
-            <Grid item>
-                <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>
-            </Grid>
-            </Grid>
-        </Card>
-    </form>
+                        <InputLabel>Unit*: </InputLabel>
+                        <Input 
+                            name='unit'
+                            required
+                        />
+                    </Grid>
+                    <Grid item>
+                        <Button color="lightBlue" variant='contained' type='Submit'>Add</Button>
+                    </Grid>
+                </Grid>
+            </Card>
+        </form>
     );
 }
 
-export default RecipeIngForm
+export default RecipeIngForm;

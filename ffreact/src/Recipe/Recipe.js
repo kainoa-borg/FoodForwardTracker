@@ -1,54 +1,140 @@
 import { Button, Typography, Box, Grid, Snackbar, Stack, TextField, 
-    InputLabel, Paper, MenuItem, Select, FormControl, Input } from "@mui/material";
-import { HighlightOff } from "@mui/icons-material";
-import React, {useState, useEffect, Fragment, useRef} from 'react';
-import { useGridApiContext } from "@mui/x-data-grid";
+    InputLabel, Paper, MenuItem, Select, FormControl, Input, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from "@mui/material";
+import { HighlightOff, Remove as RemoveIcon, Add as AddIcon } from "@mui/icons-material";
+import React, { useState, useEffect, Fragment, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
+import ReactDOM from 'react-dom';
 import axios from 'axios';
 import RecipePage from './RecipePage.js';
 import ModularRecipeDatagrid from "../components/ModularRecipeDatagrid.js";
 import RecipeIngForm from "./RecipeIngForm.js";
 import RecipePkgForm from "./RecipePkgForm.js";
 import RecipeInstForm from './RecipeInstForm.js';
-import RecipeIngList from "./RecipeIngList.js";
 import DataGridDialog from '../components/DatagridDialog.js';
 import NewModularSelect from "../components/NewModularSelect.js";
-import RecipeContext from "../contexts/RecipeContext.js"
 import { useNavigate } from "react-router-dom";
-import StationIngredientList from "./StationIngredientList.js";
-import CellDialog from "../components/CellDialog.js";
-// import food_placeholder from '../Images/food_placeholder.jpg'
 
 export default function Recipe({ loginState, recipeData, setRecipeData, ingredientOptions, packagingOptions, setCurrPage, getDBRecipeData, isAdding}) {
-    // If recipeData prop is passed, use that, otherwise use empty recipeData
-    // const [recipeName, setRecipeName] = useState(recipeData.r_name);
     const nameField = useRef();
     const servingField = useRef();
     const navigate = useNavigate();
 
-    // const IngredientNameEditCell = (params) => {
-    //     const api = useGridApiContext();
-    //     const [selectDialogOpen, setSelectDialogOpen] = useState(false);
+    const SubstepsEditDialog = ({ params, onClose, onSave }) => {
+        const [substeps, setSubsteps] = useState(params.value || []);
+        const [newSubstep, setNewSubstep] = useState({ description: '' });
+    
+        const handleSave = () => {
+            onSave(substeps);
+            onClose();
+        };
+    
+        const handleAddSubstep = () => {
+            if (newSubstep.description) {
+                setSubsteps([...substeps, { ...newSubstep }]);
+                setNewSubstep({ description: '' });
+            }
+        };
+    
+        const handleRemoveSubstep = (index) => {
+            setSubsteps(substeps.filter((_, i) => i !== index));
+        };
+    
+        return (
+            <Dialog open onClose={onClose}>
+                <DialogTitle>Edit Substeps</DialogTitle>
+                <DialogContent>
+                    <Box sx={{ minWidth: 400, p: 2 }}>
+                        {substeps.map((substep, index) => (
+                            <Box key={index} sx={{ display: 'flex', gap: 1, mb: 1, alignItems: 'center' }}>
+                                <Typography>{`${index + 1}.`}</Typography>
+                                <TextField
+                                    value={substep.description}
+                                    onChange={(e) => {
+                                        const newSubsteps = [...substeps];
+                                        newSubsteps[index].description = e.target.value;
+                                        setSubsteps(newSubsteps);
+                                    }}
+                                    fullWidth
+                                />
+                                <IconButton onClick={() => handleRemoveSubstep(index)} size="small">
+                                    <RemoveIcon />
+                                </IconButton>
+                            </Box>
+                        ))}
+                        <Box sx={{ display: 'flex', gap: 1, mt: 2, alignItems: 'center' }}>
+                            <TextField
+                                label="New Substep"
+                                value={newSubstep.description}
+                                onChange={(e) => setNewSubstep({ description: e.target.value })}
+                                fullWidth
+                            />
+                            <IconButton onClick={handleAddSubstep} color="primary">
+                                <AddIcon />
+                            </IconButton>
+                        </Box>
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={onClose}>Cancel</Button>
+                    <Button onClick={handleSave} variant="contained" color="primary">Save</Button>
+                </DialogActions>
+            </Dialog>
+        );
+    };
 
-    //     const setIngID = (ingName, ingID, unit) => {
-    //         const {id, value, field} = params;
-    //         api.current.setEditCellValue({id, field: 'ingredient_name', value: ingName});
-    //         api.current.setEditCellValue({id, field: 'ri_ing', value: ingID});
-    //         api.current.setEditCellValue({id, field: 'unit', value: unit});
-    //     }
+    const SubstepEditPortal = ({ isOpen, params, onClose, onSave }) => {
+        if (!isOpen) return null;
+        
+        return createPortal(
+            <SubstepsEditDialog params={params} onClose={onClose} onSave={onSave} />,
+            document.body
+        );
+    };
 
+    const SubstepEditCell = React.memo(({ params }) => {
+        const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    //     var ing_name = params.value;
-    //     if (!ing_name) ing_name = 'ingredient';
+        const handleOpen = (event) => {
+            event.stopPropagation();
+            setIsDialogOpen(true);
+        };
 
-    //     return (
-    //         <div>
-    //             <Button variant='outlined' sx={{width: '100%'}}onClick={() => setSelectDialogOpen(true)}>{ing_name}</Button>
-    //             <DataGridDialog DataGridComponent={RecipeIngList} setID={setIngID} open={selectDialogOpen} setOpen={setSelectDialogOpen}/>
-    //         </div>
-    //     )
-    // }
-    // 4.236.185.213
- 
+        const handleClose = () => {
+            setIsDialogOpen(false);
+        };
+
+        const handleSave = (newSubsteps) => {
+            params.api.setEditCellValue({
+                id: params.id,
+                field: params.field,
+                value: newSubsteps
+            }, true);
+            handleClose();
+        };
+
+        return (
+            <>
+                <Box sx={{ width: '100%', height: '100%' }}>
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={handleOpen}
+                        fullWidth
+                        sx={{ height: '100%' }}
+                    >
+                        Edit Substeps ({(params.value || []).length})
+                    </Button>
+                </Box>
+                <SubstepEditPortal
+                    isOpen={isDialogOpen}
+                    params={params}
+                    onClose={handleClose}
+                    onSave={handleSave}
+                />
+            </>
+        );
+    });
+
     const ingredientsColumns = [
         {
             field: 'ingredient_name',
@@ -107,63 +193,150 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
         }
     ]
 
-    const stationColumns = [
+    const prepInstructionsColumns = [
         {
-            field: 'stn_name',
-            headerName: 'Station Name',
-            width: 250,
+            field: 'step_num',
+            headerName: 'Step',
+            width: 100,
+            editable: true,
+            type: 'number'
+        },
+        {
+            field: 'amount_per_serving',
+            headerName: 'Amount/Serving',
+            width: 120,
+            editable: true,
+            type: 'number'
+        },
+        {
+            field: 'unit',
+            headerName: 'Unit',
+            width: 100,
             editable: true
         },
         {
-            field: 'stn_desc',
+            field: 'description',
             headerName: 'Description',
             width: 250,
             editable: true
         },
         {
-            field: 'stn_ings',
-            headerName: 'Ingredients',
-            width: 100,
+            field: 'substeps',
+            headerName: 'Substeps',
+            width: 400,
             editable: true,
             renderCell: (params) => {
+                if (!params.value) return null;
                 return (
-                    <CellDialog 
-                    buttonText={'View'} 
-                    dialogTitle={'View Station Ingredients'} 
-                    component={<StationIngredientList 
-                        items={params.row.stn_ings} 
-                        parentFieldName={'stn_ings'}
-                        fields={[
-                            {header: 'Ingredient', name: 'si_recipe_ing', defaultValue: ''},
-                        ]}
-                        updateFunction={(fieldName, value) => {}}/>}
-                />
-                )
+                    <Box
+                        sx={{
+                            width: '100%',
+                            height: '100%',
+                            overflow: 'auto',
+                            '&:hover': {
+                                position: 'absolute',
+                                backgroundColor: 'white',
+                                zIndex: 1000,
+                                height: 'auto',
+                                maxHeight: '300px',
+                                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                                padding: '8px',
+                                borderRadius: '4px'
+                            }
+                        }}
+                    >
+                        {params.value.map((substep, index) => (
+                            <Typography key={index} sx={{ whiteSpace: 'pre-wrap', marginBottom: '4px' }}>
+                                {`${index + 1}. ${substep.description}`}
+                            </Typography>
+                        ))}
+                    </Box>
+                );
             },
-            renderEditCell: (params) => {
-                return (
-                    <CellDialog 
-                        buttonText={'Edit'} 
-                        dialogTitle={'Edit Station Ingredients'} 
-                        component={<StationIngredientList 
-                            id={params.id}
-                            field={params.field}
-                            items={params.row.stn_ings}
-                            parentFieldName={'stn_ings'}
-                            fields={[
-                                {header: 'Ingredient', name: 'si_recipe_ing', defaultValue: '', inputComponent: (props) => <NewModularSelect style={{width: '10rem'}} {...props} fieldName={'si_recipe_ing'} searchField={'ingredient_name'} options={ingredientRows.map((ing) => ing)}/>},
-                            ]}
-                            editable
-                            updateFunction={(fieldName, value) => {}}/>}
-                    />
-                )
-            }
+            renderEditCell: (params) => <SubstepEditCell params={params} />
+        },
+        {
+            field: 'notes',
+            headerName: 'Notes',
+            width: 200,
+            editable: true
         }
-    ]
+    ];
+
+    const cookingInstructionsColumns = [
+        {
+            field: 'step_num',
+            headerName: 'Step',
+            width: 100,
+            editable: true,
+            type: 'number'
+        },
+        {
+            field: 'amount_per_serving',
+            headerName: 'Amount/Serving',
+            width: 120,
+            editable: true,
+            type: 'number'
+        },
+        {
+            field: 'unit',
+            headerName: 'Unit',
+            width: 100,
+            editable: true
+        },
+        {
+            field: 'description',
+            headerName: 'Description',
+            width: 250,
+            editable: true
+        },
+        {
+            field: 'substeps',
+            headerName: 'Substeps',
+            width: 400,
+            editable: true,
+            renderCell: (params) => {
+                if (!params.value) return null;
+                return (
+                    <Box
+                        sx={{
+                            width: '100%',
+                            height: '100%',
+                            overflow: 'auto',
+                            '&:hover': {
+                                position: 'absolute',
+                                backgroundColor: 'white',
+                                zIndex: 1000,
+                                height: 'auto',
+                                maxHeight: '300px',
+                                boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                                padding: '8px',
+                                borderRadius: '4px'
+                            }
+                        }}
+                    >
+                        {params.value.map((substep, index) => (
+                            <Typography key={index} sx={{ whiteSpace: 'pre-wrap', marginBottom: '4px' }}>
+                                {`${index + 1}. ${substep.description}`}
+                            </Typography>
+                        ))}
+                    </Box>
+                );
+            },
+            renderEditCell: (params) => <SubstepEditCell params={params} />
+        },
+        {
+            field: 'notes',
+            headerName: 'Notes',
+            width: 200,
+            editable: true
+        }
+    ];
 
     const [ingredientRows, setIngredientRows] = useState(recipeData.r_ingredients);
     const [packagingRows, setPackagingRows] = useState(recipeData.r_packaging)
-    const [stationRows, setStationRows] = useState(recipeData.r_stations ? recipeData.r_stations : []);
+    const [prepInstructions, setPrepInstructions] = useState(recipeData.prep_instructions || []);
+    const [cookingInstructions, setCookingInstructions] = useState(recipeData.cooking_instructions || []);
     const [m_s, setM_S] = useState(recipeData.m_s);
     const dietRows = recipeData.r_diets
     const allergyRows = recipeData.r_allergies
@@ -268,25 +441,6 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
     }
 
     const handleDeleteImageClick = (imgOrCard) => {
-        // if (imgOrCard === 'image' && recipeData.r_img_path) setDeleteImage(true);
-        // if (imgOrCard === 'card' && recipeData.r_card_path) setDeleteCard(true);
-        // console.log('handleDeleteImageClick: ', tempImagePath, tempCardPath);
-        // if (tempImagePath || tempCardPath) {
-        //     axios({
-        //         method: "PATCH",
-        //         url:process.env.REACT_APP_API_URL + "" + (imgOrCard==='image' ? 'tempimageupload' : 'tempcardupload') + '/' + 0 + '/',
-        //         data: (imgOrCard==='image') ? {path: tempImagePath} : {path: tempCardPath}
-        //     }).then((response)=>{
-        //         // console.log(imgOrCard, 'temp image delete success!')
-        //     }).catch((error) => {
-        //     if (error.response) {
-        //         handleErrorMessage(error);
-        //         console.log(error.response);
-        //         console.log(error.response.status);
-        //         console.log(error.response.headers);
-        //         }
-        //     });
-        // }
         if (imgOrCard==='image') {
             setImageFile();
             setTempImagePath();
@@ -302,14 +456,12 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
     }
 
     const handleImageUpload = (file, r_num, apiEndpoint) => {
-        // console.log('handleImageUpload', apiEndpoint, file);
         if (!file) {
             return;
         }
         // Send file in request to api
         const formData = new FormData();
         formData.append('file', file);
-        // setUpdateSBOpen(true);
         axios({
             method: "PATCH",
             url:process.env.REACT_APP_API_URL + "" + apiEndpoint + "/" + r_num + '/',
@@ -318,10 +470,8 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                 'Content-Type': 'multipart/form-data'
             }
         }).then((response)=>{
-            // console.log(apiEndpoint, 'image upload success!')
             apiEndpoint==='mealrecipe-image' ? setImageFile() : setCardFile();
             setUpdateDoneSBOpen(true);
-            // getDBRecipeData(recipeData.r_num);
         }).catch((error) => {
         if (error.response) {
             handleErrorMessage(error);
@@ -341,27 +491,6 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
     }
 
     const handleErrorMessage = (error) => {
-        // // Format an error response using the backend response data
-        // if (error.response.data) {
-        //     console.log(error.response.data)
-        //     let error_source = ''
-        //     let error_field = ''
-        //     let error_text = ''
-        //     let error_keys = Object.keys(error.response.data);
-        //     error_keys.forEach((error_key) => {
-        //         error_source = error_key;
-        //         let error_key_obj = error.response.data[error_key][0];
-        //         let error_key_obj_keys = Object.keys(error_key_obj);
-        //         error_key_obj_keys.forEach((err_key) => {
-        //             error_field = err_key;
-        //             error_text = error.response.data[error_key][0][err_key];
-        //         });
-        //     });
-        //     setErrorMessage('Save Failed!' + ' ' + error_source + ' ' + error_field + ': ' + error_text);
-        // }
-        // else {
-        //     setErrorMessage('Save failed! ' + error.response.statusText);
-        // }
         if (error.response.status === 400) {
             setErrorMessage('Save failed! ' + 'Please check inputs and try again!');
             console.log('error handled');
@@ -377,12 +506,16 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
     }, [errorMessage])
 
     const handleSaveClick = () => {
-        // console.log(recipeData);
-        const r_data = {...recipeData, r_name: nameField.current.value, r_servings: servingField.current.value, r_ingredients: ingredientRows, r_packaging: packagingRows, r_stations: stationRows, m_s: m_s}
-        console.log(JSON.stringify(r_data));
+        const r_data = {...recipeData, 
+            r_name: nameField.current.value, 
+            r_servings: servingField.current.value, 
+            r_ingredients: ingredientRows, 
+            r_packaging: packagingRows, 
+            prep_instructions: prepInstructions, 
+            cooking_instructions: cookingInstructions, 
+            m_s: m_s
+        }
         setUpdateSBOpen(true);
-
-        // console.log('deleteImage: ', deleteImage, 'deleteCard: ', deleteCard)
 
         if (deleteImage) {
             handleDeleteRecipeImage('image')
@@ -405,7 +538,6 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                 if (cardFile) {
                     handleImageUpload(cardFile, response.data, 'mealrecipe-card');
                 }
-                // console.log('post success!')
                 setUpdateDoneSBOpen(true);
                 setCurrPage(<RecipePage loginState={loginState} updateDone={true}/>);
             }).catch((error) => {
@@ -429,7 +561,6 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                 url:process.env.REACT_APP_API_URL + "mealrecipes/" + recipeData.r_num + '/',
                 data: r_data,
             }).then((response)=>{
-                // console.log('patch success!')
                 setUpdateDoneSBOpen(true);
                 setCurrPage(<RecipePage loginState={loginState} updateDone={true}/>);
             }).catch((error) => {
@@ -444,7 +575,6 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
     }
 
     const handleNameChange = (event) => {
-        // setRecipeName(event.target.value);
     }
 
     const handleMealSnackChange = (event) => {
@@ -452,8 +582,6 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
     }
 
     const RecipeImage = (props) => {
-        // console.log(props.image_source);
-        // Replace image with a prompt if undefined
         if (props.image_source) {
             return (
                 <Box sx={{position: 'relative'}}>
@@ -472,7 +600,6 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
     }
 
     const RecipeCard = (props) => {
-        // Replace image with a prompt if undefined
         if (props.card_source) {
             return (
                 <Box sx={{position: 'relative'}}>
@@ -514,14 +641,14 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                 {/* Recipe Image and Card Stack */}
                 <Stack item spacing={3}>
 
-                    {/* <InputLabel id='recipeNameLabel'>Recipe Name</InputLabel> */}
                     <TextField label='Recipe Name' required inputProps={{ref: nameField, maxLength: 200}} defaultValue={recipeData.r_name}/>
                     <FormControl>
-                        <InputLabel id='mealOrSnackLabel'>Meal Or Snack?</InputLabel>
-                        <Select labelID='mealOrSnackLabel' required value={m_s} label={'Meal Or Snack'} onChange={handleMealSnackChange}>
-                            <MenuItem value={undefined} disabled>Meal/Snack</MenuItem>
+                        <InputLabel id='mealOrSnackLabel'>Recipe Type</InputLabel>
+                        <Select labelID='mealOrSnackLabel' required value={m_s} label={'Recipe Type'} onChange={handleMealSnackChange}>
+                            <MenuItem value={undefined} disabled>Select Type</MenuItem>
                             <MenuItem value={1}>Meal</MenuItem>
                             <MenuItem value={0}>Snack</MenuItem>
+                            <MenuItem value={2}>Sauce/Dip</MenuItem>
                         </Select>
                     </FormControl>
 
@@ -558,7 +685,41 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                                 keyFieldName={'ri_id'}
                                 searchField={'ingredient_name'}
                                 entryName={'Recipe Ingredient'}
-                            ></ModularRecipeDatagrid>
+                            />
+                        </Box>
+                    </Box>
+
+                    {/* Prep Instructions Table */}
+                    <Box>
+                        <Typography variant='h6'>Kitchen Preparation Instructions</Typography>
+                        <Box sx={{height: '50vh', width: {md: '45vw', sm: '80vw'}}}>
+                            <ModularRecipeDatagrid 
+                                rows={prepInstructions}
+                                columns={prepInstructionsColumns}
+                                setRows={setPrepInstructions}
+                                addFormComponent={RecipeInstForm}
+                                addFormProps={{type: 'Prep'}}
+                                keyFieldName={'step_num'}
+                                searchField={'description'}
+                                entryName={'Prep Instruction'}
+                            />
+                        </Box>
+                    </Box>
+
+                    {/* Cooking Instructions Table */}
+                    <Box>
+                        <Typography variant='h6'>Home Cooking Instructions</Typography>
+                        <Box sx={{height: '50vh', width: {md: '45vw', sm: '80vw'}}}>
+                            <ModularRecipeDatagrid
+                                rows={cookingInstructions}
+                                columns={cookingInstructionsColumns}
+                                setRows={setCookingInstructions}
+                                addFormComponent={RecipeInstForm}
+                                addFormProps={{type: 'Cooking'}}
+                                keyFieldName={'step_num'}
+                                searchField={'description'} 
+                                entryName={'Cooking Instruction'}
+                            />
                         </Box>
                     </Box>
 
@@ -575,27 +736,8 @@ export default function Recipe({ loginState, recipeData, setRecipeData, ingredie
                                 keyFieldName={'rp_id'}
                                 searchField={'pkg_type'}
                                 entryName={'Recipe Packaging'}
-                            ></ModularRecipeDatagrid>
+                            />
                         </Box>    
-                    </Box>
-                    
-                    {/* Station Table */}
-                    <Box>
-                        <Typography variant='h6'>Station</Typography>
-                        <Box sx={{height: '50vh', width: {md: '45vw', sm: '80vw'}}}>
-                            <RecipeContext.Provider value={recipeData}>
-                                <ModularRecipeDatagrid
-                                    apiIP={'4.236.185.213'}
-                                    rows={stationRows}
-                                    columns={stationColumns}
-                                    setRows={setStationRows}
-                                    addFormComponent={RecipeInstForm}
-                                    keyFieldName={'stn_num'}
-                                    searchField={'stn_name'}
-                                    entryName={'Station'}
-                                ></ModularRecipeDatagrid>
-                            </RecipeContext.Provider>
-                        </Box>
                     </Box>
                 </Stack>
             </Grid>
