@@ -28,7 +28,7 @@ class UserSerializer(ModelSerializer):
 		fields = ('__all__')
 
 class DietaryRestrictionsSerializer(serializers.ModelSerializer):
-    class Meta:
+    class Meta():
         model = DietaryRestrictions
         fields = '__all__'
 
@@ -98,9 +98,14 @@ class RecipeDietsSerializers(ModelSerializer):
 		fields = ('__all__')
 
 class RecipeIngredientsSerializers(ModelSerializer):
-	class Meta():
-		model = RecipeIngredients
-		fields = ('__all__')
+    class Meta():
+        model = RecipeIngredients
+        fields = ('ri_id', 'ingredient_name', 'amt', 'unit', 'prep', 'ri_recipe_num')
+        read_only_fields = ('ri_id',)
+        extra_kwargs = {
+            'prep': {'required': False, 'allow_blank': True},
+            'ri_recipe_num': {'required': False}
+        }
 
 class RecipeInstructionsSerializers(ModelSerializer):
     substeps = serializers.JSONField(required=False)
@@ -118,8 +123,8 @@ class RecipePackagingSerializers(ModelSerializer):
 class RecipesSerializer(serializers.ModelSerializer):
     r_ingredients = RecipeIngredientsSerializers(many=True, required=False)
     r_packaging = RecipePackagingSerializers(many=True, required=False)
-    prep_instructions = RecipeInstructionsSerializers(many=True, required=False, source='r_instructions')
-    cooking_instructions = RecipeInstructionsSerializers(many=True, required=False, source='r_instructions')
+    prep_instructions = RecipeInstructionsSerializers(many=True, required=False)
+    cooking_instructions = RecipeInstructionsSerializers(many=True, required=False)
     r_img_upload = serializers.ImageField(required=False, allow_null=True)
     r_card_upload = serializers.ImageField(required=False, allow_null=True)
 
@@ -131,84 +136,118 @@ class RecipesSerializer(serializers.ModelSerializer):
         read_only_fields = ('r_num',)
 
     def create(self, validated_data):
-        ingredients_data = validated_data.pop('r_ingredients', [])
-        packaging_data = validated_data.pop('r_packaging', [])
-        prep_instructions_data = validated_data.pop('prep_instructions', [])
-        cooking_instructions_data = validated_data.pop('cooking_instructions', [])
-        
+        # Remove nested fields from validated_data
+        for field in ['r_ingredients', 'r_packaging', 'prep_instructions', 'cooking_instructions']:
+            validated_data.pop(field, None)
+
+        # Create base recipe
         recipe = Recipes.objects.create(**validated_data)
-        
-        for ingredient in ingredients_data:
-            RecipeIngredients.objects.create(ri_recipe_num=recipe, **ingredient)
-            
-        for package in packaging_data:
-            RecipePackaging.objects.create(rp_recipe_num=recipe, **package)
-            
-        for instruction in prep_instructions_data:
+
+        # Create ingredients
+        for ingredient in self.initial_data.get('r_ingredients', []):
+            RecipeIngredients.objects.create(
+                ri_recipe_num=recipe,
+                ingredient_name=ingredient.get('ingredient_name', ''),
+                amt=ingredient.get('amt', 0),
+                unit=ingredient.get('unit', ''),
+                prep=ingredient.get('prep', '')
+            )
+
+        # Create packaging
+        for package in self.initial_data.get('r_packaging', []):
+            RecipePackaging.objects.create(
+                rp_recipe_num=recipe,
+                pkg_type=package.get('pkg_type', ''),
+                pkg_contents=package.get('pkg_contents', ''),
+                amt=package.get('amt')
+            )
+
+        # Create prep instructions
+        for instruction in self.initial_data.get('prep_instructions', []):
             RecipeInstructions.objects.create(
-                inst_recipe_num=recipe, 
+                inst_recipe_num=recipe,
                 instruction_type='prep',
+                step_num=instruction.get('step_num'),
+                description=instruction.get('description', ''),
+                notes=instruction.get('notes', ''),
                 amount_per_serving=instruction.get('amount_per_serving'),
-                unit=instruction.get('unit'),
-                **{k: v for k, v in instruction.items() if k not in ['amount_per_serving', 'unit']}
+                unit=instruction.get('unit', ''),
+                substeps=instruction.get('substeps', [])
             )
-            
-        for instruction in cooking_instructions_data:
+
+        # Create cooking instructions
+        for instruction in self.initial_data.get('cooking_instructions', []):
             RecipeInstructions.objects.create(
-                inst_recipe_num=recipe, 
+                inst_recipe_num=recipe,
                 instruction_type='cook',
+                step_num=instruction.get('step_num'),
+                description=instruction.get('description', ''),
+                notes=instruction.get('notes', ''),
                 amount_per_serving=instruction.get('amount_per_serving'),
-                unit=instruction.get('unit'),
-                **{k: v for k, v in instruction.items() if k not in ['amount_per_serving', 'unit']}
+                unit=instruction.get('unit', ''),
+                substeps=instruction.get('substeps', [])
             )
-            
+
         return recipe
 
     def update(self, instance, validated_data):
-        ingredients_data = validated_data.pop('r_ingredients', [])
-        packaging_data = validated_data.pop('r_packaging', [])
-        prep_instructions_data = validated_data.pop('prep_instructions', [])
-        cooking_instructions_data = validated_data.pop('cooking_instructions', [])
-        
         # Update recipe fields
         for attr, value in validated_data.items():
-            setattr(instance, attr, value)
+            if attr not in ['r_ingredients', 'r_packaging', 'prep_instructions', 'cooking_instructions']:
+                setattr(instance, attr, value)
         instance.save()
         
         # Handle ingredients
         if 'r_ingredients' in self.initial_data:
             instance.r_ingredients.all().delete()
-            for ingredient in ingredients_data:
-                RecipeIngredients.objects.create(ri_recipe_num=instance, **ingredient)
+            for ingredient in self.initial_data.get('r_ingredients', []):
+                RecipeIngredients.objects.create(
+                    ri_recipe_num=instance,
+                    ingredient_name=ingredient.get('ingredient_name', ''),
+                    amt=ingredient.get('amt', 0),
+                    unit=ingredient.get('unit', ''),
+                    prep=ingredient.get('prep', '')
+                )
                 
         # Handle packaging
         if 'r_packaging' in self.initial_data:
             instance.r_packaging.all().delete()
-            for package in packaging_data:
-                RecipePackaging.objects.create(rp_recipe_num=instance, **package)
+            for package in self.initial_data.get('r_packaging', []):
+                RecipePackaging.objects.create(
+                    rp_recipe_num=instance,
+                    pkg_type=package.get('pkg_type', ''),
+                    pkg_contents=package.get('pkg_contents', ''),
+                    amt=package.get('amt')
+                )
                 
         # Handle prep instructions
         if 'prep_instructions' in self.initial_data:
             instance.r_instructions.filter(instruction_type='prep').delete()
-            for instruction in prep_instructions_data:
+            for instruction in self.initial_data.get('prep_instructions', []):
                 RecipeInstructions.objects.create(
-                    inst_recipe_num=instance, 
+                    inst_recipe_num=instance,
                     instruction_type='prep',
+                    step_num=instruction.get('step_num'),
+                    description=instruction.get('description', ''),
+                    notes=instruction.get('notes', ''),
                     amount_per_serving=instruction.get('amount_per_serving'),
-                    unit=instruction.get('unit'),
-                    **{k: v for k, v in instruction.items() if k not in ['amount_per_serving', 'unit']}
+                    unit=instruction.get('unit', ''),
+                    substeps=instruction.get('substeps', [])
                 )
                 
         # Handle cooking instructions
         if 'cooking_instructions' in self.initial_data:
             instance.r_instructions.filter(instruction_type='cook').delete()
-            for instruction in cooking_instructions_data:
+            for instruction in self.initial_data.get('cooking_instructions', []):
                 RecipeInstructions.objects.create(
-                    inst_recipe_num=instance, 
+                    inst_recipe_num=instance,
                     instruction_type='cook',
+                    step_num=instruction.get('step_num'),
+                    description=instruction.get('description', ''),
+                    notes=instruction.get('notes', ''),
                     amount_per_serving=instruction.get('amount_per_serving'),
-                    unit=instruction.get('unit'),
-                    **{k: v for k, v in instruction.items() if k not in ['amount_per_serving', 'unit']}
+                    unit=instruction.get('unit', ''),
+                    substeps=instruction.get('substeps', [])
                 )
                 
         return instance

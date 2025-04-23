@@ -431,12 +431,11 @@ class RecipeDiets(models.Model):
 
 
 class RecipeIngredients(models.Model):
-    ri_id = models.SmallIntegerField(primary_key=True)
+    ri_id = models.AutoField(primary_key=True)
     ingredient_name = models.CharField(max_length=100)
     amt = models.DecimalField(max_digits=6, decimal_places=3)
     unit = models.CharField(max_length=10)
-    prep = models.CharField(max_length=100)
-    # ri_ing = models.ForeignKey('Ingredients', models.CASCADE, related_name='ing_name')
+    prep = models.CharField(max_length=100, blank=True, null=True)
     ri_recipe_num = models.ForeignKey('Recipes', models.CASCADE, related_name='r_ingredients', db_column='ri_recipe_num')
 
     class Meta:
@@ -445,7 +444,7 @@ class RecipeIngredients(models.Model):
 
 
 class Recipes(models.Model):
-    r_num = models.SmallIntegerField(primary_key=True)
+    r_num = models.AutoField(primary_key=True)
     r_name = models.CharField(max_length=50, blank=True, null=True)
     r_servings = models.SmallIntegerField(default='1')
     r_img_path = models.CharField(max_length=200, blank=True, null=True)
