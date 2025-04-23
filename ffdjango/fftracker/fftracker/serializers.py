@@ -136,15 +136,30 @@ class RecipesSerializer(serializers.ModelSerializer):
         read_only_fields = ('r_num',)
 
     def create(self, validated_data):
+        # Get the nested data
+        ingredients_data = self.initial_data.get('r_ingredients', [])
+        packaging_data = self.initial_data.get('r_packaging', [])
+        prep_instructions = self.initial_data.get('prep_instructions', [])
+        cooking_instructions = self.initial_data.get('cooking_instructions', [])
+        
         # Remove nested fields from validated_data
         for field in ['r_ingredients', 'r_packaging', 'prep_instructions', 'cooking_instructions']:
             validated_data.pop(field, None)
 
-        # Create base recipe
-        recipe = Recipes.objects.create(**validated_data)
+        # Create and save recipe first
+        recipe = Recipes.objects.create(
+            r_name=validated_data.get('r_name'),
+            r_servings=validated_data.get('r_servings', 1),
+            r_img_path=validated_data.get('r_img_path'),
+            r_img_upload=validated_data.get('r_img_upload'),
+            r_card_path=validated_data.get('r_card_path'),
+            r_card_upload=validated_data.get('r_card_upload'),
+            m_s=validated_data.get('m_s')
+        )
+        recipe.save()
 
-        # Create ingredients
-        for ingredient in self.initial_data.get('r_ingredients', []):
+        # Now create related objects after recipe is saved
+        for ingredient in ingredients_data:
             RecipeIngredients.objects.create(
                 ri_recipe_num=recipe,
                 ingredient_name=ingredient.get('ingredient_name', ''),
@@ -153,8 +168,7 @@ class RecipesSerializer(serializers.ModelSerializer):
                 prep=ingredient.get('prep', '')
             )
 
-        # Create packaging
-        for package in self.initial_data.get('r_packaging', []):
+        for package in packaging_data:
             RecipePackaging.objects.create(
                 rp_recipe_num=recipe,
                 pkg_type=package.get('pkg_type', ''),
@@ -162,8 +176,7 @@ class RecipesSerializer(serializers.ModelSerializer):
                 amt=package.get('amt')
             )
 
-        # Create prep instructions
-        for instruction in self.initial_data.get('prep_instructions', []):
+        for instruction in prep_instructions:
             RecipeInstructions.objects.create(
                 inst_recipe_num=recipe,
                 instruction_type='prep',
@@ -175,8 +188,7 @@ class RecipesSerializer(serializers.ModelSerializer):
                 substeps=instruction.get('substeps', [])
             )
 
-        # Create cooking instructions
-        for instruction in self.initial_data.get('cooking_instructions', []):
+        for instruction in cooking_instructions:
             RecipeInstructions.objects.create(
                 inst_recipe_num=recipe,
                 instruction_type='cook',
