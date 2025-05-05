@@ -1,109 +1,122 @@
 from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.serializers import ModelSerializer
-from fftracker.models import IngredientUnits, IngredientNames
-from django.db.models import Q
-from django.db import IntegrityError
-from rest_framework.decorators import action
+from fftracker.models import Ingredients, IngredientConversion
+from rest_framework.decorators import action, api_view
+from rest_framework import status
 
-class IngUnitSerializer(serializers.ModelSerializer):
+class IngredientsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = IngredientUnits
-        fields = ('i_unit_id', 'recipe_amt', 'recipe_unit', 'shop_amt', 'shop_unit', 'i_name_id')
+        model = Ingredients
+        fields = '__all__'
 
-
-class IngNameSerializer(serializers.ModelSerializer):
-    ing_units = IngUnitSerializer(many=True, required=False)
-    category_id = serializers.IntegerField()
-    subcategory_id = serializers.IntegerField()
-
-    class Meta:
-        model = IngredientNames
-        fields = ('ing_name_id', 'ing_name', 'ing_units', 'category_id', 'subcategory_id')
-        read_only_fields = ('ing_name_id',)
-
-    def create(self, validated_data):
-        ing_units_data = validated_data.pop('ing_units', [])
-        ing_name = IngredientNames.objects.create(**validated_data)
-
-        for unit_data in ing_units_data:
-            IngredientUnits.objects.create(i_name_id=ing_name, **unit_data)
-
-        return ing_name
-
-    def update(self, instance, validated_data):
-        ing_units_data = validated_data.pop('ing_units', [])
-
-        # Update the IngredientName fields
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        instance.save()
-
-        # Replace all IngredientUnits
-        IngredientUnits.objects.filter(i_name_id=instance).delete()
-        for unit_data in ing_units_data:
-            IngredientUnits.objects.create(i_name_id=instance, **unit_data)
-
-        return instance
-
-class IngNameView(ModelViewSet):
-    queryset = IngredientNames.objects.all()
-    serializer_class = IngNameSerializer
+class IngredientsView(ModelViewSet):
+    queryset = Ingredients.objects.all()
+    serializer_class = IngredientsSerializer
 
     def get_queryset(self):
-        category_id = self.request.query_params.get('category_id')
-        subcategory_id = self.request.query_params.get('subcategory_id')
+        parent_category = self.request.query_params.get('parent_category')
+        specific_category = self.request.query_params.get('specific_category')
 
         queryset = self.queryset
-
-        if category_id:
-            queryset = queryset.filter(category_id=int(category_id))
-        if subcategory_id:
-            queryset = queryset.filter(subcategory_id=int(subcategory_id))
+        if parent_category:
+            queryset = queryset.filter(parent_category=int(parent_category))
+        if specific_category:
+            queryset = queryset.filter(specific_category=int(specific_category))
 
         return queryset
 
-    @action(detail=False, methods=['get'], url_path='category/(?P<category_id>[0-9]+)/subcategory/(?P<subcategory_id>[0-9]+)')
-    def filter_by_category(self, request, category_id=None, subcategory_id=None):
-        queryset = self.queryset.filter(category_id=category_id, subcategory_id=subcategory_id)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
-    @action(detail=False, methods=['post'], url_path='category/(?P<category_id>[0-9]+)/subcategory/(?P<subcategory_id>[0-9]+)')
-    def add_ingredient(self, request, category_id=None, subcategory_id=None):
-        data = request.data.copy()
-        data['category_id'] = category_id
-        data['subcategory_id'] = subcategory_id
-
-        serializer = self.get_serializer(data=data)
+    @action(detail=False, methods=['get'], url_path='filter')
+    def filter_by_category(self, request):
         try:
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
-            return Response(serializer.data, status=201)
-        except IntegrityError:
-            return Response({'error': 'Ingredient with this name already exists.'}, status=400)
+            parent_category = request.query_params.get('parent_category')
+            specific_category = request.query_params.get('specific_category')
 
-    def create(self, request, *args, **kwargs):
+            queryset = self.get_queryset()
+            if not queryset.exists():
+                return Response({'error': 'No ingredients found for the specified categories.'}, status=404)
+
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
+
+    @action(detail=False, methods=['get'], url_path='foodgroup/(?P<parent_category>[0-9]+)/specific/(?P<specific_category>[0-9]+)')
+    def filter_by_subcategory(self, request, parent_category=None, specific_category=None):
         try:
-            return super().create(request, *args, **kwargs)
-        except IntegrityError:
-            return Response({'errorText': 'An ingredient with this name already exists.'}, status=400)
+            # Ensure parent_category and specific_category are integers
+            parent_category = int(parent_category)
+            specific_category = int(specific_category)
 
-    def update(self, request, *args, **kwargs):
+            # Filter ingredients by parent_category and specific_category
+            queryset = self.queryset.filter(parent_category=parent_category, specific_category=specific_category)
+            if not queryset.exists():
+                # Debugging log to check why no ingredients are found
+                print(f"Debug: No ingredients found for parent_category={parent_category}, specific_category={specific_category}")
+                print(f"Debug: Available ingredients: {self.queryset.values()}")
+
+                return Response({'error': 'No ingredients found for this food group and specific category.'}, status=404)
+
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
+        except ValueError:
+            return Response({'error': 'Invalid food group or specific category ID.'}, status=400)
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
+
+@api_view(['GET', 'POST'])
+def ingredient_conversion_handler(request):
+    if request.method == 'POST':
         try:
-            return super().update(request, *args, **kwargs)
-        except IntegrityError:
-            return Response({'errorText': 'Error updating the ingredient.'}, status=400)
+            data = request.data
+            print("Received data:", data)
 
-    def destroy(self, request, *args, **kwargs):
+            ingredient_id = data.get('ingredientId')
+            unit_a = data.get('unit_a')
+            unit_b = data.get('unit_b')
+            amt_a = data.get('amt_a')
+            amt_b = data.get('amt_b')
+
+            if not all([ingredient_id, unit_a, unit_b, amt_a, amt_b]):
+                return Response({'error': 'All fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            conversion = IngredientConversion.objects.create(
+                ingredientId_id=ingredient_id,
+                unit_a=unit_a,
+                unit_b=unit_b,
+                amt_a=amt_a,
+                amt_b=amt_b
+            )
+
+            return Response({'message': 'Conversion saved successfully.', 'id': conversion.id}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    elif request.method == 'GET':
         try:
-            return super().destroy(request, *args, **kwargs)
-        except IntegrityError:
-            return Response({'errorText': 'Error deleting the ingredient.'}, status=400)
+            ingredient_id = request.query_params.get('ingredientId')
+            if not ingredient_id:
+                return Response({'error': 'ingredientId is required.'}, status=status.HTTP_400_BAD_REQUEST)
 
+            conversions = IngredientConversion.objects.filter(ingredientId_id=ingredient_id)
+            if not conversions.exists():
+                return Response({'message': 'No conversions found for this ingredient.'}, status=status.HTTP_404_NOT_FOUND)
 
-class IngUnitView(ModelViewSet):
-    queryset = IngredientUnits.objects.all()
-    serializer_class = IngUnitSerializer
+            conversion_data = [
+                {
+                    'unit_a': conversion.unit_a,
+                    'amt_a': conversion.amt_a,
+                    'unit_b': conversion.unit_b,
+                    'amt_b': conversion.amt_b,
+                }
+                for conversion in conversions
+            ]
+            return Response(conversion_data, status=status.HTTP_200_OK)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 

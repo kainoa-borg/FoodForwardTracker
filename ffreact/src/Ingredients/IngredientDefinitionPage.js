@@ -3,17 +3,25 @@ import { Box, Typography, Grid, Paper, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const categories = [
-    { name: 'Fruits', value: 0 },
-    { name: 'Vegetables', value: 1 },
-    { name: 'Dairy', value: 2 },
-    { name: 'Protein', value: 3 },
-    { name: 'Grains', value: 4 },
-    { name: 'Specialty', value: 5 },
-    { name: 'Condiments', value: 6 },
+    { name: 'No Category', value: 0 },
+    { name: 'Fruits', value: 1 },
+    { name: 'Vegetables', value: 2 },
+    { name: 'Dairy', value: 3 },
+    { name: 'Protein', value: 4 },
+    { name: 'Grains', value: 5 },
+    { name: 'Specialty', value: 6 },
+    { name: 'Condiments', value: 7 },
 ];
 
 export default function IngredientDefinitionPage() {
     const navigate = useNavigate(); // Hook for navigation
+
+    const navigateToCategory = (categoryId, subcategoryId = null) => {
+        const path = subcategoryId !== null 
+            ? `/ingredients/${categoryId}/subcategory/${subcategoryId}` 
+            : `/ingredients/${categoryId}`;
+        navigate(path);
+    };
 
     return (
         <div className="table-div">
@@ -29,7 +37,7 @@ export default function IngredientDefinitionPage() {
                             <Paper 
                                 elevation={3} 
                                 sx={{ p: 2, textAlign: 'center', cursor: 'pointer' }} 
-                                onClick={() => navigate(`/ingredients/${category.value}`)} // Ensure category.value is passed correctly
+                                onClick={() => navigateToCategory(category.value)} // Updated navigation logic
                             >
                                 <Typography variant="body1">{category.name}</Typography>
                             </Paper>
@@ -41,7 +49,7 @@ export default function IngredientDefinitionPage() {
                 <Button 
                     variant="contained" 
                     sx={{ mt: 4 }} 
-                    onClick={() => navigate('/ingredients/all')}
+                    onClick={() => navigate('/ingredients')}
                 >
                     View All Ingredients
                 </Button>

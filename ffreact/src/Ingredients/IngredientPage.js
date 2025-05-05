@@ -184,41 +184,37 @@ export default function IngredientPage(props) {
                 return category ? category.label : 'No Category';
             }
         },
-        { 
-            field: 'specific_category', 
-            headerName: 'Specific Category', 
-            width: 150, 
-            type: 'singleSelect',
-            editable: true,
-            valueOptions: (params) => {
-                const parentCategory = params && params.row ? 
-                    (params.row.parent_category || 0) : 0;
-                return specificCategoriesMap[parentCategory] || specificCategoriesMap[0];
-            },
-            valueFormatter: (params) => {
-                // If no value, return No Category
-                if (params.value === null || params.value === undefined) {
-                    return 'No Category';
-                }
-
-                // Search through all category lists to find the matching value
-                for (const categoryList of Object.values(specificCategoriesMap)) {
-                    const found = categoryList.find(cat => cat.value === params.value);
-                    if (found) {
-                        return found.label;
-                    }
-                }
-                
-                return 'No Category';
-            },
-            preProcessEditCellProps: (params) => {
-                const parentCategory = params && params.row ? 
-                    (params.row.parent_category || 0) : 0;
-                const validOptions = specificCategoriesMap[parentCategory] || specificCategoriesMap[0];
-                const isValid = validOptions.some(opt => opt.value === params.props.value);
-                return { ...params.props, value: isValid ? params.props.value : 0 };
+{ 
+    field: 'specific_category', 
+    headerName: 'Specific Category', 
+    width: 150, 
+    type: 'singleSelect',
+    editable: true,
+    valueOptions: (params) => {
+        const parentCategory = params && params.row ? 
+            (params.row.parent_category || 0) : 0;
+        return specificCategoriesMap[parentCategory] || specificCategoriesMap[0];
+    },
+    valueFormatter: (params) => {
+        if (params.value === null || params.value === undefined) {
+            return 'No Category';
+        }
+        for (const categoryList of Object.values(specificCategoriesMap)) {
+            const found = categoryList.find(cat => cat.value === params.value);
+            if (found) {
+                return found.label;
             }
-        },
+        }
+        return 'No Category';
+    },
+    preProcessEditCellProps: (params) => {
+        const parentCategory = params && params.row ? 
+            (params.row.parent_category || 0) : 0;
+        const validOptions = specificCategoriesMap[parentCategory] || specificCategoriesMap[0];
+        const isValid = validOptions.some(opt => opt.value === params.props.value);
+        return { ...params.props, value: isValid ? params.props.value : 0 };
+    }
+},
     ]
 
     // Page view; calls NewModularDataGrid

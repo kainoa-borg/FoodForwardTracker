@@ -39,7 +39,7 @@ from .StationViews import StationsView, StationInstructionsView
 from .SupplierViews import SupplierView
 from .UserView import UserAuth
 from .UserView import UserView
-from .IngDefViews import IngNameView, IngUnitView
+from .IngDefViews import IngredientsView, ingredient_conversion_handler
 from .HistoricalDataViews import ProductSubscriptionHistoryView
 from .IndividualClientViews import IndividualClientView
 from .HouseholdIdView import HouseholdIdView
@@ -49,9 +49,6 @@ from .EbtViews import EbtView
 from .ProductReportView import ProductReportView
 from .DietaryRestrictionsViews import DietaryRestrictionsViewSet
 from .MealRecipeViews import RecipeView
-#admin.site.register(Households)
-#admin.site.register(Ingredients)
-#admin.site.register(Packaging)
 
 router = routers.DefaultRouter()
 
@@ -74,8 +71,9 @@ router.register(r'calculations', CalculationsView, basename='calculations')
 router.register(r'ing-costtotals', IngCostTotalView, basename='ing-costtotals')
 router.register(r'pack-costtotals', PackCostTotalView, basename='pack-costtotals')
 # Definition Views
-router.register(r'ing-name-definitions', IngNameView)
-router.register(r'ing-unit-definitions', IngUnitView)
+#router.register(r'ing-name-definitions', IngNameView, basename='ing-name-definitions')
+#router.register(r'ing-unit-definitions', IngUnitView, basename='ing-unit-definitions')
+
 # Inventory Views
 router.register(r'ingredient-inventory', IngredientInvView, basename='ingredient-inventory')
 router.register(r'packaging', PackagingInvView, basename='packaging')
@@ -132,4 +130,12 @@ urlpatterns = [
     path('api/household/<str:pk>/delete_all_dates/', HouseholdDateView.as_view({'delete': 'delete_all_dates'})),
     path('api/servings', ServingsReportView.as_view(), name='servings-report'),
     path('api/product-report/', ProductReportView.as_view(), name='product-report'),
+    path('api/ingredients/', IngredientsView.as_view({'get': 'list', 'post': 'create'}), name='ingredients-list'),
+    path('api/ingredients/<int:pk>/', IngredientsView.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='ingredients-detail'),
+    path('api/ingredients/filter/', IngredientsView.as_view({'get': 'filter_by_category'}), name='ingredients-filter'),
+    path('api/ingredients/foodgroup/<int:parent_category>/specific/<int:specific_category>/', 
+         IngredientsView.as_view({'get': 'filter_by_subcategory'}), 
+         name='ingredients-filter-by-subcategory'),
+    path('api/ingredient-conversions/', ingredient_conversion_handler, name='ingredient-conversion-handler'),
+
 ]
